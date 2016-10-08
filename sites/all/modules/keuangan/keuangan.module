@@ -1,0 +1,74 @@
+<?php
+
+function keuangan_menu() {
+	$items['keuangan/pengeluaran'] = array(
+    'title' => t('Tabel Pengeluaran'),
+    'description' => t('Tabel Pengeluaran'),
+		'page callback' => 'tabel_pengeluaran_view',
+		'access callback' => 'user_access',
+		'access arguments' => array('Access Data Keuangan'),
+		'type' => MENU_CALLBACK,
+		'file' => 'keuangan.pengeluaran.inc',
+	);
+	$items['keuangan/getKategoriPengeluaran/1'] = array(
+    'title' => t('Get Kategori Pengeluaran'),
+    'description' => t('Get Kategori Pengeluaran'),
+		'page callback' => 'getKategoriPengeluaran',
+		'access callback' => 'user_access',
+		'access arguments' => array('Access Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/updateKategoriPengeluaran/%'] = array(
+    'title' => t('Update Kategori Pengeluaran'),
+    'description' => t('Update Kategori Pengeluaran'),
+		'page callback' => 'updateKategoriPengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	$items['keuangan/insertKategoriPengeluaran/%'] = array(
+    'title' => t('Insert Kategori Pengeluaran'),
+    'description' => t('Insert Kategori Pengeluaran'),
+		'page callback' => 'insertKategoriPengeluaran',
+		'page arguments' => array(1),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Keuangan'),
+		'type' => MENU_CALLBACK,
+	);
+	return $items;
+} // end hook menu
+
+function keuangan_perm() {
+	return array('Admin Data Keuangan','Access Data Keuangan');
+}
+
+require_once 'api.keuangan.inc';
+
+function keuangan_input_kategori_form(){
+	$form['idkategori'] = array(
+		'#type' => 'hidden',
+		'#value' => '',
+	);
+	$form['kategori'] = array(
+		'#title' => t('Kategori Pengeluaran'),
+		'#type' => 'textfield',
+		'#description' => t('Isi kategori pengeluaran disini.'),
+	);
+	$form['keterangan'] = array(
+		'#title' => t('Keterangan'),
+		'#type' => 'textarea',
+		'#cols' => 40,
+		'#rows' => 3,
+		'#description' => t('Isi keterangan kategori disini.'),
+	);
+	$form['submit'] = array(
+		'#type' => 'submit',
+		'#value' => t('Simpan')
+	);
+	$form['batal'] = array(
+		'#type' => 'button',
+		'#value' => t('Batal')
+	);
+	return $form;
+}

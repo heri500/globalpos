@@ -1,0 +1,147 @@
+<?php
+
+function penjualan_menu() {
+	$items['penjualan/kasir'] = array(
+    'title' => t('Kasir Global POS'),
+    'description' => 'Kasir Global POS',
+		'page callback' => 'penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
+	$items['penjualan/laundry'] = array(
+    'title' => t('Laundry Masuk'),
+    'description' => 'Form laundry masuk',
+		'page callback' => 'laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Laundry'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.laundry.inc'
+	);
+	$items['penjualan/viewpenjualan'] = array(
+    'title' => t('Data Penjualan'),
+    'description' => 'Data Penjualan',
+		'page callback' => 'view_tabel_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.penjualan.inc'
+	);
+	$items['penjualan/viewlaundry'] = array(
+    'title' => t('Data Laundry'),
+    'description' => 'Data Laundry',
+		'page callback' => 'view_tabel_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.tabellaundry.inc'
+	);
+	$items['penjualan/detailpenjualan'] = array(
+    'title' => t('Detail Penjualan'),
+    'description' => 'Detail Penjualan',
+		'page callback' => 'detail_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.penjualan.inc'
+	);
+	$items['penjualan/detaillaundry'] = array(
+    'title' => t('Detail Laundry'),
+    'description' => 'Detail Laundry',
+		'page callback' => 'detail_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.tabellaundry.inc'
+	);
+	$items['penjualan/cariproduk'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_produk',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
+	$items['penjualan/autocaribarang'] = array(
+    'title' => t('Pencarian Produk'),
+    'description' => 'Pencarian Produk',
+		'page callback' => 'cari_barang',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
+	$items['penjualan/simpanpenjualan'] = array(
+    'title' => t('Simpan Penjualan'),
+    'description' => 'Simpan Penjualan',
+		'page callback' => 'simpan_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
+	$items['penjualan/simpanlaundry'] = array(
+    'title' => t('Simpan Laundry Masuk'),
+    'description' => 'Simpan laundry masuk',
+		'page callback' => 'simpan_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Laundry'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.laundry.inc'
+	);
+	$items['penjualan/hitungomset'] = array(
+    'title' => t('Hitung Omset'),
+    'description' => 'Hitung Omset',
+		'page callback' => 'hitung_omset',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
+	$items['penjualan/updatepenjualan'] = array(
+    'title' => t('Update Penjualan'),
+    'description' => t('Update Penjualan'),
+		'page callback' => 'update_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
+	$items['penjualan/updatelaundry'] = array(
+    'title' => t('Update Laundry'),
+    'description' => t('Update Laundry'),
+		'page callback' => 'update_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
+	$items['penjualan/deletepenjualan'] = array(
+    'title' => t('Delete Penjualan'),
+    'description' => t('Delete Penjualan'),
+		'page callback' => 'delete_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.delete.inc'
+	);
+	$items['penjualan/deletelaundry'] = array(
+    'title' => t('Delete Laundry'),
+    'description' => t('Delete Laundry'),
+		'page callback' => 'delete_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.delete.inc'
+	);
+	return $items;
+} // end hook menu
+
+function penjualan_perm() {
+	return array('Admin Penjualan Produk','Admin Data Penjualan Produk','Input Laundry');
+}
+
+require_once 'attachplugins.inc';
+require_once 'penjualan.api.inc';

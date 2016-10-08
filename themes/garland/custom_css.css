@@ -1,0 +1,1282 @@
+.form_field{
+	float: left;
+	width:100%;
+}
+.form_field label{
+	float:left;
+	width:150px;
+	display:inline;
+}
+.form_field input[type="text"],select{
+	float:left;
+}
+.submit_button{
+	margin:14px 0 0 0;	
+}
+.submit_button_left{
+	margin:14px 0 0 0;
+	float: left;
+}
+#form_jurnal_umum_wrapper{
+	float:left;
+	width:100%;	
+}
+/* CSS for overriding datatables style*/
+#tabel_laporan_stok_wrapper{
+	margin-top: 10px;	
+}
+table.views-table{
+	margin:0;	
+}
+th div.DataTables_sort_wrapper span.ui-icon{
+	float:right;	
+}
+.add_data,.approve_data{
+	margin:8px 0;
+}
+.icon_button{
+	cursor:pointer;	
+}
+th.table_button{
+	width: 20px;	
+}
+th.center{
+	text-align: center !important;	
+}
+table.display td img{
+	cursor: pointer;	
+}
+.hide_input{
+	display:none;	
+}
+a.tombol_menu{
+	background:url("images/sub_inactive.jpg") repeat-x scroll left top transparent;
+	width:205px;
+	margin:0 5px 5px 0;
+	display:block;
+	float:left;
+	font-size:11px;
+	line-height:25px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border:solid 1px #D3D3D3;
+	color:#404040;
+	padding:0 5px;
+	cursor:pointer;
+	text-decoration: none;
+	font-weight: bold;
+	height:25px;
+}
+a.tombol_menu:hover{
+	background:#eaeaea;
+	text-decoration:none;
+	color:#000;
+}
+/*.menu-container{
+	width: 90%;
+	border: 1px solid #EEE;
+	padding: 10px;
+	margin-bottom: 10px;	
+	float: left;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}*/
+.menu-module-title{
+	font-size: 150%;
+	color: green;
+	margin-bottom:6px;
+	width:100%;
+	float:left;
+}
+.menu_icon{
+	background:url(images/next_arrow.jpg) no-repeat left center;
+	padding:0 0 0 20px;
+	line-height:16px;
+}
+.menu_tabel{
+	background:url(images/column.png) no-repeat left center;
+	padding:0 0 0 20px;
+	line-height:16px;
+}
+.ui-accordion .ui-accordion-header{
+	text-shadow: 1px 1px 1px #999;
+	color: black;	
+}
+.node{
+	padding: 8px 26px;	
+}
+.print-content .node{
+	padding: 0;
+}
+#accordion{
+	width: 550px;	
+}
+.FixedHeader_Cloned th { background-color: white; }
+.require_field{
+	color: #FFAE00;
+	font-weight: bold;
+	margin-left: 8px;
+}
+.form_row{
+	float:left;
+	width: 100%;	
+}
+#form_jurnal_umum,.form-jurnal-umum,.form_jurnal_umum{
+	float: left;
+	padding: 15px;
+	border: 1px solid #A6C9E2;
+	width: 450px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	box-shadow: 2px 2px 4px #BBBBBB;
+}
+#form_jurnal_umum label,.form_row label,.view-filters label,
+.form_jurnal_umum label{
+	width: 130px;	
+	float: left;
+}
+.view-filters label{
+	width: 110px;
+}
+#form_jurnal_umum input,#form_jurnal_umum textarea, #form_jurnal_umum select, .form_row input
+, .form_row textarea, .form_row select,
+.form_jurnal_umum input,.form_jurnal_umum textarea, .form_jurnal_umum select{
+	width: 300px;
+	float: left;
+	margin-bottom: 4px;
+	border: 1px solid #A6C9E2;
+	height: 18px;
+	padding: 2px;
+	margin-right: 10px;
+}
+.view-filters input[type="text"],.view-filters textarea, .view-filters select{
+	width: 300px;
+	float: left;
+	margin-bottom: 4px;
+	border: 1px solid #A6C9E2;
+	height: 18px;
+	padding: 2px;
+	margin-right: 10px;
+}
+.view-filters #edit-created-min,.view-filters #edit-created-max{
+	width:130px;	
+}
+#form_jurnal_umum select,.view-filters select,.form_jurnal_umum select{
+	height: 24px;
+	width: 306px;
+}
+#form_jurnal_umum .tanggal,
+.form_jurnal_umum .tanggal{
+	width: 150px;	
+}
+#form_detail_jurnal{
+	margin-top: 10px;
+	width: 98%;
+	float: left;
+	padding: 15px;
+	border: 1px solid #A6C9E2;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	box-shadow: 2px 2px 4px #BBBBBB;
+}
+div.filter-form{
+	width: 97% !important;
+	margin-bottom: 10px !important;
+	padding-bottom: 5px !important;	
+}
+div.filter-form button.tombol-filter{
+	font-size: 12px;
+	top: -3px;	
+	margin-right: 6px;
+}
+#form_detail_jurnal label{
+	width: 70px;	
+	float: left;
+}
+#form_detail_jurnal input,#form_detail_jurnal textarea,#form_detail_jurnal select{
+	width: 300px;
+	float: left;
+	margin-bottom: 4px;
+	border: 1px solid #A6C9E2;
+	height: 18px;
+	padding: 2px;
+	margin-right: 10px;
+}
+#form_detail_jurnal select{
+	height: 24px;
+}
+#form_detail_jurnal input[type="checkbox"]{
+	width: 23px;	
+}
+#form_detail_jurnal .tanggal{
+	width: 150px;	
+}
+#form_detail_jurnal th{
+	border-top: 1px solid #D3E7F4;	
+}
+table.display tfoot th{
+	padding: 0.3em 0.85em;
+}
+.dataTables_length .form_field input[type="text"], .dataTables_length select{
+	float: none;	
+}
+th.col_angka,th.col_tanggal {
+	text-align: center;
+	width: 130px;	
+}
+.general-ledger th.col_tanggal{
+	width: 100px;
+}
+td.col_angka {
+	text-align: right;	
+}
+#general-ledger h3{
+	color: darkblue;
+ 	font-family: Tahoma;
+ 	font-weight: bold;
+ 	margin-bottom: 15px;
+ 	text-shadow: 1px 1px 1px #AAA;
+}
+
+#general-ledger th{
+	border-top: 1px solid #BBB;
+	border-bottom: 1px solid #BBB;		
+}
+h3.indogas {
+	color: darkblue;
+ 	font-family: Tahoma;
+ 	font-size:14px;
+ 	font-weight: bold;
+ 	margin-bottom: 10px;
+ 	margin-top: 15px;
+ 	text-shadow: 1px 1px 1px #DDD;
+ 	width:400px;
+ 	float: left;
+}
+.ui-autocomplete {
+		max-height: 200px;
+		overflow-y: auto;
+		/* prevent horizontal scrollbar */
+		overflow-x: hidden;
+		/* add padding to account for vertical scrollbar */
+		padding-right: 20px;
+	}
+	/* IE 6 doesn't support max-height
+	 * we use height instead, but this forces the menu to always be this tall
+	 */
+	* html .ui-autocomplete {
+		height: 200px;
+	}
+	
+.loading{
+	background: url(images/loading.gif);
+	width: 16px;
+	height: 16px;
+	border:0;	
+}
+.form_field .field-prefix{
+	float:left;	
+}
+.edit_image{
+	width: 20px;
+	height: 20px;
+	background: url(images/icon_edit.png) no-repeat center;
+	float: left;	
+}
+.delete_icon{
+	width: 20px;
+	height: 20px;
+	background: url(images/icon_delete.png) no-repeat center;
+	float: left;	
+}
+th.views-field-nid, th.views-field-nid-1{
+	width: 20px;	
+}
+#additional_info{
+	float: left;
+	padding: 15px;
+	border: 1px solid #A6C9E2;
+	width: 300px;
+	margin-left: 10px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;	
+}
+.informasi_status_pengajuan, .informasi-status{
+	margin-bottom:15px;padding: 10px;border: 1px solid #A6C9E2;width: 530px;-webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px;	
+}
+.informasi_status_pengajuan p, .informasi-status p{
+	margin: 0;	
+}
+.views-exposed-form .views-exposed-widget{
+	padding: 0.1em 1em 0 0;	
+}
+.views-exposed-widget{
+	width:460px;	
+}
+#center .editable form,#center .editable2 form{
+	margin-bottom: 0;
+	width: auto;
+}
+#center .editable2 form{
+	width: auto;
+}
+#center .editable2 form .jam{
+	width: 45px;
+}
+#center .editable2 form button{
+	width: 30px;	
+}
+th.views-field-field-jam-value{
+	width: 75px;	
+}
+#center .editable2{
+	width: auto;
+}
+input.hasDatepicker{
+	width: 75px;	
+}
+.filter-report{
+	float:left;
+	margin-bottom: 10px;	
+	width: 100%;
+}
+.filter-report select{
+	height: 23px;	
+}
+.filter-report label{
+	width: 80px;	
+	margin-right: 10px;
+}
+.filter-report .tahun-field{
+	width: 40px;	
+}
+.filter-button{
+	font-size: 11px;	
+}
+.table-place{
+	width: 100%;
+	float: left;	
+}
+.filter-report .form_row input[type="checkbox"]{
+	width: 20px;
+	padding: 0;	
+}
+.filter-report .long-label{
+	width: 100px;	
+}
+.pointer{
+	cursor:pointer;	
+}
+#form_jurnal_umum .form_row .pilihan-bulan,
+.form_jurnal_umum .form_row .pilihan-bulan{
+	width: 150px;
+	height: 24px;	
+}
+.view-laporan-pengiriman .view-empty{
+	float: left;
+	width: 100%;	
+}
+.dataTables_wrapper{
+	box-shadow: 2px 2px 4px #BBBBBB;
+	border-radius: 5px;
+	margin-bottom: 8px;
+	min-height: 0;
+}
+.rotate-text{
+	height: 180px;
+}
+#tabel_tagihan .DataTables_sort_wrapper{
+	padding-right: 0;	
+}
+table.display tfoot th.angka,td.angka{
+	text-align: right;
+	font-weight: normal;
+}
+div.angka{
+	text-align: right;
+}
+table.display tfoot th{
+	font-weight: bold;	
+}
+.dataTables_wrapper .un-approve-button,.un-approve-button{
+	background: url("images/ui-bg_gloss-wave_aspek.png") repeat-x scroll 50% 50% #FECE2F;	
+	border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+}
+.un-approve-button{ 
+	border: 1px solid orange;
+}
+.dataTables_wrapper .un-approve-button:hover,.un-approve-button:hover{
+	background: url("images/ui-bg_gloss-wave_aspek_hover.png") repeat-x scroll 50% 50% #FECE2F;	
+	border: 1px solid whitesmoke;
+  color: whitesmoke;
+}
+.node_form_wrapper{
+	float: left;
+	width: 100%;	
+}
+.form_field .form-item{
+	float: left;
+	margin-bottom: 0;
+	margin-top: 0;
+}
+#form_jurnal_umum .last_field,
+.form_jurnal_umum .last_field{
+	margin-bottom: 0;
+}
+#form_jurnal_umum .last_field .form-item,
+.form_jurnal_umum .last_field .form-item{
+	margin-bottom: 0;
+}
+#form_jurnal_umum .form_field #edit-field-tanggal-stok-0-value,
+.form_jurnal_umum .form_field #edit-field-tanggal-stok-0-value{
+	width: 90px;
+}
+#form_jurnal_umum .form_field #edit-field-jumlah-0-value,
+.form_jurnal_umum .form_field #edit-field-jumlah-0-value{
+	width: 90px;
+}
+#form_jurnal_umum.form-karyawan .form_field .date-date,
+.form_jurnal_umum.form-karyawan .form_field .date-date{
+	float: left;	
+}
+#form_jurnal_umum.form-karyawan .form_field .description,#form_jurnal_umum .description,
+.form_jurnal_umum.form-karyawan .form_field .description,.form_jurnal_umum .description{
+	display: none;
+}
+
+#form_jurnal_umum .resizable-textarea,
+.form_jurnal_umum .resizable-textarea{
+	float: left;
+	width: 300px;
+}
+#form_jurnal_umum.form-karyawan .form_field input.date-date,
+.form_jurnal_umum.form-karyawan .form_field input.date-date{
+	width: 90px;
+}
+.kolom-form{
+	float: left;
+	width: 50%;	
+}
+#form_jurnal_umum.form-karyawan .form_field label,
+.form_jurnal_umum.form-karyawan .form_field label{
+	width: 160px;	
+}
+#form_jurnal_umum.form-karyawan .form_field select,
+.form_jurnal_umum.form-karyawan .form_field select{
+	width: 305px;	
+}
+#form_jurnal_umum.form-karyawan .form_field input.form-file,#form_jurnal_umum input.form-file,
+.form_jurnal_umum.form-karyawan .form_field input.form-file,.form_jurnal_umum input.form-file{
+	height: 24px;
+	border: 0;
+	margin: 0;
+	width: 210px;
+}
+#form_jurnal_umum.form-karyawan .form_field input[type="submit"],#form_jurnal_umum input[type="submit"],
+.form_jurnal_umum.form-karyawan .form_field input[type="submit"],.form_jurnal_umum input[type="submit"]{
+	/* display: none;	*/
+	width: auto;
+	height: auto;
+	float: left;
+	margin:1px 0 0 6px;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+#form_jurnal_umum.form-karyawan .form_field .filefield-element,#form_jurnal_umum .filefield-element,
+.form_jurnal_umum.form-karyawan .form_field .filefield-element,.form_jurnal_umum .filefield-element{
+	float: left;
+	margin: 0 0 4px 0;	
+}
+#edit-field-foto-karyawan-0-upload-wrapper .filefield-upload,#form_jurnal_umum .filefield-upload,
+.form_jurnal_umum .filefield-upload{
+	float: left;
+	width: 300px;
+}
+#tabelpengeluaran th.views-field-field-jam-value{
+	width: 100px;
+	text-align: center;	
+}
+.submit-button{
+	font-size: 11px;	
+	text-transform: uppercase;
+}
+#form_jurnal_umum .tanggal-pendek,.tanggal-pendek,
+.form_jurnal_umum .tanggal-pendek{
+	width: 90px;	
+}
+.input-tanggal-2{
+	width: 110px !important;
+}
+#form_jurnal_umum .form_field #edit-title-wrapper,
+.form_jurnal_umum .form_field #edit-title-wrapper{
+	margin:0;	
+}
+#form_jurnal_umum .resizable-textarea .grippie,
+.form_jurnal_umum .resizable-textarea .grippie{
+	width: 305px;
+	margin-top: -4px;
+	margin-bottom: 4px; 
+	float: left;
+}
+#form_jurnal_umum textarea,
+.form_jurnal_umum textarea{
+	height: 80px;	
+}
+#view_vertical_tab{
+	color: #666;
+	width: 100%;
+	float: left;
+	margin: 8px 0;
+	font-weight: bold;
+  margin: 8px 0 0;
+  text-shadow: 1px 1px 1px #DDDDDD;
+  text-decoration: none;
+}
+#view_vertical_tab:hover{
+	color: green;	
+}
+.ui-tabs{
+	border: 0;	
+}
+.ui-tabs .ui-tabs-nav{
+	background: none;
+	border: 0;
+	border-radius: 0;
+	/*border-bottom: 1px solid #AAA;*/
+}
+.ui-tabs .ui-tabs-panel{
+	border: 1px solid #79B7E7;
+	border-radius: 5px;
+	width: 97%;
+}
+th.nama-karyawan{
+	width: 200px;	
+}
+th.views-field-field-nik-value,td.views-field-field-nik-value{
+	width: 115px;	
+}
+th.views-field-field-jabatan-ref-nid,td.views-field-field-jabatan-ref-nid{
+	width: 110px;
+}
+#tabel_absensi_karyawan_wrapper td{
+	border-left: 1px solid #BBB;	
+}
+#tabel_absensi_karyawan_wrapper thead th{
+	padding: 0.3em 0.5em;
+}
+.approval_form{
+	float: left;
+	width: 100%;	
+}
+.view-empty{
+	width: 100%;
+	float: left;	
+}
+.views-field-field-jumlah-value,.views-field-field-status-material-value{
+	width: 40px;	
+}
+th.views-field-field-jumlah-value,
+td.views-field-field-jumlah-value,
+th.views-field-field-status-material-value,
+td.views-field-field-status-material-value
+{
+	text-align: right;
+}
+.baris_click{
+	cursor: pointer;	
+}
+.title-at-toolbar{
+	float: left;
+	font-weight: bold;
+	width:200px;
+	color: yellow;
+	text-shadow: 1px 1px 1px #555;
+}
+.judul-rowspan{
+	background: url("images/ui-bg_glass_85_dfeffc_1x400.png") repeat-x scroll 50% 50% #DFEFFC;
+	border: 1px solid #C5DBEC;	
+}
+#rekapitulasi_inventori td{
+	border-left: 1px solid #CCC;	
+}
+.highlight-number{
+	color: red;
+	font-weight: bold;	
+}
+.text-editable input[type="text"]{
+	width: 50px;	
+}
+#form_jurnal_umum input#edit-field-tanggal-0-value-date,
+.form_jurnal_umum input#edit-field-tanggal-0-value-date{
+	width: 90px;	
+}
+#edit-field-besar-tagihan-0-value-wrapper{
+	float: left;
+	margin: 0;	
+}
+#form_jurnal_umum .date-date,
+.form_jurnal_umum .date-date{
+	float: left;	
+}
+#block_penukaran_valve{
+	width: 510px;
+	float:left;	
+}
+#block_tagihan_transportasi{
+	width: 500px;
+	float:left;	
+}
+.table-button{
+	width: 25px;	
+}
+.table-button-small{
+	width: 20px;
+}
+.form-item .description{
+	float: left;	
+}
+#rekapitulasi_inventori_place_holder{
+	float: left;
+	width: 100%;	
+}
+.ui-button-text-only{
+	box-shadow: 1px 1px 2px #BBBBBB;	
+}
+/* FINANCE REPORT */
+.kredit{
+	color: red;
+}
+#tabel-total-income_wrapper{
+	width: 900px;	
+}
+#tabel_absensi_karyawan_wrapper td{
+	cursor: pointer;	
+}
+th.views-field-field-nama-singkat-value{
+	width: 110px;	
+}
+th.views-field-field-cabang-ref-nid{
+	width: 240px;	
+}
+#tabel_pembelian_material th.views-field-field-cabang-ref-nid{
+	width: auto;
+}
+th.views-field-field-departemen-nid{
+	width: 110px;
+}
+#tabel_karyawan_baru_wrapper,#tabel_approval_nonaktif_wrapper,#tabel_ikatan_baru_wrapper,#tabel_departemen_baru_wrapper{
+	margin-top:15px;
+	float:left;
+	width: 100%;
+}
+.info-legend-karyawan{
+	margin: -3px 6px 6px;
+	float: left;
+	width: 200px;
+}
+.info-legend-karyawan.no-icon{
+	margin: 0 6px !important;	
+}
+td.views-field-field-jam-value{
+	text-align: center;	
+}
+th.views-field-counter{
+	width: 30px;	
+}
+ul.tips{
+	display:none;
+}
+.hidden_div{
+	display: none;	
+}
+.views-field-field-urutan-tampil-value{
+	width: 20px;	
+}
+th.total-value{
+	width: 120px;
+}
+th.total-value-right{
+	text-align: right;
+	width: 120px;
+}
+td.total-value{
+	text-align: right;
+	width: 120px;
+}
+table.table-in-tree{
+	margin: -3px 0;
+	border: 0;
+	font-weight: bold;
+	color: #444;
+}
+table.table-in-tree tbody{
+	border: 0;
+}
+table.table-in-tree tbody td{
+	padding: 3px 6px 3px 12px;
+}
+table.table-in-tree tbody th{
+	text-align: left;
+}
+h3.cashflow-title{
+	font-size: 15px;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #999;
+	margin: 15px 0 8px;
+	color: green;
+}
+.editable-cell{
+	cursor: pointer;	
+}
+
+td.total-value-tree{
+	width: 140px;
+	text-align: right;	
+}
+/* Bank Rekonsel Tabel */
+th.views-field-field-tahun-rekonsel-value,
+td.views-field-field-tahun-rekonsel-value{
+	text-align: center;
+	width: 80px;	
+}
+th.views-field-field-bulan-rekonsel-value,
+td.views-field-field-bulan-rekonsel-value{
+	text-align: center;
+	width: 100px;	
+}
+th.views-field-field-nilai-rekonsel-value,
+td.views-field-field-nilai-rekonsel-value{
+	width: 150px;
+	text-align: right;	
+}
+div.views-submit-button{
+	width: auto;
+	float: left;	
+}
+.views-exposed-form .views-exposed-widget .form-submit{
+	margin: 0;
+	font-size: 12px;
+}
+.views-exposed-form .views-exposed-widget input.ui-button{
+	padding: 0.3em 1em;	
+}
+#edit-field-tahun-rekonsel-value{
+	width: 100px;
+	float: left;	
+}
+div.views-widget-filter-field_tahun_rekonsel_value{
+	width: 200px;
+	float: left;	
+}
+div.views-widget-filter-field_tahun_rekonsel_value label{
+	width: 60px;	
+	float: left;
+}
+#edit-field-tahun-rekonsel-value-wrapper{
+	float: left;	
+}
+.views-widget-filter-field_tahun_rekonsel_value .views-widget{
+	float: left;	
+}
+/* End Bank Rekonsel*/
+button.xls-export{
+	font-size: 11px;
+	margin-bottom: 6px;
+}
+#center form.export-form{
+	margin: 0;
+}
+table.detail-inner-table{
+	margin: 0;	
+}
+.maxi-width{
+	width: 100%;	
+}
+tr.saldo-bulan{
+	cursor: pointer;
+	font-weight: bold;
+}
+tr.saldo-bulan:hover{
+	background-color: #FFFF00;	
+}
+h3.summary-title{
+	background: url("images/bg-crumbs.png") no-repeat scroll -260px 0 transparent;
+  color: darkblue;
+  font-weight: bold;
+  margin: 20px 0 10px;
+  padding: 4px 4px 7px 15px;
+  text-shadow: 1px 1px 1px #BBBBBB;
+}
+div#summary-inventory_wrapper{
+	width: 500px;
+}
+div#tabel-info-penerimaan-material_wrapper{
+	width: 750px;
+}
+h3.table-title{
+	font-weight: bold;
+	text-shadow: 1px 1px 1px #999;
+	margin-bottom: 15px;
+	text-transform: uppercase;
+	color: #444;
+}
+h2.with-tabs{
+	margin: 0;
+}
+h3.judul-detail-cf{
+	font-weight: bold;
+	font-size: 16px;
+	text-shadow: 1px 1px 1px #CCC;
+	margin-bottom: 10px;
+	color: #444;
+}
+#table_detail_pemakaian{
+	font-size: 100%;	
+}
+#form_detail_jurnal.penerimaan input,#form_detail_jurnal.penerimaan textarea,#form_detail_jurnal.penerimaan select{
+	height: 24px;
+}
+#form_jurnal_umum.penerimaan input,#form_jurnal_umum.penerimaan textarea, #form_jurnal_umum.penerimaan select,
+.form_jurnal_umum.penerimaan input,.form_jurnal_umum.penerimaan textarea, .form_jurnal_umum.penerimaan select{
+	height: 24px;
+}
+#additional_info table th,#additional_info table td{
+	font-size: 13px;	
+}
+table.tabel-detail-info{
+	width:600px;	
+}
+table td.field-harga-material{
+	width: 120px;
+}
+table td.views-field-field-jumlah-diterima-value{
+	width: 60px;
+}
+div.messages{
+	max-height: 150px;
+	overflow-y: auto;
+}
+#form_detail_jurnal div.title,
+#form_jurnal_umum div.title,
+.form_jurnal_umum div.title,
+.informasi_status_pengajuan div.title{
+	background-color: #EEEEEE;
+  border: 1px solid #A6C9E2;
+  border-radius: 6px 6px 0 0;
+  font-weight: bold;
+  margin: -16px -16px 10px;
+  padding: 5px 15px;	
+}
+#form_detail_jurnal div.title h3,
+#form_jurnal_umum div.title h3,
+.form_jurnal_umum div.title h3,
+.informasi_status_pengajuan div.title h3{
+	font-size: 12px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-left: -4px;
+}
+.informasi_status_pengajuan div.title{
+	margin: -11px -11px 10px;
+  padding: 5px 10px;
+}
+/*.ui-tabs-panel {
+    overflow-y: hidden;
+    overflow-x: auto;
+}*/
+#tabel-detail-cash-flow-wrapper{
+	padding-right: 20px;
+}
+.button-tambah{
+	margin-bottom: 10px;	
+}
+.input-target{
+	width: 190px;	
+}
+div#tabel-target_wrapper{
+	width: 800px;	
+}
+.total-target-value{
+	width: 200px;	
+}
+div.input-mirror-format{
+	width: 190px;
+	text-align: right;
+}
+.pilihan-tahun{
+	width: 80px;
+	margin: 0 0 15px 10px;	
+}
+.view-filters{
+	border: 1px solid #A6C9E2;
+	box-shadow: 2px 2px 4px #BBBBBB;
+  border-radius: 6px 6px 6px 6px;
+  margin-bottom: 10px;
+  padding: 8px 8px 0;
+}
+#center .view-filters form{
+	margin-bottom : 0;
+}
+.ui-widget{
+	font-family: Arial;
+}
+th.views-field-created{
+	width: 140px;	
+}
+#form_jurnal_umum .form-item #autocomplete .reference-autocomplete label,
+.form_jurnal_umum .form-item #autocomplete .reference-autocomplete label{
+	display: none !important;	
+}
+#form_jurnal_umum .form-item #autocomplete .reference-autocomplete a,
+.form_jurnal_umum .form-item #autocomplete .reference-autocomplete a{
+	color: #000000;
+}
+#form_jurnal_umum .form-item #autocomplete li.selected .reference-autocomplete a,
+.form_jurnal_umum .form-item #autocomplete li.selected .reference-autocomplete a{
+	color: yellow;
+}
+#form_jurnal_umum .form-item #autocomplete,
+.form_jurnal_umum .form-item #autocomplete{
+	margin: 40px 0 0 130px!important;	
+}
+th.views-field-edit-node, th.views-field-delete-node{
+	width: 25px;	
+}
+.datagrid-htable tbody{
+	border-top: 0;	
+}
+table.datagrid-htable{
+	width: auto;
+	margin: 0;	
+}
+table.datagrid-btable{
+	margin: 0 !important;
+}
+ul.menu{
+	background-color: transparent;
+	position: relative;	
+}
+div.datagrid-cell-rownumber{
+	display: none;	
+}
+div.datagrid-header-rownumber{
+	display: none;
+}
+.tree-icon{
+	display: none !important;	
+}
+.easyui-tabs .tabs-panels{
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius : 6px;
+}
+th.views-field-field-jumlah-disetujui-value{
+	width: 100px;	
+}
+td.views-field-field-jumlah-disetujui-value{
+	text-align: right;	
+}
+#form_jurnal_umum input.radio-input,
+.form_jurnal_umum input.radio-input{
+	width: 10px;	
+	margin-right: 5px;
+}
+#form_jurnal_umum label.pendek,
+.form_jurnal_umum label.pendek{
+	width: 40px;
+}
+.button-place-wrapper{
+	width: 100%;
+	float: left;	
+}
+.multiselect {
+	width: 640px;
+	height: 300px;
+}
+#switcher {
+	margin-top: 20px;
+}
+/* Printout CSS */
+.print-content table{
+	margin-top: 10px;	
+}
+.print-content table thead tr, .print-content table thead tr th{
+	border: 1px solid #000;
+}
+.print-content thead th{
+	font-size: 13px;
+	font-weight: normal;	
+	color: #000;
+}
+.print-content table thead th.col_tanggal{
+	width: 80px;	
+}
+.print-content table thead th.col_jam{
+	width: 40px;
+}
+.print-content table thead th, .print-content table tr td{
+	padding: 5px 3px;	
+}
+.print-content table tr td.center{
+	text-align: center;
+}
+.print-content table tr td{
+	border: 1px solid #000;
+	font-size: 13px;
+}
+table.display tbody tr td.details{
+	background-color: #eee;	
+}
+table.display tbody tr.jamlembur{
+	background-color: #F7FE2E !important;
+}
+h5.periode-title{
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-shadow: 1px 1px 1px #AAA;	
+}
+.retester-sum-title{
+	margin: -10px 0 2px;
+	text-align: center;
+	font-weight:bold;
+	color: #2E6E9E;
+	text-transform: uppercase;
+	text-shadow: 1px 1px 1px #CCCCCC;
+}
+#icon_legend_karyawan .form_row label .icon-label{
+	float: left;
+	width: 30px;
+	font-weight: bold;
+}
+#icon_legend_karyawan .form_row{
+	border-bottom : 1px solid #DDD;
+	margin-bottom : 3px;	
+}
+.require-field, #form_jurnal_umum input.require-field{
+	border: 1px solid red !important;	
+}
+.nik-field-view{
+	padding: 8px;
+	margin-bottom :	5px;
+	border: 2px solid red;
+	border-radius: 4px;
+	float: right;
+	font-size: 150%;
+	font-weight: bold;
+	color: #444;
+	box-shadow: 2px 2px 4px #bbbbbb;
+}
+.red-font{
+	color: red;	
+}
+h2{
+	color: darkblue;
+  font-family: Tahoma;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-shadow: 1px 1px 1px #999;
+  text-transform: uppercase;	
+}
+input {
+	height: 18px;
+}
+input.form-submit.ui-button.ui-widget{
+	height: auto !important;
+}
+.form-inline .form-item{
+	float: left;
+	width: 100% !important;	
+	margin-bottom: 0;
+}
+.form-inline .form-item label {
+	display: inline !important;
+	float: left;
+	width: 130px;
+}
+.baris-jam{
+	float: left;
+	width: 100% !important;	
+}
+.form-inline .baris-jam .form-item{
+	width: auto !important;
+	margin-right: 8px;
+}
+.form-button, .form-submit{
+	height: auto !important;	
+}
+.baris-jam select{
+	width: 70px;	
+}
+.form-item select.workshop-select{
+	width: 300px;	
+}
+#formInputDKL .form-button,#formInputDKL .form-submit{
+	margin-top: 0;	
+}
+.chosen-container-multi .chosen-choices li{
+	background-image: none !important;
+}
+.chosen-container ul li, .chosen-container ul.menu li, .chosen-container .item-list ul li, .chosen-container li.leaf{
+	background-image: none !important;
+}
+.uncomplete-attendance{
+	/*background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,.5) 3px, rgba(255,255,255,.5) 7px);	*/
+}
+.periode-title{
+	color: darkblue;
+	font-weight: bold;
+	margin-bottom: 10px;
+	text-shadow: 1px 1px 1px #ccc;	
+}
+table#absen-dialog-box thead th{
+	border-bottom: 1px solid #999 !important;
+	border-right: 1px solid #999 !important;
+	padding-top: 4px !important;
+	text-align: center;
+}
+/* Attendance Type CSS */
+.finger-none-uncomplete{
+	background-image: url("images/finger_none_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.none-finger-uncomplete{
+	background-image: url("images/none_finger_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.card-none-uncomplete{
+	background-image: url("images/card_none_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.none-card-uncomplete{
+	background-image: url("images/none_card_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.manual-none-uncomplete{
+	background-image: url("images/manual_none_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.none-manual-uncomplete{
+	background-image: url("images/none_manual_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.manual-complete{
+	background-image: url("images/manual_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.finger-complete{
+	background-image: url("images/finger_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.card-complete{
+	background-image: url("images/card_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.finger-card-complete{
+	background-image: url("images/finger_card_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.card-finger-complete{
+	background-image: url("images/card_finger_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.finger-manual-complete{
+	background-image: url("images/finger_manual_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.manual-finger-complete{
+	background-image: url("images/manual_finger_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.card-manual-complete{
+	background-image: url("images/card_manual_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.manual-card-complete{
+	background-image: url("images/manual_card_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.undefined-finger-complete{
+	background-image: url("images/undefined_finger_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.undefined-card-complete{
+	background-image: url("images/undefined_card_scan.png");
+	background-color: rgba(255, 255, 2, 0);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.undefined-card-uncomplete{
+	background-image: url("images/undefined_card_none_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.undefined-finger-uncomplete{
+	background-image: url("images/undefined_finger_none_scan.png"), repeating-linear-gradient(45deg, transparent 0px, transparent 0px, rgba(255, 255, 2, 0) 5px, rgba(0, 0, 0, 1) 7px);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.input-jam{
+	width: 60px;
+	text-align: center;
+}
+.input-jam_panjang{
+	width: 80px;
+	text-align: center;
+}
+.input-tanggal{
+	width: 80px;	
+	text-align: center;
+}
+.input-keterangan{
+	width: 190px;	
+}
+tr.hari-sabtu{
+	background-color: #F7F2E0 !important;	
+}
+tr.hari-minggu{
+	background-color: #F5D0A9 !important;	
+}
+h3.pagesubtitle{
+	color: darkblue;
+	text-shadow: 1px 1px 1px #999;
+	font-weight: bold;
+	margin-bottom: 10px;	
+}
+#formAddNewDetailSPKL.form-inline .form-item label{
+	width: 140px;
+}
+.edit-class{
+	margin:0 !important;	
+}

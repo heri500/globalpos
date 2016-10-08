@@ -1,0 +1,41 @@
+#wrapper{
+  margin-top:0px;
+  display:none;
+  margin:auto;
+  width:1000px;
+}
+
+#lihatberita{
+/*display:none;*/
+}
+
+#lihatberita .scrollEl{
+  font-family:sans-serif;
+  color:black;
+  height:300px;
+  padding:6px;
+  padding-top:6px;
+  text-align:left;
+  text-shadow:#999 1px 1px 1px;
+}
+
+#lihatberita_controls div{
+  font-family:sans-serif;
+  margin-top:5px;
+  background:#fff;
+  display:inline-block;
+  padding:6px;
+  cursor:pointer;
+}
+
+#lihatberita_controls .sel{
+  color:black !important;
+  font-weight:bold;
+}
+#lihatberita_controls .disabled{
+  color:gray;
+}
+#lihatberita_controls .page{
+  padding:5px;
+  color:gray;
+}

@@ -1,0 +1,62 @@
+#wrapper{
+  margin-top:80px;
+  display:none;
+  margin:auto;
+  width:1000px;
+}
+
+#myScroll{
+/*display:none;*/
+}
+
+.scrollEl{
+  display:none;
+  background:url("images/elBgnd.png") repeat-x;
+  border:1px solid #ddd;
+  font-family:Verdana;
+  font-size:10pt;
+  padding:4px;
+  padding-top:4px;
+  color:#333333;
+  height:100%;
+  width:100%;
+  text-shadow:#999 1px 1px 1px;
+  text-align:center;
+  /*CSS3 properties*/
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;
+}
+
+
+#controls1 div, #controls2 div, #controls3 div, #controls4 div, #controls5 div, #controls6 div, #controls7 div, #controls8 div, #controls9 div, #controls10 div{
+  font-family:sans-serif;
+  margin-top:-1px;
+  background:#fff;
+  display:inline-block;
+  padding:2px;
+  cursor:pointer;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-box-shadow:#999 2px 2px 2px;
+  -webkit-box-shadow:#999 2px 2px 2px;
+}
+
+#myScroll1{
+  float:left;
+  margin-right:0px;
+}
+
+#controls1 .sel, #controls2 .sel, #controls3 .sel, #controls4 .sel, #controls5 .sel, #controls6 .sel, #controls7 .sel, #controls8 .sel, #controls9 .sel, #controls10 .sel{
+  color:black !important;
+  font-weight:bold;
+}
+#controls1 .disabled, #controls2 .disabled, #controls3 .disabled, #controls4 .disabled, #controls5 .disabled, #controls6 .disabled, #controls7 .disabled, #controls8 .disabled, #controls9 .disabled, #controls10 .disabled{
+  color:gray;
+}
+#controls1 .page, #controls2 .page, #controls3 .page, #controls4 .page, #controls5 .page, #controls6 .page, #controls7 .page, #controls8 .page, #controls9 .page, #controls10 .page{
+  padding:5px;
+  color:gray;
+}

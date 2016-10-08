@@ -1,0 +1,51 @@
+#wrapper{
+  margin-top:0px;
+  display:none;
+  margin:auto;
+  width:1000px;
+}
+
+#blockberita{
+/*display:none;*/
+}
+#lihatberita{
+/*display:none;*/
+}
+#blockberita .scrollEl{
+  font-family:sans-serif;
+  color:black;
+  height:285px;
+  padding:6px;
+  padding-top:6px;
+  text-shadow:#999 1px 1px 1px;
+}
+
+#lihatberita .scrollEl{
+  font-family:sans-serif;
+  color:black;
+  height:500px;
+  padding:6px;
+  padding-top:6px;
+  text-shadow:#999 1px 1px 1px;
+}
+
+#blockberita_controls div, #lihatberita_controls div{
+  font-family:sans-serif;
+  margin-top:5px;
+  background:#fff;
+  display:inline-block;
+  padding:6px;
+  cursor:pointer;
+}
+
+#blockberita_controls .sel, #lihatberita_controls .sel{
+  color:black !important;
+  font-weight:bold;
+}
+#blockberita_controls .disabled, #lihatberita_controls .disabled{
+  color:gray;
+}
+#blockberita_controls .page, #lihatberita_controls .page{
+  padding:5px;
+  color:gray;
+}
