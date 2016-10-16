@@ -23,6 +23,13 @@
 				'default' => 'Keterangan',
 				'description' => t('Keterangan kategori pengeluaran.'),
 			),
+			'jeniskategori' => array(
+				'type' => 'int',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+				'default' => 0,
+				'description' => t('Jenis keterangan kategori, 0 : pengeluaran, 1 : pemasukan.'),
+			),
 			'created' => array(
 				'type' => 'int',
 				'unsigned' => TRUE,
@@ -128,6 +135,21 @@
 				'size' => 'big',
 				'not null' => TRUE,
 				'description' => t('ID Pemasukan.'),
+			),
+			'kategori' => array(
+				'type' => 'int',
+				'unsigned' => TRUE,
+				'not null' => FALSE,
+				'default' => 0,
+				'size' => 'normal',
+				'description' => t('Kategori pemasukan, 0 untuk umum.'),
+			),
+			'tglpemasukan' => array(
+				'type' => 'int',
+				'unsigned' => TRUE,
+				'not null' => TRUE,
+				'default' => 0,
+				'description' => t('Tanggal pemasukan dibuat.'),
 			),
 			'keterangan' => array(
 				'type' => 'varchar',

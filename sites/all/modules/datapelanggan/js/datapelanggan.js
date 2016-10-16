@@ -369,7 +369,7 @@ $(document).ready(function() {
         changeMonth: true,
         changeYear: true,
         dateFormat: 'dd-mm-yy',
-        altField: '#tglbayarkirim',
+        altField: '#tglkirim',
         altFormat: 'yy-mm-dd'
     });
     $('#nilaipembayaran').keypress(function(e) {

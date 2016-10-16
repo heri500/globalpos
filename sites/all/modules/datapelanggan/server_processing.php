@@ -435,7 +435,7 @@ function serverSideLaundry($request){
 		$tombolambil = "<img title=\"Klik untuk mengisi form pengambilan laundry\" onclick=\"pickup_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
 		$tombolhapus = "<img title=\"Klik untuk menghapus laundry\" onclick=\"delete_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
 		$tombolprint = "<img title=\"Klik untuk mencetak titipan laundry\" onclick=\"print_laundry(".$data->idtitipanlaundry.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
-		$tombolselesai = "<img title=\"Laundry sudah diambil\" src=\"/misc/media/images/checks.png\" width=\"22\">";		
+		$tombolselesai = "<img title=\"Laundry sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
 		$rowData[] = $tomboldetail;
 		if ($data->status_laundry == 0 || $data->status_laundry == 1){
 			$rowData[] = $tombolambil;
@@ -483,6 +483,221 @@ function arrayHariSS(){
     $hari_array = array('Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu');
     return $hari_array;
 }
+function kategoriPengeluaran($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		'id','kategori','jeniskategori','keterangan'
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength)){
+		$pageLength = 25;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT id, kategori, jeniskategori, keterangan, created, changed, uid ";
+	$strSQLFilteredTotal = "SELECT COUNT(id) ";
+	$strSQL .= "FROM cms_kategoripengeluaran ";
+	$strSQLFilteredTotal .= "FROM cms_kategoripengeluaran ";
+	$strSQL .= "WHERE 1=1 ";
+	$strSQLFilteredTotal .= "WHERE 1=1 ";
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (kategori LIKE '%%%s%%' OR keterangan LIKE '%%%s%%' )";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)){
+		$result = db_query($strSQL,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery));
+	}else{
+		$result = db_query($strSQL,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+	}
+	$output = array();
+	$jenisKategori = array('Pengeluaran', 'Pemasukan');
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$editbutton = '<img title="Klik untuk mengubah kategori pengeluaran" onclick="edit_kategori('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+		$rowData[] = $editbutton;
+		$rowData[] = $data->kategori;
+		$rowData[] = $jenisKategori[$data->jeniskategori];
+		$rowData[] = $data->keterangan;
+		$rowData[] = $data->jeniskategori;
+		$rowData[] = $data->id;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM cms_kategoripengeluaran"));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
+function pengeluaran($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		'pengeluaran.tglpengeluaran','pengeluaran.kategori', 'pengeluaran.keterangan', 'pengeluaran.nilai'
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength)){
+		$pageLength = 25;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT pengeluaran.id, pengeluaran.keterangan, pengeluaran.kategori, ";
+	$strSQL .= "pengeluaran.nilai, pengeluaran.tglpengeluaran, pengeluaran.created, ";
+	$strSQL .= "pengeluaran.changed, pengeluaran.uid, ";
+	$strSQL .= "katpengeluaran.kategori AS kategori_title ";
+	$strSQLFilteredTotal = "SELECT COUNT(pengeluaran.id) ";
+	$strSQL .= "FROM cms_pengeluaran AS pengeluaran ";
+	$strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
+	$strSQL .= "ON pengeluaran.kategori=katpengeluaran.id ";
+	$strSQLFilteredTotal .= "FROM cms_pengeluaran AS pengeluaran ";
+	$strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
+	$strSQLFilteredTotal .= "ON pengeluaran.kategori=katpengeluaran.id ";
+	$strSQLFilteredTotal .= "WHERE 1=1 ";
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (katpengeluaran.kategori LIKE '%%%s%%' OR ";
+		$strCriteria .= "katpengeluaran.keterangan LIKE '%%%s%%' OR ";
+		$strCriteria .= "pengeluaran.keterangan LIKE '%%%s%%' OR ";
+		$strCriteria .= "SUBSTR(pengeluaran.tglpengeluaran,1,10) LIKE '%%%s%%'  OR ";
+		$strCriteria .= "pengeluaran.nilai LIKE '%%%s%%'";
+		$strCriteria .= ")";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)){
+		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+	}else{
+		$result = db_query($strSQL,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+	}
+	$output = array();
+	$arrayhari = arrayHariSS();
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$editbutton = '<img title="Klik untuk mengubah pengeluaran" onclick="edit_pengeluaran('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+		$deletebutton = '<img title="Klik untuk menghapus pengeluaran" onclick="hapus_pengeluaran('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$rowData[] = $editbutton;
+		$rowData[] = $deletebutton;
+		$index_hari = date('w', $data->tglpengeluaran);
+		$tglpengeluaran = date('d-m-Y', $data->tglpengeluaran);
+		$rowData[] = $arrayhari[$index_hari];
+		$rowData[] = $tglpengeluaran;
+		$rowData[] = $data->kategori_title;
+		$rowData[] = $data->keterangan;
+		$rowData[] = number_format($data->nilai,0,',','.');
+		$rowData[] = $data->kategori;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM cms_pengeluaran"));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
+function pemasukan($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		'pemasukan.tglpemasukan','pemasukan.kategori', 'pemasukan.keterangan', 'pemasukan.nilai'
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength)){
+		$pageLength = 25;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT pemasukan.id, pemasukan.keterangan, pemasukan.kategori, ";
+	$strSQL .= "pemasukan.nilai, pemasukan.tglpemasukan, pemasukan.created, ";
+	$strSQL .= "pemasukan.changed, pemasukan.uid, ";
+	$strSQL .= "katpemasukan.kategori AS kategori_title ";
+	$strSQLFilteredTotal = "SELECT COUNT(pemasukan.id) ";
+	$strSQL .= "FROM cms_pemasukan AS pemasukan ";
+	$strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpemasukan ";
+	$strSQL .= "ON pemasukan.kategori=katpemasukan.id ";
+	$strSQLFilteredTotal .= "FROM cms_pemasukan AS pemasukan ";
+	$strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpemasukan ";
+	$strSQLFilteredTotal .= "ON pemasukan.kategori=katpemasukan.id ";
+	$strSQLFilteredTotal .= "WHERE 1=1 ";
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (katpemasukan.kategori LIKE '%%%s%%' OR ";
+		$strCriteria .= "katpemasukan.keterangan LIKE '%%%s%%' OR ";
+		$strCriteria .= "pemasukan.keterangan LIKE '%%%s%%' OR ";
+		$strCriteria .= "SUBSTR(pemasukan.tglpemasukan,1,10) LIKE '%%%s%%'  OR ";
+		$strCriteria .= "pemasukan.nilai LIKE '%%%s%%'";
+		$strCriteria .= ")";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)){
+		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+	}else{
+		$result = db_query($strSQL,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal));
+	}
+	$output = array();
+	$arrayhari = arrayHariSS();
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$editbutton = '<img title="Klik untuk mengubah pemasukan" onclick="edit_pemasukan('.$data->id.', this.parentNode.parentNode);" src="'.$baseDirectory.'/misc/media/images/edit.ico" width="22">';
+		$deletebutton = '<img title="Klik untuk menghapus pemasukan" onclick="hapus_pemasukan('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$rowData[] = $editbutton;
+		$rowData[] = $deletebutton;
+		$index_hari = date('w', $data->tglpemasukan);
+		$tglpemasukan = date('d-m-Y', $data->tglpemasukan);
+		$rowData[] = $arrayhari[$index_hari];
+		$rowData[] = $tglpemasukan;
+		$rowData[] = $data->kategori_title;
+		$rowData[] = $data->keterangan;
+		$rowData[] = number_format($data->nilai,0,',','.');
+		$rowData[] = $data->kategori;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM cms_pemasukan"));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -493,6 +708,12 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePenjualan2($_GET);
 }else if($_GET['request_data'] == 'laundry'){
     $returnArray = serverSideLaundry($_GET);
+}else if($_GET['request_data'] == 'kategoripengeluaran'){
+	$returnArray = kategoriPengeluaran($_GET);
+}else if($_GET['request_data'] == 'pengeluaran'){
+	$returnArray = pengeluaran($_GET);
+}else if($_GET['request_data'] == 'pemasukan'){
+	$returnArray = pemasukan($_GET);
 }
 echo json_encode($returnArray);
 ?>

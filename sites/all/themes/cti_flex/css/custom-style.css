@@ -203,7 +203,7 @@ div.toolbar3,#dialogdetail div.toolbar,#dialogdetailhutang div.toolbar,#dialogde
 	margin-left: 6px;	
 }
 #pilihanperiode input[type="text"]{
-	width: 80px;
+	width: 100px;
 	margin-right: 10px;
 }
 div.barisbayar{
@@ -743,7 +743,9 @@ input.hasDatepicker{
 	display: table-cell;
 	vertical-align: top;
 }
-#keuangan-input-kategori-form .form-item{
+#keuangan-input-kategori-form .form-item,
+#keuangan-input-form .form-item,
+#keuangan-input-pemasukan-form .form-item{
 	margin: 0;	
 }
 .chosen-container-single .chosen-search{
@@ -792,7 +794,7 @@ table.dataTable thead th div.DataTables_sort_wrapper span{
 }
 .button-div{
 	float: left;
-  margin: 6px 10px -6px 6px;	
+    margin: 6px 10px -6px 6px;
 }
 .page-dataproduk-produk h1.title{
     float: left;
@@ -806,4 +808,26 @@ table.dataTable thead th div.DataTables_sort_wrapper span{
 }
 table.dataTable tfoot th, table.dataTable tfoot td{
 padding: 10px 6px 6px 6px !important;
+}
+.kolom-pemasukan{
+	width: 48%;
+	float: left;
+	padding: 10px;
+}
+.kolom-pengeluaran{
+	width: 48%;
+	float: left;
+	padding: 10px;
+}
+#tempat-report{
+	float: left;
+	width: 100%;
+}
+.kolom-grand-total{
+	width: 98%;
+	float: left;
+	padding: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 16px;
 }

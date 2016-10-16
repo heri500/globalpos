@@ -58,7 +58,7 @@ function view_tabel_penjualan(){
 					"iDisplayLength": 100,
 					"aaSorting": [[urutan, "desc"]],
 					"processing": true,
-	        "serverSide": true,
+	        		"serverSide": true,
 					"ajax": Drupal.settings.basePath + "sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='.$tgl1.'&tglakhir='.$tgl2.'",
 					buttons: [
 	        	{
@@ -303,18 +303,4 @@ function DateAdd($v,$d=null , $f="m/d/Y"){
  */	
  $d=($d?$d:date("Y-m-d")); 
  return date($f,strtotime($v." days",strtotime($d))); 
-}
-function getTotalPenjualan($field_name = null, $tglAwal = null, $tglAkhir = null){
-	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
-		$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));	
-	}
-	return $totalPenjualan;
-}
-function getTotalPenjualan2($field_name1 = null, $field_name2 = null, $tglAwal = null, $tglAkhir = null){
-	if (!empty($field_name1) && !empty($field_name2) && !empty($tglAwal) && !empty($tglAkhir)){
-		$totalPenjualan = db_result(db_query("SELECT SUM($field_name1*$field_name2) FROM detailpenjualan AS detail
-		LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan 
-		WHERE penj.tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));	
-	}
-	return $totalPenjualan;
 }

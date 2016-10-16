@@ -344,3 +344,17 @@ function createLogoImagePath(){
 	'setting');
 	return $logoPath;
 }
+function getTotalPenjualan($field_name = null, $tglAwal = null, $tglAkhir = null){
+	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
+		$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+	}
+	return $totalPenjualan;
+}
+function getTotalPenjualan2($field_name1 = null, $field_name2 = null, $tglAwal = null, $tglAkhir = null){
+	if (!empty($field_name1) && !empty($field_name2) && !empty($tglAwal) && !empty($tglAkhir)){
+		$totalPenjualan = db_result(db_query("SELECT SUM($field_name1*$field_name2) FROM detailpenjualan AS detail
+		LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan
+		WHERE penj.tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+	}
+	return $totalPenjualan;
+}
