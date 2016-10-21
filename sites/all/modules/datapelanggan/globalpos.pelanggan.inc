@@ -389,6 +389,7 @@ function getTotalHutangPelanggan(){
  * @return int
  */
 function syncHutangPelanggan($idPelanggan = null){
+	global $user;
 	$strSql = 'SELECT idpelanggan FROM pelanggan';
 	if (!empty($idPelanggan)){
 		$strSql .= ' WHERE idpelanggan=%d';
@@ -402,8 +403,18 @@ function syncHutangPelanggan($idPelanggan = null){
 		if (!empty($data->idpelanggan)){
 			$totalHutang = getTotalHutangLatest($data->idpelanggan, true);
 		}
-		$strSqlUpdate = 'UPDATE piutang SET besarhutang=\'%f\' WHERE idpelanggan=%d';
-		db_query($strSqlUpdate, $totalHutang, $data->idpelanggan);
+		$piutangExist = cekPiutangExists($data->idpelanggan);
+		if ($piutangExist){
+			$strSqlUpdate = 'UPDATE piutang SET besarhutang=\'%f\' WHERE idpelanggan=%d';
+			db_query($strSqlUpdate, $totalHutang, $data->idpelanggan);
+		}else{
+			$strSqlInsert = "INSERT INTO piutang (idpelanggan, besarhutang, pembayaranterakhir,uid) ";
+			$strSqlInsert .= "VALUES (%d, '%f','%f', %d)";
+			db_query(
+				$strSqlInsert,
+				$data->idpelanggan,$totalHutang,-1*($totalHutang), $user->uid
+			);
+		}
 		$totalSync++;
 	}
 	return $totalSync;

@@ -26,3 +26,15 @@ function getTotalPenggunaanDeposit($idpelanggan = null){
 	}
 	return $totalpenggunaan;
 }
+function cekPiutangExists($idpelanggan = null){
+	$piutangExist = 0;
+	if (!empty($idpelanggan)){
+		$piutangExist = db_result(
+			db_query(
+				"SELECT COUNT(idpelanggan) FROM piutang WHERE idpelanggan=%d",
+				$idpelanggan
+			)
+		);
+	}
+	return $piutangExist;
+}

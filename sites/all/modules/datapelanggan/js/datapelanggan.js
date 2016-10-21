@@ -97,8 +97,10 @@ function tampiltabelhutangdetail(){
         'bAutoWidth': false,
         'bPaginate': false,
         'bLengthChange': false,
-        'bFilter': false,
+        'bFilter': true,
         'bInfo': false,
+        'scrollY': '330px',
+        'scrollCollapse': true,
         'aoColumnDefs': [
             { 'bSortable': false, 'aTargets': [ 0 ] }
         ],
@@ -119,8 +121,6 @@ function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
         cache: false,
         success: function(data){
             $('#detailpiutang').html(data);
-            tampiltabelhutangdetail();
-            $('div.toolbar').html('PELANGGAN : '+ namapelanggan);
             alamat = pathutama + 'datapelanggan/detailpembayaran';
             $.ajax({
                 type: 'POST',
@@ -129,9 +129,11 @@ function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
                 cache: false,
                 success: function(data2){
                     $('#detailpembayaran').html(data2);
+                    $('#dialogdetailhutang').dialog('open');
+                    tampiltabelhutangdetail();
+                    $('div.toolbar').html('PELANGGAN : '+ namapelanggan);
                     tampiltabelpembayaran();
                     $('div.toolbar2').html('PEMBAYARAN');
-                    $('#dialogdetailhutang').dialog('open');
                 }
             });
         }
@@ -154,8 +156,10 @@ function tampiltabelpembayaran(){
         'bAutoWidth': false,
         'bPaginate': false,
         'bLengthChange': false,
+        'scrollY': '330px',
+        'scrollCollapse': true,
         'bInfo': false,
-        'bFilter': false,
+        'bFilter': true,
         'aaSorting': [[0, 'asc']],
         'sDom': '<"H"<"toolbar2">fr>t<"F"ip>'
 });
@@ -331,7 +335,7 @@ $(document).ready(function() {
     });
     $('#dialogdetailhutang').dialog({
         modal: true,
-        width: 950,
+        width: 980,
         resizable: false,
         autoOpen: false,
         position: ['auto','auto']

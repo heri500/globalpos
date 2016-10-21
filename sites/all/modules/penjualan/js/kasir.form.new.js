@@ -6,6 +6,7 @@ var totalproduk = 0;
 var barisrubah;
 var tglsekarang = "";
 var tgltampil = "";
+var cetakstruk = 0;
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
 		"bJQueryUI": true,
@@ -100,7 +101,8 @@ function tambahproduk(qtyAdd){
 		}
 	});
 }
-function kirim_data(){
+function kirim_data(cetaknota){
+	cetakstruk = cetaknota;
 	if (totalproduk > 0){
 		var sData = $("input", oTable.fnGetNodes()).serialize();
 		$("#nilaikirim").val(decodeURIComponent(sData));
@@ -407,8 +409,10 @@ $(document).ready(function(){
 				$("#pesantext").text("Mohon isi barcode atau kode produk atau nama produk yang ingin dicari...!!!");
 				$("#dialogwarning").dialog("open");
 			}
-		}else if (e.keyCode == 116 || e.keyCode == 117){
-			kirim_data();
+		}else if (e.keyCode == 116) {
+			kirim_data(1);
+		}else if (e.keyCode == 117){
+			kirim_data(0);
 		}else if (e.keyCode == 115){
 			hapus_latest_produk();
 		}else if (e.keyCode == 119){
@@ -508,7 +512,7 @@ $(document).ready(function(){
 			$("#field_kembalian").hide();
 		}
 		if (e.keyCode == 13){
-			akhiri_belanja();
+			akhiri_belanja(cetakstruk);
 		}
 	});
 	$("#tgljual").datepicker({

@@ -60,8 +60,8 @@ function penjualan($idtitipanlaundry = null){
 	$tombolcari = '<a id="tombolubahharga" class="cari" onclick="ubahharga()">F2:UBAH HARGA</a>';
 	$tombolqty = '<a id="tombolubahqty" onclick="ubahqty()" class="buttonqty">F3:UBAH QTY</a>';
 	$tombolhapus = '<a class="buttonhapus" onclick="hapus_latest_produk()">F4:HAPUS ITEM</a>';
-	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data()">F5:BAYAR</a>';
-	$tombolprint = '<a class="buttonprint" onclick="kirim_data()">F6:BAYAR&PRINT</a>';
+	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(1)">F5:BAYAR&PRINT</a>';
+	$tombolprint = '<a class="buttonprint" onclick="kirim_data(0)">F6:BAYAR</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
 	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
@@ -130,6 +130,7 @@ function penjualan($idtitipanlaundry = null){
 	$penjualan .= $tombolqty;
 	$penjualan .= $tombolhapus;
 	$penjualan .= $tombolselesai;
+	$penjualan .= $tombolprint;
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;

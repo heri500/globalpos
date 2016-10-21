@@ -121,9 +121,19 @@ function pembayaranhutang($variables){
 	$variables['keterangan'],$variables['idpenjualan'],$variables['idtitipanlaundry']);
 	$sisahutang = $variables['hutang'] - $variables['pembayaran'];
 	$tglsekarang = date("Y-m-d H:i:s");
-	db_query("UPDATE piutang SET besarhutang='%f',pembayaranterakhir='%f',last_update='%s' WHERE idpelanggan='%d'",
-	$sisahutang,$variables['pembayaran'],$tglsekarang,$variables['idpelanggan']);
-	$variables['sisahutang'] = $sisahutang;
+	$piutangExist = cekPiutangExists($variables['idpelanggan']);
+	if ($piutangExist){
+		db_query("UPDATE piutang SET besarhutang='%f',pembayaranterakhir='%f',last_update='%s' WHERE idpelanggan='%d'",
+		$sisahutang,$variables['pembayaran'],$tglsekarang,$variables['idpelanggan']);
+		$variables['sisahutang'] = $sisahutang;
+	}else{
+		db_query(
+			"INSERT INTO piutang (idpelanggan, besarhutang, pembayaranterakhir,uid)
+			VALUES (%d, '%f','%f', %d)",$variables['idpelanggan'],$sisahutang,
+			$variables['pembayaran'], $user->uid
+		);
+	}
+
 	return $variables;
 }
 function rest_getTotalHutang($idpelanggan = null){

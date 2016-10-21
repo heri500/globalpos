@@ -218,8 +218,8 @@ function serverSidePenjualan($request){
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
-	$tglAwal = $_REQUEST['tglawal'].' 00:00';
-	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$tglAwal = $_REQUEST['tglawal'];
+	$tglAkhir = $_REQUEST['tglakhir'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.idpemakai', 
@@ -239,25 +239,28 @@ function serverSidePenjualan($request){
 	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
 	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
-	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name ";
+	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, plg.namapelanggan ";
 	$strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
 	$strSQL .= "FROM penjualan AS penj ";
 	$strSQLFilteredTotal .= "FROM penjualan AS penj ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
 	$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
 	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
 	$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
 		$strCriteria .= "OR SUBSTR(penj.tglpenjualan,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
+		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
 	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
 	}else{
 		$result = db_query($strSQL,$tglAwal,$tglAkhir,$firstRecord,$lastRecord);
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
@@ -277,7 +280,10 @@ function serverSidePenjualan($request){
 		$rowData[] = number_format($data->bayar,0,",",".");
 		$rowData[] = number_format($data->kembali,0,",",".");
 		$rowData[] = $data->name;
-    $rowData[] = $data->idpenjualan;
+		$rowData[] = $data->namapelanggan;
+		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+		$rowData[] = $tombolprint;
+		$rowData[] = $data->idpenjualan;
 		$output[] = $rowData;
 	}
 	$recordsTotal = db_result(db_query("SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
@@ -287,7 +293,7 @@ function serverSidePenjualan($request){
 				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output
+			"data"            => $output,
 		);
 }
 
@@ -295,8 +301,8 @@ function serverSidePenjualan2($request){
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
-	$tglAwal = $_REQUEST['tglawal'].' 00:00';
-	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$tglAwal = $_REQUEST['tglawal'];
+	$tglAkhir = $_REQUEST['tglakhir'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'prod.barcode','prod.namaproduct','supp.namasupplier', 

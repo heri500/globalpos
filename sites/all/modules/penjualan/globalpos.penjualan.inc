@@ -5,8 +5,8 @@ function view_tabel_penjualan(){
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
 	if ($_POST["tgl1"] AND $_POST["tgl2"]){
-		$tgl1 = $_POST["tgl1"].' 00:00';
-		$tgl2 = $_POST["tgl2"].' 23:59';
+		$tgl1 = $_POST["tgl1"];
+		$tgl2 = $_POST["tgl2"];
 	}else{
 		$tgl1 = date("Y-m-d").' 00:00';
 		$tgl2 = date("Y-m-d").' 23:59';
@@ -79,6 +79,8 @@ function view_tabel_penjualan(){
 						$("td", row).eq(8).addClass("angka");
 						$("td", row).eq(9).addClass("angka");
 						$("td", row).eq(10).addClass("center");
+						$("td", row).eq(11).addClass("center");
+						$("td", row).eq(12).addClass("center");
 					}
 				});
 			}else if (tampilData == 1){
@@ -143,6 +145,12 @@ function view_tabel_penjualan(){
 				}
 			});
 		}
+		function print_penjualan(idpenjualan,nonota){
+			var konfirmasi = confirm("Yakin ingin mencetak nota penjualan dengan no nota : "+ nonota +" ini...??!!");
+			if (konfirmasi){
+				window.open(pathutama + "print/6?idpenjualan="+ idpenjualan);
+			}
+		}
 		$(document).ready(function(){
 			$("#dialogdetail").dialog({
 				modal: true,
@@ -157,12 +165,12 @@ function view_tabel_penjualan(){
 			$("#tgl1").datepicker({
 				changeMonth: true,
 				changeYear: true,
-				dateFormat: "yy-mm-dd"
+				dateFormat: "yy-mm-dd 00:00"
 			});
 			$("#tgl2").datepicker({
 				changeMonth: true,
 				changeYear: true,
-				dateFormat: "yy-mm-dd"
+				dateFormat: "yy-mm-dd 23:59"
 			});
 		})
 	','inline');
@@ -196,6 +204,8 @@ function tabel_penjualan($tgl1,$tgl2){
 	$tabelpenjualan .= '<th>BAYAR</th>';
 	$tabelpenjualan .= '<th>KEMBALI</th>';
 	$tabelpenjualan .= '<th>KASIR</th>';
+	$tabelpenjualan .= '<th>PELANGGAN</th>';
+	$tabelpenjualan .= '<th class="tablebutton"></th>';
 	$tabelpenjualan .= '</tr>';
 	$tabelpenjualan .= '</thead>';
 	$tabelpenjualan .= '<tbody>';
@@ -214,7 +224,9 @@ function tabel_penjualan($tgl1,$tgl2){
 	$tabelpenjualan .= '<th></th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelpenjualan .= '<th></th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '</tr>';
 	$tabelpenjualan .= '</tfoot>';
 	$tabelpenjualan .= '</table>';

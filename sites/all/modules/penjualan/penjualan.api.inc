@@ -274,45 +274,45 @@ function printOutPenjualan(){
 	drupal_add_js($js_path);
 	$tablePrint = '';
 	$nidpenjualan = isset($_GET['idpenjualan']) ? $_GET['idpenjualan'] : null;
-	$printHeader = false;
+	$printHeader = true;
 	if (!empty($nidpenjualan)){
 		global $user;
 		$dataPenjualan = getDataPenjualan($nidpenjualan);
 		$tablePrint = '<table style="width: 240px;border-collapse: collapse;" >';
 		$tablePrint .= '<tbody>';
 		if ($printHeader){
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px dotted #444;border-top: 1px dotted #444;">LAUNDRY IKHWAN</td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 14px;font-weight: bold;text-align: center;border-bottom: 1px dotted #444;border-top: 1px dotted #444;">IKHWAN MART</td></tr>';
 		}
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;"><span style="float: left">'.$dataPenjualan['info']->tglpenjualan.'</span><span style="float: right">'.$dataPenjualan['info']->nonota.'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><span style="float: left">'.$dataPenjualan['info']->tglpenjualan.'</span><span style="float: right">'.$dataPenjualan['info']->nonota.'&nbsp;&nbsp;</span></td></tr>';
 		$nilaiBayar = '[Rp. '.number_format($dataPenjualan['info']->bayar,0,",",".").']';	
 		if (isset($dataPenjualan['laundry'])){
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 9px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">MASUK : '.$dataPenjualan['laundry']['info']->tglpenjualan.'</span><span style="float: right">KASIR : '.$dataPenjualan['laundry']['info']->name.'&nbsp;&nbsp;</span></td></tr>';
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 9px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">Status : AMBIL</span><span style="float: right">Bayar : '.$dataPenjualan['info']->carabayar.' '.$nilaiBayar.'&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">MASUK : '.$dataPenjualan['laundry']['info']->tglpenjualan.'</span><span style="float: right">KASIR : '.$dataPenjualan['laundry']['info']->name.'&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">Status : AMBIL</span><span style="float: right">Bayar : '.$dataPenjualan['info']->carabayar.' '.$nilaiBayar.'&nbsp;&nbsp;</span></td></tr>';
 		}else{
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 9px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">'.$dataPenjualan['info']->name.'</span><span style="float: right">Bayar : '.$dataPenjualan['info']->carabayar.' '.$nilaiBayar.'&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px dotted #444;"><span style="float: left">'.$dataPenjualan['info']->name.'</span><span style="float: right">Bayar : '.$dataPenjualan['info']->carabayar.' '.$nilaiBayar.'&nbsp;&nbsp;</span></td></tr>';
 		}
 		$totalPenjualan = 0;
 		for ($i = 0;$i < count($dataPenjualan['detail']);$i++){
 			$dataDetail = $dataPenjualan['detail'][$i];
 			if ($dataDetail->jumlah > 1){
-				$tablePrint .= '<tr><td colspan="2" style="font-size: 10px;"><span style="float: left">'.$dataDetail->jumlah.' '.$dataDetail->satuan.' X '.number_format($dataDetail->hargajual,0,",",".").'</span></td></tr>';
+				$tablePrint .= '<tr><td colspan="2" style="font-size: 13px;font-weight: bold;"><span style="float: left">'.$dataDetail->jumlah.' '.$dataDetail->satuan.' X '.number_format($dataDetail->hargajual,0,",",".").'</span></td></tr>';
 			}
 			$tablePrint .= '<tr>';
-			$tablePrint .= '<td style="font-size: 10px;width: 75%;">'.$dataDetail->namaproduct.'</td>';
-			$tablePrint .= '<td style="font-size: 10px;width: 25%;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
+			$tablePrint .= '<td style="font-size: 11px;width: 75%;">'.$dataDetail->namaproduct.'</td>';
+			$tablePrint .= '<td style="font-size: 12px;font-weight: bold;width: 25%;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
 			$tablePrint .= '</tr>';
 			$totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
 		}
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px dotted #444;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;"><span style="float: left">BAYAR</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px dotted #444;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">BAYAR</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
 		$viewperlakuankembalian = '';
 		if ($dataPenjualan['info']->perlakuankembalian != 0){
-			$viewperlakuankembalian = '<span style="font-size: 10px">'.$perlakuanKembalian[$dataPenjualan['info']->perlakuankembalian].'</span>';
+			$viewperlakuankembalian = '<span style="font-size: 13px;font-weight: bold;">'.$perlakuanKembalian[$dataPenjualan['info']->perlakuankembalian].'</span>';
 		}
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px dotted #444;"><span style="float: left"><img src="'.base_path().'misc/media/images/bbm.png" width="12" style="vertical-align:middle;">&nbsp;5AB041B8</span><span style="float: right"><img src="'.base_path().'misc/media/images/whatsapp.png" width="11" style="vertical-align:middle;">&nbsp;+628982485685&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;">Jl. Babakan Madang, Ruko Victoria,&nbsp;&nbsp;</td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-bottom: 1px dotted #444;">Blok C No.22, Sentul City - Bogor&nbsp;&nbsp;</td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px dotted #444;"><span style="float: left"><img src="'.base_path().'misc/media/images/bbm.png" width="12" style="vertical-align:middle;">&nbsp;5A9DC6F8</span><span style="float: right"><img src="'.base_path().'misc/media/images/whatsapp.png" width="11" style="vertical-align:middle;">&nbsp;+6287873134847&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;">Plaza Victoria,Blok G No.3&nbsp;&nbsp;</td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-bottom: 1px dotted #444;">Sentul City - Bogor&nbsp;&nbsp;</td></tr>';
 		$tablePrint .= '</tbody>';
 		$tablePrint .= '</table>';
 	}
