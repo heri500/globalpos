@@ -358,3 +358,20 @@ function getTotalPenjualan2($field_name1 = null, $field_name2 = null, $tglAwal =
 	}
 	return $totalPenjualan;
 }
+function getRandomString($length=22)
+{
+	$key = '';
+	$keys = array_merge(range(1, 9));
+	$keys2 = array_merge(range(0, 9));
+	if ($length > 4){
+		for ($i = 0; $i < $length - 4; $i++) {
+			srand((double)microtime() * 10000000);
+			$key .= $keys[array_rand($keys)];
+		}
+		for ($i = $length - 4; $i < $length; $i++) {
+			srand((double)microtime() * 10000000);
+			$key .= $keys2[array_rand($keys)];
+		}
+	}
+	return $key;
+}

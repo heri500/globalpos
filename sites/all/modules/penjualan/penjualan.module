@@ -19,6 +19,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.laundry.inc'
 	);
+	$items['penjualan/customerorder'] = array(
+		'title' => t('Customer Order'),
+		'description' => 'Form customer order',
+		'page callback' => 'customerorder',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	$items['penjualan/viewpenjualan'] = array(
     'title' => t('Data Penjualan'),
     'description' => 'Data Penjualan',
@@ -91,6 +100,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.laundry.inc'
 	);
+	$items['penjualan/simpancustomerorder'] = array(
+		'title' => t('Simpan Customer Order'),
+		'description' => 'Simpan customer order',
+		'page callback' => 'simpan_customerorder',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	$items['penjualan/hitungomset'] = array(
     'title' => t('Hitung Omset'),
     'description' => 'Hitung Omset',
@@ -140,7 +158,7 @@ function penjualan_menu() {
 } // end hook menu
 
 function penjualan_perm() {
-	return array('Admin Penjualan Produk','Admin Data Penjualan Produk','Input Laundry');
+	return array('Admin Penjualan Produk','Admin Data Penjualan Produk','Input Laundry','Input Customer Order');
 }
 
 require_once 'attachplugins.inc';
