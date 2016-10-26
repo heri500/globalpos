@@ -1091,7 +1091,7 @@ function edit_data_produk(){
 					data: request, 
 					cache: false, 
 					success: function(data){
-						$("#kodepoduk").val(kodebarang +"-"+ data);
+						$("#kodepoduk").val(kodebarang +"-"+ data.trim());
 					}
 				});
 			}
