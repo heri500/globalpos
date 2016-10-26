@@ -833,7 +833,7 @@ function simpan_produk(){
 				if (isset($_POST["alt_code"])){
 					$kodealternatif = $altCode;
 				}else{
-					$kodealternatif = $kodealt.cek_kode_alt($kodealt);
+					$kodealternatif = $kodealt.cek_kode_alt(remove_utf8_bom($kodealt));
 				}
 				//$sql = "UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'";
 				//$nilai = $_POST["idsupplier"].'-'.$_POST["idkategori"].'-'.$_POST["idsubkategori"].'-'.$_POST["barcode"].'-'.$kodealternatif.'-'.$_POST["namaproduk"].'-'.$_POST["hargapokok"].'-'.$_POST["hargajual"].'-'.$_POST["margin"].'-'.$_POST["minstok"].'-'.$_POST["maxstok"].'-'.$_POST["stok"].'-'.$_POST["satuan"].'-'.$_POST["keterangan"].'-'.$_POST["idproduk"];
