@@ -488,6 +488,121 @@ function serverSideLaundry($request){
             "order"           => $orderColumn
 		);
 }
+function serverSideCustomerOrder($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		5 => 'customerorder.nonota',
+		7 => 'tanggal',
+		9 => 'total',
+		10 => 'customerorder.carabayar',
+		11 => 'customerorder.bayar',
+		14 => 'plg.namapelanggan',
+		15 => 'customerorder.status_order',
+		16 => 'perkiraan_ambil',
+		17 => 'customerorder.keterangan',
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength)){
+		$pageLength = 100;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT customerorder.id,customerorder.nonota,SUBSTR(customerorder.tglorder,1,10) AS tanggal,";
+	$strSQL .= "SUBSTR(customerorder.tglorder,11,9) AS waktu, customerorder.idpemakai,";
+	$strSQL .= "(SELECT SUM(hargajual*jumlah) FROM detailcustomerorder WHERE ";
+	$strSQL .= "id = customerorder.id) AS total,";
+	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
+	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
+	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";
+	$strSQL .= "plg.namapelanggan, customerorder.keterangan, user.name ";
+	$strSQL .= "FROM customer_order AS customerorder ";
+	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
+	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = customerorder.idpelanggan ";
+	$strSQL .= "WHERE customerorder.tglorder BETWEEN '%s' AND '%s' ";
+	$strSQLFilteredTotal = "SELECT COUNT(customerorder.id) ";
+	$strSQLFilteredTotal .= "FROM customer_order AS customerorder ";
+	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
+	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = customerorder.idpelanggan ";
+	$strSQLFilteredTotal .= "WHERE customerorder.tglorder BETWEEN '%s' AND '%s' ";
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (customerorder.nonota LIKE '%%%s%%' OR SUBSTR(customerorder.tglorder,1,10) LIKE '%%%s%%' ";
+		$strCriteria .= "OR SUBSTR(customerorder.tglorder,11,9) LIKE '%%%s%%' OR user.name LIKE '%%%s%%' ";
+		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR customerorder.carabayar LIKE '%%%s%%' ";
+		$strCriteria .= ")";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)){
+		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+	}else{
+		$result = db_query($strSQL,$tglAwal,$tglAkhir,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
+	}
+	$arrayhari = arrayHariSS();
+	$output = array();
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$tomboldetail = "<img title=\"Klik untuk melihat detail customer order\" onclick=\"view_detail(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
+		$tombolambil = "<img title=\"Klik untuk mengisi form pengambilan customer order\" onclick=\"pickup_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
+		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
+		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
+		$tombolselesai = "<img title=\"Customer order sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
+		$rowData[] = $tomboldetail;
+		if ($data->status_order == 0 || $data->status_order == 1){
+			$rowData[] = $tombolambil;
+		}else{
+			$rowData[] = $tombolselesai;
+		}
+		$rowData[] = $tombolprint;
+		$rowData[] = $tombolhapus;
+		$rowData[] = '<div id="'.$data->nonota.'" class="barcode-place"></div>';
+		$rowData[] = $data->nonota;
+		$indexhari = date('w', strtotime($data->tanggal));
+		$rowData[] = $arrayhari[$indexhari];
+		$rowData[] = date('d-m-Y', strtotime($data->tanggal));
+		$rowData[] = $data->waktu;
+		$rowData[] = number_format($data->total,0,",",".");
+		$rowData[] = $data->carabayar;
+		$rowData[] = number_format($data->bayar,0,",",".");
+		$sisaPembayaran = $data->total - $data->bayar;
+		$rowData[] = number_format($sisaPembayaran,0,",",".");
+		$rowData[] = $data->name;
+		$rowData[] = $data->namapelanggan;
+		if ($data->status_order == 0){
+			$rowData[] = 'BELUM DIAMBIL';
+		}else if ($data->status_order == 1){
+			$rowData[] = 'DIAMBIL SEBAGIAN';
+		}else if ($data->status_order == 2){
+			$rowData[] = 'SUDAH DIAMBIL';
+		}
+		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
+		$rowData[] = $data->keterangan;
+		$rowData[] = $data->id;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output,
+		"order"           => $orderColumn,
+	);
+}
 function arrayHariSS(){
     $hari_array = array('Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu');
     return $hari_array;
