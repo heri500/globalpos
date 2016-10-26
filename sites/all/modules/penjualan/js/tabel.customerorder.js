@@ -1,7 +1,7 @@
 var oTable;
 var pathutama = '';
 var urutan = '';
-var alamatupdatedetaillaundry = '';
+var alamatupdatedetailcustomerorder = '';
 function addCommas(nStr){
 	nStr += "";
 	x = nStr.split(",");
@@ -13,8 +13,8 @@ function addCommas(nStr){
 	}
 	return x1 + x2;
 }
-function tampiltabellaundry(){
-	oTable = $('#tabel_laundry').dataTable( {
+function tampiltabelcustomerorder(){
+	oTable = $('#tabel_customerorder').dataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
         'sPaginationType': 'full_numbers',
@@ -24,7 +24,7 @@ function tampiltabellaundry(){
         'order': [[ 7, "desc" ]],
         'processing': true,
         'serverSide': true,
-        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=laundry&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
+        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
         buttons: [
             {
                 extend: 'colvis',
@@ -41,22 +41,36 @@ function tampiltabellaundry(){
             $('td', row).eq(5).addClass('center');
             $('td', row).eq(6).addClass('center');
             $('td', row).eq(7).addClass('center');
-            $('td', row).eq(8).addClass('angka');
-            $('td', row).eq(9).addClass('center');
-            $('td', row).eq(10).addClass('angka');
+			$('td', row).eq(8).addClass('center');
+            $('td', row).eq(9).addClass('angka');
+            $('td', row).eq(10).addClass('center');
             $('td', row).eq(11).addClass('angka');
-            $('td', row).eq(12).addClass('center');
+            $('td', row).eq(12).addClass('angka');
             $('td', row).eq(13).addClass('center');
             $('td', row).eq(14).addClass('center');
             $('td', row).eq(15).addClass('center');
+            $('td', row).eq(16).addClass('center');
         },
+		'drawCallback': function( settings ) {
+			var renderer = "bmp";
+			var btype = "ean13";
+			var settings = {
+				output:renderer,
+				barWidth: 1,
+				barHeight: 20
+			};
+			$(".barcode-place").each(function(){
+				barcode_value = $(this).attr('id');
+				$(this).barcode(barcode_value, btype, settings);
+			});
+		},
 		"aoColumnDefs": [
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,5,7,11 ] }
+			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16 ] }
 		]
 	});
 }
-function tampiltabellaundrydetail(){
-	oTable = $("#tabel_detail_laundry").dataTable( {
+function tampiltabelcustomerorderdetail(){
+	oTable = $("#tabel_detail_customerorder").dataTable( {
 		"bJQueryUI": true,
 		"bAutoWidth": false,
 		"bPaginate": false,
@@ -66,10 +80,10 @@ function tampiltabellaundrydetail(){
 		"sDom": "<'H'<'toolbar'>fr>t<'F'ip>"
 	});
 }
-function view_detail(idlaundry,nonota){
+function view_detail(idcustomerorder,nonota){
 	var request = new Object();
-	request.idtitipanlaundry = idlaundry;
-	alamat = pathutama + 'penjualan/detaillaundry';
+	request.idcustomerorder = idcustomerorder;
+	alamat = pathutama + 'penjualan/detailcustomerorder';
 	$.ajax({
 		type: 'POST',
 		url: alamat,
@@ -77,47 +91,31 @@ function view_detail(idlaundry,nonota){
 		cache: false,
 		success: function(data){
 			$('#dialogdetail').html(data);
-			tampiltabellaundrydetail();
+			tampiltabelcustomerorderdetail();
 			$('div.toolbar').html('No. Nota : '+ nonota);
 			$('#dialogdetail').dialog('open');
-			/*$('.edit-jumlah').editable(alamatupdatedetaillaundry,{
-				name : 'jumlahproduk',
-				width : 60,
-				height : 18,
-				style   : 'margin: 0',
-				tooltip   : 'Klik untuk mengubah jumlah barang',
-		    indicator : 'Saving...'
-		  });
-		  $('.edit-hargajual').editable(alamatupdatedetaillaundry,{
-				name : 'hargajual',
-				width : 90,
-				height : 18,
-				style   : 'margin: 0',
-				tooltip   : 'Klik untuk mengubah hargajual',
-		    indicator : 'Saving...'
-		  });*/
 		}
 	});
 }
-function delete_laundry(idlaundry,nonota){
-	var konfirmasi = confirm('Yakin ingin menghapus laundry dengan no nota : '+ nonota +' ini...??!!');	
+function delete_customerorder(idcustomerorder,nonota){
+	var konfirmasi = confirm('Yakin ingin menghapus customer order dengan no nota : '+ nonota +' ini...??!!');
 	if (konfirmasi){
-		window.location = pathutama + 'penjualan/deletelaundry/'+ idlaundry +'?destination=penjualan/viewlaundry';	
+		window.location = pathutama + 'penjualan/deletecustomerorder/'+ idcustomerorder +'?destination=penjualan/viewcustomerorder';	
 	}
 }
-function print_laundry(idlaundry,nonota){
-	var konfirmasi = confirm('Yakin ingin mencetak kembali laundry dengan no nota : '+ nonota +' ini...??!!');	
+function print_customerorder(idcustomerorder,nonota){
+	var konfirmasi = confirm('Yakin ingin mencetak kembali customerorder dengan no nota : '+ nonota +' ini...??!!');	
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?nidlaundry='+ idlaundry);	
+		window.open(pathutama + 'print/6?nidcustomerorder='+ idcustomerorder);	
 	}
 }
-function pickup_laundry(idtitipan, nonota){
+function pickup_customerorder(idtitipan, nonota){
 	window.open(Drupal.settings.basePath + 'penjualan/kasir/'+ idtitipan);
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
-	alamatupdatetanggaljual = pathutama + 'penjualan/updatelaundry';
-	//alamatupdatedetaillaundry = pathutama + 'laundry/updatedetaillaundry';
+	alamatupdatetanggaljual = pathutama + 'penjualan/updatecustomerorder';
+	//alamatupdatedetailcustomerorder = pathutama + 'customerorder/updatedetailcustomerorder';
 	urutan = Drupal.settings.urutan;
 	$('#dialogdetail').dialog({
 		modal: true,
@@ -131,17 +129,17 @@ $(document).ready(function(){
 	if (urutan == 1){
 		$('.edit-tanggal').editable(alamatupdatetanggaljual,{
 			submitdata : function(value, settings) {
-			 var idlaundry = $(this).attr('id');
-			 var splitidlaundry = idlaundry.split('-');
-			 idlaundry = splitidlaundry[1];
-			 var jamlaundryupdate = $('#jamlaundry-'+ idlaundry).html();
-			 return {jamlaundry: jamlaundryupdate,ubah: 'tanggal'};
+			 var idcustomerorder = $(this).attr('id');
+			 var splitidcustomerorder = idcustomerorder.split('-');
+			 idcustomerorder = splitidcustomerorder[1];
+			 var jamcustomerorderupdate = $('#jamcustomerorder-'+ idcustomerorder).html();
+			 return {jamcustomerorder: jamcustomerorderupdate,ubah: 'tanggal'};
    		},
 			name : 'tanggaljual',
 			width : 130,
 			height : 18,
 			style   : 'margin: 0',
-			tooltip   : 'Klik untuk mengubah tanggal laundry',
+			tooltip   : 'Klik untuk mengubah tanggal customerorder',
 	    indicator : 'Saving...',
 	    type: "datepicker",
 			datepicker: {
@@ -156,10 +154,10 @@ $(document).ready(function(){
 				tanggaljual.setFullYear(split_tanggal[2],bulan,split_tanggal[0]);
 				var indexhari = tanggaljual.getDay();
 				var hari = Drupal.settings.namahari[indexhari];
-				var idlaundry = $(this).attr('id');
-			 	var splitidlaundry = idlaundry.split('-');
-			 	idlaundry = splitidlaundry[1];
-			 	$('#harilaundry-'+ idlaundry).html(hari);
+				var idcustomerorder = $(this).attr('id');
+			 	var splitidcustomerorder = idcustomerorder.split('-');
+			 	idcustomerorder = splitidcustomerorder[1];
+			 	$('#haricustomerorder-'+ idcustomerorder).html(hari);
      	}
 	  });
 	  $('.edit-jam').editable(alamatupdatetanggaljual,{
@@ -169,11 +167,11 @@ $(document).ready(function(){
 			style   : 'margin: 0;',
 			type: "timepicker",
 			submitdata : function(value, settings) {
-			 var idlaundry = $(this).attr('id');
-			 var splitidlaundry = idlaundry.split('-');
-			 idlaundry = splitidlaundry[1];
-			 var tgllaundryupdate = $('#tglpenjualan-'+ idlaundry).html();
-			 return {tanggaljual: tgllaundryupdate,ubah: 'jam'};
+			 var idcustomerorder = $(this).attr('id');
+			 var splitidcustomerorder = idcustomerorder.split('-');
+			 idcustomerorder = splitidcustomerorder[1];
+			 var tglcustomerorderupdate = $('#tglpenjualan-'+ idcustomerorder).html();
+			 return {tanggaljual: tglcustomerorderupdate,ubah: 'jam'};
    		},
 			timepicker: {
 		  	timeOnlyTitle: "PILIH WAKTU",
@@ -185,11 +183,11 @@ $(document).ready(function(){
 				showButtonPanel: false
 		  },
 		  submit		: "Ok",
-			tooltip   : 'Klik untuk mengubah jam laundry',
+			tooltip   : 'Klik untuk mengubah jam customerorder',
 	    indicator : 'Saving...'
 	  });
 	}
-	tampiltabellaundry();
+	tampiltabelcustomerorder();
 	$('#tgl1').datepicker({
 		changeMonth: true,
 		changeYear: true,

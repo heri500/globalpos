@@ -206,7 +206,7 @@ function simpan_penjualan(){
 	//nonota, idpemakai, total, bayar, kembali
 	if ($_POST["detail_produk"] AND $_POST["bayar"] >= 0 AND $_POST["totalbelanja"]){
 		global $user;
-		date_default_timezone_set('Asia/Jakarta');
+		//date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
 		$splitTanggal = explode('-', $_POST["tgljual"]);
 		$splitJam = explode(':',date("H:i:s"));

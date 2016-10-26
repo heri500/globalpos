@@ -89,7 +89,7 @@
  *   $db_url = 'mysqli://username:password@localhost/databasename';
  *   $db_url = 'pgsql://username:password@localhost/databasename';
  */
-$db_url = 'mysqli://root:abuya313@localhost/ikhwanmart';
+$db_url = 'mysqli://root:abuya313@localhost/songkokikhwan';
 $db_prefix = 'cms_';
 
 /**
@@ -155,8 +155,6 @@ $update_free_access = FALSE;
  * duplicated there so as to avoid conflict issues.
  */
 ini_set('arg_separator.output',     '&amp;');
-ini_set('magic_quotes_runtime',     0);
-ini_set('magic_quotes_sybase',      0);
 ini_set('session.cache_expire',     200000);
 ini_set('session.cache_limiter',    'none');
 ini_set('session.cookie_lifetime',  2000000);

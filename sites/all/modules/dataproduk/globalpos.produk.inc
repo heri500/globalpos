@@ -302,7 +302,7 @@ function data_produk(){
 				data: request, 
 				cache: false, 
 				success: function(data){
-					$("#kodepoduk").val(kodebarang +"-"+ data);
+					$("#kodepoduk").val(kodebarang +"-"+ data.trim());
 				}
 			});
 		}
@@ -389,7 +389,16 @@ function data_produk(){
 						ubahkodebarang();
 						$("#barcode").val("");
 						$("#refreshprodukbaru").click();
-						$("#barcode").select();
+						alamatbarcode = pathutama +"penjualan/getrandomstring";
+						$.ajax({
+							type: "POST",
+							url: alamatbarcode,
+							cache: false,
+							success: function(data){
+								$("#barcode").val(data.trim());
+								$("#barcode").select();
+							}
+						});
 					}
 				});
 			}else{
@@ -501,7 +510,16 @@ function data_produk(){
 	      text: false
       }).click(function(){
       	$("#formpenambahanproduk").fadeIn("slow",function(){
-      		$("#barcode").select();
+      		alamatbarcode = pathutama +"penjualan/getrandomstring";
+      		$.ajax({
+				type: "POST",
+				url: alamatbarcode,
+				cache: false,
+				success: function(data){
+					$("#barcode").val(data.trim());
+      				$("#barcode").select();
+      			}
+      		});
       	});
       });
       $("#refreshprodukbaru").button({
@@ -798,9 +816,10 @@ function cek_barcode2(){
 function simpan_produk(){
 	/*idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,
 	hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan*/
-	if ($_POST["idproduk"]){
+	$altCode = remove_utf8_bom($_POST["alt_code"]);
+	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
-		if ($_POST["barcode"] AND $_POST["namaproduk"]){
+		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
 			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
 			$data = db_fetch_object($result);
 			$STOKSEBELUM = $data->stok;
@@ -811,7 +830,11 @@ function simpan_produk(){
 				$resultsubkategori = db_query("SELECT kodesubkategori FROM subkategori WHERE idsubkategori='%d'",$_POST["idsubkategori"]);
 				$datasubkategori = db_fetch_object($resultsubkategori);
 				$kodealt = $datakategori->kodekategori."-".$datasubkategori->kodesubkategori;
-				$kodealternatif = $kodealt.cek_kode_alt($kodealt);
+				if (isset($_POST["alt_code"])){
+					$kodealternatif = $altCode;
+				}else{
+					$kodealternatif = $kodealt.cek_kode_alt($kodealt);
+				}
 				//$sql = "UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'";
 				//$nilai = $_POST["idsupplier"].'-'.$_POST["idkategori"].'-'.$_POST["idsubkategori"].'-'.$_POST["barcode"].'-'.$kodealternatif.'-'.$_POST["namaproduk"].'-'.$_POST["hargapokok"].'-'.$_POST["hargajual"].'-'.$_POST["margin"].'-'.$_POST["minstok"].'-'.$_POST["maxstok"].'-'.$_POST["stok"].'-'.$_POST["satuan"].'-'.$_POST["keterangan"].'-'.$_POST["idproduk"];
 				db_query("UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',
@@ -851,12 +874,12 @@ function simpan_produk(){
 			}
 		}
 	}else{
-		if ($_POST["barcode"] AND $_POST["namaproduk"]){
+		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
 			db_query("INSERT INTO product(idsupplier,idkategori,idsubkategori,barcode,alt_code,
 			namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,keterangan) VALUES(
 			'%d','%d','%d','%s','%s',
 			'%s','%f','%f','%f','%d','%d','%d','%s','%s')",
-			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$_POST["alt_code"],
+			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$altCode,
 			$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
 			$_POST["satuan"],$_POST["keterangan"]);
 			$result = db_query("SELECT idproduct FROM product WHERE alt_code='%s'",$_POST["alt_code"]);

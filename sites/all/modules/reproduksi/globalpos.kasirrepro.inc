@@ -94,7 +94,7 @@ function simpan_reproduksi(){
 		}
 		$no_nota = buat_nota($next_id);
 		$kembali = $_POST["bayar"] - $_POST["totalbelanja"];
-		date_default_timezone_set('Asia/Jakarta');
+		//date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tglreproduksi"]." ".date("H:i:s");
 		global $user;
 		db_query("INSERT INTO reproduksi (nonota, idpemakai, total, tglreproduksi) 

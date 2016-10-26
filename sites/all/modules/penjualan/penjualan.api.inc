@@ -375,3 +375,69 @@ function getRandomString($length=22)
 	}
 	return $key;
 }
+function createEAN13Code($number){
+	$code = '899' . str_pad($number, 9, '0');
+	$weightflag = true;
+	$sum = 0;
+	// Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+	// loop backwards to make the loop length-agnostic. The same basic functionality
+	// will work for codes of different lengths.
+	for ($i = strlen($code) - 1; $i >= 0; $i--)
+	{
+		$sum += (int)$code[$i] * ($weightflag?3:1);
+		$weightflag = !$weightflag;
+	}
+	$code .= (10 - ($sum % 10)) % 10;
+	return $code;
+}
+function printCustomerOrderBarcode(){
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+	_addBarcodePlugins();
+	drupal_add_js($js_path);
+	$js_path = drupal_get_path('module','penjualan').'/js/order.barcode.js';
+	drupal_add_js($js_path);
+	$tablePrint = '';
+	$nidorder = isset($_GET['idcustomerorder']) ? $_GET['idcustomerorder'] : null;
+	if (!empty($nidorder)){
+		$dataOrder = getCustomerOrder($nidorder);
+		if (count($dataOrder)){
+			$tablePrint = '<table style="width: 100px;border-collapse: collapse;" >';
+			$tablePrint .= '<tbody>';
+			$tablePrint .= '<tr><td id="'.$dataOrder['info']->nonota.'" class="barcode-place"></td></tr>';
+			$tablePrint .= '<tr><td style="text-align: center;">'.$dataOrder['info']->namapelanggan.'</td></tr>';
+			$tablePrint .= '</tbody>';
+			$tablePrint .= '</table>';
+		}
+	}
+	return $tablePrint;
+}
+function getCustomerOrder($nidCustomerOrder = null){
+	$dataCO = null;
+	if (!empty($nidCustomerOrder)){
+		$strSQL = 'SELECT custord.id, custord.nonota, custord.tglorder, custord.idpemakai, ';
+		$strSQL .= 'custord.idpelanggan, custord.total, custord.totalmodal, custord.carabayar, ';
+		$strSQL .= 'custord.bayar, custord.kembali, custord.nokartu, custord.keterangan, ';
+		$strSQL .= 'custord.insert_date, custord.status_order, plg.namapelanggan FROM customer_order ';
+		$strSQL .= 'custord LEFT JOIN pelanggan plg ON custord.idpelanggan = plg.idpelanggan ';
+		$strSQL .= 'WHERE id=%d';
+		$result = db_query($strSQL,$nidCustomerOrder);
+		$dataCO['info'] = db_fetch_object($result);
+		$dataCO['detail'] = getDetailCustomerOrder($nidCustomerOrder);
+	}
+	return $dataCO;
+}
+function getDetailCustomerOrder($nidCustomerOrder = null){
+	$detailOrder = null;
+	if (!empty($nidCustomerOrder)){
+		$strSQL = 'SELECT id, idcustomerorder, idproduct, detailbarcode, jumlah, hargapokok, hargajual, ';
+		$strSQL .= 'diskon, status_order, sisa, diambil, masuk, perkiraan_ambil FROM detailcustomerorder ';
+		$strSQL .= 'WHERE idcustomerorder=%d';
+		$result = db_query($strSQL,$nidCustomerOrder);
+		$detailOrder = array();
+		while ($data = db_fetch_object($result)){
+			$detailOrder[] = $data;
+		}
+	}
+	return $detailOrder;
+}

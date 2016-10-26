@@ -195,7 +195,7 @@ function simpan_customerorder(){
 				$variables['pembayaran'] = $_POST["bayar"];
 				$variables['tglbayar'] = $waktujual;
 				$variables['id'] = $next_id;
-				$variables['keterangan'] = 'Deposit Uang Untuk Nota CustomerOrder : '.$no_nota.' Tanggal : '.$waktujual;
+				$variables['keterangan'] = 'Deposit Uang Untuk Nota Customer Order : '.$no_nota.' Tanggal : '.$waktujual;
 				pembayaranhutang($variables);
 			}
 		}
@@ -216,9 +216,12 @@ function simpan_customerorder(){
 			$data = db_fetch_object($result);
 			$HARGAPOKOK = $data->hargapokok;
 			$totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
-			db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah, hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil) VALUES
-			('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d')",
-					 $next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL,$DISKON,$QTY,$intTanggal,$pecahnilai[4]);
+			$detailbarcode = createEAN13Code(getRandomString(9));
+			db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah,
+			hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil, detailbarcode,
+			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s')",
+			$next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL,$DISKON,$QTY,$intTanggal,$pecahnilai[4],
+			$detailbarcode,$QTY);
 		}
 		db_query("UPDATE customer_order SET totalmodal='%f' WHERE id='%d'",$totalmodal,$next_id);
 	}else{
@@ -227,7 +230,7 @@ function simpan_customerorder(){
 	exit();
 }
 function buat_nota_customerorder($id){
-	$no_nota = getRandomString(13);
+	$no_nota = createEAN13Code(getRandomString(9));
 	return $no_nota;
 }
 function view_kasir_customerorder(){

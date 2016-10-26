@@ -5,11 +5,11 @@ function view_tabel_penjualan(){
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
 	if ($_POST["tgl1"] AND $_POST["tgl2"]){
-		$tgl1 = $_POST["tgl1"].' 00:00';
-		$tgl2 = $_POST["tgl2"].' 23:59';
+		$tgl1 = $_POST["tgl1"];
+		$tgl2 = $_POST["tgl2"];
 	}else{
-		$tgl1 = date("Y-m-d").' 00:00';
-		$tgl2 = date("Y-m-d").' 23:59';
+		$tgl1 = date("Y-m-d");
+		$tgl2 = date("Y-m-d");
 	}
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';

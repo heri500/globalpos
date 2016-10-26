@@ -1,10 +1,17 @@
 <?php
 
-function view_tabel_laundry(){
+function view_tabel_customerorder(){
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
  	$variables['styles'] = drupal_get_css();
+	if (isset($_GET['message'])){
+		$strStatus = 'status';
+		if (isset($_GET['status'])){
+			$strStatus = $_GET['status'];
+		}
+		drupal_set_message($_GET['message'], $strStatus);
+	}
 	if ($_POST["tgl1"] AND $_POST["tgl2"]){
 		$tgl1 = $_POST["tgl1"];
         $splitTgl = explode('-', $tgl1);
@@ -14,18 +21,18 @@ function view_tabel_laundry(){
         $tgl2 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
 	}else{
 		$tgl1 = date("Y-m-").'01';
-		$tgl2 = date("Y-m-d");	
+		$tgl2 = date("Y-m-d");
 	}
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
-		$tabeltampil = tabel_laundry($tgl1,$tgl2);
-		$urutan = 1; 
+		$tabeltampil = tabel_customerorder($tgl1,$tgl2);
+		$urutan = 1;
 	}elseif ($_POST["pilihantampil"] == 'PRODUK'){
 		$produk = 'selected="selected"';
-		$tabeltampil = laundry_produk($tgl1,$tgl2);
+		$tabeltampil = customerorder_produk($tgl1,$tgl2);
 		$urutan = 2;
 	}else{
-		$tabeltampil = tabel_laundry($tgl1,$tgl2);
+		$tabeltampil = tabel_customerorder($tgl1,$tgl2);
 		$nota = 'selected="selected"';
 		$urutan = 1;
 	}
@@ -39,7 +46,8 @@ function view_tabel_laundry(){
 	_addTimePickerPlugins();
 	_addJeditablePlugins();
 	_addAutotabPlugins();
-    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+	_addBarcodePlugins();
+	drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
     drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
     drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
     drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
@@ -50,166 +58,157 @@ function view_tabel_laundry(){
 	drupal_add_js(
         array(
             'urutan'  => $urutan,
-            'tglawal' => $tgl1.' 00:00',
-            'tglakhir'=> $tgl2.' 23:59'
+            'tglawal' => $tgl1,
+            'tglakhir'=> $tgl2,
         ),
         'setting'
     );
-	$js_path = drupal_get_path('module','penjualan').'/js/tabel.laundry.js';
+	$js_path = drupal_get_path('module','penjualan').'/js/tabel.customerorder.js';
 	drupal_add_js($js_path);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';
 	$pilihantampil .= '</select>';
-	$pilihperiode = '<form action="'.base_path().'penjualan/viewlaundry" method="post"><div id="pilihanperiode"><label>PILIH PERIODE LAUNDRY </label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
-	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT LAUNDRY</button></div></form>';
-	$viewlaundry = $pilihperiode.'<div id="viewlaundry">'.$tabeltampil.'</div>';
-	$viewlaundry .= '<div id="dialogdetail" title="DETAIL LAUNDRY"></div>';
-	return $viewlaundry;
+	$pilihperiode = '<form action="'.base_path().'penjualan/viewcustomerorder" method="post"><div id="pilihanperiode"><label>PILIH PERIODE</label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
+	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT ORDER</button></div></form>';
+	$viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
+	$viewcustomerorder .= '<div id="dialogdetail" title="DETAIL customerorder"></div>';
+	return $viewcustomerorder;
 }
 
-function tabel_laundry($tgl1,$tgl2){
-	$tabellaundry ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_laundry">';
-	$tabellaundry .= '<thead>';
-	$tabellaundry .= '<tr>';
-	$tabellaundry .= '<th class="center">&nbsp;</th>';
-	$tabellaundry .= '<th class="center">&nbsp;</th>';
-	$tabellaundry .= '<th class="center">&nbsp;</th>';
-	$tabellaundry .= '<th class="center">&nbsp;</th>';
-	$tabellaundry .= '<th>NO. NOTA</th>';
-	$tabellaundry .= '<th class="center">HARI</th>';
-	$tabellaundry .= '<th class="tanggal">TGL</th>';
-	$tabellaundry .= '<th class="tanggal">JAM</th>';
-	$tabellaundry .= '<th>TOTAL</th>';
-	$tabellaundry .= '<th>CARA BAYAR</th>';
-	$tabellaundry .= '<th>BAYAR</th>';
-	$tabellaundry .= '<th>SISA</th>';
-	$tabellaundry .= '<th>KASIR</th>';
-	$tabellaundry .= '<th>PELANGGAN</th>';
-	$tabellaundry .= '<th>STATUS</th>';
-	$tabellaundry .= '<th>PERKIRAAN</th>';
-	$tabellaundry .= '<th>KETERANGAN</th>';
-	$tabellaundry .= '</tr>';
-	$tabellaundry .= '</thead>';
-	$tabellaundry .= '<tbody>';
-	$tabellaundry .= '</tbody>';
-	$tabellaundry .= '<tfoot>';
-	$tabellaundry .= '<tr>';
+function tabel_customerorder($tgl1,$tgl2){
+	$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_customerorder">';
+	$tabelcustomerorder .= '<thead>';
+	$tabelcustomerorder .= '<tr>';
+	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
+	$tabelcustomerorder .= '<th>BARCODE</th>';
+	$tabelcustomerorder .= '<th>NO. NOTA</th>';
+	$tabelcustomerorder .= '<th class="center">HARI</th>';
+	$tabelcustomerorder .= '<th class="tanggal">TGL</th>';
+	$tabelcustomerorder .= '<th class="tanggal">JAM</th>';
+	$tabelcustomerorder .= '<th>TOTAL</th>';
+	$tabelcustomerorder .= '<th>CARA BAYAR</th>';
+	$tabelcustomerorder .= '<th>BAYAR</th>';
+	$tabelcustomerorder .= '<th>SISA</th>';
+	$tabelcustomerorder .= '<th>KASIR</th>';
+	$tabelcustomerorder .= '<th>PELANGGAN</th>';
+	$tabelcustomerorder .= '<th>STATUS</th>';
+	$tabelcustomerorder .= '<th>PERKIRAAN</th>';
+	$tabelcustomerorder .= '<th>KETERANGAN</th>';
+	$tabelcustomerorder .= '</tr>';
+	$tabelcustomerorder .= '</thead>';
+	$tabelcustomerorder .= '<tbody>';
+	$tabelcustomerorder .= '</tbody>';
+	$tabelcustomerorder .= '<tfoot>';
+	$tabelcustomerorder .= '<tr>';
 	if (cekUserRoles()){
-		$tabellaundry .= '<th style="text-align:right" colspan="8">Total:&nbsp;&nbsp;</th>';
+		$tabelcustomerorder .= '<th style="text-align:right" colspan="9">Total:&nbsp;&nbsp;</th>';
 	}else{
-		$tabellaundry .= '<th style="text-align:right" colspan="7">Total:&nbsp;&nbsp;</th>';
+		$tabelcustomerorder .= '<th style="text-align:right" colspan="8">Total:&nbsp;&nbsp;</th>';
 	}
     $totaljual = 0;
     $totalbayar = 0;
     $totalSisa = 0;
-	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totalSisa,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '<th>&nbsp;</th>';
-	$tabellaundry .= '</tr>';
-	$tabellaundry .= '</tfoot>';
-	$tabellaundry .= '</table>';
-	return $tabellaundry;
+	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalSisa,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '</tr>';
+	$tabelcustomerorder .= '</tfoot>';
+	$tabelcustomerorder .= '</table>';
+	return $tabelcustomerorder;
 }
 
-function detail_laundry(){
-	if ($_POST["idtitipanlaundry"]){
-		$tabellaundry ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_laundry">';
-		$tabellaundry .= '<thead>';
-		$tabellaundry .= '<tr>';
-		$tabellaundry .= '<th>BARCODE</th>';
-		$tabellaundry .= '<th>PRODUK</th>';
-		$tabellaundry .= '<th class="qty">QTY</th>';
-		$tabellaundry .= '<th class="qty">DIAMBIL</th>';
-		$tabellaundry .= '<th class="qty">SISA</th>';
-		$tabellaundry .= '<th class="qty">PERKIRAAN</th>';
-		$tabellaundry .= '<th class="qty">TGL AMBIL</th>';
-		$tabellaundry .= '<th>H.JUAL</th>';
-		$tabellaundry .= '<th>SUBTOTAL</th>';
-		$tabellaundry .= '</tr>';
-		$tabellaundry .= '</thead>';
-		$tabellaundry .= '<tbody>';
+function detail_customerorder(){
+	if ($_POST["idtitipancustomerorder"]){
+		$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_customerorder">';
+		$tabelcustomerorder .= '<thead>';
+		$tabelcustomerorder .= '<tr>';
+		$tabelcustomerorder .= '<th>BARCODE</th>';
+		$tabelcustomerorder .= '<th>PRODUK</th>';
+		$tabelcustomerorder .= '<th class="qty">QTY</th>';
+		$tabelcustomerorder .= '<th class="qty">DIAMBIL</th>';
+		$tabelcustomerorder .= '<th class="qty">SISA</th>';
+		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
+		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
+		$tabelcustomerorder .= '<th>H.JUAL</th>';
+		$tabelcustomerorder .= '<th>SUBTOTAL</th>';
+		$tabelcustomerorder .= '</tr>';
+		$tabelcustomerorder .= '</thead>';
+		$tabelcustomerorder .= '<tbody>';
 		$result = db_query("SELECT b.iddetail,c.barcode, c.namaproduct, b.jumlah, b.hargajual, (b.hargajual*b.jumlah) AS subtotal,
-		sisa, diambil,perkiraan_ambil FROM 
-		detaillaundry b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipanlaundry='%d'",$_POST["idtitipanlaundry"]);
+		sisa, diambil,perkiraan_ambil FROM
+		detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipancustomerorder='%d'",$_POST["idtitipancustomerorder"]);
 		while($data = db_fetch_object($result)){
 			$iddetail = $data->iddetail;
-			$tabellaundry .= '<tr>';
-			$tabellaundry .= '<td>'.$data->barcode.'</td>';
-			$tabellaundry .= '<td>'.$data->namaproduct.'</td>';
-			$tabellaundry .= '<td id="detailjumlah-'.$iddetail.'" class="angka edit-jumlah">'.$data->jumlah.'</td>';
-			$tabellaundry .= '<td class="angka">'.($data->jumlah - $data->sisa).'</td>';
-			$tabellaundry .= '<td class="angka">'.$data->sisa.'</td>';
+			$tabelcustomerorder .= '<tr>';
+			$tabelcustomerorder .= '<td>'.$data->barcode.'</td>';
+			$tabelcustomerorder .= '<td>'.$data->namaproduct.'</td>';
+			$tabelcustomerorder .= '<td id="detailjumlah-'.$iddetail.'" class="angka edit-jumlah">'.$data->jumlah.'</td>';
+			$tabelcustomerorder .= '<td class="angka">'.($data->jumlah - $data->sisa).'</td>';
+			$tabelcustomerorder .= '<td class="angka">'.$data->sisa.'</td>';
 			$tglambil = '-';
 			if (!empty($data->diambil)){
 				$tglambil = date('d-m-Y H:i', $data->diambil);
 			}
-			$tabellaundry .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.date('d-m-Y H:i', $data->perkiraan_ambil).'</td>';
-			$tabellaundry .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.$tglambil.'</td>';
-			$tabellaundry .= '<td id="detailharga-'.$iddetail.'" class="angka edit-hargajual">'.number_format($data->hargajual,0,",",".").'</td>';
-			$tabellaundry .= '<td class="angka">'.number_format($data->subtotal,0,",",".").'</td>';
-			$tabellaundry .= '</tr>';
+			$tabelcustomerorder .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.date('d-m-Y H:i', $data->perkiraan_ambil).'</td>';
+			$tabelcustomerorder .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.$tglambil.'</td>';
+			$tabelcustomerorder .= '<td id="detailharga-'.$iddetail.'" class="angka edit-hargajual">'.number_format($data->hargajual,0,",",".").'</td>';
+			$tabelcustomerorder .= '<td class="angka">'.number_format($data->subtotal,0,",",".").'</td>';
+			$tabelcustomerorder .= '</tr>';
 		}
-		$tabellaundry .= '</tbody>';
-		$tabellaundry .= '</table><br><br>';
-		print $tabellaundry;
+		$tabelcustomerorder .= '</tbody>';
+		$tabelcustomerorder .= '</table><br><br>';
+		print $tabelcustomerorder;
 	}
-	exit();	
+	exit();
 }
-function laundry_produk($tgl1,$tgl2){
+function customerorder_produk($tgl1,$tgl2){
 	$tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
 	$tgl2 = date('Y-m-d', strtotime($tgl2)).' 23:59';
-	$tabellaundry ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_laundry">';
-	$tabellaundry .= '<thead>';
-	$tabellaundry .= '<tr>';
-	$tabellaundry .= '<th>BARCODE</th>';
-	$tabellaundry .= '<th>JASA</th>';
-	$tabellaundry .= '<th class="qty">QTY</th>';
-	$tabellaundry .= '<th>H.JUAL</th>';
-	$tabellaundry .= '<th>SUBTOTAL</th>';
-	$tabellaundry .= '</tr>';
-	$tabellaundry .= '</thead>';
-	$tabellaundry .= '<tbody>';
-	$result = db_query("SELECT d.namasupplier, a.tglpenjualan, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual, 
-	SUM(b.hargajual*b.jumlah) AS subtotal FROM detaillaundry b LEFT JOIN titipanlaundry a ON a.idtitipanlaundry=b.idtitipanlaundry
-	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglpenjualan BETWEEN '%s' AND '%s' 
+	$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_customerorder">';
+	$tabelcustomerorder .= '<thead>';
+	$tabelcustomerorder .= '<tr>';
+	$tabelcustomerorder .= '<th>BARCODE</th>';
+	$tabelcustomerorder .= '<th>JASA</th>';
+	$tabelcustomerorder .= '<th class="qty">QTY</th>';
+	$tabelcustomerorder .= '<th>H.JUAL</th>';
+	$tabelcustomerorder .= '<th>SUBTOTAL</th>';
+	$tabelcustomerorder .= '</tr>';
+	$tabelcustomerorder .= '</thead>';
+	$tabelcustomerorder .= '<tbody>';
+	$result = db_query("SELECT d.namasupplier, a.tglpenjualan, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
+	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN titipancustomerorder a ON a.idtitipancustomerorder=b.idtitipancustomerorder
+	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglpenjualan BETWEEN '%s' AND '%s'
 	GROUP BY b.idproduct",$tgl1,$tgl2);
 	$totaljual = 0;
 	$totalmodal = 0;
 	$totallaba = 0;
 	while($data = db_fetch_object($result)){
-		$tabellaundry .= '<tr>';
-		$tabellaundry .= '<td>'.$data->barcode.'</td>';
-		$tabellaundry .= '<td>'.$data->namaproduct.'</td>';
-		$tabellaundry .= '<td class="angka">'.$data->totalqty.'</td>';
-		$tabellaundry .= '<td class="angka">'.$data->hargajual.'</td>';
-		$tabellaundry .= '<td class="angka">'.$data->subtotal.'</td>';
-		$tabellaundry .= '</tr>';
+		$tabelcustomerorder .= '<tr>';
+		$tabelcustomerorder .= '<td>'.$data->barcode.'</td>';
+		$tabelcustomerorder .= '<td>'.$data->namaproduct.'</td>';
+		$tabelcustomerorder .= '<td class="angka">'.$data->totalqty.'</td>';
+		$tabelcustomerorder .= '<td class="angka">'.$data->hargajual.'</td>';
+		$tabelcustomerorder .= '<td class="angka">'.$data->subtotal.'</td>';
+		$tabelcustomerorder .= '</tr>';
 		$totaljual = $totaljual + $data->subtotal;
 	}
-	$tabellaundry .= '</tbody>';
-	$tabellaundry .= '<tfoot>';
-	$tabellaundry .= '<tr>';
-	$tabellaundry .= '<th style="text-align:right" colspan="4">Total:&nbsp;&nbsp;</th>';
-	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabellaundry .= '</tr>';
-	$tabellaundry .= '</tfoot>';
-	$tabellaundry .= '</table>';
-	return $tabellaundry;	
-}
-
-function DateAdd($v,$d=null , $f="m/d/Y"){ 
- /*
- To Use
- $TGLHITUNG = date("m/d/Y");
- $TGLAKHIRHITUNG = DateAdd(30,$TGLHITUNG);
- */	
- $d=($d?$d:date("Y-m-d")); 
- return date($f,strtotime($v." days",strtotime($d))); 
+	$tabelcustomerorder .= '</tbody>';
+	$tabelcustomerorder .= '<tfoot>';
+	$tabelcustomerorder .= '<tr>';
+	$tabelcustomerorder .= '<th style="text-align:right" colspan="4">Total:&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '</tr>';
+	$tabelcustomerorder .= '</tfoot>';
+	$tabelcustomerorder .= '</table>';
+	return $tabelcustomerorder;
 }
