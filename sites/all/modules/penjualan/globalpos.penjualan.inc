@@ -8,8 +8,8 @@ function view_tabel_penjualan(){
 		$tgl1 = $_POST["tgl1"];
 		$tgl2 = $_POST["tgl2"];
 	}else{
-		$tgl1 = date("Y-m-d").' 00:00';
-		$tgl2 = date("Y-m-d").' 23:59';
+		$tgl1 = date("Y-m-d");
+		$tgl2 = date("Y-m-d");
 	}
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
@@ -165,12 +165,12 @@ function view_tabel_penjualan(){
 			$("#tgl1").datepicker({
 				changeMonth: true,
 				changeYear: true,
-				dateFormat: "yy-mm-dd 00:00"
+				dateFormat: "yy-mm-dd"
 			});
 			$("#tgl2").datepicker({
 				changeMonth: true,
 				changeYear: true,
-				dateFormat: "yy-mm-dd 23:59"
+				dateFormat: "yy-mm-dd"
 			});
 		})
 	','inline');

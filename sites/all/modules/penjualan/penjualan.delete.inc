@@ -93,3 +93,20 @@ function delete_laundry($idtitipanlaundry){
 	}
 	header('Location: '.base_path().$_GET['destination']);
 }
+function delete_customer_order($idcustomerorder = null){
+	if (!empty($idcustomerorder)){
+		$strSQL = 'SELECT COUNT(idpenjualan) FROM penjualan WHERE idcustomerorder=%d';
+		$penjualanTerkait = db_result(db_query($strSQL, $idcustomerorder));
+		if ($penjualanTerkait > 0){
+			$strError = t('Ada penjualan terkait dengan customer order ini, delete data gagal');
+			header('Location: '.base_path().$_GET['destination'].'?message='.$strError.'&status=error');
+		}else{
+			$strSQLDeleteDetail = 'DELETE FROM detailcustomerorder WHERE idcustomerorder=%d';
+			$strSQLDelete = 'DELETE FROM customer_order WHERE id=%d';
+			db_query($strSQLDeleteDetail,$idcustomerorder);
+			db_query($strSQLDelete,$idcustomerorder);
+			$strSuccess = t('Customer order berhasil dihapus...!!');
+			header('Location: '.base_path().$_GET['destination'].'?message='.$strSuccess.'&status=status');
+		}
+	}
+}

@@ -266,6 +266,7 @@ function simpanproduk(namafile){
 				ubahkodebarang();
 				$("#barcode").val("");
 				$("#refreshprodukbaru").click();
+
 				$("#barcode").select();
 			}
 		});

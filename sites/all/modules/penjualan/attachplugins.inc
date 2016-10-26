@@ -53,3 +53,6 @@ function _addNewDatabalesPlugins(){
 	drupal_add_js('sites/all/libraries/datatables.1.10/extensions/Buttons/js/buttons.print.js');
 	drupal_add_js('sites/all/libraries/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
 }
+function _addBarcodePlugins(){
+	drupal_add_js('sites/all/libraries/barcode/jquery-barcode.min.js');
+}

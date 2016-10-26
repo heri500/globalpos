@@ -218,13 +218,13 @@ function serverSidePenjualan($request){
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
-	$tglAwal = $_REQUEST['tglawal'];
-	$tglAkhir = $_REQUEST['tglakhir'];
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.idpemakai', 
 		'penj.total','penj.totalmodal','penj.carabayar','penj.bayar','penj.kembali'
-		,'penj.nokartu','penj.keterangan','penj.insert_date','user.name'
+		,'penj.nokartu','penj.keterangan','penj.insert_date','user.name','plg.namapelanggan'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -294,6 +294,9 @@ function serverSidePenjualan($request){
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
 			"data"            => $output,
+			"sql"			  => $strSQL,
+			"tglawal"		  => $tglAwal,
+			"tglakhir"		  => $tglAkhir,
 		);
 }
 
@@ -301,8 +304,8 @@ function serverSidePenjualan2($request){
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
-	$tglAwal = $_REQUEST['tglawal'];
-	$tglAkhir = $_REQUEST['tglakhir'];
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'prod.barcode','prod.namaproduct','supp.namasupplier', 
