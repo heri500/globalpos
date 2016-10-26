@@ -1332,6 +1332,7 @@ function edit_data_produk(){
 		$pilihankategori2 .= '</select>';
 		//idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan
 		$editproduk = '<div id="formplace" class="produk"><form id="formproduk">';
+		$dataproduk->barcode = empty($dataproduk->barcode) ? createEAN13Code(getRandomString(9)) : $dataproduk->barcode;
 		$editproduk .= '<label>BARCODE</label><input type="text" class="validate[required,funcCall[cek_barcode]]" id="barcode" name="barcode" value="'.$dataproduk->barcode.'"><div id="validating"></div>';
 		$editproduk .= '<input type="hidden" id="barcodelama" name="barcodelama" value="'.$dataproduk->barcode.'">';
 		$editproduk .= '<input type="hidden" id="kodepoduk" name="kodeproduk" value="'.$dataproduk->alt_code.'">';
