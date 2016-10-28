@@ -336,7 +336,7 @@ function cek_barcode(field, rules, i, options){
         })
     }
 }
-function simpanproduk(){
+function simpanproduk(namafile){
     if ($('#barcode').val() != '' && !barcodesama && $('#namaproduk').val() != '' && $('#hargapokok').val() > 0 && $('#hargajual').val() > 0){
         var request = new Object();
         request.barcode = $('#barcode').val();
@@ -352,7 +352,12 @@ function simpanproduk(){
         request.maxstok = $('#maxstok').val();
         request.stok = $('#stok').val();
         request.satuan = $('#satuan').val();
+        request.namafile = namafile;
         request.keterangan = $('#keteranganproduk').val();
+        request.type_product = $("#type_product").val();
+        request.lead_time = $("#lead_time").val();
+        request.jam_kerja = $("#ikut_jam_kerja").val();
+        request.sebelum_zuhur = $("#sebelum_zuhur").val();
         alamatsimpan = pathutama +'dataproduk/simpanproduk';
         $.ajax({
             type: 'POST',
@@ -397,6 +402,17 @@ function view_status(kondisistok){
         window.location = pathutama + 'dataproduk/produk?statusstok='+ kondisistok;
     }else{
         window.location = pathutama + 'dataproduk/produk';
+    }
+}
+function save_produk(){
+    var jumlah_file = 0;
+    $(".uploadifyQueueItem").each(function(){
+        jumlah_file++;
+    });
+    if (jumlah_file > 0){
+        $("#uploadify").uploadifyUpload();
+    }else{
+        simpanproduk("tanpafile");
     }
 }
 $(document).ready(function() {
@@ -549,6 +565,21 @@ $(document).ready(function() {
         }
     });
     $('#formproduk').validationEngine();
+    $("#uploadify").uploadify({
+        "uploader"       : pathutama + "sites/all/libraries/uploadify/uploadify.swf",
+        "script"         : pathutama + "sites/all/libraries/uploadify/uploadxls.php",
+        "cancelImg"      : pathutama + "sites/all/libraries/uploadify/images/cancel.png",
+        "folder"         : pathfile,
+        "fileExt"     	 : "*.jpg;*.gif;*.png",
+        "fileDesc"    	 : "Image Files",
+        "multi"          : false,
+        "onComplete"  : function(event, ID, fileObj, response, data) {
+            simpanproduk(fileObj.name);
+        },
+        "onError" : function (event,ID,fileObj,errorObj) {
+            console.log(fileObj.name);
+        }
+    });
     tampilkantabelproduk();
     $('#print-barcode-biasa').on('click', function(){
         var selected_product = '';

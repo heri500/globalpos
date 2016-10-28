@@ -181,6 +181,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'penjualan.delete.inc'
 	);
+	$items['penjualan/detailcustomerorder'] = array(
+		'title' => t('Detail Customer Order'),
+		'description' => 'Detail customer order',
+		'page callback' => 'detail_customerorder',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.tabelcustomerorder.inc'
+	);
 	return $items;
 } // end hook menu
 
