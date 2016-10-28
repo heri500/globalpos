@@ -834,3 +834,9 @@ padding: 10px 6px 6px 6px !important;
 body.lightbox-processed{
 	margin: 8px 0 !important;
 }
+.float-right{
+	float: right !important;
+}
+tr.selected td {
+	background: #ffc none repeat scroll 0 0 !important;
+}
