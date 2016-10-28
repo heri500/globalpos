@@ -478,7 +478,7 @@ function printProductBarcodeWithLogo(){
 				}else{
 					$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
 					$tablePrint .= '<tbody>';
-					$tablePrint .= '<tr><td colspan="2" style="font-size: 10px;">&nbsp;</td></tr>';
+					$tablePrint .= '<tr><td colspan="2" style="font-size: 8px;">&nbsp;</td></tr>';
 				}
 				$tablePrint .= '<tr>';
 				$tablePrint .= '<td rowspan="3" class="logo-place">';

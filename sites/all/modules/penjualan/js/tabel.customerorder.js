@@ -50,6 +50,7 @@ function tampiltabelcustomerorder(){
             $('td', row).eq(14).addClass('center');
             $('td', row).eq(15).addClass('center');
             $('td', row).eq(16).addClass('center');
+			$('td', row).eq(17).addClass('center');
         },
 		'drawCallback': function( settings ) {
 			var renderer = "bmp";
@@ -65,7 +66,7 @@ function tampiltabelcustomerorder(){
 			});
 		},
 		"aoColumnDefs": [
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16 ] }
+			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
 		]
 	});
 }

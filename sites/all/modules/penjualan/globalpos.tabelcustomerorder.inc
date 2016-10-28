@@ -80,10 +80,10 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_customerorder">';
 	$tabelcustomerorder .= '<thead>';
 	$tabelcustomerorder .= '<tr>';
-	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
-	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
-	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
-	$tabelcustomerorder .= '<th class="center">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '<th>BARCODE</th>';
 	$tabelcustomerorder .= '<th>NO. NOTA</th>';
 	$tabelcustomerorder .= '<th class="center">HARI</th>';
@@ -98,6 +98,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>STATUS</th>';
 	$tabelcustomerorder .= '<th>PERKIRAAN</th>';
 	$tabelcustomerorder .= '<th>KETERANGAN</th>';
+	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
@@ -116,6 +117,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalSisa,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';

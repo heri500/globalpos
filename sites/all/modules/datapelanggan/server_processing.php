@@ -560,6 +560,7 @@ function serverSideCustomerOrder($request){
 		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
 		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
 		$tombolselesai = "<img title=\"Customer order sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
+		$tombolprintproduksi = "<img title=\"Klik untuk mencetak keperluan produksi\" onclick=\"print_production(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print-production.png\" width=\"22\">";
 		$rowData[] = $tomboldetail;
 		if ($data->status_order == 0 || $data->status_order == 1){
 			$rowData[] = $tombolambil;
@@ -590,6 +591,7 @@ function serverSideCustomerOrder($request){
 		}
 		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
 		$rowData[] = $data->keterangan;
+		$rowData[] = $tombolprintproduksi;
 		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
