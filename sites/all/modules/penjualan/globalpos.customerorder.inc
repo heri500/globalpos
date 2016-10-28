@@ -194,7 +194,7 @@ function simpan_customerorder(){
 				$variables['hutang'] = getTotalHutang($_POST["idpelanggan"]);
 				$variables['pembayaran'] = $_POST["bayar"];
 				$variables['tglbayar'] = $waktujual;
-				$variables['id'] = $next_id;
+				$variables['idcustomerorder'] = $next_id;
 				$variables['keterangan'] = 'Deposit Uang Untuk Nota Customer Order : '.$no_nota.' Tanggal : '.$waktujual;
 				pembayaranhutang($variables);
 			}

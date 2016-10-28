@@ -502,6 +502,50 @@ function printProductBarcodeWithLogo(){
 	}
 	return $tablePrint;
 }
+function printCustomerOrderLogo(){
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+	_addBarcodePlugins();
+	drupal_add_js($js_path);
+	$js_path = drupal_get_path('module','penjualan').'/js/orderlogo.barcode.js';
+	drupal_add_js($js_path);
+	$tablePrint = '';
+	$nidOrder = isset($_GET['idorderlogo']) ? $_GET['idorderlogo'] : null;
+	$pathLogo = createLogoImagePath();
+	if ($nidOrder > 0){
+		$detailOrders = getDetailOrder($nidOrder);
+		if (count($detailOrders)) {
+			$counterData = 0;
+			for ($i = 0;$i < count($detailOrders);$i++){
+				$dataOrder = $detailOrders[$i];
+				for ($j = 0;$j < (int)$dataOrder['jumlah'];$j++){
+					if ($counterData == 0){
+						$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" >';
+						$tablePrint .= '<tbody>';
+					}else{
+						$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
+						$tablePrint .= '<tbody>';
+						$tablePrint .= '<tr><td colspan="2" style="font-size: 8px;">&nbsp;</td></tr>';
+					}
+					$tablePrint .= '<tr>';
+					$tablePrint .= '<td rowspan="3" class="logo-place">';
+					$tablePrint .= '<img height="68" src="' . $pathLogo . '" />';
+					$tablePrint .= '</td>';
+					$tablePrint .= '<td>';
+					$tablePrint .= '<div id="' . $dataOrder['detailbarcode'] . '" class="barcode-place" align="center"></div>';
+					$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataOrder['detailbarcode'] . '</div>';
+					$tablePrint .= '</td></tr>';
+					$tablePrint .= '<tr class="standard-font"><td align="center">' . $dataOrder['namapelanggan'] . '</td></tr>';
+					$tablePrint .= '<tr class="small-font"><td align="center">' . $dataOrder['namaproduct'] . ' ['.($j + 1).']</td></tr>';
+					$tablePrint .= '</tbody>';
+					$tablePrint .= '</table>';
+					$counterData++;
+				}
+			}
+		}
+	}
+	return $tablePrint;
+}
 function getCustomerOrder($nidCustomerOrder = null){
 	$dataCO = null;
 	if (!empty($nidCustomerOrder)){
@@ -516,6 +560,26 @@ function getCustomerOrder($nidCustomerOrder = null){
 		$dataCO['detail'] = getDetailCustomerOrder($nidCustomerOrder);
 	}
 	return $dataCO;
+}
+function getDetailOrder($nidCustomerOrder = null){
+	$detailOrder = null;
+	if (!empty($nidCustomerOrder)) {
+		$dataCustomerOrder = getCustomerOrder($nidCustomerOrder);
+		$strSQL = 'SELECT a.detailbarcode, a.jumlah, b.namaproduct FROM detailcustomerorder a ';
+		$strSQL .= 'LEFT JOIN product b ON a.idproduct = b.idproduct ';
+		$strSQL .= 'WHERE a.idcustomerorder = %d';
+		$result = db_query($strSQL,$nidCustomerOrder);
+		$detailOrder = array();
+		while ($data = db_fetch_object($result)){
+			$detailOrder[] = array(
+				'detailbarcode' => $data->detailbarcode,
+				'namapelanggan' => $dataCustomerOrder['info']->namapelanggan,
+				'namaproduct' => $data->namaproduct,
+				'jumlah' => $data->jumlah,
+			);
+		}
+	}
+	return $detailOrder;
 }
 function getDataProduct($nidProduct = null){
 	$dataProduct = null;
@@ -556,6 +620,8 @@ function cekPrinterCommand(){
 		$printOut = printProductBarcode();
 	}else if (isset($_GET['idproductlogo'])){
 		$printOut = printProductBarcodeWithLogo();
+	}else if (isset($_GET['idorderlogo'])) {
+		$printOut = printCustomerOrderLogo();
 	}
 	return $printOut;
 }

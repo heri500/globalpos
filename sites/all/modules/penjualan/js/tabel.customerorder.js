@@ -110,6 +110,12 @@ function print_customerorder(idcustomerorder,nonota){
 		window.open(pathutama + 'print/6?nidcustomerorder='+ idcustomerorder);	
 	}
 }
+function print_production(idcustomerorder,nonota){
+	var konfirmasi = confirm('Yakin ingin mencetak detail customer order dengan no nota : '+ nonota +' untuk keperluan produksi...??!!');
+	if (konfirmasi){
+		window.open(pathutama + 'print/6?idorderlogo='+ idcustomerorder);
+	}
+}
 function pickup_customerorder(idtitipan, nonota){
 	window.open(Drupal.settings.basePath + 'penjualan/kasir/'+ idtitipan);
 }
