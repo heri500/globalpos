@@ -838,6 +838,8 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = pengeluaran($_GET);
 }else if($_GET['request_data'] == 'pemasukan'){
 	$returnArray = pemasukan($_GET);
+}else if($_GET['request_data'] == 'customerorder'){
+	$returnArray = serverSideCustomerOrder($_GET);
 }
 echo json_encode($returnArray);
 ?>

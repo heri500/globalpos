@@ -219,7 +219,7 @@ function simpan_customerorder(){
 			$detailbarcode = createEAN13Code(getRandomString(9));
 			db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah,
 			hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil, detailbarcode,
-			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s')",
+			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s','%d')",
 			$next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL,$DISKON,$QTY,$intTanggal,$pecahnilai[4],
 			$detailbarcode,$QTY);
 		}

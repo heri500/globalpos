@@ -565,4 +565,5 @@ $(document).ready(function(){
 	});
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
+	$('#tempattombolkasir').css('height','330px');
 })

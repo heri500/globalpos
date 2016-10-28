@@ -419,6 +419,32 @@ function printCustomerOrderBarcode(){
 	}
 	return $tablePrint;
 }
+function printProductBarcode(){
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+	_addBarcodePlugins();
+	drupal_add_js($js_path);
+	$js_path = drupal_get_path('module','penjualan').'/js/product.barcode.js';
+	drupal_add_js($js_path);
+	$tablePrint = '';
+	$nidProduct = isset($_GET['idproduct']) ? $_GET['idproduct'] : null;
+	if (!empty($nidProduct)){
+		$dataProduct = getDataProduct($nidProduct);
+		if (count($dataProduct)){
+			$tablePrint = '<table style="width: 186px;border-collapse: collapse;" >';
+			$tablePrint .= '<tbody>';
+			$tablePrint .= '<tr><td>';
+			$tablePrint .= '<div id="'.$dataProduct['info']->barcode.'" class="barcode-place" align="center" style="width: 166px;"></div>';
+			$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">'.$dataProduct['info']->barcode.'</div>';
+			$tablePrint .= '</td></tr>';
+			$tablePrint .= '<tr class="standard-font"><td style="text-align: center;">'.$dataProduct['info']->namaproduct.'</td></tr>';
+			$tablePrint .= '<tr class="small-font"><td style="text-align: center;"><span style="float: left;">&nbsp;&nbsp;&nbsp;'.$dataProduct['info']->alt_code.'</span><span style="float: right;">Rp. '.number_format($dataProduct['info']->hargajual,0,',','.').',-&nbsp;&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '</tbody>';
+			$tablePrint .= '</table>';
+		}
+	}
+	return $tablePrint;
+}
 function getCustomerOrder($nidCustomerOrder = null){
 	$dataCO = null;
 	if (!empty($nidCustomerOrder)){
@@ -433,6 +459,19 @@ function getCustomerOrder($nidCustomerOrder = null){
 		$dataCO['detail'] = getDetailCustomerOrder($nidCustomerOrder);
 	}
 	return $dataCO;
+}
+function getDataProduct($nidProduct = null){
+	$dataProduct = null;
+	if (!empty($nidProduct)){
+		$strSQL = 'SELECT idproduct, idsupplier, idkategori, idsubkategori, barcode, alt_code, ';
+		$strSQL .= 'namaproduct, type_product, hargapokok, hargajual, margin, minstok, maxstok, ';
+		$strSQL .= 'stok, satuan, berat, keterangan, lead_time, aturan_jam_kerja, ';
+		$strSQL .= 'berlaku_sebelum_zuhur ';
+		$strSQL .= 'FROM product WHERE idproduct=%d';
+		$result = db_query($strSQL,$nidProduct);
+		$dataProduct['info'] = db_fetch_object($result);
+	}
+	return $dataProduct;
 }
 function getDetailCustomerOrder($nidCustomerOrder = null){
 	$detailOrder = null;
