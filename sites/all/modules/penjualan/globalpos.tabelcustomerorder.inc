@@ -139,6 +139,7 @@ function detail_customerorder(){
 		$tabelcustomerorder .= '<th class="qty">QTY</th>';
 		$tabelcustomerorder .= '<th class="qty">DIAMBIL</th>';
 		$tabelcustomerorder .= '<th class="qty">SISA</th>';
+		$tabelcustomerorder .= '<th class="qty">PRODUKSI</th>';
 		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
 		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
 		$tabelcustomerorder .= '<th>H.JUAL</th>';
@@ -147,7 +148,7 @@ function detail_customerorder(){
 		$tabelcustomerorder .= '</thead>';
 		$tabelcustomerorder .= '<tbody>';
 		$strSQL = 'SELECT b.id,c.barcode, c.namaproduct, b.jumlah, b.hargajual,';
-		$strSQL .= '(b.hargajual*b.jumlah) AS subtotal,sisa, diambil,perkiraan_ambil FROM ';
+		$strSQL .= '(b.hargajual*b.jumlah) AS subtotal,sisa, diambil,perkiraan_ambil,outstanding FROM ';
 		$strSQL .= 'detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct ';
 		$strSQL .= 'LEFT JOIN supplier a ON c.idsupplier=a.idsupplier WHERE b.idcustomerorder=%d';
 		$result = db_query($strSQL,$_POST["idcustomerorder"]);
@@ -159,6 +160,8 @@ function detail_customerorder(){
 			$tabelcustomerorder .= '<td id="detailjumlah-'.$iddetail.'" class="angka edit-jumlah">'.$data->jumlah.'</td>';
 			$tabelcustomerorder .= '<td class="angka">'.($data->jumlah - $data->sisa).'</td>';
 			$tabelcustomerorder .= '<td class="angka">'.$data->sisa.'</td>';
+			$qtyProduksi = $data->jumlah - $data->outstanding;
+			$tabelcustomerorder .= '<td class="angka">'.$qtyProduksi.'</td>';
 			$tglambil = '-';
 			if (!empty($data->diambil)){
 				$tglambil = date('d-m-Y H:i', $data->diambil);
