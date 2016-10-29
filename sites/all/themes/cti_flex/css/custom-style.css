@@ -840,3 +840,13 @@ body.lightbox-processed{
 tr.selected td {
 	background: #ffc none repeat scroll 0 0 !important;
 }
+.barcode-scan{
+	width: 20%;
+	float: left;
+	padding: 4px;
+}
+.production-table{
+	width: 78%;
+	float: left;
+	padding: 4px;
+}

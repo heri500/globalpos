@@ -252,3 +252,132 @@ function view_kasir_customerorder(){
 	$kasirtabel .= '</table>';
 	return $kasirtabel;
 }
+function order_keluar(){
+	$path = drupal_get_path('theme', 'cti_flex');
+	$form_style = $path.'/css/custom-style.css';
+	drupal_add_css($form_style, 'theme', 'all', FALSE);
+	$variables['styles'] = drupal_get_css();
+	drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/orderkeluar.form.js';
+	drupal_add_js($js_path);
+	$labelData = '<div>Scan/Masukkan nomer nota order/nama pelanggan</div>';
+	$returnForm = $labelData.'<input type="text" id="no-nota" name="no-nota" style="width: 275px;font-size: 18px;">';
+	return $returnForm;
+}
+function cari_nota_order(){
+	if ($_GET["term"]){
+		$KATACARI = '%'.strtolower($_GET["term"]).'%';
+		$result = db_query("SELECT custord.id, custord.nonota, custord.tglorder,
+        custord.total,plg.namapelanggan,plg.telp FROM customer_order AS custord LEFT JOIN
+        pelanggan AS plg ON custord.idpelanggan=plg.idpelanggan WHERE
+        LOWER(custord.nonota) LIKE '%s' OR LOWER(plg.namapelanggan) LIKE '%s'
+        AND custord.status_order < 2
+        ORDER BY custord.tglorder DESC LIMIT 50",$KATACARI,$KATACARI);
+		$items = array();
+		while ($rowDb = db_fetch_object($result)){
+			$valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan;
+			if (!empty($rowDb->telp)){
+				$valueData .= ' - '.$rowDb->telp;
+			}
+			$valueData .= ' - '.number_format($rowDb->total,0,',','.');
+			$items[] = array(
+				'id'    => $rowDb->id,
+				'label' => $valueData,
+				'value' => $valueData,
+			);
+		}
+		print json_encode($items);
+	}
+	exit();
+}
+function order_selesai(){
+	$path = drupal_get_path('theme', 'cti_flex');
+	$form_style = $path.'/css/custom-style.css';
+	drupal_add_css($form_style, 'theme', 'all', FALSE);
+	$variables['styles'] = drupal_get_css();
+	_addNewDatabalesPlugins();
+	$js_path = drupal_get_path('module','penjualan').'/js/orderselesai.form.js';
+	drupal_add_js($js_path);
+	$labelData = '<div>Scan/Masukkan nomer kode produksi</div>';
+	$returnForm = '<div class="barcode-scan">'.$labelData;
+	$returnForm .= '<input type="text" id="detailbarcode" name="detailbarcode" style="width: 275px;font-size: 18px;">';
+	$returnForm .= '</div>';
+	$tombolSimpan = '<p><button id="simpan-produksi">Simpan Hasil Produksi</button></p>';
+	$returnForm .= '<div class="production-table">'.tableFinishedOrder().$tombolSimpan.'</div>';
+	return $returnForm;
+}
+function tableFinishedOrder(){
+	$finishedorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_finished_order">';
+	$finishedorder .= '<thead>';
+	$finishedorder .= '<tr>';
+	$finishedorder .= '<th class="tablebutton"></th>';
+	$finishedorder .= '<th>NO. ORDER</th>';
+	$finishedorder .= '<th>TANGGAL</th>';
+	$finishedorder .= '<th>PELANGGAN</th>';
+	$finishedorder .= '<th>PRODUK</th>';
+	$finishedorder .= '<th>QTY PESAN</th>';
+	$finishedorder .= '<th>CURRENT OUTSTANDING</th>';
+	$finishedorder .= '<th>QTY INPUT</th>';
+	$finishedorder .= '<th>QTY OUTSTANDING</th>';
+	$finishedorder .= '<th>DETAIL BARCODE</th>';
+	$finishedorder .= '</tr>';
+	$finishedorder .= '</thead>';
+	$finishedorder .= '<tbody>';
+	$finishedorder .= '</tbody>';
+	$finishedorder .= '</table>';
+	return $finishedorder;
+}
+function cari_nota_produksi(){
+	if ($_GET["term"]){
+		$searchText = '%'.strtolower($_GET["term"]).'%';
+		$strSQL = 'SELECT detOrd.id, detOrd.detailbarcode, custOrd.nonota, custOrd.tglorder,plg.namapelanggan,prod.namaproduct,';
+		$strSQL .= 'detOrd.jumlah,detOrd.outstanding FROM detailcustomerorder detOrd ';
+		$strSQL .= 'LEFT JOIN customer_order custOrd ON detOrd.idcustomerorder = custOrd.id ';
+		$strSQL .= 'LEFT JOIN pelanggan plg ON custOrd.idpelanggan = plg.idpelanggan ';
+		$strSQL .= 'LEFT JOIN product prod ON detOrd.idproduct = prod.idproduct ';
+		$strSQL .= 'WHERE LOWER(detOrd.detailbarcode) LIKE \'%s\'';
+		$result = db_query($strSQL,$searchText);
+		$items = array();
+		while ($rowDb = db_fetch_object($result)){
+			$valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan.'-'.$rowDb->namaproduct;
+			$items[] = array(
+				'id'    => $rowDb->id,
+				'label' => $valueData,
+				'value' => $valueData,
+				'detailbarcode' => $rowDb->detailbarcode,
+				'nonota' => $rowDb->nonota,
+				'tglorder' => $rowDb->tglorder,
+				'namapelanggan' => $rowDb->namapelanggan,
+				'namaproduct' => $rowDb->namaproduct,
+				'jumlah' => $rowDb->jumlah,
+				'outstanding' => $rowDb->outstanding,
+			);
+		}
+		if (!count($items)){
+			$items['sql'] = $strSQL;
+		}
+		print json_encode($items);
+	}
+}
+function simpan_hasil_produksi(){
+	if (isset($_POST['detailbarcode']) && !empty($_POST['detailbarcode']) && isset($_POST['qtyupdate']) && !empty($_POST['qtyupdate'])){
+		$strSQL = 'SELECT id, idproduct, idcustomerorder,outstanding FROM detailcustomerorder WHERE detailbarcode = \'%s\'';
+		$result = db_query($strSQL,$_POST['detailbarcode']);
+		$dataDetailOrder = db_fetch_object($result);
+		if ($dataDetailOrder){
+			$strSQL = 'SELECT stok FROM product WHERE idproduct=%d';
+			$stokSebelum = db_result(db_query($strSQL,$dataDetailOrder->idproduct));
+			$stokSesudah = $stokSebelum + $_POST['qtyupdate'];
+			$strSQL = 'UPDATE product SET stok = %d WHERE idproduct = %d';
+			db_query($strSQL,$stokSesudah,$dataDetailOrder->idproduct);
+			$keterangan = 'Hasil Produksi Dari Pesanan Detail Barcode : '.$_POST['detailbarcode'];
+			db_query("INSERT INTO transaksistock (idproduk, idcustomerorder, stocksebelum, masuk, stocksetelah, keterangan) VALUES
+			('%d', '%d', '%f', '%f', '%f', '%s')",$dataDetailOrder->idproduct,$dataDetailOrder->idcustomerorder,
+			$stokSebelum ,$_POST['qtyupdate'],$stokSesudah,$keterangan);
+			$strSQL = 'UPDATE detailcustomerorder SET outstanding = outstanding - %d WHERE id = %d';
+			db_query($strSQL,$_POST['qtyupdate'],$dataDetailOrder->id);
+		}
+	}
+}

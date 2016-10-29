@@ -70,3 +70,9 @@ tbody{
 .pagebreak {
   page-break-before: always;
 }
+.pull-left{
+  float: left;
+}
+.pull-right{
+  float: right;
+}
