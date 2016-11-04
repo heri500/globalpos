@@ -520,8 +520,7 @@ function serverSideCustomerOrder($request){
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT customerorder.id,customerorder.nonota,SUBSTR(customerorder.tglorder,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(customerorder.tglorder,11,9) AS waktu, customerorder.idpemakai,";
-	$strSQL .= "(SELECT SUM(hargajual*jumlah) FROM detailcustomerorder WHERE ";
-	$strSQL .= "id = customerorder.id) AS total,";
+	$strSQL .= "customerorder.total,";
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
 	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
 	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";

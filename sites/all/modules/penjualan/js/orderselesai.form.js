@@ -71,6 +71,7 @@ $(document).ready(function() {
                     oTable.cell(posisibaris,8).data(outstandingVal);
                 }else{
                     alert('Produksi kelebihan ....!!?');
+		    qtyInput[returnVal.detailbarcode]--;
                 }
             }else{
                 qtyInput[returnVal[0].detailbarcode] = 1;
@@ -120,6 +121,7 @@ $(document).ready(function() {
                                 oTable.cell(posisibaris,8).data(outstandingVal);
                             }else{
                                 alert('Produksi kelebihan ....!!?');
+				qtyInput[returnVal[0].detailbarcode]--;
                             }
                         }else{
                             qtyInput[returnVal[0].detailbarcode] = 1;

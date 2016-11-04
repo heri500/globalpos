@@ -546,7 +546,7 @@ function printCustomerOrderLogo(){
 	}
 	return $tablePrint;
 }
-function printCustomerOrderBarcodeNew(){
+function printCustomerOrderBarcodeNew($totalPrint = 1){
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
 	_addBarcodePlugins();
@@ -560,21 +560,29 @@ function printCustomerOrderBarcodeNew(){
 		$detailOrders = getCustomerOrder($nidOrder);
 		if (isset($detailOrders['info']) && count($detailOrders['info'])) {
 			$dataOrder = $detailOrders['info'];
-			$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" >';
-			$tablePrint .= '<tbody>';
-			$tablePrint .= '<tr>';
-			$tablePrint .= '<td rowspan="3" class="logo-place">';
-			$tablePrint .= '<img height="68" src="' . $pathLogo . '" />';
-			$tablePrint .= '</td>';
-			$tablePrint .= '<td>';
-			$tablePrint .= '<div id="' . $dataOrder->nonota . '" class="barcode-place" align="center"></div>';
-			$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataOrder->nonota . '</div>';
-			$tablePrint .= '</td></tr>';
-			$tablePrint .= '<tr class="standard-font"><td align="center">' . $dataOrder->namapelanggan . '</td></tr>';
-			$splitTgl = explode(' ',$dataOrder->tglorder);
-			$tablePrint .= '<tr class="small-font"><td align="center"><span class="pull-left">'.$splitTgl[0].'</span><span class="pull-right">Rp. ' . number_format($dataOrder->total,0,',','.') . '</span></td></tr>';
-			$tablePrint .= '</tbody>';
-			$tablePrint .= '</table>';
+			for ($i = 0;$i < $totalPrint;$i++){
+				if ($counterData == 0){
+					$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" >';
+					$tablePrint .= '<tbody>';
+				}else{
+					$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
+					$tablePrint .= '<tbody>';
+					$tablePrint .= '<tr><td colspan="2" style="font-size: 8px;">&nbsp;</td></tr>';
+				}
+				$tablePrint .= '<tr>';
+				$tablePrint .= '<td rowspan="3" class="logo-place">';
+				$tablePrint .= '<img height="68" src="' . $pathLogo . '" />';
+				$tablePrint .= '</td>';
+				$tablePrint .= '<td>';
+				$tablePrint .= '<div id="' . $dataOrder->nonota . '" class="barcode-place" align="center"></div>';
+				$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataOrder->nonota . '</div>';
+				$tablePrint .= '</td></tr>';
+				$tablePrint .= '<tr class="standard-font"><td align="center">' . $dataOrder->namapelanggan . '</td></tr>';
+				$splitTgl = explode(' ',$dataOrder->tglorder);
+				$tablePrint .= '<tr class="small-font"><td align="center"><span class="pull-left">'.$splitTgl[0].'</span><span class="pull-right">Rp. ' . number_format($dataOrder->total,0,',','.') . '</span></td></tr>';
+				$tablePrint .= '</tbody>';
+				$tablePrint .= '</table>';
+			}
 		}
 	}
 	return $tablePrint;
@@ -657,7 +665,11 @@ function cekPrinterCommand(){
 	}else if (isset($_GET['idorderlogo'])) {
 		$printOut = printCustomerOrderLogo();
 	}else if (isset($_GET['idorder'])){
-		$printOut = printCustomerOrderBarcodeNew();
+		$totalPrint = 1;
+                if (isset($_GET['totalprint']){
+ 			$totalPrint = $_GET['totalprint'];
+		}
+		$printOut = printCustomerOrderBarcodeNew($totalPrint);
 	}
 	return $printOut;
 }
