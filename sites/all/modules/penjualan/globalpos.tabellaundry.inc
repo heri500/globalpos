@@ -2,24 +2,24 @@
 
 function view_tabel_laundry(){
 	$path = drupal_get_path('theme', 'cti_flex');
- 	$form_style = $path.'/css/custom-style.css';
- 	drupal_add_css($form_style, 'theme', 'all', FALSE);
- 	$variables['styles'] = drupal_get_css();
+	$form_style = $path.'/css/custom-style.css';
+	drupal_add_css($form_style, 'theme', 'all', FALSE);
+	$variables['styles'] = drupal_get_css();
 	if ($_POST["tgl1"] AND $_POST["tgl2"]){
 		$tgl1 = $_POST["tgl1"];
-        $splitTgl = explode('-', $tgl1);
-        $tgl1 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
+		$splitTgl = explode('-', $tgl1);
+		$tgl1 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
 		$tgl2 = $_POST["tgl2"];
-        $splitTgl = explode('-', $tgl2);
-        $tgl2 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
+		$splitTgl = explode('-', $tgl2);
+		$tgl2 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
 	}else{
 		$tgl1 = date("Y-m-").'01';
-		$tgl2 = date("Y-m-d");	
+		$tgl2 = date("Y-m-d");
 	}
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
 		$tabeltampil = tabel_laundry($tgl1,$tgl2);
-		$urutan = 1; 
+		$urutan = 1;
 	}elseif ($_POST["pilihantampil"] == 'PRODUK'){
 		$produk = 'selected="selected"';
 		$tabeltampil = laundry_produk($tgl1,$tgl2);
@@ -29,32 +29,33 @@ function view_tabel_laundry(){
 		$nota = 'selected="selected"';
 		$urutan = 1;
 	}
-    drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
-    drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
-    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
-    drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+	drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
+	drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
+	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
 	//_addJqueryPlugins();
-    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+	drupal_add_js('misc/media/jquery.jeditable.js');
 	drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
 	_addTimePickerPlugins();
 	_addJeditablePlugins();
 	_addAutotabPlugins();
-    drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
-    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
-    drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
-    drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+	drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
+	drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
+	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
+	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
 	drupal_add_js(
-        array(
-            'urutan'  => $urutan,
-            'tglawal' => $tgl1.' 00:00',
-            'tglakhir'=> $tgl2.' 23:59'
-        ),
-        'setting'
-    );
+		array(
+			'urutan'  => $urutan,
+			'tglawal' => $tgl1,
+			'tglakhir'=> $tgl2
+		),
+		'setting'
+	);
 	$js_path = drupal_get_path('module','penjualan').'/js/tabel.laundry.js';
 	drupal_add_js($js_path);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
@@ -89,6 +90,7 @@ function tabel_laundry($tgl1,$tgl2){
 	$tabellaundry .= '<th>STATUS</th>';
 	$tabellaundry .= '<th>PERKIRAAN</th>';
 	$tabellaundry .= '<th>KETERANGAN</th>';
+	$tabellaundry .= '<th class="diskon">NO. RAK</th>';
 	$tabellaundry .= '</tr>';
 	$tabellaundry .= '</thead>';
 	$tabellaundry .= '<tbody>';
@@ -100,13 +102,14 @@ function tabel_laundry($tgl1,$tgl2){
 	}else{
 		$tabellaundry .= '<th style="text-align:right" colspan="7">Total:&nbsp;&nbsp;</th>';
 	}
-    $totaljual = 0;
-    $totalbayar = 0;
-    $totalSisa = 0;
+	$totaljual = 0;
+	$totalbayar = 0;
+	$totalSisa = 0;
 	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabellaundry .= '<th>&nbsp;</th>';
 	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totalSisa,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabellaundry .= '<th>&nbsp;</th>';
 	$tabellaundry .= '<th>&nbsp;</th>';
 	$tabellaundry .= '<th>&nbsp;</th>';
 	$tabellaundry .= '<th>&nbsp;</th>';
@@ -160,7 +163,7 @@ function detail_laundry(){
 		$tabellaundry .= '</table><br><br>';
 		print $tabellaundry;
 	}
-	exit();	
+	exit();
 }
 function laundry_produk($tgl1,$tgl2){
 	$tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
@@ -201,15 +204,27 @@ function laundry_produk($tgl1,$tgl2){
 	$tabellaundry .= '</tr>';
 	$tabellaundry .= '</tfoot>';
 	$tabellaundry .= '</table>';
-	return $tabellaundry;	
+	return $tabellaundry;
 }
 
-function DateAdd($v,$d=null , $f="m/d/Y"){ 
- /*
- To Use
- $TGLHITUNG = date("m/d/Y");
- $TGLAKHIRHITUNG = DateAdd(30,$TGLHITUNG);
- */	
- $d=($d?$d:date("Y-m-d")); 
- return date($f,strtotime($v." days",strtotime($d))); 
+function DateAdd($v,$d=null , $f="m/d/Y"){
+	/*
+    To Use
+    $TGLHITUNG = date("m/d/Y");
+    $TGLAKHIRHITUNG = DateAdd(30,$TGLHITUNG);
+    */
+	$d=($d?$d:date("Y-m-d"));
+	return date($f,strtotime($v." days",strtotime($d)));
+}
+function update_no_rak_laundry(){
+	$nilai = $_POST['value'];
+	$kolom = $_POST['kol_id'];
+	$titipanId = $_POST['row_id'];
+	$nilaiRet = $nilai;
+	if ($kolom == '16'){
+		$sql_update = "UPDATE titipanlaundry SET nomer_rak='%s' WHERE idtitipanlaundry='%d'";
+	}
+	db_query($sql_update,$nilai,$titipanId);
+	echo $nilaiRet;
+	exit();
 }

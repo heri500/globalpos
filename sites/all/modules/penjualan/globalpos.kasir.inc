@@ -1,6 +1,6 @@
 <?php
 
-function penjualan($idtitipanlaundry = null){
+function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
 	$logoPath = base_path().file_directory_path().'/cti_flex_logo.png';
@@ -20,21 +20,44 @@ function penjualan($idtitipanlaundry = null){
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
 	$idPelanggan = 0;
 	if (!empty($idtitipanlaundry)){
+		if (empty($alamatasal)){
+			$alamatasal = 'viewlaundry';
+		}
 		drupal_add_js(
 			array(
 				'idtitipanlaundry' => $idtitipanlaundry,
+				'alamatasal' => $alamatasal,
 			), 
 		'setting');
-		$titipanlaundry = db_fetch_array(db_query("SELECT idtitipanlaundry, nonota, tglpenjualan, idpemakai, 
-		idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date, status_laundry,
-		users.name FROM titipanlaundry laundry LEFT JOIN cms_users users ON laundry.idpemakai = users.uid 
-		WHERE idtitipanlaundry=%d",$idtitipanlaundry));
-		if (count($titipanlaundry)){
-			$tgllaundry = explode(' ', $titipanlaundry['tglpenjualan']);
-			$splittgllaundry = explode('-',$tgllaundry[0]);
-			$tglTampilLaundry = $splittgllaundry[2].'-'.$splittgllaundry[1].'-'.$splittgllaundry[0];
-			$idPelanggan = $titipanlaundry['idpelanggan'];
-			$kasirlaundry = $titipanlaundry['name'];
+		if ($alamatasal == 'viewlaundry' || $alamatasal == 'laundrykeluar'){
+			$titipanlaundry = db_fetch_array(db_query("SELECT idtitipanlaundry, nonota, tglpenjualan, idpemakai,
+			idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date, status_laundry,
+			users.name,laundry.nomer_rak FROM titipanlaundry laundry LEFT JOIN cms_users users ON laundry.idpemakai = users.uid
+			WHERE idtitipanlaundry=%d",$idtitipanlaundry));
+			if (count($titipanlaundry)){
+				$tgllaundry = explode(' ', $titipanlaundry['tglpenjualan']);
+				$splittgllaundry = explode('-',$tgllaundry[0]);
+				$tglTampilLaundry = $splittgllaundry[2].'-'.$splittgllaundry[1].'-'.$splittgllaundry[0];
+				$idPelanggan = $titipanlaundry['idpelanggan'];
+				$kasirlaundry = $titipanlaundry['name'];
+				$nomerRak = $titipanlaundry['nomer_rak'];
+				$labelKasir = 'LAUNDRY';
+				$labelTgl = 'MASUK';
+			}
+		}else if($alamatasal == 'viewcustomerorder' || $alamatasal == 'orderkeluar'){
+			$titipanlaundry = db_fetch_array(db_query("SELECT id, nonota, tglorder, idpemakai,
+			idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date, status_order,
+			users.name FROM customer_order custord LEFT JOIN cms_users users ON custord.idpemakai = users.uid
+			WHERE id=%d",$idtitipanlaundry));
+			if (count($titipanlaundry)){
+				$tgllaundry = explode(' ', $titipanlaundry['tglorder']);
+				$splittgllaundry = explode('-',$tgllaundry[0]);
+				$tglTampilLaundry = $splittgllaundry[2].'-'.$splittgllaundry[1].'-'.$splittgllaundry[0];
+				$idPelanggan = $titipanlaundry['idpelanggan'];
+				$kasirlaundry = $titipanlaundry['name'];
+				$labelKasir = 'ORDER';
+				$labelTgl = 'ORDER';
+			}
 		}
 	}
 	$tglsekarang = date("Y-m-d");
@@ -78,7 +101,7 @@ function penjualan($idtitipanlaundry = null){
 	$penjualan .= '</div>';
 	if (!empty($idtitipanlaundry)){
 		$penjualan .= '<div id="tempattanggal">';
-		$penjualan .= '<label>KASIR LAUNDRY</label><input readonly="readonly" type="text" id="kasir" name="kasir" value="'.$kasirlaundry.'">';	
+		$penjualan .= '<label>KASIR '.$labelKasir.'</label><input readonly="readonly" type="text" id="kasir" name="kasir" value="'.$kasirlaundry.'">';
 		$penjualan .= '</div>';
 	}
 	$penjualan .= '</div>';
@@ -111,20 +134,26 @@ function penjualan($idtitipanlaundry = null){
 	$pilihpelanggan .= '</select>';
 	$penjualan .= '<div id="tempatsupplier2">'.$pilihpelanggan.'</div>';
 	if (!empty($idtitipanlaundry)){
-		$penjualan .= '<div id="tempatsupplier"><label>TGL MASUK</label><input readonly="readonly" type="text" id="tglmasuk" name="tglmasuk" value="'.$tglTampilLaundry.'">';
+		$penjualan .= '<div id="tempatsupplier"><label>TGL '.$labelTgl.'</label><input readonly="readonly" type="text" id="tglmasuk" name="tglmasuk" value="'.$tglTampilLaundry.'">';
 		$penjualan .= '</div>';
 	}
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
-	$tablekasir = view_kasir($idtitipanlaundry);
+	$tablekasir = view_kasir($idtitipanlaundry,$alamatasal);
 	$penjualan .= '<div id="tempattabelkasir">'.$tablekasir.'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
 	$penjualan .= '<input type="hidden" id="lastharga" name="lastharga">';
 	$penjualan .= '<input type="hidden" id="lastdiskon" name="lastdiskon">';
 	$penjualan .= '<input type="hidden" id="nilaikirim" name="nilaikirim">';
-	$penjualan .= '<div id="tempattombolkasir">';
+	//$penjualan .= '<div id="tempattombolkasir">';
+	if ($nomerRak != ''){
+		$penjualan .= '<div id="tempattombolkasir" style="height:330px;">';
+		$penjualan .= '<a style="padding: 0.4em 0.3em;margin-top: 2px;margin-bottom: 4px;" class="buttonprint" onclick="preventDefault();">NO.RAK : '.$nomerRak.'</a>';
+	}else{
+		$penjualan .= '<div id="tempattombolkasir">';
+	}
 	$penjualan .= $panduantombol;
 	$penjualan .= $tombolcari;
 	$penjualan .= $tombolqty;
@@ -275,6 +304,12 @@ function simpan_penjualan(){
 			while ($data = db_fetch_object($result)){
 				$detailTitipanLaundry[$data->idproduct] = $data;
 			}
+		}else if (isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
+			$result = db_query("SELECT id, idproduct, sisa, diambil FROM
+			detailcustomerorder WHERE idcustomerorder='%d' AND sisa > 0",$_POST['idcustomerorder']);
+			while ($data = db_fetch_object($result)){
+				$detailCustomerOrder[$data->idproduct] = $data;
+			}
 		}
 		$pecahdetail = explode("&",$_POST["detail_produk"]);
 		$totalmodal = 0;
@@ -312,6 +347,14 @@ function simpan_penjualan(){
 				}
 				$strSQL = "UPDATE detaillaundry SET sisa = sisa - %f, diambil = %d, status_laundry = %d WHERE iddetail = %d";	
 				db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailTitipanLaundry[$IDPRODUK]->iddetail);
+			}else if(!empty($detailCustomerOrder) && isset($detailCustomerOrder[$IDPRODUK])){
+				if ($detailCustomerOrder[$IDPRODUK]->sisa - $QTY <= 0){
+					$statusDetail = 2;
+				}else{
+					$statusDetail = 1;
+				}
+				$strSQL = "UPDATE detailcustomerorder SET sisa = sisa - %f, diambil = %d, status_order = %d WHERE id = %d";
+				db_query($strSQL, $QTY, $intTanggal, $statusDetail, $detailCustomerOrder[$IDPRODUK]->id);
 			}
 		}
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
@@ -326,6 +369,18 @@ function simpan_penjualan(){
 			}
 			$strSQL = "UPDATE titipanlaundry SET status_laundry=%d WHERE idtitipanlaundry=%d";
 			db_query($strSQL, $statusLaundry, $_POST['idtitipanlaundry']);
+		}else if(isset($_POST['idcustomerorder']) && !empty($_POST['idcustomerorder'])){
+			$totalOrder = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d'",$_POST['idcustomerorder']));
+			$totalSelesai = db_result(db_query("SELECT COUNT(*) FROM detailcustomerorder WHERE idcustomerorder='%d' AND status_order=2",$_POST['idcustomerorder']));
+			if ($totalSelesai > 0 && $totalSelesai == $totalOrder){
+				$statusOrder = 2;
+			}else if($totalSelesai > 0 && $totalSelesai < $totalOrder){
+				$statusOrder = 1;
+			}else{
+				$statusOrder = 0;
+			}
+			$strSQL = "UPDATE customer_order SET status_order=%d WHERE id=%d";
+			db_query($strSQL, $statusOrder, $_POST['idcustomerorder']);
 		}
 		db_query("UPDATE penjualan SET totalmodal='%f' WHERE idpenjualan='%d'",$totalmodal,$next_id);
 	}else{
@@ -410,7 +465,7 @@ function cari_barang(){
 	}
 	exit();	
 }
-function view_kasir($idtitipanlaundry = null){
+function view_kasir($idtitipanlaundry = null, $alamatasal = null){
 	$kasirtabel ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_kasir">';
 	$kasirtabel .= '<thead>';
 	$kasirtabel .= '<tr>';
@@ -425,19 +480,36 @@ function view_kasir($idtitipanlaundry = null){
 	$kasirtabel .= '</thead>';
 	$kasirtabel .= '<tbody>';
 	if (!empty($idtitipanlaundry)){
-		$result = db_query("SELECT b.iddetail, b.idproduct, b.iddetail,c.barcode, c.namaproduct, b.jumlah, 
-		b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil FROM 
-		detaillaundry b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN 
-		supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipanlaundry='%d' AND sisa > 0",$idtitipanlaundry);
-		$dataLaundry = array();
-		while ($data = db_fetch_object($result)){
-			$dataLaundry[] = $data;
+		if (empty($alamatasal) || $alamatasal == 'viewlaundry' || $alamatasal == 'laundrykeluar'){
+			$result = db_query("SELECT b.iddetail, b.idproduct, b.iddetail,c.barcode, c.namaproduct, b.jumlah,
+			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil FROM
+			detaillaundry b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN
+			supplier a ON c.idsupplier=a.idsupplier WHERE b.idtitipanlaundry='%d' AND sisa > 0",$idtitipanlaundry);
+			$dataLaundry = array();
+			while ($data = db_fetch_object($result)){
+				$dataLaundry[] = $data;
+			}
+			drupal_add_js(
+				array(
+					'data_laundry' => $dataLaundry,
+				),
+				'setting');
+		}else if ($alamatasal == 'viewcustomerorder' || $alamatasal == 'orderkeluar'){
+			$result = db_query("SELECT b.id, b.idproduct, c.barcode, c.namaproduct, b.jumlah,
+			b.hargajual, (b.hargajual*b.jumlah) AS subtotal, sisa, diambil FROM
+			detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN
+			supplier a ON c.idsupplier=a.idsupplier WHERE b.idcustomerorder='%d' AND
+			sisa > 0",$idtitipanlaundry);
+			$dataOrder = array();
+			while ($data = db_fetch_object($result)){
+				$dataOrder[] = $data;
+			}
+			drupal_add_js(
+				array(
+					'data_order' => $dataOrder,
+				),
+				'setting');
 		}
-		drupal_add_js(
-			array(
-				'data_laundry' => $dataLaundry,
-			), 
-		'setting');
 	}
 	$kasirtabel .= '</tbody>';
 	$kasirtabel .= '</table>';
