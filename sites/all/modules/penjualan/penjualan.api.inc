@@ -666,7 +666,7 @@ function cekPrinterCommand(){
 		$printOut = printCustomerOrderLogo();
 	}else if (isset($_GET['idorder'])){
 		$totalPrint = 1;
-                if (isset($_GET['totalprint']){
+        if (isset($_GET['totalprint'])){
  			$totalPrint = $_GET['totalprint'];
 		}
 		$printOut = printCustomerOrderBarcodeNew($totalPrint);
