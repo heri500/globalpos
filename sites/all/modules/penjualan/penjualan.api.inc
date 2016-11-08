@@ -215,6 +215,7 @@ function printOutLaundry(){
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;line-height: 13px;">Status : '.$statusPembayaran.'</td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;line-height: 13px;">Ket : '.$keterangan.'</td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;line-height: 13px;">Kasir : '.$user->name.'</td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;line-height: 13px;padding-top: 2px;">Pengambilan Cucian Harus Disertakan Dengan Nota Asli</td></tr>';
 		$tablePrint .= '</tbody>';
 		$tablePrint .= '</table>';
 	}
@@ -666,7 +667,7 @@ function cekPrinterCommand(){
 		$printOut = printCustomerOrderLogo();
 	}else if (isset($_GET['idorder'])){
 		$totalPrint = 1;
-                if (isset($_GET['totalprint']){
+        if (isset($_GET['totalprint'])){
  			$totalPrint = $_GET['totalprint'];
 		}
 		$printOut = printCustomerOrderBarcodeNew($totalPrint);

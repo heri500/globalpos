@@ -150,11 +150,11 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	//$penjualan .= '<div id="tempattombolkasir">';
 	if ($nomerRak != ''){
 		$penjualan .= '<div id="tempattombolkasir" style="height:330px;">';
-		$penjualan .= '<a style="padding: 0.4em 0.3em;margin-top: 2px;margin-bottom: 4px;" class="buttonprint" onclick="preventDefault();">NO.RAK : '.$nomerRak.'</a>';
+		$penjualan .= '<a style="padding: 0.4em 0.3em;margin-top: 2px;" class="buttonprint" onclick="preventDefault();">NO.RAK : '.$nomerRak.'</a>';
 	}else{
 		$penjualan .= '<div id="tempattombolkasir">';
 	}
-	$penjualan .= $panduantombol;
+	//$penjualan .= $panduantombol;
 	$penjualan .= $tombolcari;
 	$penjualan .= $tombolqty;
 	$penjualan .= $tombolhapus;

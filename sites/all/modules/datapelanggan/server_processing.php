@@ -384,6 +384,7 @@ function serverSidePenjualan2($request){
 }
 
 function serverSideLaundry($request){
+	global $baseDirectory;
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
@@ -394,7 +395,7 @@ function serverSideLaundry($request){
 		'laundry.nonota','tanggal','totallaundry','laundry.carabayar','laundry.bayar',
 		'plg.namapelanggan','laundry.status_laundry','perkiraan_ambil','laundry.keterangan'
 	);
-	$orderColumnArray = $_REQUEST['order'];
+	$orderColumnArray = isset($_REQUEST['order']) ? $_REQUEST['order'] : array(array('column' => 0, 'dir' => 'DESC'));
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
 	if (is_null($pageStart)){
 		$pageStart = 0;
@@ -411,7 +412,7 @@ function serverSideLaundry($request){
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detaillaundry WHERE ";
 	$strSQL .= "idtitipanlaundry = laundry.idtitipanlaundry) AS perkiraan_ambil,";
 	$strSQL .= "laundry.carabayar, laundry.bayar, laundry.status_laundry, ";
-	$strSQL .= "plg.namapelanggan, laundry.keterangan, user.name ";
+	$strSQL .= "plg.namapelanggan, laundry.keterangan, user.name, laundry.nomer_rak ";
 	$strSQL .= "FROM titipanlaundry AS laundry ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = laundry.idpemakai ";
 	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = laundry.idpelanggan ";
@@ -475,6 +476,7 @@ function serverSideLaundry($request){
         }
         $rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
         $rowData[] = $data->keterangan;
+        $rowData[] = $data->nomer_rak;
         $rowData[] = $data->idtitipanlaundry;
 		$output[] = $rowData;
 	}

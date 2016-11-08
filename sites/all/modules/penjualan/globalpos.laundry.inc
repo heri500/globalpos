@@ -1,7 +1,6 @@
 <?php
 
 function laundry(){
-	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -76,7 +75,6 @@ function laundry(){
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
-	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Laundry : Rp. 0</div></div>';
 	$penjualan .= '<div id="tempattabelkasir">'.view_kasir_laundry().'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
@@ -94,6 +92,7 @@ function laundry(){
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
 	$penjualan .= '</div>';
+    $penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Laundry : Rp. 0</div></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="Informasi" id="dialogwarning">';
 	$penjualan .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -264,49 +263,49 @@ function view_kasir_laundry(){
 	return $kasirtabel;
 }
 function laundry_keluar(){
-	/*$path = drupal_get_path('theme', 'cti_flex');
+    /*$path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
     //$variables['styles'] = drupal_get_css();
     drupal_add_css('misc/media/jquery-ui/css/smoothness/jquery-ui-1.10.4.custom.css');
     drupal_add_js('misc/media/jquery-ui/js/jquery-1.10.2.js');
     drupal_add_js('misc/media/jquery-ui/js/jquery-ui-1.10.4.custom.js');*/
-	$path = drupal_get_path('theme', 'cti_flex');
-	$form_style = $path.'/css/custom-style.css';
-	drupal_add_css($form_style, 'theme', 'all', FALSE);
-	$variables['styles'] = drupal_get_css();
-	drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
-	drupal_add_js('misc/media/jquery-1.4.4.min.js');
-	drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
-	$js_path = drupal_get_path('module','penjualan').'/js/laundrykeluar.form.js';
-	drupal_add_js($js_path);
-	$labelData = '<div>Masukkan nomer nota laundry/nama pelanggan</div>';
-	$returnForm = $labelData.'<input type="text" id="no-nota" name="no-nota" style="width: 275px;font-size: 18px;">';
-	return $returnForm;
+    $path = drupal_get_path('theme', 'cti_flex');
+    $form_style = $path.'/css/custom-style.css';
+    drupal_add_css($form_style, 'theme', 'all', FALSE);
+    $variables['styles'] = drupal_get_css();
+    drupal_add_css('misc/media/themes/jquery-ui-1.8.11.custom.css');
+    drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    drupal_add_js('misc/media/jquery-ui-1.8.11.custom.min.js');
+    $js_path = drupal_get_path('module','penjualan').'/js/laundrykeluar.form.js';
+    drupal_add_js($js_path);
+    $labelData = '<div>Masukkan nomer nota laundry/nama pelanggan</div>';
+    $returnForm = $labelData.'<input type="text" id="no-nota" name="no-nota" style="width: 275px;font-size: 18px;">';
+    return $returnForm;
 }
 function cari_nota_laundry(){
-	if ($_GET["term"]){
-		$KATACARI = '%'.strtolower($_GET["term"]).'%';
-		$result = db_query("SELECT titipan.idtitipanlaundry, titipan.nonota, titipan.tglpenjualan,
+    if ($_GET["term"]){
+        $KATACARI = '%'.strtolower($_GET["term"]).'%';
+        $result = db_query("SELECT titipan.idtitipanlaundry, titipan.nonota, titipan.tglpenjualan,
         titipan.total,plg.namapelanggan,plg.telp FROM titipanlaundry AS titipan LEFT JOIN
         pelanggan AS plg ON titipan.idpelanggan=plg.idpelanggan WHERE
         LOWER(titipan.nonota) LIKE '%s' OR LOWER(plg.namapelanggan) LIKE '%s'
         AND titipan.status_laundry < 2
         ORDER BY titipan.tglpenjualan DESC LIMIT 50",$KATACARI,$KATACARI);
-		$items = array();
-		while ($rowDb = db_fetch_object($result)){
-			$valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan;
-			if (!empty($rowDb->telp)){
-				$valueData .= ' - '.$rowDb->telp;
-			}
-			$valueData .= ' - '.number_format($rowDb->total,0,',','.');
-			$items[] = array(
-				'id'    => $rowDb->idtitipanlaundry,
-				'label' => $valueData,
-				'value' => $valueData,
-			);
-		}
-		print json_encode($items);
-	}
-	exit();
+        $items = array();
+        while ($rowDb = db_fetch_object($result)){
+            $valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan;
+            if (!empty($rowDb->telp)){
+                $valueData .= ' - '.$rowDb->telp;
+            }
+            $valueData .= ' - '.number_format($rowDb->total,0,',','.');
+            $items[] = array(
+                'id'    => $rowDb->idtitipanlaundry,
+                'label' => $valueData,
+                'value' => $valueData,
+            );
+        }
+        print json_encode($items);
+    }
+    exit();
 }
