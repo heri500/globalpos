@@ -358,9 +358,30 @@ function createLogoImagePath(){
 	'setting');
 	return $logoPath;
 }
-function getTotalPenjualan($field_name = null, $tglAwal = null, $tglAkhir = null){
+function getTotalPenjualan($field_name = null, $tglAwal = null, $tglAkhir = null, $carabayar = 0){
 	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
-		$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+		if ($carabayar == 0){
+			$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+		}else if($carabayar == 1){
+			//Untuk mendapatkan total cash saja
+			$strSQL = "SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND carabayar='TUNAI' AND kembali >= 0";
+			$totalPenjualanCash = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+			$strSQL = "SELECT SUM(bayar) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND ";
+			$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG'))";
+			$totalPenjualanDP = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+			$totalPenjualan = $totalPenjualanCash + $totalPenjualanDP;
+		}else if($carabayar == 2){
+			//Untuk mendapatkan total hutang dari penjualan
+			$strSQL = "SELECT SUM(kembali) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND ";
+			$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG'))";
+			$totalPenjualan = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+		}else if($carabayar == 3){
+			//Untuk mendapatkan total debit/giro saja
+			$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND carabayar IN ('DEBIT','GIRO')",$tglAwal,$tglAkhir));
+		}else if($carabayar == 4){
+			//Untuk mendapatkan total pembayaran menggunakan deposit
+			$totalPenjualan = db_result(db_query("SELECT SUM($field_name) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND carabayar = 'DEPOSIT'",$tglAwal,$tglAkhir));
+		}
 	}
 	return $totalPenjualan;
 }

@@ -29,152 +29,30 @@ function view_tabel_penjualan(){
 	}
 	drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
 	drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
-  drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
-  drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+  	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+  	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
 	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
 	drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine-en.js');
 	drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine.js');
 	drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
 	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
 	drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
-	drupal_add_js('
-		var oTable;
-		var pathutama = "'.base_path().'";
-		var urutan = "'.$urutan.'";
-		var tampilData = "'.$tampilData.'";
-		function tampiltabeljual(){
-			if (tampilData == 0){
-				oTable = $("#tabel_penjualan").dataTable( {
-					"bJQueryUI": true,
-					"bAutoWidth": false,
-					"sPaginationType": "full_numbers",
-					"bInfo": true,
-					"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-					"iDisplayLength": 100,
-					"aaSorting": [[urutan, "desc"]],
-					"processing": true,
-	        		"serverSide": true,
-					"ajax": Drupal.settings.basePath + "sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='.$tgl1.'&tglakhir='.$tgl2.'",
-					buttons: [
-	        	{
-	          	extend: \'colvis\',
-	            columns: \':not(:first-child)\'
-	          }, "copy", "excel", "print"
-	        ],
-					"sDom": \'<"button-div"B><"H"lfr>t<"F"ip>\',
-					"createdRow": function ( row, data, index ) {
-						row.id = data[(data.length - 1)];
-						$("td", row).eq(1).addClass("center");
-						$("td", row).eq(2).addClass("center");
-						$("td", row).eq(3).addClass("center");
-						$("td", row).eq(4).addClass("angka");
-						$("td", row).eq(5).addClass("angka");
-						$("td", row).eq(6).addClass("angka");
-						$("td", row).eq(7).addClass("center");
-						$("td", row).eq(8).addClass("angka");
-						$("td", row).eq(9).addClass("angka");
-						$("td", row).eq(10).addClass("center");
-						$("td", row).eq(11).addClass("center");
-						$("td", row).eq(12).addClass("center");
-					}
-				});
-			}else if (tampilData == 1){
-				oTable = $("#tabel_penjualan").dataTable( {
-					"bJQueryUI": true,
-					"bAutoWidth": false,
-					"sPaginationType": "full_numbers",
-					"bInfo": true,
-					"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-					"iDisplayLength": 100,
-					"aaSorting": [[urutan, "desc"]],
-					"processing": true,
-	        "serverSide": true,
-					"ajax": Drupal.settings.basePath + "sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan2&tglawal='.$tgl1.'&tglakhir='.$tgl2.'",
-					buttons: [
-	        	{
-	          	extend: \'colvis\',
-	            columns: \':not(:first-child)\'
-	          }, "copy", "excel", "print"
-	        ],
-					"sDom": \'<"button-div"B><"H"lfr>t<"F"ip>\',
-					"createdRow": function ( row, data, index ) {
-						row.id = data[(data.length - 1)];
-						$("td", row).eq(0).addClass("center");
-						$("td", row).eq(3).addClass("angka");
-						$("td", row).eq(4).addClass("angka");
-						$("td", row).eq(5).addClass("angka");
-						$("td", row).eq(6).addClass("angka");
-						$("td", row).eq(7).addClass("angka");
-						$("td", row).eq(8).addClass("angka");
-						$("td", row).eq(9).addClass("angka");
-						$("td", row).eq(10).addClass("angka");
-					}
-				});
-			}
-		}
-		function tampiltabeljualdetail(){
-			oTable = $("#tabel_detail_penjualan").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bInfo": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar">fr>t<"F"ip>\'
-			});
-		}
-		function view_detail(idpenjualan,nonota){
-			var request = new Object();
-			request.idpenjualan = idpenjualan;
-			alamat = pathutama + "penjualan/detailpenjualan";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#dialogdetail").html(data);
-					tampiltabeljualdetail();
-					$("div.toolbar").html("No. Nota : "+ nonota);
-					$("#dialogdetail").dialog("open");
-				}
-			});
-		}
-		function print_penjualan(idpenjualan,nonota){
-			var konfirmasi = confirm("Yakin ingin mencetak nota penjualan dengan no nota : "+ nonota +" ini...??!!");
-			if (konfirmasi){
-				window.open(pathutama + "print/6?idpenjualan="+ idpenjualan);
-			}
-		}
-		$(document).ready(function(){
-			$("#dialogdetail").dialog({
-				modal: true,
-				width: 850,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"]
-			});
-			$("button").button();
-			/*TableToolsInit.sSwfPath = pathutama +"misc/media/datatables/swf/ZeroClipboard.swf";*/
-			tampiltabeljual();
-			$("#tgl1").datepicker({
-				changeMonth: true,
-				changeYear: true,
-				dateFormat: "yy-mm-dd"
-			});
-			$("#tgl2").datepicker({
-				changeMonth: true,
-				changeYear: true,
-				dateFormat: "yy-mm-dd"
-			});
-		})
-	','inline');
-	
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+	drupal_add_js(
+		array(
+			'urutan' => $urutan,
+			'tampilData' => $tampilData,
+			'tglAwal' => $tgl1,
+			'tglAkhir' => $tgl2,
+		),
+		'setting');
+	$modulePath = drupal_get_path('module','penjualan');
+	$jsPath = $modulePath.'/js/tabel.penjualan.js';
+	drupal_add_js($jsPath);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';

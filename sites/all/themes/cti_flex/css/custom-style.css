@@ -831,6 +831,14 @@ padding: 10px 6px 6px 6px !important;
 	font-weight: bold;
 	font-size: 16px;
 }
+.kolom-grand-total-2{
+	width: 98%;
+	float: left;
+	padding: 4px 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 13px;
+}
 body.lightbox-processed{
 	margin: 8px 0 !important;
 }

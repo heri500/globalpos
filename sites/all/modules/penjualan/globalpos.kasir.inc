@@ -288,14 +288,17 @@ function simpan_penjualan(){
 			}
 		}
 		if ($_POST["carabayar"] == "DEPOSIT"){
-			$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"])); 
-			$variables['idpelanggan'] = $_POST["idpelanggan"];
-			$variables['deposit'] = $sisaDeposit;
-			$variables['penggunaan'] = $_POST["bayar"];
-			$variables['tglbayar'] = $waktujual;
-			$variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : '.$no_nota.' Tanggal : '.$waktujual;
-			$variables['idpenjualan'] = $next_id;
-			penggunaandeposit($variables);
+			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
+				$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"]));
+				$variables['idpelanggan'] = $_POST["idpelanggan"];
+				$variables['deposit'] = $sisaDeposit;
+				$variables['penggunaan'] = $_POST["bayar"];
+				$variables['tglbayar'] = $waktujual;
+				$variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : '.$no_nota.' Tanggal : '.$waktujual;
+				$variables['idpenjualan'] = $next_id;
+				penggunaandeposit($variables);
+				syncHutangPelanggan($_POST["idpelanggan"]);
+			}
 		}
 		$detailTitipanLaundry = null;
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){

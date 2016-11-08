@@ -223,9 +223,9 @@ function serverSidePenjualan($request){
 	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.idpemakai', 
-		'penj.total','penj.totalmodal','penj.carabayar','penj.bayar','penj.kembali'
-		,'penj.nokartu','penj.keterangan','penj.insert_date','user.name','plg.namapelanggan'
+		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.tglpenjualan',
+		'penj.total','penj.totalmodal','(penj.total - penj.totalmodal)','penj.carabayar',
+		'penj.bayar','penj.kembali','user.name','plg.namapelanggan'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
