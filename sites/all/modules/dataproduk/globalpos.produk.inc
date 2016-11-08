@@ -7,8 +7,8 @@ function data_produk(){
     //$variables['styles'] = drupal_get_css();
 	drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
 	drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
-  drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
-  drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
+  	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.dataTables.css');
+  	drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
 	drupal_add_css('misc/media/jqueryValidate/css/validationEngine.jquery.css');
 	drupal_add_css('misc/media/jqueryValidate/css/template.css');
 	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
@@ -17,557 +17,25 @@ function data_produk(){
 	drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
 	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
 	drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
-  drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.flash.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.html5.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.print.js');
+  	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/buttons.colVis.min.js');
 	drupal_add_js('misc/media/jquery.jeditable.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
     drupal_add_js('sites/all/libraries/barcode/jquery-barcode.min.js');
-	drupal_add_js('
-		var oTable;
-		var pathutama = "'.base_path().'";
-		var pathfile = "'.base_path().file_directory_path().'/";
-		var alamatupdate = "";
-		var barcodesama = false;
-		var renderer = "bmp";
-        var btype = "ean13";
-        var settings = {
-            output:renderer,
-            barWidth: 1,
-            barHeight: 50
-        };
-        var statusstok = 0;
-		function tampilkantabelproduk(){
-			oTable = $("#tabel_produk").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"sPaginationType": "full_numbers",
-				"bInfo": true,
-				"processing": true,
-        "serverSide": true,
-				"ajax": Drupal.settings.basePath + "sites/all/modules/datapelanggan/server_processing.php?request_data=produk&statusstok="+ statusstok,
-				"aoColumns": [
-					{ "bSortable": false },null,null,{ "bVisible": false },null,null,null,null,
-					null,{ "bVisible": false },{ "bVisible": false },
-					{ "bVisible": false },null,null,null,{ "bVisible": false },null
-				],
-				"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-				"iDisplayLength": 100,
-				"aaSorting": [[0, "asc"]],
-				buttons: [
-        	{
-          	extend: \'colvis\',
-            columns: \':not(:first-child)\'
-          }, "copy", "excel", "print"
-        ],
-				"sDom": \'<"button-div"B><"H"lfr>t<"F"ip>\',
-				"createdRow": function ( row, data, index ) {
-					row.id = data[(data.length - 1)];
-          $("td", row).eq(3).addClass("center").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 3 };
-            },
-            "width": "120px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });
-          $("td", row).eq(4).addClass("center").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 4 };
-            },
-            "width": "80px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });
-          $("td", row).eq(5).addClass("left").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 5 };
-            },
-            "width": "220px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });
-          $("td", row).eq(6).addClass("angka").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 6 };
-            },
-            "data": function (value, settings) {
-            	var newValue = value.replace(".","");
-            	newValue = newValue.replace(",",".");
-        			return newValue;
-    				},
-            "width": "70px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });
-          $("td", row).eq(7).addClass("angka").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 7 };
-            },
-            "data": function (value, settings) {
-            	var newValue = value.replace(".","");
-            	newValue = newValue.replace(",",".");
-        			return newValue;
-    				},
-            "width": "70px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });
-          $("td", row).eq(8).addClass("angka").editable(alamatupdate, {
-          	"submitdata": function ( value, settings ) {
-            	return { "row_id": this.parentNode.getAttribute("id"), "kol_id": 8 };
-            },
-            "data": function (value, settings) {
-            	var newValue = value.replace(".","");
-            	newValue = newValue.replace(",",".");
-        			return newValue;
-    				},
-            "width": "60px",
-            "height": "20px",
-            "submit": "Ok",
-            "select": true,
-            "indicator": "Menyimpan...",
-            "tooltip": "Klik untuk mengubah..."
-          });;
-          $("td", row).eq(9).addClass("center");
-          $("td", row).eq(10).addClass("center");
-          $("td", row).eq(11).addClass("angka");
-				}
-			});
-		}
-		
-		function simpankategori(){
-			if ($("#kodekategori").val() != "" && $("#kategori").val() != ""){
-				var request = new Object();
-				request.kodekategori = $("#kodekategori").val();
-				request.kategori = $("#kategori").val();
-				request.keterangan = $("#keterangan").val();
-				request.asal = "Subkategori";
-				alamat = pathutama + "dataproduk/simpankategori";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						$("#idkategori").append("<option value=\""+ data +"\">"+ request.kodekategori +"-"+ request.kategori +"</option>");
-						$("#kodekategori").val("");
-						$("#kategori").val("");
-						$("#keterangan").val("");
-						$("#dialogtambahkategori").dialog("close");
-						$("#idkategori").val(data);
-						filtersubkategori();
-					}
-				});
-			}else{
-				$("#tambahkategoriform").submit();
-			}	
-		}
-		
-		function simpansubkategori(){
-			if ($("#kodesubkategori").val() != "" && $("#subkategori").val() != ""){
-				var request = new Object();
-				request.idkategori = $("#idkategori2").val();
-				request.kodesubkategori = $("#kodesubkategori").val();
-				request.subkategori = $("#subkategori").val();
-				request.keterangan = $("#keterangansub").val();
-				request.asal = "Produk";
-				alamat = pathutama + "dataproduk/simpansubkategori";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						$("#idsubkategori").append("<option value=\""+ data +"\">"+ request.kodesubkategori +"-"+ request.subkategori +"</option>");
-						$("#kodesubkategori").val("");
-						$("#subkategori").val("");
-						$("#keterangansub").val("");
-						$("#dialogtambahsubkategori").dialog("close");
-						$("#idsubkategori").val(data);
-						ubahkodebarang();
-					}
-				});
-			}else{
-				$("#tambahsubkategoriform").submit();
-			}	
-		}
-		
-		function simpansupplier(){
-			if ($("#kodesupplier").val() != "" && $("#supplier").val() != ""){
-				var request = new Object();
-				request.kodesupplier = $("#kodesupplier").val();
-				request.namasupplier = $("#namasupplier").val();
-				request.keterangan = $("#keterangan").val();
-				request.asal = "supplier";
-				alamat = pathutama + "datasupplier/simpansupplier";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						$("#idsupplier").append("<option value=\""+ data +"\">"+ request.kodesupplier +"-"+ request.namasupplier +"</option>");
-						$("#kodesupplier").val("");
-						$("#supplier").val("");
-						$("#keterangan").val("");
-						$("#dialogtambahsupplier").dialog("close");
-						$("#idsupplier").val(data);
-					}
-				});
-			}else{
-				$("#tambahsupplierform").submit();
-			}	
-		}
-		function simpansatuan(){
-			if ($("#namasatuan").val() != ""){
-				var request = new Object();
-				request.namasatuan = $("#namasatuan").val();
-				alamat = pathutama + "dataproduk/simpansatuan";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						if (data != "error"){
-							$("#satuan").append("<option value=\""+ request.namasatuan +"\">"+ request.namasatuan +"</option>");
-							$("#namasatuan").val("");
-							$("#dialogtambahsatuan").dialog("close");
-							$("#satuan").val(data);
-						}else{
-							alert("Satuan ini sudah ada..!!");	
-						}
-					}
-				});
-			}else{
-				$("#tambahsatuanform").submit();
-			}	
-		}
-		function tutupformtambahproduk(){
-			$("#formproduk").validationEngine("hide");
-			$("#formpenambahanproduk").fadeOut("slow");
-		}
-		function filtersubkategori(){
-			var request = new Object();
-			request.idkategori = 	$("#idkategori").val();
-			var alamat = pathutama + "dataproduk/filterkategori";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#idsubkategori").empty();
-					$("#idsubkategori").append(data);
-					ubahkodebarang();
-				}
-			});
-		}
-		function ubahkodebarang(){
-			var kategori = "";
-			$("#idkategori option:selected").each(function () {
-				kategori = $(this).text();
-			}); 
-			var pecahkategori = kategori.split("-");
-			var subkategori = "";
-			$("#idsubkategori option:selected").each(function () {
-				subkategori = $(this).text();
-			});
-			pecahsubkategori = subkategori.split("-");
-			kodebarang = pecahkategori[0] +"-"+ pecahsubkategori[0];
-			var request = new Object();
-			request.kodealternatif = 	kodebarang;
-			var alamat = pathutama + "dataproduk/cekkodealternatif";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#kodepoduk").val(kodebarang +"-"+ data.trim());
-				}
-			});
-		}
-		function hitungmargin(asal){
-			if (asal == "hargapokok"){
-				if ($("#margin").val() > 0 && $("#hargapokok").val() > 0){
-					var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-					$("#hargajual").val(Math.round(hargajual));
-				}
-			}else if (asal == "hargajual"){
-				if ($("#hargapokok").val() > 0 && $("#hargajual").val() > 0){
-					var margin = (($("#hargajual").val() - $("#hargapokok").val())/$("#hargajual").val())*100;
-					$("#margin").val(Math.round(margin));
-				}
-			}else if (asal == "margin"){
-				if ($("#hargapokok").val() > 0 && $("#margin").val() > 0){
-					var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-					$("#hargajual").val(Math.round(hargajual));
-				}
-			}
-		}
-		function cek_barcode(field, rules, i, options){
-			if (field.val() != ""){
-				$("#validating").html("<img src = \""+ pathutama +"misc/media/images/loading.gif\">");
-				$("#validating").fadeIn("fast",function(){
-					var request = new Object();
-				 	request.barcode = field.val(); 
-					cekbarcode = pathutama +"dataproduk/cekbarcode";
-					$.ajax({
-						type: "POST", 
-						url: cekbarcode,
-						data: request,
-						cache: false,
-						success: function(data){
-							if (data == "sama"){
-								$("#validating").fadeOut("fast",function(){
-									$("#barcode").validationEngine("showPrompt", "Barcode ini sudah digunakan..!!", "error", "topRight", true);
-									$("#barcode").select();
-									barcodesama = true;
-								})
-							}else{
-								if (data == "taksama"){
-									barcodesama = false;
-								}
-								$("#validating").fadeOut("fast");
-							}
-						}
-					});
-				})
-			}		
-		}
-		function simpanproduk(){
-			if ($("#barcode").val() != "" && !barcodesama && $("#namaproduk").val() != "" && $("#hargapokok").val() > 0 && $("#hargajual").val() > 0){
-				var request = new Object();
-			 	request.barcode = $("#barcode").val();
-			 	request.alt_code = $("#kodepoduk").val();
-			 	request.idkategori = $("#idkategori").val();
-			 	request.idsubkategori = $("#idsubkategori").val();
-			 	request.idsupplier = $("#idsupplier").val();
-			 	request.namaproduk = $("#namaproduk").val();
-			 	request.hargapokok = $("#hargapokok").val();
-			 	request.hargajual = $("#hargajual").val();
-			 	request.margin = $("#margin").val();
-			 	request.minstok = $("#minstok").val();
-			 	request.maxstok = $("#maxstok").val();
-			 	request.stok = $("#stok").val();
-			 	request.satuan = $("#satuan").val();
-			 	request.keterangan = $("#keteranganproduk").val();
-				alamatsimpan = pathutama +"dataproduk/simpanproduk";
-				$.ajax({
-					type: "POST", 
-					url: alamatsimpan,
-					data: request,
-					cache: false, 
-					success: function(){
-						$("#namaproduk").val("");
-						$("#hargapokok").val("");
-						$("#hargajual").val("");
-						$("#margin").val("");
-						$("#keteranganproduk").val("");
-						$("#stok").val("");
-						$("#minstok").val("");
-						$("#maxstok").val("");
-						ubahkodebarang();
-						$("#barcode").val("");
-						$("#refreshprodukbaru").click();
-						alamatbarcode = pathutama +"penjualan/getrandomstring";
-						$.ajax({
-							type: "POST",
-							url: alamatbarcode,
-							cache: false,
-							success: function(data){
-								$("#barcode").val(data.trim());
-								$("#barcode").select();
-							}
-						});
-					}
-				});
-			}else{
-				$("#formproduk").validationEngine("validate");
-			}
-		}
-		function editproduk(idproduk){
-			if (idproduk > 0){
-				window.location = pathutama + "dataproduk/editproduk?idproduk="+ idproduk;
-			}
-		}
-		function view_status(kondisistok){
-		    if (kondisistok != "all"){
-				window.location = pathutama + "dataproduk/produk?statusstok="+ kondisistok;
-			}else{
-				window.location = pathutama + "dataproduk/produk";
-			}
-		}
-		$(document).ready(function() {
-			alamatupdate = Drupal.settings.basePath + "dataproduk/updateproduk";
-			statusstok = Drupal.settings.statusstokfilter;
-			$("#dialogtambahkategori").dialog({
-				modal: true,
-				width: 350,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"],
-				open: function(event, ui) {
-					$("#kodekategori").focus();
-				},
-				close: function(){
-					$("#tambahkategoriform").validationEngine("hide");
-				}
-			});
-			$("#dialogtambahsubkategori").dialog({
-				modal: true,
-				width: 350,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"],
-				open: function(event, ui) {
-					$("#kodesubkategori").focus();
-				},
-				close: function(){
-					$("#tambahsubkategoriform").validationEngine("hide");
-				}
-			});
-			$("#dialogtambahsupplier").dialog({
-				modal: true,
-				width: 350,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"],
-				open: function(event, ui) {
-					$("#kodesupplier").focus();
-				},
-				close: function(){
-					$("#tambahsupplierform").validationEngine("hide");
-				}
-			});
-			$("#dialogtambahsatuan").dialog({
-				modal: true,
-				width: 350,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"],
-				open: function(event, ui) {
-					$("#namasatuan").select();
-				},
-				close: function(){
-					$("#tambahsatuanform").validationEngine("hide");
-				}
-			});
-			/*TableToolsInit.sSwfPath = pathutama +"misc/media/datatables/swf/ZeroClipboard.swf";*/
-			
-			$("#formsubkategori").validationEngine();
-			$("#tambahkategoriform").validationEngine();
-			$("#tambahsubkategoriform").validationEngine();
-			$("button").button();
-			$("#addkategori").click(function(){
-      	$("#dialogtambahkategori").dialog("open");
-      	$(".ui-dialog-title").css("font-size","15px");
-      	$("#formproduk").validationEngine("hide");
-      	return false;
-      });
-      $("#addsubkategori").click(function(){
-      	$("#dialogtambahsubkategori").dialog("open");
-      	$("#idkategori2").val($("#idkategori").val());
-      	$(".ui-dialog-title").css("font-size","15px");
-      	$("#formproduk").validationEngine("hide");
-      	return false;
-      });
-      $("#addsupplier").click(function(){
-      	$("#dialogtambahsupplier").dialog("open");
-      	$(".ui-dialog-title").css("font-size","15px");
-      	$("#formproduk").validationEngine("hide");
-      	return false;
-      });
-      $("#addsatuan").click(function(){
-      	$("#dialogtambahsatuan").dialog("open");
-      	$(".ui-dialog-title").css("font-size","15px");
-      	$("#formproduk").validationEngine("hide");
-      	return false;
-      });
-      $("#tambahprodukbaru").button({
-	      icons: {
-	          primary: "ui-icon-plusthick"
-	      },
-	      text: false
-      }).click(function(){
-      	$("#formpenambahanproduk").fadeIn("slow",function(){
-      		alamatbarcode = pathutama +"penjualan/getrandomstring";
-      		$.ajax({
-				type: "POST",
-				url: alamatbarcode,
-				cache: false,
-				success: function(data){
-					$("#barcode").val(data.trim());
-      				$("#barcode").select();
-      			}
-      		});
-      	});
-      });
-      $("#refreshprodukbaru").button({
-	      icons: {
-	          primary: "ui-icon-refresh"
-	      },
-	      text: false
-      }).click(function(){
-      	$("#tempattabel").html("Memuat Data Produk...<img src = \""+ pathutama +"misc/media/images/loading.gif\">");
-      	var request = new Object();
-			 	request.asal = "produk"; 
-				alamattabelproduk = pathutama +"dataproduk/isitableproduk";
-				$.ajax({
-					type: "POST", 
-					url: alamattabelproduk,
-					data: request,
-					cache: false,
-					success: function(data){
-						$("#tempattabel").fadeOut("fast",function(){
-							$("#tempattabel").html(data);
-							tampilkantabelproduk();
-							$("#tempattabel").fadeIn("fast");
-						});
-					}
-				});
-      });
-      $("#kodekategori, #kodesubkategori, #kodesupplier, #namasatuan").autotab_filter({
-				format: "alphanumeric",
-				uppercase: true,
-				nospace: true
-			});
-			$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-				format: "numeric",
-				nospace: true
-			});
-			//$("#main h2").css("width","100%");
-			//$("#main h2").css("float","left");
-			$("#barcode").keypress(function(e) {
-			    if(e.keyCode == 13) {
-			    	$("#formproduk").validationEngine("validateField", "#barcode");
-			    	ubahkodebarang();
-			    	$("#idkategori").focus();
-			    }
-			});
-			$("#formproduk").validationEngine();
-			tampilkantabelproduk();
-		})
-	','inline');
+	drupal_add_js('sites/all/libraries/uploadify/jquery.uploadify.v2.1.0.min.js');
+	drupal_add_js('sites/all/libraries/uploadify/swfobject.js');
+	$filePath = base_path().file_directory_path();
+	drupal_add_js(
+		array(
+			'filePath'  => $filePath,
+		),
+		'setting'
+	);
+	$js_path = drupal_get_path('module','dataproduk').'/tabelproduknew.js';
+	drupal_add_js($js_path);
 	drupal_set_title('<span style="float: left;margin-right: 6px;">Data Produk</span><button id="tambahprodukbaru" class="tombolutama">Tambah Produk</button><button id="refreshprodukbaru" class="tombolutama">Refresh Tabel Produk</button>');
 	//Pilihan Kategori
 	$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
@@ -630,17 +98,38 @@ function data_produk(){
 	$viewtabelproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')">';
 	$viewtabelproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')">';
 	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')">';
+	$pilihantype = '<select id="type_product" name="type_product">';
+	$pilihantype .= '<option value="0">Produk</option>';
+	$pilihantype .= '<option value="1">Jasa</option>';
+	$pilihantype .= '</select>';
+	$viewtabelproduk .= '<label>TYPE ITEM</label>'.$pilihantype;
+	$viewtabelproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time">';
+	$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
+	$pilihanjamkerja .= '<option value="0">Tidak</option>';
+	$pilihanjamkerja .= '<option value="1">Ya</option>';
+	$pilihanjamkerja .= '</select>';
+	$viewtabelproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
+	$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
+	$pilihansebelumzuhur .= '<option value="0">Tidak</option>';
+	$pilihansebelumzuhur .= '<option value="1">Ya</option>';
+	$pilihansebelumzuhur .= '</select>';
+	$viewtabelproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
 	$viewtabelproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok">';
 	$viewtabelproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok">';
 	$viewtabelproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok">';
 	$viewtabelproduk .= '<label>SATUAN</label>'.$pilihansatuan.$buttonadd4;
+	$viewtabelproduk .= '<label>GAMBAR</label><input id="uploadify" name="uploadify" type="file">';
 	$viewtabelproduk .= '<label>KETERANGAN</label><input type="text" id="keteranganproduk" name="keteranganproduk">';
-	$viewtabelproduk .= '</form><div><button onclick="simpanproduk();" style="font-size:12px;">Tambah Produk</button></div></div></div>';
+	$viewtabelproduk .= '</form><div><button onclick="save_produk();" style="font-size:12px;">Tambah Produk</button></div></div></div>';
 	$pilihanstatus = '<div id="pilihanstatus">';
 	$pilihanstatus .= '<img onclick="view_status(\'minimum\')" title="Klik untuk melihat produk dengan stok dibawah minimum" src="'.base_path().'misc/media/images/statusmerah.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'maksimum\')" title="Klik untuk melihat produk dengan stok diatas maksimum" src="'.base_path().'misc/media/images/statuskuning.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'aman\')" title="Klik untuk melihat produk dengan stok aman" src="'.base_path().'misc/media/images/statushijau.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'all\')" title="Klik untuk melihat seluruh produk" src="'.base_path().'misc/media/images/alldata.png">';
+	$pilihanstatus .= '<span class="float-right">';
+	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode Biasa</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Dengan Logo</button>';
+	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
 	if ($_GET["statusstok"]){
 		$STATUSTOK = $_GET["statusstok"];
@@ -745,6 +234,7 @@ function tabel_produk($statusstok = null){
 	$tabelproduk .= '<th>SATUAN</th>';
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
@@ -754,6 +244,7 @@ function tabel_produk($statusstok = null){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';
@@ -816,6 +307,7 @@ function cek_barcode2(){
 function simpan_produk(){
 	/*idsupplier,idkategori,idsubkategori,barcode,alt_code,namaproduct,hargapokok,
 	hargajual,margin,minstok,maxstok,stok,satuan,berat,keterangan*/
+	global $user;
 	$altCode = remove_utf8_bom($_POST["alt_code"]);
 	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
@@ -837,11 +329,17 @@ function simpan_produk(){
 				}
 				//$sql = "UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'";
 				//$nilai = $_POST["idsupplier"].'-'.$_POST["idkategori"].'-'.$_POST["idsubkategori"].'-'.$_POST["barcode"].'-'.$kodealternatif.'-'.$_POST["namaproduk"].'-'.$_POST["hargapokok"].'-'.$_POST["hargajual"].'-'.$_POST["margin"].'-'.$_POST["minstok"].'-'.$_POST["maxstok"].'-'.$_POST["stok"].'-'.$_POST["satuan"].'-'.$_POST["keterangan"].'-'.$_POST["idproduk"];
-				db_query("UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',
-				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'",
-				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$kodealternatif,
-				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
-				$_POST["satuan"],$_POST["keterangan"],$_POST["idproduk"]);
+				db_query("UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',
+				barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',
+				margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
+				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
+				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
+				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
+				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
+				$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
+				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],
+				$_POST["idproduk"]);
 				//print $sql;
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
@@ -850,44 +348,127 @@ function simpan_produk(){
 				}
 			}else{
 				db_query("UPDATE product SET idsupplier='%d',barcode='%s',
-				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'",
+				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',
+				minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
+				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',
+				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["barcode"],
-				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
-				$_POST["satuan"],$_POST["keterangan"],$_POST["idproduk"]);
+				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],
+				$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
+				$_POST["satuan"],$_POST["keterangan"],$_POST["idkategori"],$_POST["type_product"],
+				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],
+				$_POST["idproduk"]);
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
 					db_query("INSERT INTO historyhargabeli (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
 					$HARGAPOKOK,$_POST["hargapokok"],$user->uid);
 				}
 			}
-			$SELISIHSTOK = ($_POST["stok"]*1)-$STOKSEBELUM;
-			if ($SELISIHSTOK < 0){
-				$KELUAR = abs($SELISIHSTOK);
-				$KETERANGAN = 'Perubahan Stock-Stok Berkurang';
-				db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
-				('%d', '%f', '%f', '%f', '%s')",$_POST["idproduk"],$STOKSEBELUM,$KELUAR,$_POST["stok"],$KETERANGAN);
-			}else{
-				$MASUK = $SELISIHSTOK;
-				$KETERANGAN = 'Perubahan Stock-Stok Bertambah';
-				db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
-				('%d', '%f', '%f', '%f', '%s')",$_POST["idproduk"],$STOKSEBELUM,$MASUK,$_POST["stok"],$KETERANGAN);
+			if ($_POST["type_product"] == 0) {
+				$SELISIHSTOK = ($_POST["stok"] * 1) - $STOKSEBELUM;
+				if ($SELISIHSTOK < 0) {
+					$KELUAR = abs($SELISIHSTOK);
+					$KETERANGAN = 'Perubahan Stock-Stok Berkurang';
+					db_query(
+						"INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES
+					('%d', '%f', '%f', '%f', '%s')",
+						$_POST["idproduk"],
+						$STOKSEBELUM,
+						$KELUAR,
+						$_POST["stok"],
+						$KETERANGAN
+					);
+				} else {
+					$MASUK = $SELISIHSTOK;
+					$KETERANGAN = 'Perubahan Stock-Stok Bertambah';
+					db_query(
+						"INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES
+					('%d', '%f', '%f', '%f', '%s')",
+						$_POST["idproduk"],
+						$STOKSEBELUM,
+						$MASUK,
+						$_POST["stok"],
+						$KETERANGAN
+					);
+				}
 			}
 		}
 	}else{
 		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
-			db_query("INSERT INTO product(idsupplier,idkategori,idsubkategori,barcode,alt_code,
-			namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,keterangan) VALUES(
+			db_query("INSERT INTO product(idsupplier,idkategori,idsubkategori,barcode,
+			alt_code,namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,
+			keterangan,type_product,lead_time, aturan_jam_kerja,berlaku_sebelum_zuhur)
+			VALUES(
 			'%d','%d','%d','%s','%s',
-			'%s','%f','%f','%f','%d','%d','%d','%s','%s')",
-			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],$_POST["barcode"],$altCode,
-			$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
-			$_POST["satuan"],$_POST["keterangan"]);
+			'%s','%f','%f','%f','%d','%d','%d','%s','%s','%d','%d','%d','%d')",
+			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
+			$_POST["barcode"],$altCode,$_POST["namaproduk"],$_POST["hargapokok"],
+			$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
+			$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
+			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"]);
 			$result = db_query("SELECT idproduct FROM product WHERE alt_code='%s'",$_POST["alt_code"]);
 			$data = db_fetch_object($result);
 			$IDPRODUK = $data->idproduct;
-			$KETERANGAN = 'Inisialisasi Stock';
-			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
-			('%d', '%f', '%f', '%f', '%s')",$IDPRODUK,0,$_POST["stok"],$_POST["stok"],$KETERANGAN);
+			if ($_POST["type_product"] == 0) {
+				$KETERANGAN = 'Inisialisasi Stock';
+				db_query("INSERT INTO transaksistock (idproduk, stocksebelum,
+				masuk, stocksetelah, keterangan) VALUES ('%d', '%f', '%f', '%f', '%s')",
+				$IDPRODUK,0,$_POST["stok"],$_POST["stok"],$KETERANGAN
+				);
+			}
+			if (trim($_POST['namafile']) != 'tanpafile'){
+				$node = new stdClass();
+				$node->title = $_POST["namaproduk"];
+				$node->body = $_POST["keterangan"];
+				$node->type = 'gambar_produk';
+				$node->created = time();
+				$node->changed = $node->created;
+				$node->status = 1;          // Published?
+				$node->promote = 0;       // Display on front page?
+				$node->sticky = 0;          // Display top of page?
+				$node->format = 0;         // Filtered HTML?
+				$node->uid = $user->uid;	             //  Content owner uid (author)?
+				$node->name = $user->name;
+				$node->field_id_produk[0]['value'] = $IDPRODUK;
+				$files_path = file_directory_path().'/';
+				$file = $files_path.$_POST['namafile'];
+				$details = stat($file);
+				$filesize = $details['size'];
+				$name = basename($file);
+				$file_obj = new stdClass();
+				$file_obj->filename = $name;
+				$file_obj->filepath = $file;
+				$file_obj->filemime = file_get_mimetype($name);
+				$file_obj->filesize = $filesize;
+				$file_obj->filesource = $name;
+				// You can change this to the UID you want
+				$file_obj->uid = $user->uid;
+				$file_obj->status = FILE_STATUS_TEMPORARY;
+				$file_obj->timestamp = time();
+				$file_obj->list = 1;
+				$file_obj->new = true;
+				dpm($file_obj);
+				// Save file to files table
+				drupal_write_record('files', $file_obj);
+				file_set_status($file_obj,1);
+
+				// Attach the file object to your node
+				$node->field_gambar_file = array(
+					array(
+						'fid' => $file_obj->fid,
+						'title' => $name,
+						'filename' => $file_obj->filename,
+						'filepath' => $file_obj->filepath,
+						'filesize' => $file_obj->filesize,
+						'mimetype' => file_get_mimetype($name),
+						'description' => $name,
+						'list' => 1,
+					),
+				);
+				//$node->files[$file_obj->fid] = $file_obj;
+				dpm($node);
+				node_save($node);
+			}
 		}
 	}
 	exit();	
@@ -920,8 +501,9 @@ function edit_data_produk(){
 	if ($_GET["idproduk"]){
 		$IDPRODUK = $_GET["idproduk"];
 		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode, 
-		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan, keterangan FROM product WHERE idproduct='%d'",
-		$IDPRODUK);
+		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan,
+		keterangan, type_product, lead_time,aturan_jam_kerja,berlaku_sebelum_zuhur FROM product
+		WHERE idproduct='%d'",$IDPRODUK);
 		$dataproduk = db_fetch_object($resultproduk);
         $path = drupal_get_path('theme', 'cti_flex');
         $form_style = $path.'/css/custom-style.css';
@@ -934,355 +516,16 @@ function edit_data_produk(){
 		drupal_add_js('misc/media/jquery.validationEngine.js');
 		drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
 		drupal_add_js('misc/media/jquery.autotab-1.1b.js');
-		drupal_add_js('
-			var oTable;
-			var pathutama = "'.base_path().'";
-			var pathfile = "'.base_path().file_directory_path().'/";
-			var barcodesama = false;
-			
-			function simpankategori(){
-				if ($("#kodekategori").val() != "" && $("#kategori").val() != ""){
-					var request = new Object();
-					request.kodekategori = $("#kodekategori").val();
-					request.kategori = $("#kategori").val();
-					request.keterangan = $("#keterangan").val();
-					request.asal = "Subkategori";
-					alamat = pathutama + "dataproduk/simpankategori";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data){
-							$("#idkategori").append("<option value=\""+ data +"\">"+ request.kodekategori +"-"+ request.kategori +"</option>");
-							$("#kodekategori").val("");
-							$("#kategori").val("");
-							$("#keterangan").val("");
-							$("#dialogtambahkategori").dialog("close");
-							$("#idkategori").val(data);
-							filtersubkategori();
-						}
-					});
-				}else{
-					$("#tambahkategoriform").submit();
-				}	
-			}
-			
-			function simpansubkategori(){
-				if ($("#kodesubkategori").val() != "" && $("#subkategori").val() != ""){
-					var request = new Object();
-					request.idkategori = $("#idkategori2").val();
-					request.kodesubkategori = $("#kodesubkategori").val();
-					request.subkategori = $("#subkategori").val();
-					request.keterangan = $("#keterangansub").val();
-					request.asal = "Produk";
-					alamat = pathutama + "dataproduk/simpansubkategori";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data){
-							$("#idsubkategori").append("<option value=\""+ data +"\">"+ request.kodesubkategori +"-"+ request.subkategori +"</option>");
-							$("#kodesubkategori").val("");
-							$("#subkategori").val("");
-							$("#keterangansub").val("");
-							$("#dialogtambahsubkategori").dialog("close");
-							$("#idsubkategori").val(data);
-							ubahkodebarang();
-						}
-					});
-				}else{
-					$("#tambahsubkategoriform").submit();
-				}	
-			}
-			
-			function simpansupplier(){
-				if ($("#kodesupplier").val() != "" && $("#supplier").val() != ""){
-					var request = new Object();
-					request.kodesupplier = $("#kodesupplier").val();
-					request.namasupplier = $("#namasupplier").val();
-					request.keterangan = $("#keterangan").val();
-					request.asal = "supplier";
-					alamat = pathutama + "datasupplier/simpansupplier";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data){
-							$("#idsupplier").append("<option value=\""+ data +"\">"+ request.kodesupplier +"-"+ request.namasupplier +"</option>");
-							$("#kodesupplier").val("");
-							$("#supplier").val("");
-							$("#keterangan").val("");
-							$("#dialogtambahsupplier").dialog("close");
-							$("#idsupplier").val(data);
-						}
-					});
-				}else{
-					$("#tambahsupplierform").submit();
-				}	
-			}
-			function simpansatuan(){
-				if ($("#namasatuan").val() != ""){
-					var request = new Object();
-					request.namasatuan = $("#namasatuan").val();
-					alamat = pathutama + "dataproduk/simpansatuan";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data){
-							if (data != "error"){
-								$("#satuan").append("<option value=\""+ request.namasatuan +"\">"+ request.namasatuan +"</option>");
-								$("#namasatuan").val("");
-								$("#dialogtambahsatuan").dialog("close");
-								$("#satuan").val(data);
-							}else{
-								alert("Satuan ini sudah ada..!!");	
-							}
-						}
-					});
-				}else{
-					$("#tambahsatuanform").submit();
-				}	
-			}
-			
-			function filtersubkategori(idsubkategori){
-				var request = new Object();
-				request.idkategori = 	$("#idkategori").val();
-				var alamat = pathutama + "dataproduk/filterkategori";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						$("#idsubkategori").empty();
-						$("#idsubkategori").append(data);
-						ubahkodebarang();
-						if (idsubkategori > 0){
-							$("#idsubkategori").val(idsubkategori);
-							ubahkodebarang();
-						}
-					}
-				});
-			}
-			
-			function ubahkodebarang(){
-				var kategori = "";
-				$("#idkategori option:selected").each(function () {
-					kategori = $(this).text();
-				}); 
-				var pecahkategori = kategori.split("-");
-				var subkategori = "";
-				$("#idsubkategori option:selected").each(function () {
-					subkategori = $(this).text();
-				});
-				pecahsubkategori = subkategori.split("-");
-				kodebarang = pecahkategori[0] +"-"+ pecahsubkategori[0];
-				var request = new Object();
-				request.kodealternatif = 	kodebarang;
-				var alamat = pathutama + "dataproduk/cekkodealternatif";
-				$.ajax({ 
-					type: "POST",
-					url: alamat,
-					data: request, 
-					cache: false, 
-					success: function(data){
-						$("#kodepoduk").val(kodebarang +"-"+ data.trim());
-					}
-				});
-			}
-			function hitungmargin(asal){
-				if (asal == "hargapokok"){
-					if ($("#margin").val() > 0 && $("#hargapokok").val() > 0){
-						var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-						$("#hargajual").val(Math.round(hargajual));
-					}
-				}else if (asal == "hargajual"){
-					if ($("#hargapokok").val() > 0 && $("#hargajual").val() > 0){
-						var margin = (($("#hargajual").val() - $("#hargapokok").val())/$("#hargajual").val())*100;
-						$("#margin").val(Math.round(margin));
-					}
-				}else if (asal == "margin"){
-					if ($("#hargapokok").val() > 0 && $("#margin").val() > 0){
-						var hargajual = $("#hargapokok").val() * (100/(100-$("#margin").val()));
-						$("#hargajual").val(Math.round(hargajual));
-					}
-				}
-			}
-			function cek_barcode(field, rules, i, options){
-				if (field.val() != ""){
-					$("#validating").html("<img src = \""+ pathutama +"misc/media/images/loading.gif\">");
-					$("#validating").fadeIn("fast",function(){
-						var request = new Object();
-					 	request.barcode = field.val();
-					 	request.idproduk = $("#idproduk").val();
-						cekbarcode = pathutama +"dataproduk/cekbarcode2";
-						$.ajax({
-							type: "POST", 
-							url: cekbarcode,
-							data: request,
-							cache: false,
-							success: function(data){
-								if (data == "sama"){
-									$("#validating").fadeOut("fast",function(){
-										$("#barcode").validationEngine("showPrompt", "Barcode ini sudah digunakan..!!", "error", "topRight", true);
-										$("#barcode").select();
-										barcodesama = true;
-									})
-								}else{
-									if (data == "taksama"){
-										barcodesama = false;
-									}
-									$("#validating").fadeOut("fast");
-								}
-							}
-						});
-					})
-				}		
-			}
-			function simpanproduk(){
-				if ($("#barcode").val() != "" && !barcodesama && $("#namaproduk").val() != "" && $("#hargapokok").val() > 0 && $("#hargajual").val() > 0){
-					var request = new Object();
-					request.idproduk = $("#idproduk").val();
-				 	request.barcode = $("#barcode").val();
-				 	request.alt_code = $("#kodepoduk").val();
-				 	request.idkategori = $("#idkategori").val();
-				 	request.idsubkategori = $("#idsubkategori").val();
-				 	request.idsupplier = $("#idsupplier").val();
-				 	request.namaproduk = $("#namaproduk").val();
-				 	request.hargapokok = $("#hargapokok").val();
-				 	request.hargajual = $("#hargajual").val();
-				 	request.margin = $("#margin").val();
-				 	request.minstok = $("#minstok").val();
-				 	request.maxstok = $("#maxstok").val();
-				 	request.stok = $("#stok").val();
-				 	request.satuan = $("#satuan").val();
-				 	request.keterangan = $("#keteranganproduk").val();
-					alamatsimpan = pathutama +"dataproduk/simpanproduk";
-					$.ajax({
-						type: "POST", 
-						url: alamatsimpan,
-						data: request,
-						cache: false, 
-						success: function(data){
-							window.location = pathutama + "dataproduk/produk";
-						}
-					});
-				}else{
-					$("#formproduk").validationEngine("validate");
-				}
-			}
-			function batal(){
-				window.location = pathutama + "dataproduk/produk";
-			}
-			$(document).ready(function() {
-				$("#dialogtambahkategori").dialog({
-					modal: true,
-					width: 350,
-					resizable: false,
-					autoOpen: false,
-					position: ["auto","auto"],
-					open: function(event, ui) {
-						$("#kodekategori").focus();
-					},
-					close: function(){
-						$("#tambahkategoriform").validationEngine("hide");
-					}
-				});
-				$("#dialogtambahsubkategori").dialog({
-					modal: true,
-					width: 350,
-					resizable: false,
-					autoOpen: false,
-					position: ["auto","auto"],
-					open: function(event, ui) {
-						$("#kodesubkategori").focus();
-					},
-					close: function(){
-						$("#tambahsubkategoriform").validationEngine("hide");
-					}
-				});
-				$("#dialogtambahsupplier").dialog({
-					modal: true,
-					width: 350,
-					resizable: false,
-					autoOpen: false,
-					position: ["auto","auto"],
-					open: function(event, ui) {
-						$("#kodesupplier").focus();
-					},
-					close: function(){
-						$("#tambahsupplierform").validationEngine("hide");
-					}
-				});
-				$("#dialogtambahsatuan").dialog({
-					modal: true,
-					width: 350,
-					resizable: false,
-					autoOpen: false,
-					position: ["auto","auto"],
-					open: function(event, ui) {
-						$("#namasatuan").select();
-					},
-					close: function(){
-						$("#tambahsatuanform").validationEngine("hide");
-					}
-				});
-				$("#formsubkategori").validationEngine();
-				$("#tambahkategoriform").validationEngine();
-				$("#tambahsubkategoriform").validationEngine();
-				$("button").button();
-				$("#addkategori").click(function(){
-	      	$("#dialogtambahkategori").dialog("open");
-	      	$(".ui-dialog-title").css("font-size","15px");
-	      	$("#formproduk").validationEngine("hide");
-	      	return false;
-	      });
-	      $("#addsubkategori").click(function(){
-	      	$("#dialogtambahsubkategori").dialog("open");
-	      	$("#idkategori2").val($("#idkategori").val());
-	      	$(".ui-dialog-title").css("font-size","15px");
-	      	$("#formproduk").validationEngine("hide");
-	      	return false;
-	      });
-	      $("#addsupplier").click(function(){
-	      	$("#dialogtambahsupplier").dialog("open");
-	      	$(".ui-dialog-title").css("font-size","15px");
-	      	$("#formproduk").validationEngine("hide");
-	      	return false;
-	      });
-	      $("#addsatuan").click(function(){
-	      	$("#dialogtambahsatuan").dialog("open");
-	      	$(".ui-dialog-title").css("font-size","15px");
-	      	$("#formproduk").validationEngine("hide");
-	      	return false;
-	      });
-	      $("#kodekategori, #kodesubkategori, #kodesupplier, #namasatuan").autotab_filter({
-					format: "alphanumeric",
-					uppercase: true,
-					nospace: true
-				});
-				$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-					format: "numeric",
-					nospace: true
-				});
-				$("#main h2").css("width","100%");
-				$("#main h2").css("float","left");
-				$("#barcode").keypress(function(e) {
-				    if(e.keyCode == 13) {
-				    	$("#formproduk").validationEngine("validateField", "#barcode");
-				    	$("#idkategori").focus();
-				    }
-				});
-				$("#formproduk").validationEngine();
-				filtersubkategori("'.$dataproduk->idsubkategori.'");
-				$("#barcode").select();
-			})
-		','inline');
+		$filePath = base_path().file_directory_path();
+		$idSubKategori = $dataproduk->idsubkategori;
+		drupal_add_js(
+			array(
+				'filePath' => $filePath,
+				'idSubKategori' => $idSubKategori,
+			),
+			'setting');
+		$js_path = drupal_get_path('module','dataproduk').'/editproduct.js';
+		drupal_add_js($js_path);
 		//Pilihan Kategori
 		$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
 		$pilihankategori = '<select id="idkategori" name="idkategori" onkeypress="filtersubkategori();" onchange="filtersubkategori();">';
@@ -1346,6 +589,21 @@ function edit_data_produk(){
 		$editproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok" value="'.$dataproduk->minstok.'">';
 		$editproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok" value="'.$dataproduk->maxstok.'">';
 		$editproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok" value="'.$dataproduk->stok.'">';
+		$editproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time" value="'.$dataproduk->lead_time.'">';
+		$selected_no = ($dataproduk->aturan_jam_kerja == 0) ? 'selected' : '';
+		$selected_yes = ($dataproduk->aturan_jam_kerja == 1) ? 'selected' : '';
+		$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
+		$pilihanjamkerja .= '<option value="0" '.$selected_no.'>Tidak</option>';
+		$pilihanjamkerja .= '<option value="1" '.$selected_yes.'>Ya</option>';
+		$pilihanjamkerja .= '</select>';
+		$editproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
+		$selected_no = ($dataproduk->berlaku_sebelum_zuhur == 0) ? 'selected' : '';
+		$selected_yes = ($dataproduk->berlaku_sebelum_zuhur == 1) ? 'selected' : '';
+		$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
+		$pilihansebelumzuhur .= '<option value="0" '.$selected_no.'>Tidak</option>';
+		$pilihansebelumzuhur .= '<option value="1" '.$selected_yes.'>Ya</option>';
+		$pilihansebelumzuhur .= '</select>';
+		$editproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
 		$editproduk .= '<label>SATUAN</label>'.$pilihansatuan.$buttonadd4;
 		$editproduk .= '<label>KETERANGAN</label><input type="text" id="keteranganproduk" name="keteranganproduk" value="'.$dataproduk->keterangan.'">';
 		$editproduk .= '<input type="hidden" id="idproduk" name="idproduk" value="'.$IDPRODUK.'"></form><div><button onclick="simpanproduk();" style="font-size:12px;border: 1px solid blue;">Update Produk</button><button onclick="batal();" style="font-size:12px;margin-left: 6px;border: 1px solid red;">Batal</button></div></div></div>';

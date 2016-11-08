@@ -181,6 +181,87 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'penjualan.delete.inc'
 	);
+	$items['penjualan/detailcustomerorder'] = array(
+		'title' => t('Detail Customer Order'),
+		'description' => 'Detail customer order',
+		'page callback' => 'detail_customerorder',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.tabelcustomerorder.inc'
+	);
+	$items['penjualan/laundrykeluar'] = array(
+		'title' => t('Pengambilan Laundry'),
+		'description' => 'Form laundry keluar',
+		'page callback' => 'laundry_keluar',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Laundry'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.laundry.inc'
+	);
+	$items['penjualan/carinotalaundry'] = array(
+		'title' => t('Pencarian Nota Laundry'),
+		'description' => 'Pencarian Nota Laundry',
+		'page callback' => 'cari_nota_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Laundry'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.laundry.inc'
+	);
+	$items['penjualan/updateraklaundry'] = array(
+		'title' => t('Update Nomer Rak Laundry'),
+		'description' => 'Update nomer rak laundry',
+		'page callback' => 'update_no_rak_laundry',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Laundry'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.tabellaundry.inc'
+	);
+	$items['penjualan/orderkeluar'] = array(
+		'title' => t('Pengambilan Order/Pesanan'),
+		'description' => 'Form pengambilan order/pesanan',
+		'page callback' => 'order_keluar',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
+	$items['penjualan/carinotaorder'] = array(
+		'title' => t('Pencarian Nota Order'),
+		'description' => 'Pencarian Nota Order',
+		'page callback' => 'cari_nota_order',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
+	$items['penjualan/orderselesai'] = array(
+		'title' => t('Input Hasil Produksi'),
+		'description' => 'Form input hasil produksi',
+		'page callback' => 'order_selesai',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
+	$items['penjualan/carinotaproduksi'] = array(
+		'title' => t('Pencarian Nota Produksi'),
+		'description' => 'Pencarian Nota Produksi',
+		'page callback' => 'cari_nota_produksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
+	$items['penjualan/simpanhasilproduksi'] = array(
+		'title' => t('Simpan Hasil Produksi'),
+		'description' => 'Simpan hasil produksi',
+		'page callback' => 'simpan_hasil_produksi',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	return $items;
 } // end hook menu
 

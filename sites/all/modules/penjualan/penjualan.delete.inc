@@ -105,6 +105,7 @@ function delete_customer_order($idcustomerorder = null){
 			$strSQLDelete = 'DELETE FROM customer_order WHERE id=%d';
 			db_query($strSQLDeleteDetail,$idcustomerorder);
 			db_query($strSQLDelete,$idcustomerorder);
+			db_query("DELETE FROM historypembayaran WHERE idcustomerorder='%d'",$idcustomerorder);
 			$strSuccess = t('Customer order berhasil dihapus...!!');
 			header('Location: '.base_path().$_GET['destination'].'?message='.$strSuccess.'&status=status');
 		}

@@ -50,6 +50,7 @@ function tampiltabelcustomerorder(){
             $('td', row).eq(14).addClass('center');
             $('td', row).eq(15).addClass('center');
             $('td', row).eq(16).addClass('center');
+			$('td', row).eq(17).addClass('center');
         },
 		'drawCallback': function( settings ) {
 			var renderer = "bmp";
@@ -65,7 +66,7 @@ function tampiltabelcustomerorder(){
 			});
 		},
 		"aoColumnDefs": [
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16 ] }
+			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
 		]
 	});
 }
@@ -106,11 +107,17 @@ function delete_customerorder(idcustomerorder,nonota){
 function print_customerorder(idcustomerorder,nonota){
 	var konfirmasi = confirm('Yakin ingin mencetak kembali customerorder dengan no nota : '+ nonota +' ini...??!!');	
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?nidcustomerorder='+ idcustomerorder);	
+		window.open(pathutama + 'print/6?idorder='+ idcustomerorder);
 	}
 }
-function pickup_customerorder(idtitipan, nonota){
-	window.open(Drupal.settings.basePath + 'penjualan/kasir/'+ idtitipan);
+function print_production(idcustomerorder,nonota){
+	var konfirmasi = confirm('Yakin ingin mencetak detail customer order dengan no nota : '+ nonota +' untuk keperluan produksi...??!!');
+	if (konfirmasi){
+		window.open(pathutama + 'print/6?idorderlogo='+ idcustomerorder);
+	}
+}
+function pickup_customerorder(idcustomerorder, nonota){
+	window.open(Drupal.settings.basePath + 'penjualan/kasir/'+ idcustomerorder +'/viewcustomerorder');
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;

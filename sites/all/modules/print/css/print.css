@@ -16,7 +16,7 @@ tr.even {
   background-color: #fff;
 }
 td {
-  padding: 2px;
+  padding: 0;
 }
 #menu {
   visibility: hidden;
@@ -56,4 +56,23 @@ img.print-logo {border: 0;}
 .print-footer {text-align: center;}
 tbody{
 	border-top: none !important;	
+}
+.small-font{
+  font-size: 10px;
+}
+.standard-font{
+  font-size: 12px;
+}
+.logo-place{
+  width: 70px;
+  padding: 4px 2px 4px 10px;
+}
+.pagebreak {
+  page-break-before: always;
+}
+.pull-left{
+  float: left;
+}
+.pull-right{
+  float: right;
 }

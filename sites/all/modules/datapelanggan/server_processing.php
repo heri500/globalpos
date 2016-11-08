@@ -198,6 +198,7 @@ function serverSideProduk($request){
 		$rowData[] = $data->satuan;
 		$rowData[] = $data->keterangan;
 		$rowData[] = number_format($data->total_nilai,0,",",".");
+		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
 		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
 		$rowData[] = $data->idproduct;
 		$output[] = $rowData;
@@ -519,8 +520,7 @@ function serverSideCustomerOrder($request){
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT customerorder.id,customerorder.nonota,SUBSTR(customerorder.tglorder,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(customerorder.tglorder,11,9) AS waktu, customerorder.idpemakai,";
-	$strSQL .= "(SELECT SUM(hargajual*jumlah) FROM detailcustomerorder WHERE ";
-	$strSQL .= "id = customerorder.id) AS total,";
+	$strSQL .= "customerorder.total,";
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
 	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
 	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";
@@ -559,6 +559,7 @@ function serverSideCustomerOrder($request){
 		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
 		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
 		$tombolselesai = "<img title=\"Customer order sudah diambil\" src=\"$baseDirectory/misc/media/images/checks.png\" width=\"22\">";
+		$tombolprintproduksi = "<img title=\"Klik untuk mencetak keperluan produksi\" onclick=\"print_production(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print-production.png\" width=\"22\">";
 		$rowData[] = $tomboldetail;
 		if ($data->status_order == 0 || $data->status_order == 1){
 			$rowData[] = $tombolambil;
@@ -589,6 +590,7 @@ function serverSideCustomerOrder($request){
 		}
 		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
 		$rowData[] = $data->keterangan;
+		$rowData[] = $tombolprintproduksi;
 		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
@@ -838,6 +840,8 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = pengeluaran($_GET);
 }else if($_GET['request_data'] == 'pemasukan'){
 	$returnArray = pemasukan($_GET);
+}else if($_GET['request_data'] == 'customerorder'){
+	$returnArray = serverSideCustomerOrder($_GET);
 }
 echo json_encode($returnArray);
 ?>

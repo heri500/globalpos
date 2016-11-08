@@ -115,10 +115,14 @@ function pembayaranhutang($variables){
 	if (!isset($variables['idpenjualan'])){
 		$variables['idpenjualan'] = 0;	
 	}
+	if (!isset($variables['idcustomerorder'])){
+		$variables['idcustomerorder'] = 0;
+	}
 	db_query("INSERT INTO historypembayaran (idpelanggan, nilaisebelumbayar, pembayaran, uid, tglbayar, 
-	keterangan, idpenjualan, idtitipanlaundry) VALUES ('%d', '%f', '%f', '%d', '%s', '%s', '%d', '%d')",
+	keterangan, idpenjualan, idtitipanlaundry,idcustomerorder) VALUES
+	('%d', '%f', '%f', '%d', '%s', '%s', '%d', '%d', '%d')",
 	$variables['idpelanggan'],$variables['hutang'],$variables['pembayaran'],$user->uid,$variables['tglbayar'],
-	$variables['keterangan'],$variables['idpenjualan'],$variables['idtitipanlaundry']);
+	$variables['keterangan'],$variables['idpenjualan'],$variables['idtitipanlaundry'],$variables['idcustomerorder']);
 	$sisahutang = $variables['hutang'] - $variables['pembayaran'];
 	$tglsekarang = date("Y-m-d H:i:s");
 	$piutangExist = cekPiutangExists($variables['idpelanggan']);

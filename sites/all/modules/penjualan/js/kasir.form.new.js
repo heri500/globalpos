@@ -1,12 +1,13 @@
 var oTable;
-var pathutama = "";
+var pathutama = '';
 var giCount = 1;
 var totalbelanja = 0;
 var totalproduk = 0;
 var barisrubah;
-var tglsekarang = "";
-var tgltampil = "";
+var tglsekarang = '';
+var tgltampil = '';
 var cetakstruk = 0;
+var alamatasal = '';
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
 		"bJQueryUI": true,
@@ -171,7 +172,12 @@ function hapus_produk(posisi,nTr,idproduk){
 function akhiri_belanja(cetak){
 	var request = new Object();
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined'){
-		request.idtitipanlaundry = Drupal.settings.idtitipanlaundry;
+		if (alamatasal == 'viewlaundry' || alamatasal == 'laundrykeluar'){
+			request.idtitipanlaundry = Drupal.settings.idtitipanlaundry;
+		}else if (alamatasal == 'viewcustomerorder' || alamatasal == 'orderkeluar'){
+			request.idcustomerorder = Drupal.settings.idtitipanlaundry;
+		}
+
 	}
 	request.detail_produk = $("#nilaikirim").val();
 	$("#idpelanggan").removeAttr("disabled");
@@ -200,7 +206,12 @@ function akhiri_belanja(cetak){
 					if (cetak == 1){
 						window.open(pathutama + "print/6?idpenjualan="+ returndata);
 					}
-					window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual;
+					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
+						window.location = pathutama + 'penjualan/' + alamatasal;
+					}else{
+						window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual;
+					}
+
 				}else{
 					alert("Ada masalah dalam penyimpanan data...!!!");
 				}
@@ -250,20 +261,46 @@ $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	tglsekarang = Drupal.settings.tglsekarang;
 	tgltampil = Drupal.settings.tgltampil;
-	
-	$("#dialogkasir").dialog({
-		modal: true,
-		width: 925,
-		closeOnEscape: false,
-		height: 600,
-		resizable: false,
-		autoOpen: false,
-		open: function(event, ui) {
-			$("#tempatjam").clock({"format":"24","calendar":"false"});
-			$("#barcode").focus();
-		},
-		position: ["auto","auto"]
-	});
+	alamatasal = Drupal.settings.alamatasal;
+	if (typeof Drupal.settings.idtitipanlaundry != 'undefined') {
+		$("#dialogkasir").dialog({
+			modal: true,
+			width: 925,
+			closeOnEscape: false,
+			height: 640,
+			resizable: false,
+			autoOpen: false,
+			open: function (event, ui) {
+				$("#tempatjam").clock({"format": "24", "calendar": "false"});
+				$("#barcode").focus();
+			},
+			position: ["auto", "auto"],
+			close: function( event, ui ) {
+				if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
+					window.location = pathutama + 'penjualan/' + alamatasal;
+				}
+			}
+		});
+	}else{
+		$("#dialogkasir").dialog({
+			modal: true,
+			width: 925,
+			closeOnEscape: false,
+			height: 600,
+			resizable: false,
+			autoOpen: false,
+			open: function (event, ui) {
+				$("#tempatjam").clock({"format": "24", "calendar": "false"});
+				$("#barcode").focus();
+			},
+			position: ["auto", "auto"],
+			close: function( event, ui ) {
+				if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
+					window.location = pathutama + 'penjualan/' + alamatasal;
+				}
+			}
+		});
+	}
 	$("#dialogwarning").dialog({
 		modal: true,
 		width: 400,
@@ -532,9 +569,21 @@ $(document).ready(function(){
 			for (var i = 0;i < totaldetaildata;i++){
 				var dataDetail = Drupal.settings.data_laundry[i];
 				$('#barcode').val(dataDetail.namaproduct);
-				console.log(dataDetail.sisa);
 				tambahproduk(dataDetail.sisa);
 			}	
+		}
+	}else if(typeof Drupal.settings.data_order != 'undefined'){
+		if (Drupal.settings.data_order.length > 0){
+			var totaldetaildata = Drupal.settings.data_order.length;
+			for (var i = 0;i < totaldetaildata;i++){
+				var dataDetail = Drupal.settings.data_order[i];
+				if (dataDetail.barcode != ''){
+					$('#barcode').val(dataDetail.barcode);
+				}else{
+					$('#barcode').val(dataDetail.namaproduct);
+				}
+				tambahproduk(dataDetail.sisa);
+			}
 		}
 	}
 	$("#carabayar").change(function(){
@@ -565,4 +614,5 @@ $(document).ready(function(){
 	});
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
+	$('#tempattombolkasir').css('height','330px');
 })
