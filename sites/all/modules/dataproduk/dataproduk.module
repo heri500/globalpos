@@ -190,32 +190,32 @@ function calculateTakeTimeNormal($leadTime = null, $dateIn = null){
 		$splitDateTime = explode(' ',$dateIn);
 		$splitDate = explode('-',$splitDateTime[0]);
 		$splitTime = explode(':',$splitDateTime[1]);
-		$takeDay = date('w', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		$takeHour = date('H', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+		$takeDay = date('w', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+		$takeHour = date('H', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
 		$jamKerjaLaundry = JAM_KERJA_LAUNDRY();
 		if ($takeDay == 0){
 			if ((int)$takeHour > (int)$jamKerjaLaundry['minggu']['jam_keluar']){
-				$takeTimeOld = date('Y-m-d', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+				$takeTimeOld = date('Y-m-d', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
 				$splitTakeTime = explode('-', $takeTimeOld);
 				$takeTime = array();	
-				$takeTime[] = date('d-M-y', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
+				$takeTime[] = date('d-M-y H:i', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
 				$takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
 			}else{
 				$takeTime = array();	
-				$takeTime[] = date('d-M-y', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$takeTime[] = mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]);
+				$takeTime[] = date('d-M-y H:i', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+				$takeTime[] = mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]);
 			}
 		}else{
 			if ($takeHour > $jamKerjaLaundry['normal']['jam_keluar']){
-				$takeTimeOld = date('Y-m-d', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+				$takeTimeOld = date('Y-m-d', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
 				$splitTakeTime = explode('-', $takeTimeOld);
 				$takeTime = array();
-				$takeTime[] = date('d-M-y', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
+				$takeTime[] = date('d-M-y H:i', mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]));
 				$takeTime[] = mktime(7, 0, 0, $splitTakeTime[1],$splitTakeTime[2] + 1,$splitTakeTime[0]);
 			}else{
 				$takeTime = array();
-				$takeTime[] = date('d-M-y', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-				$takeTime[] = mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]);
+				$takeTime[] = date('d-M-y H:i', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+				$takeTime[] = mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]);
 			}
 		}
 	}
@@ -231,7 +231,7 @@ function calculateTakeTime($leadTime = null, $dateIn = null, $ikutJamKerja = fal
 		$splitDate = explode('-',$splitDateTime[0]);
 		$splitTime = explode(':',$splitDateTime[1]);
 		$inDay = date('w', mktime($splitTime[0], $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
-		$takeHour = date('H', mktime($splitTime[0] + $leadTime, $splitTime[1], 0, $splitDate[1],$splitDate[2],$splitDate[0]));
+		$takeHour = date('H', mktime($splitTime[0], $splitTime[1] + $leadTime, 0, $splitDate[1],$splitDate[2],$splitDate[0]));
 		if ($ikutJamKerja && $sebelumZuhur){
 			if ($splitTime[0] > 12){
 				$newDateIn = date('Y-m-d H:i',mktime(7,0,0, $splitDate[1], (int)$splitDate[2] + 1, $splitDate[0]));
@@ -264,15 +264,15 @@ function calculateTakeTime($leadTime = null, $dateIn = null, $ikutJamKerja = fal
 				 	$sisaJamKerja = $sisaJamKerja - $totalJamKerja;
 			        }
 			        $explodeTakeDate = explode('-',$nextDate);
-			        $takeTime[] = date('d-M-y', mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
+			        $takeTime[] = date('d-M-y H:i', mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
 			        $takeTime[] = mktime($jamMasuk, 0, 0, $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);	
 			}else{
-                                $nextDate = date('Y-m-d',mktime($splitTime[0] + $leadTime, $splitTime[1], $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
+                $nextDate = date('Y-m-d',mktime($splitTime[0], $splitTime[1] + $leadTime, $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
 				$explodeTakeDate = explode('-',$nextDate);
-                                $nexTime =  date('H:i:s',mktime($splitTime[0] + $leadTime, $splitTime[1], $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
+                $nexTime =  date('H:i:s',mktime($splitTime[0], $splitTime[1]  + $leadTime, $splitTime[2], $splitDate[1],$splitDate[2],$splitDate[0]));
 				$explodeTakeTime = explode(':',$nexTime);
-				$takeTime[] = date('d-M-y', mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
-			        $takeTime[] = mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);
+				$takeTime[] = date('d-M-y H:i', mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]));
+			    $takeTime[] = mktime($explodeTakeTime[0], $explodeTakeTime[1], $explodeTakeTime[2], $explodeTakeDate[1],$explodeTakeDate[2],$explodeTakeDate[0]);
 			}
 		}else if(!$ikutJamKerja && $sebelumZuhur){
 			if ($splitTime[0] > 12){
