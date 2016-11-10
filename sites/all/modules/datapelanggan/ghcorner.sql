@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.0
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: Nov 09, 2016 at 07:12 AM
--- Server version: 5.5.16
--- PHP Version: 5.6.19
+-- Host: 127.0.0.1
+-- Generation Time: Nov 10, 2016 at 02:21 AM
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -124,8 +124,8 @@ INSERT INTO `cms_actions` (`aid`, `type`, `callback`, `parameters`, `description
 ('node_save_action', 'node', 'node_save_action', '', 'Save post'),
 ('user_block_user_action', 'user', 'user_block_user_action', '', 'Block current user'),
 ('user_block_ip_action', 'user', 'user_block_ip_action', '', 'Ban IP address of current user'),
-('imagecache_flush_action', 'node', 'imagecache_flush_action', '', 'ImageCache: Flush ALL presets for this node\'s filefield images'),
-('imagecache_generate_all_action', 'node', 'imagecache_generate_all_action', '', 'ImageCache: Generate ALL presets for this node\'s filefield images');
+('imagecache_flush_action', 'node', 'imagecache_flush_action', '', 'ImageCache: Flush ALL presets for this node''s filefield images'),
+('imagecache_generate_all_action', 'node', 'imagecache_generate_all_action', '', 'ImageCache: Generate ALL presets for this node''s filefield images');
 
 -- --------------------------------------------------------
 
@@ -1228,7 +1228,7 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('navigation', 7, 0, 'node/%', 'node/%', '', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 8, 2, 'admin/compact', 'admin/compact', 'Compact mode', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 2, 0, 2, 8, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 9, 0, 'filter/tips', 'filter/tips', 'Compose tips', 'a:0:{}', 'system', 1, 0, 0, 0, 0, 1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 10, 2, 'admin/content', 'admin/content', 'Content management', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:27:"Manage your site\'s content.";}}', 'system', 0, 0, 1, 0, -10, 2, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 10, 2, 'admin/content', 'admin/content', 'Content management', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:27:"Manage your site''s content.";}}', 'system', 0, 0, 1, 0, -10, 2, 0, 2, 10, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 11, 0, 'node/add', 'node/add', 'Create content', 'a:0:{}', 'system', 0, 0, 1, 0, 1, 1, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 12, 0, 'comment/delete', 'comment/delete', 'Delete comment', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 13, 0, 'comment/edit', 'comment/edit', 'Edit comment', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1238,25 +1238,25 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('navigation', 17, 2, 'admin/build', 'admin/build', 'Site building', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:38:"Control how your site looks and feels.";}}', 'system', 0, 0, 1, 0, -10, 2, 0, 2, 17, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 18, 2, 'admin/settings', 'admin/settings', 'Site configuration', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:40:"Adjust basic site configuration options.";}}', 'system', 0, 0, 1, 0, -5, 2, 0, 2, 18, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 19, 0, 'user/autocomplete', 'user/autocomplete', 'User autocomplete', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 20, 2, 'admin/user', 'admin/user', 'User management', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:61:"Manage your site\'s users, groups and access to site features.";}}', 'system', 0, 0, 1, 0, 0, 2, 0, 2, 20, 0, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 20, 2, 'admin/user', 'admin/user', 'User management', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:61:"Manage your site''s users, groups and access to site features.";}}', 'system', 0, 0, 1, 0, 0, 2, 0, 2, 20, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 21, 0, 'user/%', 'user/%', 'My account', 'a:0:{}', 'system', 0, 0, 0, 0, 0, 1, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 22, 20, 'admin/user/rules', 'admin/user/rules', 'Access rules', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:80:"List and create rules to disallow usernames, e-mail addresses, and IP addresses.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 20, 22, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 23, 18, 'admin/settings/actions', 'admin/settings/actions', 'Actions', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:41:"Manage the actions defined for your site.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 23, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 24, 18, 'admin/settings/admin', 'admin/settings/admin', 'Administration theme', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:55:"Settings for how your administrative pages should look.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 24, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 25, 17, 'admin/build/block', 'admin/build/block', 'Blocks', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:79:"Configure what block content appears in your site\'s sidebars and other regions.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 25, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 25, 17, 'admin/build/block', 'admin/build/block', 'Blocks', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:79:"Configure what block content appears in your site''s sidebars and other regions.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 25, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 26, 18, 'admin/settings/clean-urls', 'admin/settings/clean-urls', 'Clean URLs', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:43:"Enable or disable clean URLs for your site.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 26, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 27, 10, 'admin/content/comment', 'admin/content/comment', 'Comments', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:61:"List and edit site comments and the comment moderation queue.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 10, 27, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 28, 10, 'admin/content/node', 'admin/content/node', 'Content', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:43:"View, edit, and delete your site\'s content.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 10, 28, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 28, 10, 'admin/content/node', 'admin/content/node', 'Content', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:43:"View, edit, and delete your site''s content.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 10, 28, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 29, 10, 'admin/content/types', 'admin/content/types', 'Content types', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:82:"Manage posts by content type, including default status, front page promotion, etc.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 10, 29, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 30, 18, 'admin/settings/date-time', 'admin/settings/date-time', 'Date and time', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:89:"Settings for how Drupal displays date and time, as well as the system\'s default timezone.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 30, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 30, 18, 'admin/settings/date-time', 'admin/settings/date-time', 'Date and time', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:89:"Settings for how Drupal displays date and time, as well as the system''s default timezone.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 30, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 31, 0, 'node/%/delete', 'node/%/delete', 'Delete', 'a:0:{}', 'system', -1, 0, 0, 0, 1, 1, 0, 31, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 32, 21, 'user/%/delete', 'user/%/delete', 'Delete', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 2, 0, 21, 32, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 33, 18, 'admin/settings/error-reporting', 'admin/settings/error-reporting', 'Error reporting', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:93:"Control how Drupal deals with errors including 403/404 errors as well as PHP error reporting.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 33, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 34, 18, 'admin/settings/file-system', 'admin/settings/file-system', 'File system', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:68:"Tell Drupal where to store uploaded files and how they are accessed.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 34, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 35, 18, 'admin/settings/image-toolkit', 'admin/settings/image-toolkit', 'Image toolkit', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:74:"Choose which image toolkit to use if you have installed optional toolkits.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 35, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 36, 18, 'admin/settings/filters', 'admin/settings/filters', 'Input formats', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:127:"Configure how content input by users is filtered, including allowed HTML tags. Also allows enabling of module-provided filters.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 36, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 37, 18, 'admin/settings/logging', 'admin/settings/logging', 'Logging and alerts', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:156:"Settings for logging and alerts modules. Various modules can route Drupal\'s system events to different destination, such as syslog, database, email, ...etc.";}}', 'system', 0, 0, 1, 0, 0, 3, 0, 2, 18, 37, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 38, 17, 'admin/build/menu', 'admin/build/menu', 'Menus', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:116:"Control your site\'s navigation menu, primary links and secondary links, as well as rename and reorganize menu items.";}}', 'system', 0, 0, 1, 0, 0, 3, 0, 2, 17, 38, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 37, 18, 'admin/settings/logging', 'admin/settings/logging', 'Logging and alerts', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:156:"Settings for logging and alerts modules. Various modules can route Drupal''s system events to different destination, such as syslog, database, email, ...etc.";}}', 'system', 0, 0, 1, 0, 0, 3, 0, 2, 18, 37, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 38, 17, 'admin/build/menu', 'admin/build/menu', 'Menus', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:116:"Control your site''s navigation menu, primary links and secondary links, as well as rename and reorganize menu items.";}}', 'system', 0, 0, 1, 0, 0, 3, 0, 2, 17, 38, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 39, 17, 'admin/build/modules', 'admin/build/modules', 'Modules', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:47:"Enable or disable add-on modules for your site.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 39, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 40, 18, 'admin/settings/performance', 'admin/settings/performance', 'Performance', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:101:"Enable or disable page caching for anonymous users and set CSS and JS bandwidth optimization options.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 40, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 41, 20, 'admin/user/permissions', 'admin/user/permissions', 'Permissions', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:64:"Determine access to features by selecting permissions for roles.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 20, 41, 0, 0, 0, 0, 0, 0, 0),
@@ -1266,7 +1266,7 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('navigation', 45, 20, 'admin/user/roles', 'admin/user/roles', 'Roles', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:30:"List, edit, or add user roles.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 20, 45, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 46, 18, 'admin/settings/site-information', 'admin/settings/site-information', 'Site information', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:107:"Change basic site information, such as the site name, slogan, e-mail address, mission, front page and more.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 46, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 47, 18, 'admin/settings/site-maintenance', 'admin/settings/site-maintenance', 'Site maintenance', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:63:"Take the site off-line for maintenance or bring it back online.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 47, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 48, 16, 'admin/reports/status', 'admin/reports/status', 'Status report', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:74:"Get a status report about your site\'s operation and any detected problems.";}}', 'system', 0, 0, 0, 0, 10, 3, 0, 2, 16, 48, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 48, 16, 'admin/reports/status', 'admin/reports/status', 'Status report', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:74:"Get a status report about your site''s operation and any detected problems.";}}', 'system', 0, 0, 0, 0, 10, 3, 0, 2, 16, 48, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 49, 17, 'admin/build/themes', 'admin/build/themes', 'Themes', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:57:"Change which theme your site uses or allows users to set.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 49, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 50, 20, 'admin/user/settings', 'admin/user/settings', 'User settings', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:101:"Configure default behavior of users, including registration requirements, e-mails, and user pictures.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 20, 50, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 51, 20, 'admin/user/user', 'admin/user/user', 'Users', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:26:"List, add, and edit users.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 20, 51, 0, 0, 0, 0, 0, 0, 0),
@@ -1314,8 +1314,8 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('navigation', 93, 16, 'admin/reports/dblog', 'admin/reports/dblog', 'Recent log entries', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:43:"View events that have recently been logged.";}}', 'system', 0, 0, 0, 0, -1, 3, 0, 2, 16, 93, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 94, 10, 'admin/content/taxonomy', 'admin/content/taxonomy', 'Taxonomy', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:67:"Manage tagging, categorization, and classification of your content.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 10, 94, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 95, 0, 'taxonomy/term/%', 'taxonomy/term/%', 'Taxonomy term', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 95, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 96, 16, 'admin/reports/access-denied', 'admin/reports/access-denied', 'Top \'access denied\' errors', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:35:"View \'access denied\' errors (403s).";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 16, 96, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 97, 16, 'admin/reports/page-not-found', 'admin/reports/page-not-found', 'Top \'page not found\' errors', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:36:"View \'page not found\' errors (404s).";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 16, 97, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 96, 16, 'admin/reports/access-denied', 'admin/reports/access-denied', 'Top ''access denied'' errors', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:35:"View ''access denied'' errors (403s).";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 16, 96, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 97, 16, 'admin/reports/page-not-found', 'admin/reports/page-not-found', 'Top ''page not found'' errors', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:36:"View ''page not found'' errors (404s).";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 16, 97, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 98, 15, 'admin/help/dblog', 'admin/help/dblog', 'dblog', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 3, 0, 2, 15, 98, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 99, 15, 'admin/help/taxonomy', 'admin/help/taxonomy', 'taxonomy', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 3, 0, 2, 15, 99, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 100, 37, 'admin/settings/logging/dblog', 'admin/settings/logging/dblog', 'Database logging', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:169:"Settings for logging to the Drupal database logs. This is the most common method for small to medium sites on shared hosting. The logs are viewable from the admin pages.";}}', 'system', 0, 0, 0, 0, 0, 4, 0, 2, 18, 37, 100, 0, 0, 0, 0, 0, 0),
@@ -1401,7 +1401,7 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('devel', 437, 0, 'devel/reference', 'devel/reference', 'Function reference', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:73:"View a list of currently defined user functions with documentation links.";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 437, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('devel', 438, 0, 'devel/elements', 'devel/elements', 'Hook_elements()', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:51:"View the active form/render elements for this site.";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 438, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 439, 0, 'nodereference/autocomplete', 'nodereference/autocomplete', 'Nodereference autocomplete', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 439, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('devel', 440, 0, 'devel/phpinfo', 'devel/phpinfo', 'PHPinfo()', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:36:"View your server\'s PHP configuration";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 440, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+('devel', 440, 0, 'devel/phpinfo', 'devel/phpinfo', 'PHPinfo()', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:36:"View your server''s PHP configuration";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 440, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('devel', 441, 0, 'devel/reinstall', 'devel/reinstall', 'Reinstall modules', 'a:2:{s:10:"attributes";a:1:{s:5:"title";s:64:"Run hook_uninstall() and then hook_install() for a given module.";}s:5:"alter";b:1;}', 'system', 0, 0, 0, 0, 0, 1, 0, 441, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('devel', 442, 0, 'devel/session', 'devel/session', 'Session viewer', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:31:"List the contents of $_SESSION.";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 442, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('devel', 443, 0, 'devel/switch', 'devel/switch', 'Switch user', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 443, 0, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1421,7 +1421,7 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('devel', 458, 0, 'devel/menu/reset', 'devel/menu/reset', 'Rebuild menus', 'a:2:{s:10:"attributes";a:1:{s:5:"title";s:113:"Rebuild menu based on hook_menu() and revert any custom changes. All menu items return to their default settings.";}s:5:"alter";b:1;}', 'system', 0, 0, 0, 0, 0, 1, 0, 458, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 459, 0, 'date/tools/remove', 'date/tools/remove', 'Remove calendar', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 1, 0, 459, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 ('devel', 460, 0, 'devel/theme/registry', 'devel/theme/registry', 'Theme registry', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:63:"View a list of available theme functions across the whole site.";}}', 'system', 0, 0, 0, 0, 0, 1, 0, 460, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-('navigation', 461, 17, 'admin/build/path', 'admin/build/path', 'URL aliases', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:46:"Change your site\'s URL paths by aliasing them.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 461, 0, 0, 0, 0, 0, 0, 0),
+('navigation', 461, 17, 'admin/build/path', 'admin/build/path', 'URL aliases', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:46:"Change your site''s URL paths by aliasing them.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 17, 461, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 462, 18, 'admin/settings/vertical-tabs', 'admin/settings/vertical-tabs', 'Vertical Tabs', 'a:1:{s:10:"attributes";a:1:{s:5:"title";s:37:"Configure settings for vertical tabs.";}}', 'system', 0, 0, 0, 0, 0, 3, 0, 2, 18, 462, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 464, 15, 'admin/help/content', 'admin/help/content', 'content', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 3, 0, 2, 15, 464, 0, 0, 0, 0, 0, 0, 0),
 ('navigation', 465, 15, 'admin/help/date', 'admin/help/date', 'date', 'a:0:{}', 'system', -1, 0, 0, 0, 0, 3, 0, 2, 15, 465, 0, 0, 0, 0, 0, 0, 0),
@@ -1509,8 +1509,8 @@ INSERT INTO `cms_menu_links` (`menu_name`, `mlid`, `plid`, `link_path`, `router_
 ('admin_menu', 547, 511, 'admin/reports/status', 'admin/reports/status', 'Status report', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 10, 2, 0, 511, 547, 0, 0, 0, 0, 0, 0, 0, 0),
 ('admin_menu', 548, 509, 'admin/content/taxonomy', 'admin/content/taxonomy', 'Taxonomy', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 1, 0, 0, 2, 0, 509, 548, 0, 0, 0, 0, 0, 0, 0, 0),
 ('admin_menu', 549, 512, 'admin/build/themes', 'admin/build/themes', 'Themes', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 1, 0, 0, 2, 0, 512, 549, 0, 0, 0, 0, 0, 0, 0, 0),
-('admin_menu', 550, 511, 'admin/reports/access-denied', 'admin/reports/access-denied', 'Top \'access denied\' errors', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 0, 2, 0, 511, 550, 0, 0, 0, 0, 0, 0, 0, 0),
-('admin_menu', 551, 511, 'admin/reports/page-not-found', 'admin/reports/page-not-found', 'Top \'page not found\' errors', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 0, 2, 0, 511, 551, 0, 0, 0, 0, 0, 0, 0, 0),
+('admin_menu', 550, 511, 'admin/reports/access-denied', 'admin/reports/access-denied', 'Top ''access denied'' errors', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 0, 2, 0, 511, 550, 0, 0, 0, 0, 0, 0, 0, 0),
+('admin_menu', 551, 511, 'admin/reports/page-not-found', 'admin/reports/page-not-found', 'Top ''page not found'' errors', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 0, 2, 0, 511, 551, 0, 0, 0, 0, 0, 0, 0, 0),
 ('admin_menu', 552, 512, 'admin/build/path', 'admin/build/path', 'URL aliases', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 1, 0, 0, 2, 0, 512, 552, 0, 0, 0, 0, 0, 0, 0, 0),
 ('admin_menu', 553, 514, 'admin/user/settings', 'admin/user/settings', 'User settings', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 0, 0, 0, 2, 0, 514, 553, 0, 0, 0, 0, 0, 0, 0, 0),
 ('admin_menu', 554, 514, 'admin/user/user', 'admin/user/user', 'Users', 'a:1:{s:5:"alter";b:1;}', 'admin_menu', 0, 0, 1, 0, 0, 2, 0, 514, 554, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -1866,7 +1866,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('penjualan/getrandomstring', '', '', 'user_access', 'a:1:{i:0;s:22:"Admin Penjualan Produk";}', 'getRandomStringAjax', 'a:0:{}', 3, 2, '', 'penjualan/getrandomstring', 'Get Random String', 't', '', 4, '', 'Get Random String', '', 0, ''),
 ('datapelanggan/gettotalhutang', '', '', 'user_access', 'a:1:{i:0;s:21:"Access Data Pelanggan";}', 'rest_getTotalHutang', 'a:0:{}', 3, 2, '', 'datapelanggan/gettotalhutang', 'Get Total Hutang/Deposit Pelanggan', 't', '', 4, '', 'Get total hutang/deposit pelanggan', '', 0, ''),
 ('devel/elements', '', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_elements_page', 'a:0:{}', 3, 2, '', 'devel/elements', 'Hook_elements()', 't', '', 6, '', 'View the active form/render elements for this site.', '', 0, ''),
-('devel/phpinfo', '', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_phpinfo', 'a:0:{}', 3, 2, '', 'devel/phpinfo', 'PHPinfo()', 't', '', 6, '', 'View your server\'s PHP configuration', '', 0, ''),
+('devel/phpinfo', '', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_phpinfo', 'a:0:{}', 3, 2, '', 'devel/phpinfo', 'PHPinfo()', 't', '', 6, '', 'View your server''s PHP configuration', '', 0, ''),
 ('user/password', '', '', 'user_is_anonymous', 'a:0:{}', 'drupal_get_form', 'a:1:{i:0;s:9:"user_pass";}', 3, 2, 'user', 'user', 'Request new password', 't', '', 128, '', '', '', 0, 'modules/user/user.pages.inc'),
 ('devel/session', '', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_session', 'a:0:{}', 3, 2, '', 'devel/session', 'Session viewer', 't', '', 6, '', 'List the contents of $_SESSION.', '', 0, ''),
 ('devel/switch', '', '', '_devel_switch_user_access', 'a:1:{i:0;i:2;}', 'devel_switch_user', 'a:0:{}', 3, 2, '', 'devel/switch', 'Switch user', 't', '', 4, '', '', '', 0, ''),
@@ -1877,7 +1877,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('dataproduk/cekbarcode2', '', '', 'user_access', 'a:1:{i:0;s:17:"Admin Data Produk";}', 'cek_barcode2', 'a:0:{}', 3, 2, '', 'dataproduk/cekbarcode2', 'Cek Barcode', 't', '', 4, '', 'Cek Barcode', '', 0, 'sites/all/modules/dataproduk/globalpos.produk.inc'),
 ('dataproduk/cekkodealternatif', '', '', 'user_access', 'a:1:{i:0;s:17:"Admin Data Produk";}', 'cek_kode_alt', 'a:0:{}', 3, 2, '', 'dataproduk/cekkodealternatif', 'Cek Kode Alternatif', 't', '', 4, '', 'Cek Kode Alternatif', '', 0, 'sites/all/modules/dataproduk/globalpos.produk.inc'),
 ('datasupplier/cpsupplier', '', '', 'user_access', 'a:1:{i:0;s:29:"Admin Contact Person Supplier";}', 'data_cpsupplier', 'a:0:{}', 3, 2, '', 'datasupplier/cpsupplier', 'Contact Person Supplier', 't', '', 4, '', 'Manajemen Contact Person Supplier', '', 0, 'sites/all/modules/datasupplier/globalpos.cpsupplier.inc'),
-('admin/content', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'system_admin_menu_block_page', 'a:0:{}', 3, 2, '', 'admin/content', 'Content management', 't', '', 6, '', 'Manage your site\'s content.', 'left', -10, 'modules/system/system.admin.inc'),
+('admin/content', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'system_admin_menu_block_page', 'a:0:{}', 3, 2, '', 'admin/content', 'Content management', 't', '', 6, '', 'Manage your site''s content.', 'left', -10, 'modules/system/system.admin.inc'),
 ('penjualan/customerorder', '', '', 'user_access', 'a:1:{i:0;s:20:"Input Customer Order";}', 'customerorder', 'a:0:{}', 3, 2, '', 'penjualan/customerorder', 'Customer Order', 't', '', 4, '', 'Form customer order', '', 0, 'sites/all/modules/penjualan/globalpos.customerorder.inc'),
 ('penjualan/viewcustomerorder', '', '', 'user_access', 'a:1:{i:0;s:25:"Admin Data Customer Order";}', 'view_tabel_customerorder', 'a:0:{}', 3, 2, '', 'penjualan/viewcustomerorder', 'Data Customer Order', 't', '', 4, '', 'Data customer order', '', 0, 'sites/all/modules/penjualan/globalpos.tabelcustomerorder.inc'),
 ('penjualan/viewlaundry', '', '', 'user_access', 'a:1:{i:0;s:27:"Admin Data Penjualan Produk";}', 'view_tabel_laundry', 'a:0:{}', 3, 2, '', 'penjualan/viewlaundry', 'Data Laundry', 't', '', 4, '', 'Data Laundry', '', 0, 'sites/all/modules/penjualan/globalpos.tabellaundry.inc'),
@@ -1967,7 +1967,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('penjualan/updatepenjualan', '', '', 'user_access', 'a:1:{i:0;s:22:"Admin Penjualan Produk";}', 'update_penjualan', 'a:0:{}', 3, 2, '', 'penjualan/updatepenjualan', 'Update Penjualan', 't', '', 4, '', 'Update Penjualan', '', 0, 'sites/all/modules/penjualan/penjualan.update.inc'),
 ('dataproduk/updatesubkategori', '', '', 'user_access', 'a:1:{i:0;s:24:"Admin Subkategori Produk";}', 'update_subkategori', 'a:0:{}', 3, 2, '', 'dataproduk/updatesubkategori', 'Update Subkategori Produk', 't', '', 4, '', 'Update Subkategori Produk', '', 0, 'sites/all/modules/dataproduk/globalpos.subkategori.inc'),
 ('node/%', 'a:1:{i:1;s:9:"node_load";}', '', 'node_access', 'a:2:{i:0;s:4:"view";i:1;i:1;}', 'node_page_view', 'a:1:{i:0;i:1;}', 2, 2, '', 'node/%', '', 'node_page_title', 'a:1:{i:0;i:1;}', 4, '', '', '', 0, ''),
-('admin/user', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'system_admin_menu_block_page', 'a:0:{}', 3, 2, '', 'admin/user', 'User management', 't', '', 6, '', 'Manage your site\'s users, groups and access to site features.', 'left', 0, 'modules/system/system.admin.inc'),
+('admin/user', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'system_admin_menu_block_page', 'a:0:{}', 3, 2, '', 'admin/user', 'User management', 't', '', 6, '', 'Manage your site''s users, groups and access to site features.', 'left', 0, 'modules/system/system.admin.inc'),
 ('user/%', 'a:1:{i:1;s:22:"user_uid_optional_load";}', 'a:1:{i:1;s:24:"user_uid_optional_to_arg";}', 'user_view_access', 'a:1:{i:0;i:1;}', 'user_view', 'a:1:{i:0;i:1;}', 2, 2, '', 'user/%', 'My account', 'user_page_title', 'a:1:{i:0;i:1;}', 6, '', '', '', 0, 'modules/user/user.pages.inc'),
 ('node/%/view', 'a:1:{i:1;s:9:"node_load";}', '', 'node_access', 'a:2:{i:0;s:4:"view";i:1;i:1;}', 'node_page_view', 'a:1:{i:0;i:1;}', 5, 3, 'node/%', 'node/%', 'View', 't', '', 136, '', '', '', -10, ''),
 ('user/%/view', 'a:1:{i:1;s:9:"user_load";}', '', 'user_view_access', 'a:1:{i:0;i:1;}', 'user_view', 'a:1:{i:0;i:1;}', 5, 3, 'user/%', 'user/%', 'View', 't', '', 136, '', '', '', -10, 'modules/user/user.pages.inc'),
@@ -1981,7 +1981,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('date/tools/remove', '', '', 'user_access', 'a:1:{i:0;s:21:"administer date tools";}', 'drupal_get_form', 'a:2:{i:0;s:22:"date_tools_remove_form";i:1;i:3;}', 7, 3, '', 'date/tools/remove', 'Remove calendar', 't', '', 4, '', '', '', 0, ''),
 ('admin/user/rules', '', '', 'user_access', 'a:1:{i:0;s:22:"administer permissions";}', 'user_admin_access', 'a:0:{}', 7, 3, '', 'admin/user/rules', 'Access rules', 't', '', 6, '', 'List and create rules to disallow usernames, e-mail addresses, and IP addresses.', '', 0, 'modules/user/user.admin.inc'),
 ('admin/reports/updates', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'update_status', 'a:0:{}', 7, 3, '', 'admin/reports/updates', 'Available updates', 't', '', 6, '', 'Get a status report about available updates for your installed modules and themes.', '', 10, 'modules/update/update.report.inc'),
-('admin/build/block', '', '', 'user_access', 'a:1:{i:0;s:17:"administer blocks";}', 'block_admin_display', 'a:0:{}', 7, 3, '', 'admin/build/block', 'Blocks', 't', '', 6, '', 'Configure what block content appears in your site\'s sidebars and other regions.', '', 0, 'modules/block/block.admin.inc'),
+('admin/build/block', '', '', 'user_access', 'a:1:{i:0;s:17:"administer blocks";}', 'block_admin_display', 'a:0:{}', 7, 3, '', 'admin/build/block', 'Blocks', 't', '', 6, '', 'Configure what block content appears in your site''s sidebars and other regions.', '', 0, 'modules/block/block.admin.inc'),
 ('admin/content/comment', '', '', 'user_access', 'a:1:{i:0;s:19:"administer comments";}', 'comment_admin', 'a:0:{}', 7, 3, '', 'admin/content/comment', 'Comments', 't', '', 6, '', 'List and edit site comments and the comment moderation queue.', '', 0, 'modules/comment/comment.admin.inc'),
 ('node/%/devel', 'a:1:{i:1;s:9:"node_load";}', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_load_object', 'a:2:{i:0;i:1;i:1;s:4:"node";}', 5, 3, 'node/%', 'node/%', 'Devel', 't', '', 128, '', '', '', 100, ''),
 ('user/%/devel', 'a:1:{i:1;s:9:"user_load";}', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_load_object', 'a:2:{i:0;i:1;i:1;s:4:"user";}', 5, 3, 'user/%', 'user/%', 'Devel', 't', '', 128, '', '', '', 100, ''),
@@ -1991,13 +1991,13 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('admin/content/image', '', '', 'user_access', 'a:1:{i:0;s:26:"administer image galleries";}', 'image_gallery_admin', 'a:0:{}', 7, 3, '', 'admin/content/image', 'Image galleries', 't', '', 6, '', 'Create and manage image galleries.', '', 0, 'sites/all/modules/image/contrib/image_gallery/image_gallery.admin.inc'),
 ('admin/settings/imageapi', '', '', 'user_access', 'a:1:{i:0;s:19:"administer imageapi";}', 'drupal_get_form', 'a:1:{i:0;s:17:"imageapi_settings";}', 7, 3, '', 'admin/settings/imageapi', 'ImageAPI', 't', '', 6, '', 'Configure ImageAPI.', '', 0, ''),
 ('admin/build/imagecache', '', '', 'user_access', 'a:1:{i:0;s:21:"administer imagecache";}', 'imagecache_ui_preset_overview', 'a:0:{}', 7, 3, '', 'admin/build/imagecache', 'ImageCache', 't', '', 6, '', 'Administer imagecache presets and actions.', '', 0, 'sites/all/modules/imagecache/imagecache_ui.pages.inc'),
-('admin/settings/logging', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'system_logging_overview', 'a:0:{}', 7, 3, '', 'admin/settings/logging', 'Logging and alerts', 't', '', 6, '', 'Settings for logging and alerts modules. Various modules can route Drupal\'s system events to different destination, such as syslog, database, email, ...etc.', '', 0, 'modules/system/system.admin.inc'),
+('admin/settings/logging', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'system_logging_overview', 'a:0:{}', 7, 3, '', 'admin/settings/logging', 'Logging and alerts', 't', '', 6, '', 'Settings for logging and alerts modules. Various modules can route Drupal''s system events to different destination, such as syslog, database, email, ...etc.', '', 0, 'modules/system/system.admin.inc'),
 ('admin/settings/performance_logging', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'drupal_get_form', 'a:1:{i:0;s:20:"performance_settings";}', 7, 3, '', 'admin/settings/performance_logging', 'Performance logging', 't', '', 6, '', 'Logs performance data: page generation times and memory usage.', '', 0, ''),
 ('admin/reports/dblog', '', '', 'user_access', 'a:1:{i:0;s:19:"access site reports";}', 'dblog_overview', 'a:0:{}', 7, 3, '', 'admin/reports/dblog', 'Recent log entries', 't', '', 6, '', 'View events that have recently been logged.', '', -1, 'modules/dblog/dblog.admin.inc'),
-('admin/reports/status', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'system_status', 'a:0:{}', 7, 3, '', 'admin/reports/status', 'Status report', 't', '', 6, '', 'Get a status report about your site\'s operation and any detected problems.', '', 10, 'modules/system/system.admin.inc'),
+('admin/reports/status', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'system_status', 'a:0:{}', 7, 3, '', 'admin/reports/status', 'Status report', 't', '', 6, '', 'Get a status report about your site''s operation and any detected problems.', '', 10, 'modules/system/system.admin.inc'),
 ('taxonomy/term/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:14:"access content";}', 'taxonomy_term_page', 'a:1:{i:0;i:2;}', 6, 3, '', 'taxonomy/term/%', 'Taxonomy term', 't', '', 4, '', '', '', 0, 'modules/taxonomy/taxonomy.pages.inc'),
 ('devel/theme/registry', '', '', 'user_access', 'a:1:{i:0;s:24:"access devel information";}', 'devel_theme_registry', 'a:0:{}', 7, 3, '', 'devel/theme/registry', 'Theme registry', 't', '', 6, '', 'View a list of available theme functions across the whole site.', '', 0, ''),
-('admin/build/path', '', '', 'user_access', 'a:1:{i:0;s:22:"administer url aliases";}', 'path_admin_overview', 'a:0:{}', 7, 3, '', 'admin/build/path', 'URL aliases', 't', '', 6, '', 'Change your site\'s URL paths by aliasing them.', '', 0, 'modules/path/path.admin.inc'),
+('admin/build/path', '', '', 'user_access', 'a:1:{i:0;s:22:"administer url aliases";}', 'path_admin_overview', 'a:0:{}', 7, 3, '', 'admin/build/path', 'URL aliases', 't', '', 6, '', 'Change your site''s URL paths by aliasing them.', '', 0, 'modules/path/path.admin.inc'),
 ('admin/help/block', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'help_page', 'a:1:{i:0;i:2;}', 7, 3, '', 'admin/help/block', 'block', 't', '', 4, '', '', '', 0, 'modules/help/help.admin.inc'),
 ('admin/help/color', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'help_page', 'a:1:{i:0;i:2;}', 7, 3, '', 'admin/help/color', 'color', 't', '', 4, '', '', '', 0, 'modules/help/help.admin.inc'),
 ('admin/help/comment', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'help_page', 'a:1:{i:0;i:2;}', 7, 3, '', 'admin/help/comment', 'comment', 't', '', 4, '', '', '', 0, 'modules/help/help.admin.inc'),
@@ -2031,9 +2031,9 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('admin/help/views_ui', '', '', 'user_access', 'a:1:{i:0;s:27:"access administration pages";}', 'help_page', 'a:1:{i:0;i:2;}', 7, 3, '', 'admin/help/views_ui', 'views_ui', 't', '', 4, '', '', '', 0, 'modules/help/help.admin.inc'),
 ('node/%/access', 'a:1:{i:1;s:9:"node_load";}', '', 'content_access_node_page_access', 'a:1:{i:0;i:1;}', 'drupal_get_form', 'a:2:{i:0;s:19:"content_access_page";i:1;i:1;}', 5, 3, 'node/%', 'node/%', 'Access control', 't', '', 128, '', '', '', 3, 'sites/all/modules/content_access/content_access.admin.inc'),
 ('admin/settings/clean-urls', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:25:"system_clean_url_settings";}', 7, 3, '', 'admin/settings/clean-urls', 'Clean URLs', 't', '', 6, '', 'Enable or disable clean URLs for your site.', '', 0, 'modules/system/system.admin.inc'),
-('admin/content/node', '', '', 'user_access', 'a:1:{i:0;s:16:"administer nodes";}', 'drupal_get_form', 'a:1:{i:0;s:18:"node_admin_content";}', 7, 3, '', 'admin/content/node', 'Content', 't', '', 6, '', 'View, edit, and delete your site\'s content.', '', 0, 'modules/node/node.admin.inc'),
+('admin/content/node', '', '', 'user_access', 'a:1:{i:0;s:16:"administer nodes";}', 'drupal_get_form', 'a:1:{i:0;s:18:"node_admin_content";}', 7, 3, '', 'admin/content/node', 'Content', 't', '', 6, '', 'View, edit, and delete your site''s content.', '', 0, 'modules/node/node.admin.inc'),
 ('admin/content/types', '', '', 'user_access', 'a:1:{i:0;s:24:"administer content types";}', 'content_types_overview', 'a:0:{}', 7, 3, '', 'admin/content/types', 'Content types', 't', '', 6, '', 'Manage posts by content type, including default status, front page promotion, etc.', '', 0, 'sites/all/modules/cck/includes/content.admin.inc'),
-('admin/settings/date-time', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:25:"system_date_time_settings";}', 7, 3, '', 'admin/settings/date-time', 'Date and time', 't', '', 6, '', 'Settings for how Drupal displays date and time, as well as the system\'s default timezone.', '', 0, 'modules/system/system.admin.inc'),
+('admin/settings/date-time', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:25:"system_date_time_settings";}', 7, 3, '', 'admin/settings/date-time', 'Date and time', 't', '', 6, '', 'Settings for how Drupal displays date and time, as well as the system''s default timezone.', '', 0, 'modules/system/system.admin.inc'),
 ('node/%/delete', 'a:1:{i:1;s:9:"node_load";}', '', 'node_access', 'a:2:{i:0;s:6:"delete";i:1;i:1;}', 'drupal_get_form', 'a:2:{i:0;s:19:"node_delete_confirm";i:1;i:1;}', 5, 3, '', 'node/%/delete', 'Delete', 't', '', 4, '', '', '', 1, 'modules/node/node.pages.inc'),
 ('user/%/delete', 'a:1:{i:1;s:9:"user_load";}', '', 'user_delete_access', 'a:1:{i:0;i:1;}', 'drupal_get_form', 'a:2:{i:0;s:19:"user_confirm_delete";i:1;i:1;}', 5, 3, '', 'user/%/delete', 'Delete', 't', '', 4, '', '', '', 0, 'modules/user/user.pages.inc'),
 ('keuangan/deletepemasukan/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'deletePemasukan', 'a:1:{i:0;i:2;}', 6, 3, '', 'keuangan/deletepemasukan/%', 'Delete Pemasukan', 't', '', 4, '', 'Delete Pemasukan', '', 0, ''),
@@ -2051,7 +2051,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('keuangan/insertPemasukan/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'insertPemasukan', 'a:1:{i:0;i:1;}', 6, 3, '', 'keuangan/insertPemasukan/%', 'Insert Pemasukan', 't', '', 4, '', 'Insert Pemasukan', '', 0, ''),
 ('keuangan/insertPengeluaran/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'insertPengeluaran', 'a:1:{i:0;i:1;}', 6, 3, '', 'keuangan/insertPengeluaran/%', 'Insert Pengeluaran', 't', '', 4, '', 'Insert Pengeluaran', '', 0, ''),
 ('admin/settings/lightbox2', '', '', 'user_access', 'a:1:{i:0;s:20:"administer lightbox2";}', 'lightbox2_settings_page', 'a:0:{}', 7, 3, '', 'admin/settings/lightbox2', 'Lightbox2', 't', '', 6, '', 'Allows the user to configure the lightbox2 settings', '', 0, 'sites/all/modules/lightbox2/lightbox2.admin.inc'),
-('admin/build/menu', '', '', 'user_access', 'a:1:{i:0;s:15:"administer menu";}', 'menu_overview_page', 'a:0:{}', 7, 3, '', 'admin/build/menu', 'Menus', 't', '', 6, '', 'Control your site\'s navigation menu, primary links and secondary links, as well as rename and reorganize menu items.', '', 0, 'modules/menu/menu.admin.inc'),
+('admin/build/menu', '', '', 'user_access', 'a:1:{i:0;s:15:"administer menu";}', 'menu_overview_page', 'a:0:{}', 7, 3, '', 'admin/build/menu', 'Menus', 't', '', 6, '', 'Control your site''s navigation menu, primary links and secondary links, as well as rename and reorganize menu items.', '', 0, 'modules/menu/menu.admin.inc'),
 ('admin/settings/mimedetect', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:19:"mimedetect_settings";}', 7, 3, '', 'admin/settings/mimedetect', 'Mime type detection', 't', '', 6, '', 'Control how the mime type of uploaded files will be determined.', '', 0, 'sites/all/modules/mimedetect/mimedetect.admin.inc'),
 ('admin/build/modules', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:14:"system_modules";}', 7, 3, '', 'admin/build/modules', 'Modules', 't', '', 6, '', 'Enable or disable add-on modules for your site.', '', 0, 'modules/system/system.admin.inc'),
 ('admin/settings/performance', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:27:"system_performance_settings";}', 7, 3, '', 'admin/settings/performance', 'Performance', 't', '', 6, '', 'Enable or disable page caching for anonymous users and set CSS and JS bandwidth optimization options.', '', 0, 'modules/system/system.admin.inc'),
@@ -2067,8 +2067,8 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('admin/settings/site-maintenance', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:32:"system_site_maintenance_settings";}', 7, 3, '', 'admin/settings/site-maintenance', 'Site maintenance', 't', '', 6, '', 'Take the site off-line for maintenance or bring it back online.', '', 0, 'modules/system/system.admin.inc'),
 ('admin/content/taxonomy', '', '', 'user_access', 'a:1:{i:0;s:19:"administer taxonomy";}', 'drupal_get_form', 'a:1:{i:0;s:30:"taxonomy_overview_vocabularies";}', 7, 3, '', 'admin/content/taxonomy', 'Taxonomy', 't', '', 6, '', 'Manage tagging, categorization, and classification of your content.', '', 0, 'modules/taxonomy/taxonomy.admin.inc'),
 ('admin/build/themes', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:2:{i:0;s:18:"system_themes_form";i:1;N;}', 7, 3, '', 'admin/build/themes', 'Themes', 't', '', 6, '', 'Change which theme your site uses or allows users to set.', '', 0, 'modules/system/system.admin.inc'),
-('admin/reports/access-denied', '', '', 'user_access', 'a:1:{i:0;s:19:"access site reports";}', 'dblog_top', 'a:1:{i:0;s:13:"access denied";}', 7, 3, '', 'admin/reports/access-denied', 'Top \'access denied\' errors', 't', '', 6, '', 'View \'access denied\' errors (403s).', '', 0, 'modules/dblog/dblog.admin.inc'),
-('admin/reports/page-not-found', '', '', 'user_access', 'a:1:{i:0;s:19:"access site reports";}', 'dblog_top', 'a:1:{i:0;s:14:"page not found";}', 7, 3, '', 'admin/reports/page-not-found', 'Top \'page not found\' errors', 't', '', 6, '', 'View \'page not found\' errors (404s).', '', 0, 'modules/dblog/dblog.admin.inc'),
+('admin/reports/access-denied', '', '', 'user_access', 'a:1:{i:0;s:19:"access site reports";}', 'dblog_top', 'a:1:{i:0;s:13:"access denied";}', 7, 3, '', 'admin/reports/access-denied', 'Top ''access denied'' errors', 't', '', 6, '', 'View ''access denied'' errors (403s).', '', 0, 'modules/dblog/dblog.admin.inc'),
+('admin/reports/page-not-found', '', '', 'user_access', 'a:1:{i:0;s:19:"access site reports";}', 'dblog_top', 'a:1:{i:0;s:14:"page not found";}', 7, 3, '', 'admin/reports/page-not-found', 'Top ''page not found'' errors', 't', '', 6, '', 'View ''page not found'' errors (404s).', '', 0, 'modules/dblog/dblog.admin.inc'),
 ('keuangan/updateKategoriPengeluaran/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'updateKategoriPengeluaran', 'a:1:{i:0;i:1;}', 6, 3, '', 'keuangan/updateKategoriPengeluaran/%', 'Update Kategori Pengeluaran', 't', '', 4, '', 'Update Kategori Pengeluaran', '', 0, ''),
 ('keuangan/updatePemasukan/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'updatePemasukan', 'a:1:{i:0;i:1;}', 6, 3, '', 'keuangan/updatePemasukan/%', 'Update Pemasukan', 't', '', 4, '', 'Update Pemasukan', '', 0, ''),
 ('keuangan/updatePengeluaran/%', 'a:1:{i:2;N;}', '', 'user_access', 'a:1:{i:0;s:19:"Admin Data Keuangan";}', 'updatePengeluaran', 'a:1:{i:0;i:1;}', 6, 3, '', 'keuangan/updatePengeluaran/%', 'Update Pengeluaran', 't', '', 4, '', 'Update Pengeluaran', '', 0, ''),
@@ -2159,7 +2159,7 @@ INSERT INTO `cms_menu_router` (`path`, `load_functions`, `to_arg_functions`, `ac
 ('admin/settings/logging/dblog', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:20:"dblog_admin_settings";}', 15, 4, '', 'admin/settings/logging/dblog', 'Database logging', 't', '', 6, '', 'Settings for logging to the Drupal database logs. This is the most common method for small to medium sites on shared hosting. The logs are viewable from the admin pages.', '', 0, 'modules/dblog/dblog.admin.inc'),
 ('admin/build/views1/convert', '', '', 'user_access', 'a:1:{i:0;s:16:"administer views";}', 'views_ui_convert1', 'a:1:{i:0;i:4;}', 15, 4, '', 'admin/build/views1/convert', 'Convert view', 't', '', 4, '', '', '', 0, 'sites/all/modules/views/includes/convert.inc'),
 ('admin/build/views1/delete', '', '', 'user_access', 'a:1:{i:0;s:16:"administer views";}', 'drupal_get_form', 'a:2:{i:0;s:24:"views_ui_delete1_confirm";i:1;i:4;}', 15, 4, '', 'admin/build/views1/delete', 'Delete view', 't', '', 4, '', '', '', 0, 'sites/all/modules/views/includes/convert.inc'),
-('admin/settings/date-time/configure', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:25:"system_date_time_settings";}', 15, 4, 'admin/settings/date-time', 'admin/settings/date-time', 'Date and time', 't', '', 136, '', 'Settings for how Drupal displays date and time, as well as the system\'s default timezone.', '', 0, 'modules/system/system.admin.inc'),
+('admin/settings/date-time/configure', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:25:"system_date_time_settings";}', 15, 4, 'admin/settings/date-time', 'admin/settings/date-time', 'Date and time', 't', '', 136, '', 'Settings for how Drupal displays date and time, as well as the system''s default timezone.', '', 0, 'modules/system/system.admin.inc'),
 ('admin/settings/date-time/formats', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:26:"date_api_date_formats_form";}', 15, 4, 'admin/settings/date-time', 'admin/settings/date-time', 'Formats', 't', '', 128, '', 'Allow users to configure date formats', '', 1, 'sites/all/modules/date/date_api.admin.inc'),
 ('admin/settings/image/image_gallery', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:28:"image_gallery_admin_settings";}', 15, 4, 'admin/settings/image', 'admin/settings/image', 'Image gallery', 't', '', 128, '', 'Configure appearance of image galleries.', '', 0, 'sites/all/modules/image/contrib/image_gallery/image_gallery.admin.inc'),
 ('admin/settings/image/image_import', '', '', 'user_access', 'a:1:{i:0;s:29:"administer site configuration";}', 'drupal_get_form', 'a:1:{i:0;s:27:"image_import_admin_settings";}', 15, 4, 'admin/settings/image', 'admin/settings/image', 'Image import', 't', '', 128, '', 'Change settings for the Image Import module.', '', 0, 'sites/all/modules/image/contrib/image_import/image_import.admin.inc'),
@@ -2657,7 +2657,7 @@ CREATE TABLE `cms_print_page_counter` (
 --
 
 INSERT INTO `cms_print_page_counter` (`path`, `totalcount`, `timestamp`) VALUES
-('node/6', 7485, 1478425548),
+('node/6', 7486, 1478699898),
 ('node/6/5', 7, 1454864475);
 
 -- --------------------------------------------------------
@@ -2758,7 +2758,8 @@ INSERT INTO `cms_sessions` (`uid`, `sid`, `hostname`, `timestamp`, `cache`, `ses
 (1, 'bv56hi9fgb1h4dva9p31p2fcj7', '127.0.0.1', 1477454889, 0, ''),
 (1, 'v62l17akntjjur4h5orkthsnv3', '127.0.0.1', 1478638265, 0, 'node_overview_filter|a:1:{i:0;a:2:{i:0;s:4:"type";i:1;s:13:"gambar_produk";}}dblog_overview_filter|a:0:{}'),
 (0, 'fl51b9bpqcni9np1464tui04l6', '127.0.0.1', 1478609214, 0, ''),
-(1, '1lo9qltsj50o8cspokgaanoje2', '127.0.0.1', 1478643898, 0, '');
+(1, '1lo9qltsj50o8cspokgaanoje2', '127.0.0.1', 1478643898, 0, ''),
+(1, '71vtf6d177v16km9plk5cinj57', '::1', 1478740823, 0, '');
 
 -- --------------------------------------------------------
 
@@ -2871,7 +2872,7 @@ INSERT INTO `cms_system` (`filename`, `name`, `type`, `owner`, `status`, `thrott
 ('sites/all/modules/image/contrib/image_im_advanced/image_im_advanced.module', 'image_im_advanced', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:28:"ImageMagick Advanced Options";s:11:"description";s:55:"Adds advanced options to the ImageMagick image toolkit.";s:7:"package";s:5:"Image";s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.2";s:7:"project";s:5:"image";s:9:"datestamp";s:10:"1332228655";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/image/contrib/image_import/image_import.module', 'image_import', 'module', '', 1, 0, 0, 1, 0, 'a:10:{s:4:"name";s:12:"Image Import";s:11:"description";s:71:"Allows batches of images to be imported from a directory on the server.";s:7:"package";s:5:"Image";s:12:"dependencies";a:1:{i:0;s:5:"image";}s:4:"core";s:3:"6.x";s:7:"version";s:7:"6.x-1.2";s:7:"project";s:5:"image";s:9:"datestamp";s:10:"1332228655";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imageapi/imageapi.module', 'imageapi', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:8:"ImageAPI";s:11:"description";s:38:"ImageAPI supporting multiple toolkits.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:3:"php";s:3:"5.1";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}}'),
-('sites/all/modules/imageapi/imageapi_gd.module', 'imageapi_gd', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:12:"ImageAPI GD2";s:11:"description";s:49:"Uses PHP\'s built-in GD2 image processing support.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
+('sites/all/modules/imageapi/imageapi_gd.module', 'imageapi_gd', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:12:"ImageAPI GD2";s:11:"description";s:49:"Uses PHP''s built-in GD2 image processing support.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imageapi/imageapi_imagemagick.module', 'imageapi_imagemagick', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:20:"ImageAPI ImageMagick";s:11:"description";s:33:"Command Line ImageMagick support.";s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:8:"6.x-1.10";s:7:"project";s:8:"imageapi";s:9:"datestamp";s:10:"1305563215";s:12:"dependencies";a:0:{}s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imagecache/imagecache.module', 'imagecache', 'module', '', 1, 0, 0, 6001, 0, 'a:10:{s:4:"name";s:10:"ImageCache";s:11:"description";s:36:"Dynamic image manipulator and cache.";s:7:"package";s:10:"ImageCache";s:12:"dependencies";a:1:{i:0;s:8:"imageapi";}s:4:"core";s:3:"6.x";s:7:"version";s:11:"6.x-2.0-rc1";s:7:"project";s:10:"imagecache";s:9:"datestamp";s:10:"1337742655";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
 ('sites/all/modules/imagecache/imagecache_ui.module', 'imagecache_ui', 'module', '', 1, 0, 0, 0, 0, 'a:10:{s:4:"name";s:13:"ImageCache UI";s:11:"description";s:26:"ImageCache User Interface.";s:12:"dependencies";a:2:{i:0;s:10:"imagecache";i:1;s:8:"imageapi";}s:7:"package";s:10:"ImageCache";s:4:"core";s:3:"6.x";s:7:"version";s:11:"6.x-2.0-rc1";s:7:"project";s:10:"imagecache";s:9:"datestamp";s:10:"1337742655";s:10:"dependents";a:0:{}s:3:"php";s:5:"4.3.5";}'),
@@ -3009,7 +3010,7 @@ CREATE TABLE `cms_users` (
 
 INSERT INTO `cms_users` (`uid`, `name`, `pass`, `mail`, `mode`, `sort`, `threshold`, `theme`, `signature`, `signature_format`, `created`, `access`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `data`, `timezone_name`) VALUES
 (0, '', '', '', 0, 0, 0, '', '', 0, 0, 0, 0, 0, NULL, '', '', '', NULL, ''),
-(1, 'admin_pos', '12b7d0cc2e2e9b4b9380ad9ea59908e0', 'info@ikhwanit.com', 0, 0, 0, '', '', 0, 1302046258, 1478643887, 1478639196, 1, '25200', '', '', 'info@ikhwanit.com', 'a:1:{s:13:"form_build_id";s:48:"form-oe54e8LxbnAEMFWe3Kf1Fo9gJOanNLAVpb-O1vz6tBw";}', 'Asia/Jakarta'),
+(1, 'admin_pos', '12b7d0cc2e2e9b4b9380ad9ea59908e0', 'info@ikhwanit.com', 0, 0, 0, '', '', 0, 1302046258, 1478740676, 1478699698, 1, '25200', '', '', 'info@ikhwanit.com', 'a:1:{s:13:"form_build_id";s:48:"form-oe54e8LxbnAEMFWe3Kf1Fo9gJOanNLAVpb-O1vz6tBw";}', 'Asia/Jakarta'),
 (4, 'kasir', 'de28f8f7998f23ab4194b51a6029416f', 'kasir@banimustofa.com', 0, 0, 0, '', '', 0, 1422282416, 1450087549, 1449386328, 1, '25200', '', '', 'kasir@banimustofa.com', 'a:1:{s:13:"form_build_id";s:48:"form-QNZJa4Ri3GiFvda_xqXTAyAw9mr3fSL02gl1fADpmBs";}', 'Asia/Jakarta'),
 (5, 'administrasi', '4b9db269c5f978e1264480b0a7619eea', 'admin@banimustofa.com', 0, 0, 0, '', '', 0, 1422282879, 1450055289, 1449260500, 1, '25200', '', '', 'admin@banimustofa.com', 'a:1:{s:13:"form_build_id";s:48:"form-9wCkLyIGcRYW_fXLKVoWlzgAWfePUG94gNtdLVUMh64";}', 'Asia/Jakarta'),
 (6, 'Sarah', 'ca273008260787ce2780285dba46665c', 'sarah@gmail.com', 0, 0, 0, '', '', 0, 1464234267, 1464238405, 1464234941, 1, '25200', '', '', 'sarah@gmail.com', 'a:1:{s:13:"form_build_id";s:48:"form-FjmSfzvJzf1vKKmYgyM8UMgBu3qE2JjQQM4amrr7v0o";}', '');
@@ -3067,10 +3068,10 @@ INSERT INTO `cms_variable` (`name`, `value`) VALUES
 ('node_options_page', 'a:1:{i:0;s:6:"status";}'),
 ('content_access_settings', 'a:0:{}'),
 ('theme_settings', 'a:19:{s:11:"toggle_logo";i:1;s:11:"toggle_name";i:1;s:13:"toggle_slogan";i:0;s:14:"toggle_mission";i:1;s:24:"toggle_node_user_picture";i:0;s:27:"toggle_comment_user_picture";i:0;s:13:"toggle_search";i:0;s:14:"toggle_favicon";i:1;s:20:"toggle_primary_links";i:1;s:22:"toggle_secondary_links";i:1;s:30:"toggle_node_info_gambar_produk";i:1;s:29:"toggle_node_info_halaman_nota";i:0;s:22:"toggle_node_info_image";i:1;s:12:"default_logo";i:0;s:9:"logo_path";s:28:"sites/default/files/logo.png";s:11:"logo_upload";s:0:"";s:15:"default_favicon";i:1;s:12:"favicon_path";s:0:"";s:14:"favicon_upload";s:0:"";}'),
-('drupal_http_request_fails', 'b:0;'),
-('css_js_query_string', 's:20:"HAPm2OeS7VwWNohulbQj";'),
+('drupal_http_request_fails', 'b:1;'),
+('css_js_query_string', 's:20:"RHAPm2OeS7VwWNohulbQ";'),
 ('install_profile', 's:7:"default";'),
-('update_last_check', 'i:1478639211;'),
+('update_last_check', 'i:1478699722;'),
 ('file_directory_temp', 's:23:"sites/default/files/tmp";'),
 ('theme_adaptivetheme_settings', 'a:115:{s:23:"skip_navigation_display";s:4:"hide";s:18:"breadcrumb_display";s:3:"yes";s:20:"breadcrumb_separator";s:8:" &#187; ";s:15:"breadcrumb_home";s:1:"0";s:19:"breadcrumb_trailing";s:1:"0";s:16:"breadcrumb_title";s:1:"0";s:25:"display_search_form_label";s:1:"1";s:14:"search_snippet";s:1:"1";s:16:"search_info_type";s:1:"1";s:16:"search_info_user";s:1:"1";s:16:"search_info_date";s:1:"1";s:19:"search_info_comment";s:1:"1";s:18:"search_info_upload";s:1:"1";s:21:"search_info_separator";s:3:" - ";s:18:"primary_links_tree";s:1:"0";s:20:"secondary_links_tree";s:1:"0";s:23:"mission_statement_pages";s:4:"home";s:25:"taxonomy_settings_enabled";s:1:"0";s:24:"taxonomy_display_default";s:4:"only";s:23:"taxonomy_format_default";s:5:"vocab";s:26:"taxonomy_delimiter_default";s:2:", ";s:28:"taxonomy_enable_content_type";s:1:"0";s:29:"submitted_by_settings_enabled";s:1:"0";s:27:"submitted_by_author_default";s:1:"1";s:25:"submitted_by_date_default";s:1:"1";s:32:"submitted_by_enable_content_type";s:1:"0";s:30:"display_links_settings_enabled";s:1:"0";s:21:"display_links_default";s:3:"all";s:33:"display_links_enable_content_type";s:1:"0";s:16:"rebuild_registry";s:1:"0";s:15:"show_theme_info";s:1:"0";s:23:"cleanup_classes_section";s:1:"0";s:21:"cleanup_classes_front";s:1:"0";s:27:"cleanup_classes_user_status";s:1:"0";s:27:"cleanup_classes_normal_path";s:1:"0";s:25:"cleanup_classes_node_type";s:1:"0";s:31:"cleanup_classes_add_edit_delete";s:1:"0";s:24:"cleanup_classes_language";s:1:"0";s:18:"cleanup_article_id";s:1:"0";s:31:"cleanup_article_classes_promote";s:1:"0";s:30:"cleanup_article_classes_sticky";s:1:"0";s:30:"cleanup_article_classes_teaser";s:1:"0";s:31:"cleanup_article_classes_preview";s:1:"0";s:28:"cleanup_article_classes_type";s:1:"0";s:32:"cleanup_article_classes_language";s:1:"0";s:25:"cleanup_comment_anonymous";s:1:"0";s:30:"cleanup_comment_article_author";s:1:"0";s:25:"cleanup_comment_by_viewer";s:1:"0";s:19:"cleanup_comment_new";s:1:"0";s:21:"cleanup_comment_zebra";s:1:"0";s:28:"cleanup_comment_wrapper_type";s:1:"0";s:32:"cleanup_block_block_module_delta";s:1:"0";s:28:"cleanup_block_classes_module";s:1:"0";s:27:"cleanup_block_classes_zebra";s:1:"0";s:28:"cleanup_block_classes_region";s:1:"0";s:27:"cleanup_block_classes_count";s:1:"0";s:23:"cleanup_menu_menu_class";s:1:"1";s:23:"cleanup_menu_leaf_class";s:1:"1";s:31:"cleanup_menu_first_last_classes";s:1:"0";s:27:"cleanup_menu_active_classes";s:1:"0";s:24:"cleanup_menu_title_class";s:1:"0";s:24:"cleanup_links_type_class";s:1:"1";s:28:"cleanup_links_active_classes";s:1:"0";s:32:"cleanup_links_first_last_classes";s:1:"0";s:23:"cleanup_item_list_zebra";s:1:"0";s:28:"cleanup_item_list_first_last";s:1:"0";s:22:"cleanup_views_css_name";s:1:"0";s:23:"cleanup_views_view_name";s:1:"0";s:24:"cleanup_views_display_id";s:1:"0";s:20:"cleanup_views_dom_id";s:1:"0";s:25:"cleanup_views_unformatted";s:1:"0";s:23:"cleanup_views_item_list";s:1:"0";s:19:"cleanup_fields_type";s:1:"0";s:19:"cleanup_fields_name";s:1:"0";s:20:"cleanup_fields_zebra";s:1:"0";s:28:"cleanup_headings_title_class";s:1:"0";s:33:"cleanup_headings_namespaced_class";s:1:"0";s:23:"links_add_span_elements";s:1:"0";s:12:"at_user_menu";s:1:"0";s:16:"block_edit_links";s:1:"1";s:18:"at_admin_hide_help";s:1:"0";s:13:"layout_method";s:1:"0";s:12:"layout_width";s:5:"960px";s:26:"layout_sidebar_first_width";s:3:"240";s:25:"layout_sidebar_last_width";s:3:"240";s:22:"layout_enable_settings";s:2:"on";s:19:"layout_enable_width";s:2:"on";s:22:"layout_enable_sidebars";s:2:"on";s:20:"layout_enable_method";s:2:"on";s:23:"layout_enable_frontpage";s:2:"on";s:22:"equal_heights_sidebars";s:1:"0";s:20:"equal_heights_blocks";s:1:"0";s:21:"equal_heights_gpanels";s:1:"0";s:22:"horizontal_login_block";s:1:"0";s:32:"horizontal_login_block_overlabel";s:1:"0";s:29:"horizontal_login_block_enable";s:2:"on";s:13:"color_schemes";s:18:"colors-default.css";s:20:"color_enable_schemes";s:3:"off";s:7:"mission";s:0:"";s:12:"default_logo";i:1;s:9:"logo_path";s:0:"";s:15:"default_favicon";i:1;s:12:"favicon_path";s:0:"";s:13:"primary_links";i:1;s:15:"secondary_links";i:1;s:11:"toggle_logo";i:1;s:14:"toggle_favicon";i:1;s:11:"toggle_name";i:1;s:13:"toggle_search";i:0;s:13:"toggle_slogan";i:0;s:14:"toggle_mission";i:1;s:24:"toggle_node_user_picture";i:0;s:27:"toggle_comment_user_picture";i:0;s:20:"toggle_primary_links";i:1;s:22:"toggle_secondary_links";i:1;}'),
 ('theme_adaptivetheme_subtheme_settings', 'a:125:{s:23:"skip_navigation_display";s:4:"hide";s:18:"breadcrumb_display";s:3:"yes";s:20:"breadcrumb_separator";s:8:" &#187; ";s:15:"breadcrumb_home";i:0;s:19:"breadcrumb_trailing";i:0;s:16:"breadcrumb_title";i:0;s:25:"display_search_form_label";i:1;s:14:"search_snippet";i:1;s:16:"search_info_type";i:1;s:16:"search_info_user";i:1;s:16:"search_info_date";i:1;s:19:"search_info_comment";i:1;s:18:"search_info_upload";i:1;s:21:"search_info_separator";s:3:" - ";s:18:"primary_links_tree";i:0;s:20:"secondary_links_tree";i:0;s:23:"mission_statement_pages";s:4:"home";s:25:"taxonomy_settings_enabled";i:0;s:24:"taxonomy_display_default";s:4:"only";s:23:"taxonomy_format_default";s:5:"vocab";s:26:"taxonomy_delimiter_default";s:2:", ";s:28:"taxonomy_enable_content_type";s:1:"0";s:29:"submitted_by_settings_enabled";i:0;s:27:"submitted_by_author_default";s:1:"1";s:25:"submitted_by_date_default";s:1:"1";s:32:"submitted_by_enable_content_type";s:1:"0";s:30:"display_links_settings_enabled";i:0;s:21:"display_links_default";s:3:"all";s:33:"display_links_enable_content_type";s:1:"0";s:16:"rebuild_registry";i:0;s:15:"show_theme_info";s:1:"0";s:23:"cleanup_classes_section";i:0;s:21:"cleanup_classes_front";i:0;s:27:"cleanup_classes_user_status";i:0;s:27:"cleanup_classes_normal_path";i:0;s:25:"cleanup_classes_node_type";i:0;s:31:"cleanup_classes_add_edit_delete";i:0;s:24:"cleanup_classes_language";s:1:"0";s:18:"cleanup_article_id";i:0;s:31:"cleanup_article_classes_promote";i:0;s:30:"cleanup_article_classes_sticky";i:0;s:30:"cleanup_article_classes_teaser";i:0;s:31:"cleanup_article_classes_preview";i:0;s:28:"cleanup_article_classes_type";i:0;s:32:"cleanup_article_classes_language";s:1:"0";s:25:"cleanup_comment_anonymous";i:0;s:30:"cleanup_comment_article_author";i:0;s:25:"cleanup_comment_by_viewer";i:0;s:19:"cleanup_comment_new";i:0;s:21:"cleanup_comment_zebra";i:0;s:28:"cleanup_comment_wrapper_type";i:0;s:32:"cleanup_block_block_module_delta";i:0;s:28:"cleanup_block_classes_module";i:0;s:27:"cleanup_block_classes_zebra";i:0;s:28:"cleanup_block_classes_region";i:0;s:27:"cleanup_block_classes_count";i:0;s:23:"cleanup_menu_menu_class";i:1;s:23:"cleanup_menu_leaf_class";i:1;s:31:"cleanup_menu_first_last_classes";i:0;s:27:"cleanup_menu_active_classes";i:0;s:24:"cleanup_menu_title_class";i:0;s:24:"cleanup_links_type_class";i:1;s:28:"cleanup_links_active_classes";i:0;s:32:"cleanup_links_first_last_classes";i:0;s:23:"cleanup_item_list_zebra";i:0;s:28:"cleanup_item_list_first_last";i:0;s:22:"cleanup_views_css_name";s:1:"0";s:23:"cleanup_views_view_name";s:1:"0";s:24:"cleanup_views_display_id";s:1:"0";s:20:"cleanup_views_dom_id";s:1:"0";s:25:"cleanup_views_unformatted";s:1:"0";s:23:"cleanup_views_item_list";s:1:"0";s:19:"cleanup_fields_type";s:1:"0";s:19:"cleanup_fields_name";s:1:"0";s:20:"cleanup_fields_zebra";s:1:"0";s:28:"cleanup_headings_title_class";i:0;s:33:"cleanup_headings_namespaced_class";i:0;s:23:"links_add_span_elements";i:0;s:12:"at_user_menu";i:0;s:16:"block_edit_links";i:1;s:18:"at_admin_hide_help";i:0;s:13:"layout_method";s:1:"0";s:12:"layout_width";s:5:"960px";s:26:"layout_sidebar_first_width";s:3:"240";s:25:"layout_sidebar_last_width";s:3:"240";s:22:"layout_enable_settings";s:2:"on";s:19:"layout_enable_width";s:2:"on";s:22:"layout_enable_sidebars";s:2:"on";s:20:"layout_enable_method";s:2:"on";s:23:"layout_enable_frontpage";s:2:"on";s:22:"equal_heights_sidebars";i:0;s:20:"equal_heights_blocks";s:1:"0";s:21:"equal_heights_gpanels";i:0;s:22:"horizontal_login_block";i:1;s:32:"horizontal_login_block_overlabel";i:1;s:29:"horizontal_login_block_enable";s:2:"on";s:13:"color_schemes";s:18:"colors-default.css";s:20:"color_enable_schemes";s:3:"off";s:7:"mission";s:0:"";s:12:"default_logo";i:1;s:9:"logo_path";s:0:"";s:15:"default_favicon";i:1;s:12:"favicon_path";s:0:"";s:13:"primary_links";i:1;s:15:"secondary_links";i:1;s:11:"toggle_logo";i:1;s:14:"toggle_favicon";i:1;s:11:"toggle_name";i:1;s:13:"toggle_search";i:0;s:13:"toggle_slogan";i:0;s:14:"toggle_mission";i:1;s:24:"toggle_node_user_picture";i:0;s:27:"toggle_comment_user_picture";i:0;s:20:"toggle_primary_links";i:1;s:22:"toggle_secondary_links";i:1;s:11:"logo_upload";s:0:"";s:14:"favicon_upload";s:0:"";s:20:"equalize_leaderboard";i:0;s:15:"equalize_header";i:0;s:26:"equalize_secondary-content";i:0;s:20:"equalize_content-top";i:0;s:23:"equalize_content-bottom";i:0;s:25:"equalize_tertiary-content";i:0;s:15:"equalize_footer";i:0;s:17:"exported_settings";s:3916:"settings[skip_navigation_display]="hide"\r\nsettings[breadcrumb_display]="yes"\r\nsettings[breadcrumb_separator]=" &#187; "\r\nsettings[breadcrumb_home]="0"\r\nsettings[breadcrumb_trailing]="0"\r\nsettings[breadcrumb_title]="0"\r\nsettings[display_search_form_label]="1"\r\nsettings[search_snippet]="1"\r\nsettings[search_info_type]="1"\r\nsettings[search_info_user]="1"\r\nsettings[search_info_date]="1"\r\nsettings[search_info_comment]="1"\r\nsettings[search_info_upload]="1"\r\nsettings[search_info_separator]=" - "\r\nsettings[primary_links_tree]="0"\r\nsettings[secondary_links_tree]="0"\r\nsettings[mission_statement_pages]="home"\r\nsettings[taxonomy_settings_enabled]="0"\r\nsettings[taxonomy_display_default]="only"\r\nsettings[taxonomy_format_default]="vocab"\r\nsettings[taxonomy_delimiter_default]=", "\r\nsettings[taxonomy_enable_content_type]="0"\r\nsettings[submitted_by_settings_enabled]="0"\r\nsettings[submitted_by_author_default]="1"\r\nsettings[submitted_by_date_default]="1"\r\nsettings[submitted_by_enable_content_type]="0"\r\nsettings[display_links_settings_enabled]="0"\r\nsettings[display_links_default]="all"\r\nsettings[display_links_enable_content_type]="0"\r\nsettings[rebuild_registry]="0"\r\nsettings[show_theme_info]="0"\r\nsettings[cleanup_classes_section]="0"\r\nsettings[cleanup_classes_front]="0"\r\nsettings[cleanup_classes_user_status]="0"\r\nsettings[cleanup_classes_normal_path]="0"\r\nsettings[cleanup_classes_node_type]="0"\r\nsettings[cleanup_classes_add_edit_delete]="0"\r\nsettings[cleanup_classes_language]="0"\r\nsettings[cleanup_article_id]="0"\r\nsettings[cleanup_article_classes_promote]="0"\r\nsettings[cleanup_article_classes_sticky]="0"\r\nsettings[cleanup_article_classes_teaser]="0"\r\nsettings[cleanup_article_classes_preview]="0"\r\nsettings[cleanup_article_classes_type]="0"\r\nsettings[cleanup_article_classes_language]="0"\r\nsettings[cleanup_comment_anonymous]="0"\r\nsettings[cleanup_comment_article_author]="0"\r\nsettings[cleanup_comment_by_viewer]="0"\r\nsettings[cleanup_comment_new]="0"\r\nsettings[cleanup_comment_zebra]="0"\r\nsettings[cleanup_comment_wrapper_type]="0"\r\nsettings[cleanup_block_block_module_delta]="0"\r\nsettings[cleanup_block_classes_module]="0"\r\nsettings[cleanup_block_classes_zebra]="0"\r\nsettings[cleanup_block_classes_region]="0"\r\nsettings[cleanup_block_classes_count]="0"\r\nsettings[cleanup_menu_menu_class]="1"\r\nsettings[cleanup_menu_leaf_class]="1"\r\nsettings[cleanup_menu_first_last_classes]="0"\r\nsettings[cleanup_menu_active_classes]="0"\r\nsettings[cleanup_menu_title_class]="0"\r\nsettings[cleanup_links_type_class]="1"\r\nsettings[cleanup_links_active_classes]="0"\r\nsettings[cleanup_links_first_last_classes]="0"\r\nsettings[cleanup_item_list_zebra]="0"\r\nsettings[cleanup_item_list_first_last]="0"\r\nsettings[cleanup_views_css_name]="0"\r\nsettings[cleanup_views_view_name]="0"\r\nsettings[cleanup_views_display_id]="0"\r\nsettings[cleanup_views_dom_id]="0"\r\nsettings[cleanup_views_unformatted]="0"\r\nsettings[cleanup_views_item_list]="0"\r\nsettings[cleanup_fields_type]="0"\r\nsettings[cleanup_fields_name]="0"\r\nsettings[cleanup_fields_zebra]="0"\r\nsettings[cleanup_headings_title_class]="0"\r\nsettings[cleanup_headings_namespaced_class]="0"\r\nsettings[links_add_span_elements]="0"\r\nsettings[at_user_menu]="0"\r\nsettings[block_edit_links]="1"\r\nsettings[at_admin_hide_help]="0"\r\nsettings[layout_method]="0"\r\nsettings[layout_width]="960px"\r\nsettings[layout_sidebar_first_width]="240"\r\nsettings[layout_sidebar_last_width]="240"\r\nsettings[layout_enable_settings]="on"\r\nsettings[layout_enable_width]="on"\r\nsettings[layout_enable_sidebars]="on"\r\nsettings[layout_enable_method]="on"\r\nsettings[layout_enable_frontpage]="on"\r\nsettings[equal_heights_sidebars]="0"\r\nsettings[equal_heights_blocks]="0"\r\nsettings[equal_heights_gpanels]="0"\r\nsettings[horizontal_login_block]="0"\r\nsettings[horizontal_login_block_overlabel]="0"\r\nsettings[horizontal_login_block_enable]="on"\r\nsettings[color_schemes]="colors-default.css"\r\nsettings[color_enable_schemes]="off"\r\n";}'),
@@ -3116,8 +3117,8 @@ INSERT INTO `cms_variable` (`name`, `value`) VALUES
 ('image_attach_maximum_gambar_produk', 's:1:"0";'),
 ('image_attach_size_teaser_gambar_produk', 's:9:"thumbnail";'),
 ('image_attach_size_body_gambar_produk', 's:9:"thumbnail";'),
-('conditional_styles_cti_flex', 's:261:"<!--[if IE]>\n<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/cti_flex/css/ie.css?H" />\n<![endif]-->\n<!--[if lte IE 6]>\n<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/cti_flex/css/ie6.css?H" />\n<![endif]-->\n";'),
-('conditional_styles_cti_flex_rtl', 's:261:"<!--[if IE]>\n<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/cti_flex/css/ie.css?H" />\n<![endif]-->\n<!--[if lte IE 6]>\n<link type="text/css" rel="stylesheet" media="all" href="/sites/all/themes/cti_flex/css/ie6.css?H" />\n<![endif]-->\n";'),
+('conditional_styles_cti_flex', 's:279:"<!--[if IE]>\n<link type="text/css" rel="stylesheet" media="all" href="/ghcorner/sites/all/themes/cti_flex/css/ie.css?R" />\n<![endif]-->\n<!--[if lte IE 6]>\n<link type="text/css" rel="stylesheet" media="all" href="/ghcorner/sites/all/themes/cti_flex/css/ie6.css?R" />\n<![endif]-->\n";'),
+('conditional_styles_cti_flex_rtl', 's:279:"<!--[if IE]>\n<link type="text/css" rel="stylesheet" media="all" href="/ghcorner/sites/all/themes/cti_flex/css/ie.css?R" />\n<![endif]-->\n<!--[if lte IE 6]>\n<link type="text/css" rel="stylesheet" media="all" href="/ghcorner/sites/all/themes/cti_flex/css/ie6.css?R" />\n<![endif]-->\n";'),
 ('theme_zen_settings', 'a:9:{s:17:"zen_block_editing";s:1:"1";s:14:"zen_breadcrumb";s:3:"yes";s:24:"zen_breadcrumb_separator";s:5:" › ";s:19:"zen_breadcrumb_home";s:1:"1";s:23:"zen_breadcrumb_trailing";s:1:"1";s:20:"zen_breadcrumb_title";s:1:"0";s:10:"zen_layout";s:18:"zen-columns-liquid";s:20:"zen_rebuild_registry";s:1:"0";s:14:"zen_wireframes";s:1:"0";}'),
 ('theme_cti_flex_settings', 'a:43:{s:17:"zen_block_editing";i:0;s:14:"zen_breadcrumb";s:3:"yes";s:24:"zen_breadcrumb_separator";s:5:" › ";s:19:"zen_breadcrumb_home";i:0;s:23:"zen_breadcrumb_trailing";i:0;s:20:"zen_breadcrumb_title";i:0;s:20:"zen_rebuild_registry";i:0;s:14:"zen_wireframes";i:0;s:15:"cti_flex_layout";s:5:"fluid";s:15:"cti_flex_design";s:1:"0";s:20:"cti_flex_font_family";s:1:"0";s:11:"toggle_logo";i:1;s:11:"toggle_name";i:1;s:13:"toggle_slogan";i:1;s:14:"toggle_mission";i:1;s:24:"toggle_node_user_picture";i:0;s:27:"toggle_comment_user_picture";i:0;s:13:"toggle_search";i:0;s:14:"toggle_favicon";i:1;s:20:"toggle_primary_links";i:1;s:22:"toggle_secondary_links";i:1;s:12:"default_logo";i:0;s:9:"logo_path";s:37:"sites/default/files/cti_flex_logo.png";s:11:"logo_upload";s:0:"";s:15:"default_favicon";i:0;s:12:"favicon_path";s:40:"sites/default/files/cti_flex_favicon.png";s:14:"favicon_upload";s:0:"";s:15:"cti_flex_color1";s:0:"";s:15:"cti_flex_color2";s:0:"";s:15:"cti_flex_color3";s:0:"";s:20:"cti_flex_color4_left";s:0:"";s:24:"cti_flex_color4_lefthead";s:0:"";s:22:"cti_flex_color4_center";s:0:"";s:26:"cti_flex_color4_centerhead";s:0:"";s:21:"cti_flex_color4_right";s:0:"";s:25:"cti_flex_color4_righthead";s:0:"";s:15:"cti_flex_color5";s:0:"";s:15:"cti_flex_color6";s:0:"";s:15:"cti_flex_color7";s:0:"";s:15:"cti_flex_color8";s:0:"";s:20:"cti_flex_color9_left";s:0:"";s:22:"cti_flex_color9_center";s:0:"";s:21:"cti_flex_color9_right";s:0:"";}'),
 ('print_html_link_pos', 'a:4:{s:4:"link";s:4:"link";s:5:"block";s:5:"block";s:4:"help";s:4:"help";s:6:"corner";i:0;}'),
@@ -3675,7 +3676,8 @@ INSERT INTO `kategori` (`idkategori`, `kodekategori`, `kategori`, `keterangan`) 
 (1, 'DPB', 'DAPUR BERSIH', 'Makanan yang disiapkan oleh bahagian dapur bersih'),
 (2, 'MNM', 'MINUMAN', 'Bahagian penyedia bermacam macam minuman'),
 (3, 'CNI', 'CANAI', 'Bahagian penyedia roti canai'),
-(4, 'MSP', 'MASAKAN PANAS', 'Bahagian penyedia masakan panas');
+(4, 'MSP', 'MASAKAN PANAS', 'Bahagian penyedia masakan panas'),
+(5, 'BKR', 'Bakery', '');
 
 -- --------------------------------------------------------
 
@@ -3834,7 +3836,107 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`idproduct`, `idsupplier`, `idkategori`, `idsubkategori`, `barcode`, `alt_code`, `namaproduct`, `type_product`, `hargapokok`, `hargajual`, `margin`, `minstok`, `maxstok`, `stok`, `satuan`, `berat`, `keterangan`, `lead_time`, `aturan_jam_kerja`, `berlaku_sebelum_zuhur`) VALUES
-(1, 1, 1, 1, '8993795291581', 'DPB-FD-1', 'Carbonara', 0, 15000, 20000, 25, 10, 20, 15, 'PCS', 0, '', 10, 0, 0);
+(1, 1, 1, 1, '8993795291581', 'DPB-FD-1', 'Carbonara', 0, 15000, 20000, 25, 10, 20, 15, 'PCS', 0, '', 10, 0, 0),
+(2, 1, 1, 1, '8991080913873', 'DPB-FD-2', 'Bolognese', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(3, 1, 1, 1, '8991471213469', 'DPB-FD-3', 'AGI + nasi + minum', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 10, 0, 0),
+(4, 1, 1, 1, '8991572933693', 'DPB-FD-4', 'AGI + Kentang + minum', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(5, 1, 1, 1, '8991516429046', 'DPB-FD-5', 'AGI (Ayam Goreng Ikhwan)', 0, 10000, 13000, 23, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(6, 1, 1, 1, '8996227546143', 'DPB-FD-6', 'Chicken Katsu + Nasi/Kentang', 0, 20000, 25000, 20, 10, 20, 12, 'PCS', 0, '', 20, 0, 0),
+(7, 1, 1, 1, '8992604776684', 'DPB-FD-7', 'Cordon Bleu + Nasi/Kentang', 0, 22000, 29000, 24, 10, 20, 12, 'PCS', 0, '', 20, 0, 0),
+(8, 1, 1, 1, '8996826819488', 'DPB-FD-8', 'Tom Yam + Nasi', 0, 20000, 25000, 20, 10, 20, 12, 'PCS', 0, '', 20, 0, 0),
+(9, 1, 1, 1, '8993640551198', 'DPB-FD-9', 'Nasi Briyani Kambing', 0, 35000, 45000, 22, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(10, 1, 1, 1, '8994737853973', 'DPB-FD-10', 'Nasi Briyani Ayam', 0, 22000, 30000, 27, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(11, 1, 1, 1, '8997209543259', 'DPB-FD-11', 'Grilled Chicken Chop', 0, 30000, 43000, 30, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(12, 1, 1, 1, '8992301884439', 'DPB-FD-12', 'Chicken Chop', 0, 30000, 38000, 21, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(13, 1, 1, 1, '8995709267439', 'DPB-FD-13', 'Nasi Lemak', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(14, 1, 2, 7, '8995546630403', 'MNM-DGN-1', 'Milkshake Vanilla', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(15, 1, 2, 7, '8999258591656', 'MNM-DGN-2', 'Milkshake Strawberry', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(16, 1, 2, 7, '8990061297285', 'MNM-DGN-3', 'Milkshake Chocolate', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(17, 1, 2, 7, '8993991322706', 'MNM-DGN-4', 'Es Blend Durian', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(18, 1, 2, 7, '8992732031440', 'MNM-DGN-5', 'Es Blend Alpukat', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(19, 1, 2, 7, '8997155757137', 'MNM-DGN-6', 'Es Blend Mangga', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(20, 1, 2, 7, '8992400600398', 'MNM-DGN-7', 'Es Blend Anggur', 0, 10000, 14925, 33, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(21, 1, 2, 7, '8992092763029', 'MNM-DGN-8', 'Es Teh Manis', 0, 1000, 3000, 67, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(22, 1, 2, 6, '8991232328302', 'MNM-PNS-1', 'Teh Tarik Panas', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(23, 1, 2, 7, '8992506550542', 'MNM-DGN-9', 'Teh Tarik Dingin', 0, 5000, 9000, 44, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(24, 1, 2, 6, '8994626768982', 'MNM-PNS-2', 'Teh Tawar Panas', 0, 1000, 3000, 67, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(25, 1, 2, 6, '8997020663419', 'MNM-PNS-3', 'Teh Manis Panas', 0, 1000, 3000, 67, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(26, 1, 2, 6, '8990572157399', 'MNM-PNS-4', 'Kopi Hitam', 0, 5000, 8929, 44, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(27, 1, 2, 6, '8993530742934', 'MNM-PNS-5', 'Arabica Coffe Special', 0, 8000, 13000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(28, 1, 2, 6, '8992703748452', 'MNM-PNS-6', 'Kopi Susu', 0, 5000, 12000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(29, 1, 2, 6, '8999418566968', 'MNM-PNS-7', 'Nescafe', 0, 5000, 12000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(30, 1, 2, 6, '8995234652267', 'MNM-PNS-8', 'Moccacino', 0, 5000, 12000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(31, 1, 2, 6, '8997594155815', 'MNM-PNS-9', 'Cappucino', 0, 5000, 12000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(32, 1, 2, 6, '8997549858556', 'MNM-PNS-10', 'Lemon Tea Panas', 0, 4000, 7000, 43, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(33, 1, 2, 6, '8991741580352', 'MNM-PNS-11', 'Lemon Panas', 0, 4000, 7000, 43, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(34, 1, 2, 7, '8999580152181', 'MNM-DGN-10', 'Lemon Tea Dingin', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(35, 1, 2, 7, '8994082206783', 'MNM-DGN-11', 'Lemon Dingin', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(36, 1, 2, 6, '8995979888884', 'MNM-PNS-12', 'Milo Spesial Panas', 0, 9000, 13000, 31, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(37, 1, 2, 7, '8996067240881', 'MNM-DGN-12', 'Milo Spesial Dingin', 0, 10000, 14000, 29, 10, 20, 12, 'PCS', 0, '', 15, 0, 0),
+(38, 1, 2, 9, '8991073279726', '?MNM-MNL-1', 'Air Ikhwan Kecil', 0, 1500, 3000, 50, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(39, 1, 2, 9, '8998536456472', '?MNM-MNL-2', 'Air Ikhwan Sedang', 0, 3000, 5000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(40, 1, 2, 9, '8999362256052', '?MNM-MNL-3', 'Air Ikhwan Besar', 0, 5000, 7000, 29, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(41, 1, 2, 8, '8998120487073', 'MNM-JUS-1', 'Fresh Juice Alpukat', 0, 10000, 20000, 50, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(42, 1, 2, 8, '8997926123895', 'MNM-JUS-2', 'Fresh Juice Mangga', 0, 10000, 20000, 50, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(43, 1, 2, 8, '8999429872706', 'MNM-JUS-3', 'Fresh Juice Jeruk', 0, 8000, 15000, 47, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(44, 1, 2, 8, '8995180658665', 'MNM-JUS-4', 'Fresh Juice Jambu', 0, 8000, 15000, 47, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(45, 1, 2, 0, '8991421827500', 'MNM-SOY-1', 'Soya Ikhwan', 0, 8000, 10000, 20, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(46, 1, 1, 2, '8991242963715', 'DPB-APP-1', 'French Fries Large', 0, 10000, 13000, 23, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(47, 1, 1, 2, '8994338663797', 'DPB-APP-2', 'French Fries Small', 0, 7000, 10000, 30, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(48, 1, 1, 2, '8994912638357', 'DPB-APP-3', 'Cheezy Fries', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(49, 1, 1, 2, '8994674203978', 'DPB-APP-4', 'Banana Bread & Cheese', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(50, 1, 1, 2, '8991421183965', 'DPB-APP-5', 'Cheese Bread', 0, 6000, 9000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(51, 1, 1, 2, '8997257055513', 'DPB-APP-6', 'Shepherd Pie', 0, 12000, 16000, 25, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(52, 1, 3, 3, '8997104442022', 'CNI-CAP-1', 'Martabak', 0, 15000, 20000, 25, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(53, 1, 3, 3, '8995090767815', 'CNI-CAP-2', 'Canai Kosong', 0, 4000, 6000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(54, 1, 3, 3, '8993014859943', 'CNI-CAP-3', 'Canai Keju', 0, 6000, 10000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(55, 1, 3, 3, '8999395603847', 'CNI-CAP-4', 'Canai Telor', 0, 6000, 10000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(56, 1, 3, 3, '8991138043552', 'CNI-CAP-5', 'Canai Coklat', 0, 5000, 8000, 38, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(57, 1, 3, 3, '8992511009974', 'CNI-CAP-6', 'Canai Coklat Keju', 0, 12000, 15000, 20, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(58, 1, 3, 3, '8999129587030', 'CNI-CAP-7', 'Burger Biasa', 0, 15000, 25000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(59, 1, 3, 3, '8994529436971', 'CNI-CAP-8', 'Burger Spesial', 0, 20000, 33000, 39, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(60, 1, 3, 3, '8997658456315', 'CNI-CAP-9', 'Popia 1 Pcs', 0, 2000, 3000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(61, 1, 3, 3, '8994910418692', 'CNI-CAP-10', 'Popia 2 Pcs', 0, 3000, 5000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(62, 1, 3, 3, '8996053975094', 'CNI-CAP-11', 'Roti Jala 1 Pcs', 0, 2000, 3000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(63, 1, 3, 3, '8999557046222', 'CNI-CAP-12', 'Roti Jala 1 Set', 0, 5000, 10000, 50, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(64, 1, 1, 4, '8996852605888', 'DPB-DST-1', 'Honey Toast', 0, 8000, 10000, 20, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(65, 1, 1, 4, '8991429521301', 'DPB-DST-2', 'Banana Split', 0, 10000, 15000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(66, 1, 1, 4, '8992403878633', 'DPB-DST-3', 'Banana Choco Cheese', 0, 8000, 10000, 20, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(67, 1, 1, 4, '8990589752136', 'DPB-DST-4', 'GH Ice Cream', 0, 8000, 12000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(68, 1, 1, 4, '8990840309666', 'DPB-DST-5', 'Garlic Bread + Com Soup', 0, 8000, 12000, 33, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(69, 1, 1, 4, '8991630649733', 'DPB-DST-6', 'Soya Jelly', 0, 3000, 5000, 40, 10, 20, 12, 'PCS', 0, '', 5, 0, 0),
+(70, 2, 5, 12, '8997054122470', 'BKR-DNT-1', 'Donat Toping', 0, 4000, 6500, 38, 10, 20, 12, 'PCS', 0, '', 1, 0, 0),
+(71, 2, 5, 12, '8996686453815', 'BKR-DNT-2', 'Donat Salju 3 pcs', 0, 3500, 5000, 0, 10, 20, 12, 'PCS', 0, '', 0, 0, 0),
+(72, 2, 5, 13, '8995648763351', 'BKR-PIE-1', 'Brownies', 0, 8500, 10000, 0, 10, 20, 12, 'PCS', 0, '', 0, 0, 0),
+(73, 2, 5, 13, '8992844149897', 'BKR-PIE-2', 'Muffin Vanilla', 0, 4500, 6000, 0, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(74, 2, 5, 13, '8994608122177', 'BKR-PIE-3', 'Muffin Chocolate', 0, 4500, 6000, 25, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(75, 2, 5, 13, '8990668853570', 'BKR-PIE-4', 'Pie Cheese Blueberry', 0, 4500, 6000, 25, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(76, 2, 5, 13, '8992275318121', 'BKR-PIE-5', 'Pie Cheese Strawberry', 0, 4500, 6000, 25, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(77, 2, 5, 13, '8998220757786', 'BKR-PIE-6', 'Pie Cheese Oreo', 0, 4500, 6000, 25, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(78, 2, 5, 11, '8994743544926', 'BKR-RTI-1', 'Roti Sosis', 0, 5500, 7000, 0, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(79, 2, 5, 11, '8995491351491', 'BKR-RTI-2', 'Roti Abon', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(80, 1, 5, 11, '8996918399201', 'BKR-RTI-3', 'Roti Cheese', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(81, 2, 5, 11, '8992755590436', 'BKR-RTI-4', 'Roti Kopi', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(82, 2, 5, 11, '8995661611882', 'BKR-RTI-5', 'Roti 3 Rasa', 0, 5500, 7000, 0, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(83, 1, 5, 11, '8993203301086', 'BKR-RTI-6', 'Roti Kacang Merah', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(84, 2, 5, 11, '8992422699813', 'BKR-RTI-7', 'Roti Tuna', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(85, 2, 5, 14, '8999828578001', 'BKR-CHP-1', 'Bagelen', 0, 23500, 25000, 0, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(86, 2, 5, 14, '8990116628927', 'BKR-CHP-2', 'Grisini', 0, 23500, 25000, 6, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(87, 2, 5, 14, '8999819168464', 'BKR-CHP-3', 'Choco Chips', 0, 23500, 25000, 6, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(88, 2, 5, 14, '8995303156047', 'BKR-CHP-4', 'Mini Sus', 0, 23500, 25000, 6, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(89, 2, 5, 14, '8995378680348', 'BKR-CHP-5', 'Cistik Original', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(90, 2, 5, 14, '8991981207354', 'BKR-CHP-6', 'Cistik Pedas', 0, 5500, 7000, 21, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(91, 1, 4, 15, '8997825722762', 'MSP-KWT-1', 'Char Kwe Teow', 0, 26000, 28000, 0, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(92, 1, 4, 15, '8995730101870', 'MSP-KWT-2', 'Kwe Teow Kungfu', 0, 23000, 25000, 8, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(93, 1, 4, 15, '8999808038747', 'MSP-KWT-3', 'Kwe Teow Goreng', 0, 23000, 25000, 8, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(94, 1, 4, 16, '8999965520628', 'MSP-MIE-1', 'Mie Spageti Goreng Mamak', 0, 25000, 27000, 7, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(95, 1, 4, 17, '8996836797295', 'MSP-BHN-1', 'Bihun Goreng Seafood', 0, 28000, 30000, 7, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(96, 1, 4, 17, '8991780767189', 'MSP-BHN-2', 'Bihun Tom Yam', 0, 23000, 25000, 8, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(97, 1, 4, 16, '8997968225342', 'MSP-MIE-2', 'Spageti Tom Yam', 0, 23000, 25000, 8, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(98, 1, 4, 18, '8999354913062', 'MSP-NSI-1', 'Nasi Goreng Pattaya Spesial', 0, 33000, 35000, 6, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(99, 1, 4, 18, '8993282806861', 'MSP-NSI-2', 'Nasi Goreng Kampung', 0, 23000, 25000, 8, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(100, 1, 4, 18, '8996481498448', 'MSP-NSI-3', 'Nasi Goreng Seafood', 0, 28000, 30000, 7, 0, 0, 0, 'PCS', 0, '', 0, 0, 0),
+(101, 1, 4, 19, '8991883463209', 'MSP-SYR-1', 'Cap Cay', 0, 16000, 18000, 11, 0, 0, 0, 'PCS', 0, '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3933,7 +4035,18 @@ INSERT INTO `subkategori` (`idsubkategori`, `idkategori`, `kodesubkategori`, `su
 (5, 1, 'BKR', 'BAKERY', ''),
 (6, 2, 'PNS', 'PANAS', ''),
 (7, 2, 'DGN', 'DINGIN', ''),
-(8, 2, 'JUS', 'JUS BUAH', '');
+(8, 2, 'JUS', 'JUS BUAH', ''),
+(9, 2, 'MNL', 'MINERAL', ''),
+(10, 2, 'SOY', 'SOYA IKHWAN', ''),
+(11, 5, 'RTI', 'ROTI', ''),
+(12, 5, 'DNT', 'DONAT', ''),
+(13, 5, 'PIE', 'PIE', ''),
+(14, 5, 'CHP', 'CHIPS', ''),
+(15, 4, 'KWT', 'KWITIAU', ''),
+(16, 4, 'MIE', 'MIE', ''),
+(17, 4, 'BHN', 'BIHUN', ''),
+(18, 4, 'NSI', 'NASI', ''),
+(19, 4, 'SYR', 'SAYUR', '');
 
 -- --------------------------------------------------------
 
@@ -3955,7 +4068,8 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`idsupplier`, `kodesupplier`, `namasupplier`, `telp`, `alamat`, `email`) VALUES
-(1, 'GHC', 'GH CORNER', '', '', '');
+(1, 'GHC', 'GH CORNER', '', '', ''),
+(2, 'IBK', 'IKHWAN BAKERY', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -4008,7 +4122,143 @@ CREATE TABLE `transaksistock` (
 
 INSERT INTO `transaksistock` (`idproduk`, `idpenjualan`, `tgltransaksi`, `stocksebelum`, `masuk`, `keluar`, `stocksetelah`, `keterangan`, `idpembelian`, `idreproduksi`, `idreturn`, `idreturnpelanggan`, `idcustomerorder`) VALUES
 (1, 0, '2016-11-08 22:08:15', 0, 15, 0, 15, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
-(1, 0, '2016-11-08 22:09:18', 15, 0, 0, 15, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0);
+(1, 0, '2016-11-08 22:09:18', 15, 0, 0, 15, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(2, 0, '2016-11-09 21:32:12', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(3, 0, '2016-11-09 21:35:30', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(4, 0, '2016-11-09 21:36:49', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(5, 0, '2016-11-09 21:37:28', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(6, 0, '2016-11-09 21:38:27', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(7, 0, '2016-11-09 21:39:54', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(8, 0, '2016-11-09 21:40:51', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(9, 0, '2016-11-09 21:41:53', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(10, 0, '2016-11-09 21:42:26', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(11, 0, '2016-11-09 21:43:14', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(12, 0, '2016-11-09 21:43:43', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(13, 0, '2016-11-09 21:44:12', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(14, 0, '2016-11-09 21:45:35', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(15, 0, '2016-11-09 21:46:29', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(16, 0, '2016-11-09 21:47:00', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(17, 0, '2016-11-09 21:47:52', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(18, 0, '2016-11-09 21:48:33', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(19, 0, '2016-11-09 21:48:54', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(20, 0, '2016-11-09 21:49:20', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(21, 0, '2016-11-09 21:49:46', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(22, 0, '2016-11-09 21:50:16', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(23, 0, '2016-11-09 21:50:42', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(24, 0, '2016-11-09 21:51:18', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(25, 0, '2016-11-09 21:51:52', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(26, 0, '2016-11-09 21:52:18', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(27, 0, '2016-11-09 21:53:04', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(28, 0, '2016-11-09 21:55:59', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(29, 0, '2016-11-09 21:56:30', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(30, 0, '2016-11-09 21:57:01', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(31, 0, '2016-11-09 21:57:19', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(32, 0, '2016-11-09 21:57:54', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(33, 0, '2016-11-09 21:58:11', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(34, 0, '2016-11-09 21:58:53', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(35, 0, '2016-11-09 22:00:15', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(36, 0, '2016-11-09 22:05:28', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(37, 0, '2016-11-09 22:06:07', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(38, 0, '2016-11-09 22:07:12', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(39, 0, '2016-11-09 22:07:36', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(40, 0, '2016-11-09 22:08:02', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(41, 0, '2016-11-09 22:08:29', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(42, 0, '2016-11-09 22:09:05', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(43, 0, '2016-11-09 22:09:34', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(44, 0, '2016-11-09 22:09:52', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(45, 0, '2016-11-09 22:10:53', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(46, 0, '2016-11-09 22:12:08', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(47, 0, '2016-11-09 22:12:30', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(48, 0, '2016-11-09 22:12:57', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(49, 0, '2016-11-09 22:13:33', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(50, 0, '2016-11-09 22:13:55', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(51, 0, '2016-11-09 22:14:24', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(52, 0, '2016-11-09 22:14:52', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(53, 0, '2016-11-09 22:15:18', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(54, 0, '2016-11-09 22:15:43', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(55, 0, '2016-11-09 22:16:08', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(56, 0, '2016-11-09 22:16:31', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(57, 0, '2016-11-09 22:16:55', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(58, 0, '2016-11-09 22:19:46', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(59, 0, '2016-11-09 22:20:06', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(60, 0, '2016-11-09 22:20:46', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(61, 0, '2016-11-09 22:21:03', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(62, 0, '2016-11-09 22:23:54', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(63, 0, '2016-11-09 22:24:15', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(64, 0, '2016-11-09 22:24:52', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(65, 0, '2016-11-09 22:25:14', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(66, 0, '2016-11-09 22:25:42', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(67, 0, '2016-11-09 22:26:04', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(68, 0, '2016-11-09 22:26:34', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(69, 0, '2016-11-09 22:27:02', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(70, 0, '2016-11-09 22:34:51', 0, 12, 0, 12, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(70, 0, '2016-11-09 22:35:23', 12, 0, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(38, 0, '2016-11-09 22:35:42', 12, 0, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(71, 0, '2016-11-09 22:37:32', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(72, 0, '2016-11-09 22:38:31', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(73, 0, '2016-11-09 22:39:28', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(74, 0, '2016-11-09 22:40:01', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(75, 0, '2016-11-09 22:40:56', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(76, 0, '2016-11-09 22:41:37', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(77, 0, '2016-11-09 22:42:00', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(78, 0, '2016-11-09 22:42:37', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(79, 0, '2016-11-09 22:43:03', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(80, 0, '2016-11-09 22:43:37', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(81, 0, '2016-11-09 22:44:26', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(82, 0, '2016-11-10 00:51:13', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(83, 0, '2016-11-10 00:51:40', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(84, 0, '2016-11-10 00:52:07', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(85, 0, '2016-11-10 00:52:44', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(86, 0, '2016-11-10 00:53:09', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(87, 0, '2016-11-10 00:53:35', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(88, 0, '2016-11-10 00:53:58', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(89, 0, '2016-11-10 00:54:35', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(90, 0, '2016-11-10 00:54:54', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(91, 0, '2016-11-10 00:55:51', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(92, 0, '2016-11-10 00:56:24', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(93, 0, '2016-11-10 00:56:49', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(94, 0, '2016-11-10 00:57:25', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(95, 0, '2016-11-10 00:57:52', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(96, 0, '2016-11-10 00:58:24', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(97, 0, '2016-11-10 00:58:54', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(98, 0, '2016-11-10 00:59:24', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(99, 0, '2016-11-10 00:59:49', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(100, 0, '2016-11-10 01:00:16', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(101, 0, '2016-11-10 01:00:34', 0, 0, 0, 0, 'Inisialisasi Stock', 0, 0, 0, 0, 0),
+(70, 0, '2016-11-10 01:01:33', 12, 0, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(71, 0, '2016-11-10 01:02:06', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(72, 0, '2016-11-10 01:02:25', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(73, 0, '2016-11-10 01:02:58', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(74, 0, '2016-11-10 01:03:12', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(75, 0, '2016-11-10 01:03:27', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(76, 0, '2016-11-10 01:03:52', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(77, 0, '2016-11-10 01:04:05', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(78, 0, '2016-11-10 01:04:31', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(79, 0, '2016-11-10 01:04:51', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(81, 0, '2016-11-10 01:05:03', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(82, 0, '2016-11-10 01:05:16', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(84, 0, '2016-11-10 01:05:30', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(85, 0, '2016-11-10 01:06:09', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(86, 0, '2016-11-10 01:06:21', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(87, 0, '2016-11-10 01:06:37', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(88, 0, '2016-11-10 01:07:15', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(89, 0, '2016-11-10 01:07:32', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(90, 0, '2016-11-10 01:07:45', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(39, 0, '2016-11-10 01:10:10', 12, 0, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(40, 0, '2016-11-10 01:10:25', 12, 0, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(91, 0, '2016-11-10 01:12:12', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(92, 0, '2016-11-10 01:12:28', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(93, 0, '2016-11-10 01:12:43', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(94, 0, '2016-11-10 01:12:59', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(95, 0, '2016-11-10 01:13:14', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(96, 0, '2016-11-10 01:13:26', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(97, 0, '2016-11-10 01:13:47', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(98, 0, '2016-11-10 01:14:06', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(99, 0, '2016-11-10 01:14:23', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(100, 0, '2016-11-10 01:14:50', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(101, 0, '2016-11-10 01:16:31', 0, 0, 0, 0, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(71, 0, '2016-11-10 01:19:01', 0, 12, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0),
+(72, 0, '2016-11-10 01:19:20', 0, 12, 0, 12, 'Perubahan Stock-Stok Bertambah', 0, 0, 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -5054,7 +5304,7 @@ ALTER TABLE `detailpenjualan`
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `idkategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idkategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `pelanggan`
 --
@@ -5084,7 +5334,7 @@ ALTER TABLE `po`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `idproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 --
 -- AUTO_INCREMENT for table `reproduksi`
 --
@@ -5099,12 +5349,12 @@ ALTER TABLE `returnsupplier`
 -- AUTO_INCREMENT for table `subkategori`
 --
 ALTER TABLE `subkategori`
-  MODIFY `idsubkategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idsubkategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `supplier`
 --
 ALTER TABLE `supplier`
-  MODIFY `idsupplier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idsupplier` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `titipanlaundry`
 --
