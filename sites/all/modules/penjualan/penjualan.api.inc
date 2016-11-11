@@ -649,6 +649,7 @@ function printMejaBarcodeWithLogo(){
 	}
 	return $tablePrint;
 }
+//Print customer order GHC
 function printGHCOrder(){
     drupal_add_js('misc/media/jquery-1.4.4.min.js');
     $js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
@@ -703,6 +704,71 @@ function printKasirOrder($dataOrder = null){
             $tablePrint .= '</tbody>';
             $tablePrint .= '</table>';
         }
+    }
+    return $tablePrint;
+}
+//End function print customer order GHC
+//function printout penjualan ghc
+function printOutPenjualanGHC(){
+    $perlakuanKembalian = PERLAKUAN_KEMBALIAN();
+    drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    $js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+    drupal_add_js($js_path);
+    $tablePrint = '';
+    $nidpenjualan = isset($_GET['idpenjualangh']) ? $_GET['idpenjualangh'] : null;
+    $printHeader = true;
+    $pathLogo = createLogoImagePath();
+    if (!empty($nidpenjualan)){
+        global $user;
+        $dataPenjualan = getDataPenjualan($nidpenjualan);
+        $tablePrint = '<table style="width: 240px;border-collapse: collapse;" >';
+        $tablePrint .= '<tbody>';
+        if ($printHeader){
+            $tablePrint .= '<tr><td rowspan="3" style="border-bottom: 1px solid #000;border-top: 1px solid #000;width:50px;text-align: center;"><img height="48" src="'.$pathLogo.'" /></td><td colspan="2" style="font-size: 14px;font-weight: bold;text-align: center;border-bottom: 1px solid #000;border-top: 1px solid #000;">GH CORNER</td></tr>';
+            $tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;">RUKO B7 PASAR BERSIH&nbsp;&nbsp;</td></tr>';
+            $tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">SENTUL CITY - BOGOR&nbsp;&nbsp;</td></tr>';
+        }
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><span style="float: left">No.</span><span style="float: right">'.$dataPenjualan['info']->nonota.'&nbsp;&nbsp;</span></td></tr>';
+        if (!empty($dataPenjualan['info']->namapelanggan)){
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><span style="float: left">Member</span><span style="float: right">'.$dataPenjualan['info']->namapelanggan.'&nbsp;&nbsp;</span></td></tr>';
+        }
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;border-bottom: 1px solid #000;"><span style="float: left">Tanggal</span><span style="float: right">'.$dataPenjualan['info']->tglpenjualan.'&nbsp;&nbsp;</span></td></tr>';
+        if (isset($dataPenjualan['laundry'])){
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px solid #000;"><span style="float: left">MASUK : '.$dataPenjualan['laundry']['info']->tglpenjualan.'</span><span style="float: right">KASIR : '.$dataPenjualan['laundry']['info']->name.'&nbsp;&nbsp;</span></td></tr>';
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-bottom: 1px solid #000;"><span style="float: left">Status : AMBIL</span><span style="float: right">Bayar : '.$dataPenjualan['info']->carabayar.' '.$nilaiBayar.'&nbsp;&nbsp;</span></td></tr>';
+        }
+        $totalPenjualan = 0;
+        for ($i = 0;$i < count($dataPenjualan['detail']);$i++){
+            $dataDetail = $dataPenjualan['detail'][$i];
+            $tablePrint .= '<tr>';
+            $tablePrint .= '<td colspan="3" style="font-size: 13px;font-weight: bold;">'.$dataDetail->namaproduct.'</td>';
+            $tablePrint .= '</tr>';
+            $tablePrint .= '<tr>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual,0,",",".").'</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,0,",",".").'</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
+            $tablePrint .= '</tr>';
+            $totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
+        }
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+        if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
+            $totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL HUTANG</span><span style="float: right">'.number_format($totalHutang,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+        }
+        $viewperlakuankembalian = '';
+        if ($dataPenjualan['info']->perlakuankembalian != 0){
+            $viewperlakuankembalian = '<span style="font-size: 13px;font-weight: bold;">'.$perlakuanKembalian[$dataPenjualan['info']->perlakuankembalian].'</span>';
+        }
+        if ($dataPenjualan['info']->kembali >= 0){
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+        }
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">INGAT MAKAN INGAT TUHAN</td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px solid #000;">KRITIK/SARAN DAN PESAN ANTAR HUBUNGI</td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;font-weight: bold;"><span style="float: left"><img src="'.base_path().'misc/media/images/bbm.png" width="12" style="vertical-align:middle;">&nbsp;5FA325FA</span><span style="float: right"><img src="'.base_path().'misc/media/images/whatsapp.png" width="11" style="vertical-align:middle;">&nbsp;+6283818232613&nbsp;&nbsp;</span></td></tr>';
+        $tablePrint .= '</tbody>';
+        $tablePrint .= '</table>';
     }
     return $tablePrint;
 }
@@ -860,6 +926,8 @@ function cekPrinterCommand(){
 		$printOut = printMejaBarcodeWithLogo();
 	}else if (isset($_GET['idghorder'])){
 		$printOut = printGHCOrder();
-	}
+	}else if (isset($_GET['idpenjualangh'])){
+        $printOut = printOutPenjualanGHC();
+    }
 	return $printOut;
 }
