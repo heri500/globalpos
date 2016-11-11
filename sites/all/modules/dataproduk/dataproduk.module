@@ -146,11 +146,38 @@ function dataproduk_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.produk.inc'
 	);
+	$items['dataproduk/meja'] = array(
+		'title' => t('Data Meja'),
+		'description' => 'Manajemen Data Meja',
+		'page callback' => 'meja',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Meja'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.meja.inc'
+	);
+	$items['dataproduk/simpanmeja'] = array(
+		'title' => t('Simpan Meja'),
+		'description' => 'Simpan Meja',
+		'page callback' => 'simpan_meja',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Meja'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.meja.inc'
+	);
+	$items['dataproduk/updatemeja'] = array(
+		'title' => t('Update Meja'),
+		'description' => 'Update Meja',
+		'page callback' => 'update_meja',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Meja'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.meja.inc'
+	);
 	return $items;
 } // end hook menu
 
 function dataproduk_perm() {
-	return array('Admin Kategori Produk','Admin Subkategori Produk','Admin Data Produk');
+	return array('Admin Kategori Produk','Admin Subkategori Produk','Admin Data Produk','Admin Meja');
 }
 /*
 	$array_to_js : array('key' => 'value')

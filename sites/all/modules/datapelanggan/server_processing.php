@@ -524,13 +524,15 @@ function serverSideCustomerOrder($request){
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
 	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
 	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";
-	$strSQL .= "plg.namapelanggan, customerorder.keterangan, user.name ";
+	$strSQL .= "plg.namapelanggan, customerorder.keterangan, user.name, meja.meja ";
 	$strSQL .= "FROM customer_order AS customerorder ";
+	$strSQL .= "LEFT JOIN meja AS meja ON meja.id = customerorder.idmeja ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
 	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = customerorder.idpelanggan ";
 	$strSQL .= "WHERE customerorder.tglorder BETWEEN '%s' AND '%s' ";
 	$strSQLFilteredTotal = "SELECT COUNT(customerorder.id) ";
 	$strSQLFilteredTotal .= "FROM customer_order AS customerorder ";
+	$strSQLFilteredTotal .= "LEFT JOIN meja AS meja ON meja.id = customerorder.idmeja ";
 	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
 	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = customerorder.idpelanggan ";
 	$strSQLFilteredTotal .= "WHERE customerorder.tglorder BETWEEN '%s' AND '%s' ";
@@ -568,6 +570,7 @@ function serverSideCustomerOrder($request){
 		}
 		$rowData[] = $tombolprint;
 		$rowData[] = $tombolhapus;
+		$rowData[] = $data->meja;
 		$rowData[] = '<div id="'.$data->nonota.'" class="barcode-place"></div>';
 		$rowData[] = $data->nonota;
 		$indexhari = date('w', strtotime($data->tanggal));
@@ -590,7 +593,7 @@ function serverSideCustomerOrder($request){
 		}
 		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
 		$rowData[] = $data->keterangan;
-		$rowData[] = $tombolprintproduksi;
+		//$rowData[] = $tombolprintproduksi;
 		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
