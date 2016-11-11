@@ -204,7 +204,7 @@ function akhiri_belanja(cetak){
 				var returndata = data.trim();
 				if (returndata != "error"){
 					if (cetak == 1){
-						window.open(pathutama + "print/6?idpenjualan="+ returndata);
+						window.open(pathutama + "print/6?idpenjualangh="+ returndata);
 					}
 					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
 						window.location = pathutama + 'penjualan/' + alamatasal;
