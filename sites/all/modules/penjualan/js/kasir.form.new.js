@@ -267,7 +267,7 @@ $(document).ready(function(){
 			modal: true,
 			width: 925,
 			closeOnEscape: false,
-			height: 640,
+			height: 650,
 			resizable: false,
 			autoOpen: false,
 			open: function (event, ui) {
@@ -286,7 +286,7 @@ $(document).ready(function(){
 			modal: true,
 			width: 925,
 			closeOnEscape: false,
-			height: 600,
+			height: 630,
 			resizable: false,
 			autoOpen: false,
 			open: function (event, ui) {
@@ -475,10 +475,6 @@ $(document).ready(function(){
 			}
 			tambahproduk(1);
 		}
-	});
-	$("#newqty").autotab_filter({
-		format: "numeric",
-		nospace: true
 	});
 	$("#newharga").keypress(function(e) {
 		if (e.keyCode == 13){

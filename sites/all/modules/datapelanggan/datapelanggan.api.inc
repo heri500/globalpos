@@ -6,16 +6,27 @@
  *
  * @return bool|int
  */
-function getTotalHutangLatest($idPelanggan = null, $realData = false){
+function getTotalHutangLatest($idPelanggan = null, $realData = false, $periode = null){
 	$totalHutangLatest = 0;
 	if (!empty($idPelanggan)){
 		if ($realData){
-			$strSqlTotalHutang = "SELECT SUM(besarhutang) AS total_hutang FROM detailpiutang WHERE idpelanggan=%d";
+			$strSqlTotalHutang = "SELECT SUM(besarhutang) AS total_hutang FROM detailpiutang piutang ";
+			$strSqlTotalHutang .= "LEFT JOIN penjualan penj ON piutang.idpenjualan=penj.idpenjualan ";
+			$strSqlTotalHutang .= "WHERE idpelanggan=%d ";
+			if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])){
+				$strSqlTotalHutang = "AND (penj.tglpenjualan BETWEEN '%s' AND '%s')";
+			}
 			$strSqlTotalBayar = "SELECT SUM(pembayaran) AS total_bayar FROM historypembayaran WHERE idpelanggan=%d";
 			$strSqlTotalPemakaianDeposit = "SELECT SUM(penggunaan) AS total_guna FROM historypenggunaandeposit WHERE idpelanggan=%d";
-			$totalHutang = db_result(db_query($strSqlTotalHutang, $idPelanggan));
-			$totalBayar = db_result(db_query($strSqlTotalBayar, $idPelanggan));
-			$totalGuna = db_result(db_query($strSqlTotalPemakaianDeposit, $idPelanggan));
+			if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])) {
+				$totalHutang = db_result(db_query($strSqlTotalHutang, $idPelanggan, $periode['tglawal'], $periode['tglakhir']));
+				$totalBayar = db_result(db_query($strSqlTotalBayar, $idPelanggan, $periode['tglawal'], $periode['tglakhir']));
+				$totalGuna = db_result(db_query($strSqlTotalPemakaianDeposit, $idPelanggan, $periode['tglawal'], $periode['tglakhir']));
+			}else{
+				$totalHutang = db_result(db_query($strSqlTotalHutang, $idPelanggan));
+				$totalBayar = db_result(db_query($strSqlTotalBayar, $idPelanggan));
+				$totalGuna = db_result(db_query($strSqlTotalPemakaianDeposit, $idPelanggan));
+			}
 		}else{
 			$strSqlTotalHutang = "SELECT besarhutang FROM piutang WHERE idpelanggan=%d";
 			$totalHutang = db_result(db_query($strSqlTotalHutang, $idPelanggan));
@@ -49,10 +60,29 @@ function getTotalHutang($idpelanggan = null){
 	}
 	return $totalhutang;
 }
-function getTotalPembayaran($idpelanggan = null){
+function getTotalPembayaran($idpelanggan = null, $periode = null){
 	$totalpembayaran = 0;
 	if (!empty($idpelanggan)){
-		$result = db_result(db_query("SELECT SUM(pembayaran) FROM historypembayaran WHERE idpelanggan='%d'",$idpelanggan));
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM historypembayaran WHERE idpelanggan='%d'", $idpelanggan)
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM historypembayaran WHERE idpelanggan='%d' AND tglbayar BETWEEN '%s' AND '%s' ", $idpelanggan, $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}else{
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM historypembayaran")
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM historypembayaran WHERE tglbayar BETWEEN '%s' AND '%s' ", $periode['awal'], $periode['akhir'])
+			);
+		}
 		$totalpembayaran = $result;
 	}
 	return $totalpembayaran;
@@ -112,4 +142,32 @@ function syncHutangPelanggan($idPelanggan = null){
 		$totalSync++;
 	}
 	return $totalSync;
+}
+function createPelangganSelection($defaultValue = null, $emptyText = 'UMUM', $inisialUlang = true){
+	if ($inisialUlang){
+		$pilihpelanggan = '<select id="idpelanggan" name="idpelanggan" onchange="inisialulang();">';
+	}else{
+		$pilihpelanggan = '<select id="idpelanggan" name="idpelanggan">';
+	}
+	if (empty($defaultValue)){
+		$pilihpelanggan .= '<option selected value="0">'.$emptyText.'</option>';
+	}else{
+		$pilihpelanggan .= '<option value="0">'.$emptyText.'</option>';
+	}
+	$resultpelanggan = db_query("SELECT idpelanggan,namapelanggan FROM pelanggan");
+	if (!empty($defaultValue)){
+		$selectedpelanggan = $defaultValue;
+	}
+	while ($datapelanggan = db_fetch_object($resultpelanggan)){
+		if ($datapelanggan->idpelanggan == $selectedpelanggan){
+			$pilihpelanggan .= '<option selected value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';
+		}else{
+			$pilihpelanggan .= '<option value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';
+		}
+	}
+	$pilihpelanggan .= '</select>';
+	return $pilihpelanggan;
+}
+function getTotalPembayaranHutang(){
+
 }

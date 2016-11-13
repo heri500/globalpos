@@ -126,20 +126,40 @@ function data_produk(){
 	$pilihanstatus .= '<img onclick="view_status(\'maksimum\')" title="Klik untuk melihat produk dengan stok diatas maksimum" src="'.base_path().'misc/media/images/statuskuning.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'aman\')" title="Klik untuk melihat produk dengan stok aman" src="'.base_path().'misc/media/images/statushijau.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'all\')" title="Klik untuk melihat seluruh produk" src="'.base_path().'misc/media/images/alldata.png">';
+	$pilihanstatus .= '<img onclick="view_status(\'nonaktif\')" title="Klik untuk melihat seluruh produk non aktif" src="'.base_path().'misc/media/images/nonaktifdata.png">';
 	$pilihanstatus .= '<span class="float-right">';
+	$pilihanstatus .= '<button id="nonaktifkan">Non Aktifkan</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode Biasa</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Dengan Logo</button>';
 	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
-	if ($_GET["statusstok"]){
-		$STATUSTOK = $_GET["statusstok"];
+	$statusProduct = 1;
+	if (isset($_GET["status_product"])){
 		drupal_add_js(
 			array(
-				'statusstokfilter' => $STATUSTOK,
+				'statusproduct' => $_GET["status_product"],
 			),
 			'setting'
 		);
-		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk($STATUSTOK).'</div>';
+		$statusProduct = $_GET["status_product"];
+	}else{
+		drupal_add_js(
+			array(
+				'statusproduct' => 1,
+			),
+			'setting'
+		);
+	}
+	if (isset($_GET["statusstok"])){
+		$statusStok = $_GET["statusstok"];
+		drupal_add_js(
+			array(
+				'statusstokfilter' => $statusStok,
+			),
+			'setting'
+		);
+		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk($statusStok, $statusProduct).'</div>';
 	}else{
 		drupal_add_js(
 			array(
@@ -147,7 +167,7 @@ function data_produk(){
 			),
 			'setting'
 		);
-		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk().'</div>';
+		$viewtabelproduk .= $pilihanstatus.'<div id="tempattabel" style="width: 100%;">'.tabel_produk(null, $statusProduct).'</div>';
 	}
 	$viewtabelproduk .= '<div id="dialogtambahkategori" title="TAMBAH KATEGORI PRODUK">';
 	$viewtabelproduk .= '<form id="tambahkategoriform"><div><label>KODE</label><input type="text" class="validate[required]" id="kodekategori" name="kodekategori"></div>';
@@ -213,7 +233,7 @@ function filter_kategori(){
 	exit();	
 }
 
-function tabel_produk($statusstok = null){
+function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_produk">';
 	$tabelproduk .= '<thead>';
 	$tabelproduk .= '<tr>';
@@ -239,7 +259,7 @@ function tabel_produk($statusstok = null){
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
 	$tabelproduk .= '</tbody>';
-	$totalNilaiBarang = calculateTotalNilaiBarang($statusstok);
+	$totalNilaiBarang = calculateTotalNilaiBarang($statusstok, $statusProduct);
 	$tabelproduk .= '<tfoot>';
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
@@ -691,4 +711,14 @@ function update_data_produk(){
 	db_query($sql_update,$nilai,$productId);
 	echo $nilaiRet;
 	exit();	
+}
+function ubah_status_product(){
+	if (isset($_REQUEST['selectedproduct']) && isset($_POST['statusproduct'])){
+        $selectedProduct = $_REQUEST['selectedproduct'];
+        for ($i = 0;$i < count($selectedProduct);$i++){
+            $idProduct = $selectedProduct[$i];
+            db_query('UPDATE product SET status_product=%d WHERE idproduct=%d', $_POST['statusproduct'],$idProduct);
+        }
+    }
+    exit();
 }

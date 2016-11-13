@@ -126,6 +126,8 @@ function remove_utf8_bom($text)
 
 function getTotalPembelian($field_name = null, $tglAwal = null, $tglAkhir = null){
 	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
+		$tglAwal = $tglAwal.' 00:00';
+		$tglAkhir = $tglAkhir.' 23:59';
 		$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
 	}
 	return $totalPembelian;

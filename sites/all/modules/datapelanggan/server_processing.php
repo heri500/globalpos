@@ -114,7 +114,7 @@ function serverSideProduk($request){
 	$arrayColumn = array(
 		'prod.idproduct','kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
-		,'prod.minstok','prod.maxstok','prod.stok','prod.satuan','prod.keterangan','total_nilai'
+		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -130,7 +130,7 @@ function serverSideProduk($request){
 	$strSQL .= "prod.namaproduct,prod.hargapokok,prod.hargajual,prod.margin,prod.minstok,prod.maxstok,";
 	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan ,";
 	$strSQLFilteredTotal = "SELECT COUNT(prod.idproduct) ";
-	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargapokok AS total_nilai  ";
+	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargajual AS total_nilai  ";
 	$strSQL .= "FROM product AS prod ";
 	$strSQLFilteredTotal .= "FROM product AS prod ";
 	$strSQL .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
@@ -152,14 +152,23 @@ function serverSideProduk($request){
 	}
 	if (isset($_REQUEST['statusstok']) && $_REQUEST['statusstok'] != '0'){
 		if ($_REQUEST['statusstok'] == 'aman'){
-			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok) ";
+			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok && prod.minstok != prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'maksimum'){
 			$strCriteria .= "AND (stok > prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'minimum'){
 			$strCriteria .= "AND (stok < prod.minstok) ";
 		}
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if (isset($_REQUEST['status_product'])){
+		$strCriteria .= "AND (status_product = ".$_REQUEST['status_product'].") ";
+	}else{
+		$strCriteria .= "AND (status_product = 1) ";
+	}
+	if ($pageLength != '-1'){
+		$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria." ORDER BY $orderColumn";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -210,7 +219,8 @@ function serverSideProduk($request){
 				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output
+			"data"            => $output,
+			"sql" 			  => $strSQL,
 		);
 }
 
@@ -221,6 +231,7 @@ function serverSidePenjualan($request){
 	$searchArray = $_REQUEST['search'];
 	$tglAwal = $_REQUEST['tglawal'].' 00:00';
 	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$idpelanggan = $_REQUEST['idpelanggan'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.tglpenjualan',
@@ -246,10 +257,18 @@ function serverSidePenjualan($request){
 	$strSQLFilteredTotal .= "FROM penjualan AS penj ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
 	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
-	$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	if (empty($idpelanggan)){
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}else{
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+	}
 	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
 	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
-	$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	if (empty($idpelanggan)){
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}else{
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
+	}
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (penj.nonota LIKE '%%%s%%' OR SUBSTR(penj.tglpenjualan,1,10) LIKE '%%%s%%' ";
@@ -260,11 +279,71 @@ function serverSidePenjualan($request){
 	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+		if (empty($idpelanggan)) {
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query(
+					$strSQLFilteredTotal,
+					$tglAwal,
+					$tglAkhir,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery
+				)
+			);
+		}else{
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$idpelanggan,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query(
+					$strSQLFilteredTotal,
+					$tglAwal,
+					$tglAkhir,
+					$idpelanggan,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery
+				)
+			);
+		}
 	}else{
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
+		if (empty($idpelanggan)) {
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+		}else{
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idpelanggan, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idpelanggan, $tglAwal, $tglAkhir));
+		}
 	}
 	$output = array();
 	while ($data = db_fetch_object($result)){
@@ -287,7 +366,24 @@ function serverSidePenjualan($request){
 		$rowData[] = $data->idpenjualan;
 		$output[] = $rowData;
 	}
-	$recordsTotal = db_result(db_query("SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+	if (empty($idpelanggan)) {
+		$recordsTotal = db_result(
+			db_query(
+				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s'",
+				$tglAwal,
+				$tglAkhir
+			)
+		);
+	}else{
+		$recordsTotal = db_result(
+			db_query(
+				"SELECT COUNT(idpenjualan) FROM penjualan WHERE tglpenjualan BETWEEN '%s' AND '%s' AND idpelanggan=%d",
+				$tglAwal,
+				$tglAkhir,
+				$idpelanggan
+			)
+		);
+	}
 	return array(
 			"draw"            => isset ( $request['draw'] ) ?
 				intval( $request['draw'] ) :
@@ -307,6 +403,7 @@ function serverSidePenjualan2($request){
 	$searchArray = $_REQUEST['search'];
 	$tglAwal = $_REQUEST['tglawal'].' 00:00';
 	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$idSupplier = $_REQUEST['idsupplier'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'prod.barcode','prod.namaproduct','supp.namasupplier', 
@@ -335,11 +432,19 @@ function serverSidePenjualan2($request){
 	$strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
 	$strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
 	$strSQL .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
-	$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	if (!empty($idSupplier)){
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+	}else{
+		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}
 	$strSQLFilteredTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
 	$strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
 	$strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON prod.idsupplier = supp.idsupplier ";
-	$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	if (!empty($idSupplier)){
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND prod.idsupplier = %d ";
+	}else {
+		$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	}
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (prod.barcode LIKE '%%%s%%' OR prod.namaproduct LIKE '%%%s%%' ";
@@ -349,11 +454,44 @@ function serverSidePenjualan2($request){
 	$strSQL .= $strCriteria." GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
 	$strSQLFilteredTotal .= $strCriteria." GROUP BY detail.idproduct";
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery));
+		if (!empty($idSupplier)){
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$idSupplier,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier, $searchQuery, $searchQuery, $searchQuery)
+			);
+		}else {
+			$result = db_query(
+				$strSQL,
+				$tglAwal,
+				$tglAkhir,
+				$searchQuery,
+				$searchQuery,
+				$searchQuery,
+				$firstRecord,
+				$lastRecord
+			);
+			$recordsFiltered = db_result(
+				db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery, $searchQuery)
+			);
+		}
 	}else{
-		$result = db_query($strSQL,$tglAwal,$tglAkhir,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$tglAwal,$tglAkhir));
+		if (!empty($idSupplier)) {
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idSupplier, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idSupplier));
+		}else{
+			$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+		}
 	}
 	$output = array();
 	while ($data = db_fetch_object($result)){

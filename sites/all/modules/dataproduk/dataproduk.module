@@ -146,6 +146,15 @@ function dataproduk_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.produk.inc'
 	);
+	$items['dataproduk/ubahstatusproduct'] = array(
+		'title' => t('Update Status Produk'),
+		'description' => 'Update Status Produk',
+		'page callback' => 'ubah_status_product',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.produk.inc'
+	);
 	return $items;
 } // end hook menu
 
@@ -287,12 +296,12 @@ function calculateTakeTime($leadTime = null, $dateIn = null, $ikutJamKerja = fal
 	}
 	return $takeTime;
 }
-function calculateTotalNilaiBarang($statusstok = null){
-	$strSQL = "SELECT SUM(stok*hargapokok) AS total_stok FROM product WHERE 1=1 ";
+function calculateTotalNilaiBarang($statusstok = null, $statusProduct = 1){
+	$strSQL = "SELECT SUM(stok*hargajual) AS total_stok FROM product WHERE 1=1 AND status_product= %d ";
 	$strCriteria = "";
 	if (!empty($statusstok)){
 		if ($statusstok == 'aman'){
-			$strCriteria .= "AND (stok >= minstok AND stok <= maxstok) ";
+			$strCriteria .= "AND (stok >= minstok AND stok <= maxstok AND minstok != maxstok) ";
 		}else if($statusstok == 'maksimum'){
 			$strCriteria .= "AND (stok > maxstok) ";
 		}else if($statusstok == 'minimum'){
@@ -300,6 +309,6 @@ function calculateTotalNilaiBarang($statusstok = null){
 		}
 	}
 	$strSQL .= $strCriteria;
-	$totalNilaiBarang = db_result(db_query($strSQL));
+	$totalNilaiBarang = db_result(db_query($strSQL,$statusProduct));
 	return $totalNilaiBarang;
 }

@@ -57,13 +57,7 @@ function pembelian(){
 	$pembelian .= '</div>';
 	$pembelian .= '<div id="tempatkosong">';
 	$pembelian .= '<div id="tempatsupplier"><label>SUPPLIER</label></div>';
-	$pilihsupplier = '<select id="idsupplier" name="idsupplier" onchange="inisialulangautocomplete()">';
-	$resultsupplier = db_query("SELECT idsupplier,namasupplier FROM supplier");
-	while ($datasupplier = db_fetch_object($resultsupplier)){
-		$pilihsupplier .= '<option value="'.$datasupplier->idsupplier.'">'.$datasupplier->namasupplier.'</option>';	
-	}
-	$pilihsupplier .= '</select>';
-	$pembelian .= '<div id="tempatsupplier2">'.$pilihsupplier.'</div>';
+	$pembelian .= '<div id="tempatsupplier2">'.createSupplierSelection().'</div>';
 	$pembelian .= '</div>';
 	$pembelian .= '</div>';
 	$pembelian .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';

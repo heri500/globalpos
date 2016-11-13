@@ -4,6 +4,8 @@ var tglAwal = '';
 var tglAkhir = '';
 var urutan = 0;
 var tampilData = 0;
+var idpelanggan = 0;
+var idsupplier = 0;
 function tampiltabeljual(){
 	if (tampilData == 0){
 		oTable = $('#tabel_penjualan').dataTable( {
@@ -16,7 +18,7 @@ function tampiltabeljual(){
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,
-			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idpelanggan='+ Drupal.settings.filterId,
 			buttons: [
 				{
 					extend: 'colvis',
@@ -54,7 +56,7 @@ function tampiltabeljual(){
 			'aaSorting': [[urutan, 'desc']],
 			'processing': true,
 			'serverSide': true,
-			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan2&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan2&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir +'&idsupplier='+ Drupal.settings.filterId,
 			buttons: [
 				{
 					extend: 'colvis'
@@ -111,6 +113,7 @@ function print_penjualan(idpenjualan,nonota){
 	}
 }
 $(document).ready(function(){
+        console.log(Drupal.settings.filterId);
 	pathutama = Drupal.settings.basePath;
 	urutan = Drupal.settings.urutan;
 	tampilData = Drupal.settings.tampilData;

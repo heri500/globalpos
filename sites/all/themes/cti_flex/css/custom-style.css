@@ -358,7 +358,7 @@ div.baris input[type="text"]{
 	height: 350px;
 }
 input[type="text"].barcodekasir{
-	width: 525px;
+	width: 500px;
 	font-size: 14px;
 	font-weight: bold;
 	padding: .3em;	
