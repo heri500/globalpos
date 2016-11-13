@@ -371,10 +371,6 @@ $(document).ready(function(){
 			tambahproduk();
 		}
 	});
-	$('#newqty').autotab_filter({
-		format: 'numeric',
-		nospace: true
-	});
 	$('#newqty').keypress(function(e) {
 		if (e.keyCode == 13){
 			var baris_int = totalproduk-1;
