@@ -110,29 +110,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="tempatkosong">';
 	$penjualan .= '<div id="tempatsupplier"><label>PELANGGAN</label></div>';
-	$pilihpelanggan = '<select id="idpelanggan" name="idpelanggan" onchange="inisialulang()">';
-	if ($_GET["idpelanggan"] == 0 && $idPelanggan == 0){
-		$pilihpelanggan .= '<option selected value="0">UMUM</option>';	
-	}else{
-		$pilihpelanggan .= '<option value="0">UMUM</option>';	
-	}
-	$resultpelanggan = db_query("SELECT idpelanggan,namapelanggan FROM pelanggan");
-	if (!isset($_GET["idpelanggan"])){
-		if (!empty($idPelanggan)){
-			$selectedpelanggan = $idPelanggan;	
-		}
-	}else{
-		$selectedpelanggan = $_GET["idpelanggan"];
-	}
-	while ($datapelanggan = db_fetch_object($resultpelanggan)){
-		if ($datapelanggan->idpelanggan == $selectedpelanggan){
-			$pilihpelanggan .= '<option selected value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';	
-		}else{
-			$pilihpelanggan .= '<option value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';	
-		}
-	}
-	$pilihpelanggan .= '</select>';
-	$penjualan .= '<div id="tempatsupplier2">'.$pilihpelanggan.'</div>';
+	$penjualan .= '<div id="tempatsupplier2">'.createPelangganSelection($_GET['idpelanggan']).'</div>';
 	if (!empty($idtitipanlaundry)){
 		$penjualan .= '<div id="tempatsupplier"><label>TGL '.$labelTgl.'</label><input readonly="readonly" type="text" id="tglmasuk" name="tglmasuk" value="'.$tglTampilLaundry.'">';
 		$penjualan .= '</div>';

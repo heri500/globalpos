@@ -25,7 +25,7 @@ function tampilkantabelproduk(){
             null,{ 'bVisible': false },{ 'bVisible': false },
             { 'bVisible': false },null,null,null,{ 'bVisible': false },null,{ 'bSortable': false }
         ],
-        'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+        'aLengthMenu': [[100, 200, 300, 500], [100, 200, 300,500]],
         'iDisplayLength': 100,
         'aaSorting': [[1, 'asc']],
         buttons: [
