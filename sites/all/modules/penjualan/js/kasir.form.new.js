@@ -204,7 +204,7 @@ function akhiri_belanja(cetak){
 				var returndata = data.trim();
 				if (returndata != "error"){
 					if (cetak == 1){
-						window.open(pathutama + "print/6?idpenjualan="+ returndata);
+						window.open(pathutama + "print/6?idpenjualangh="+ returndata);
 					}
 					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
 						window.location = pathutama + 'penjualan/' + alamatasal;
@@ -574,9 +574,9 @@ $(document).ready(function(){
 			for (var i = 0;i < totaldetaildata;i++){
 				var dataDetail = Drupal.settings.data_order[i];
 				if (dataDetail.barcode != ''){
-					$('#barcode').val(dataDetail.barcode);
+					$('#barcode').val(dataDetail.barcode.trim());
 				}else{
-					$('#barcode').val(dataDetail.namaproduct);
+					$('#barcode').val(dataDetail.namaproduct.trim());
 				}
 				tambahproduk(dataDetail.sisa);
 			}

@@ -84,6 +84,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+	$tabelcustomerorder .= '<th>MEJA</th>';
 	$tabelcustomerorder .= '<th>BARCODE</th>';
 	$tabelcustomerorder .= '<th>NO. NOTA</th>';
 	$tabelcustomerorder .= '<th class="center">HARI</th>';
@@ -98,7 +99,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>STATUS</th>';
 	$tabelcustomerorder .= '<th>PERKIRAAN</th>';
 	$tabelcustomerorder .= '<th>KETERANGAN</th>';
-	$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+	//$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
@@ -106,9 +107,9 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<tfoot>';
 	$tabelcustomerorder .= '<tr>';
 	if (cekUserRoles()){
-		$tabelcustomerorder .= '<th style="text-align:right" colspan="9">Total:&nbsp;&nbsp;</th>';
+		$tabelcustomerorder .= '<th style="text-align:right" colspan="10">Total:&nbsp;&nbsp;</th>';
 	}else{
-		$tabelcustomerorder .= '<th style="text-align:right" colspan="8">Total:&nbsp;&nbsp;</th>';
+		$tabelcustomerorder .= '<th style="text-align:right" colspan="9">Total:&nbsp;&nbsp;</th>';
 	}
     $totaljual = 0;
     $totalbayar = 0;
@@ -122,7 +123,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
-	$tabelcustomerorder .= '<th>&nbsp;</th>';
+	//$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</tfoot>';
 	$tabelcustomerorder .= '</table>';

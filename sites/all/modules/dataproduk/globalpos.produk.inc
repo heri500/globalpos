@@ -103,7 +103,7 @@ function data_produk(){
 	$pilihantype .= '<option value="1">Jasa</option>';
 	$pilihantype .= '</select>';
 	$viewtabelproduk .= '<label>TYPE ITEM</label>'.$pilihantype;
-	$viewtabelproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time">';
+	$viewtabelproduk .= '<label>LEAD TIME (MENIT)</label><input type="text" id="lead_time" name="lead_time">';
 	$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
 	$pilihanjamkerja .= '<option value="0">Tidak</option>';
 	$pilihanjamkerja .= '<option value="1">Ya</option>';
@@ -609,7 +609,7 @@ function edit_data_produk(){
 		$editproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok" value="'.$dataproduk->minstok.'">';
 		$editproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok" value="'.$dataproduk->maxstok.'">';
 		$editproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok" value="'.$dataproduk->stok.'">';
-		$editproduk .= '<label>LEAD TIME (JAM)</label><input type="text" id="lead_time" name="lead_time" value="'.$dataproduk->lead_time.'">';
+		$editproduk .= '<label>LEAD TIME (MENIT)</label><input type="text" id="lead_time" name="lead_time" value="'.$dataproduk->lead_time.'">';
 		$selected_no = ($dataproduk->aturan_jam_kerja == 0) ? 'selected' : '';
 		$selected_yes = ($dataproduk->aturan_jam_kerja == 1) ? 'selected' : '';
 		$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';

@@ -4,9 +4,10 @@ var giCount = 1;
 var totalbelanja = 0;
 var totalproduk = 0;
 var barisrubah;
-var tglsekarang = "'.$tglsekarang.'";
-var tgltampil = "'.$tgltampil.'";
+var tglsekarang = '';
+var tgltampil = '';
 var pelanggansaatini = 0;
+var cetakstruk = 0;
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
 		"bJQueryUI": true,
@@ -14,7 +15,7 @@ function tampilkantabelkasir(){
 		"bLengthChange": false,
 		"bFilter": true,
 		"bInfo": false,
-		"sScrollY": "230px",
+		"sScrollY": "270px",
 		"aoColumns": [
 		{ "bSortable": false },{ "bSortable": false },null,null,null,null,null,null
 		],
@@ -55,10 +56,10 @@ function tambahproduk(){
 		success: function(data){
 			var pecahdata = new Array();
 			pecahdata = data.split(";");
-			if (pecahdata[0] != "error"){
+			if (pecahdata[0].trim() != "error"){
 				nilaisubtotal = pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100);
 				subtotal = number_format(nilaisubtotal,0,",",".");
-				nilaikirim = pecahdata[0] +"___1___"+ pecahdata[2] +"___"+ pecahdata[3] +"___"+ pecahdata[5];
+				nilaikirim = pecahdata[0].trim() +"___1___"+ pecahdata[2] +"___"+ pecahdata[3] +"___"+ pecahdata[5];
 				index_cek_box = pecahdata[0];
 				namacekbox = "cekbox_"+ index_cek_box;
 				if($("#"+ namacekbox).val()){
@@ -105,18 +106,15 @@ function tambahproduk(){
 		}
 	});
 }
-function kirim_data(){
-	if (totalproduk > 0 && $("#idpelanggan").val() != 0){
+function kirim_data(cetaknota){
+	cetakstruk = cetaknota;
+	if (totalproduk > 0){
 		var sData = $("input", oTable.fnGetNodes()).serialize();
 		$("#nilaikirim").val(decodeURIComponent(sData));
 		$("#dialogbayar").dialog("open");
 	}else{
-		if (totalproduk < 0 && $("#idpelanggan").val() != 0){
-			$("#pesantext").text("Mohon pilih produk/jasa customerorder terlebih dahulu...!!!");
-		}else if(totalproduk > 0 && $("#idpelanggan").val() == 0){
-			$("#pesantext").text("Mohon pilih pelanggan terlebih dahulu...!!!");
-		}else{
-			$("#pesantext").text("Mohon pilih produk/jasa customerorder dan pelanggan terlebih dahulu...!!!");
+		if (totalproduk < 0 ){
+			$("#pesantext").text("Mohon pilih produk/jasa yang di order terlebih dahulu...!!!");
 		}
 		$("#dialogwarning").dialog("open");
 	}
@@ -195,6 +193,7 @@ function akhiri_belanja(cetak){
 	request.nomerkartu = $("#nomerkartu").val();
 	request.tgljual = $("#tgljualkirim").val();
 	request.keterangan = $("#keterangan").val();
+	request.idmeja = $("#idmeja").val();
 	alamat = pathutama + "penjualan/simpancustomerorder";
 	$.ajax({
 		type: "POST",
@@ -205,7 +204,7 @@ function akhiri_belanja(cetak){
 			var returndata = data.trim();
 			if (returndata != "error"){
                                 if (cetak == 1){
-					window.open(pathutama + "print/6?idorder="+ returndata +"&totalprint=2");
+					window.open(pathutama + "print/6?idghorder="+ returndata);
 				}
 				window.location = pathutama + "penjualan/customerorder?tanggal="+ request.tgljual;
 			}else{
@@ -256,11 +255,13 @@ function ubahharga(){
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
+	tglsekarang = Drupal.settings.tglsekarang;
+	tgltampil = Drupal.settings.tgltampil;
 	$("#dialogkasir").dialog({
 		modal: true,
 		width: 975,
 		closeOnEscape: false,
-		height: 560,
+		height: 600,
 		resizable: false,
 		autoOpen: false,
 		open: function(event, ui) {
@@ -364,22 +365,28 @@ $(document).ready(function(){
 			kembali = $("#nilaibayar").val() - totalbelanja;
 			$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 			$("#nilaibayar").select();
-			alamat = pathutama + "datapelanggan/gettotalhutang/"+ $("#idpelanggan").val();
-			$.ajax({
-				type: "POST",
-				url: alamat,
-				cache: false,
-				success: function(data){
-					var returnData = eval(data);
-					var totalHutang = returnData[0];
-					if (totalHutang < 0){
-						$('#label-deposit').html('Deposit');
-					}else{
-						$('#label-deposit').html('Hutang');
+			if ($("#idpelanggan").val() != 0){
+				$("#baris-deposit").show();
+				alamat = pathutama + "datapelanggan/gettotalhutang/"+ $("#idpelanggan").val();
+				$.ajax({
+					type: "POST",
+					url: alamat,
+					cache: false,
+					success: function(data){
+						var returnData = eval(data);
+						var totalHutang = returnData[0];
+						if (totalHutang < 0){
+							$('#label-deposit').html('Deposit');
+						}else{
+							$('#label-deposit').html('Hutang');
+						}
+						$('#depositpelanggan').val(Math.abs(totalHutang));
 					}
-					$('#depositpelanggan').val(Math.abs(totalHutang));
-				}
-			})
+				})
+			}else{
+				$("#baris-deposit").hide();
+			}
+			$('#keterangan').select();
 		},
 		close: function(){
 			$("#barcode").select();
@@ -408,12 +415,7 @@ $(document).ready(function(){
 		}else if (e.keyCode == 119){
 			hitung_omset();
 		}else if (e.keyCode == 113){
-			if ($("#idpelanggan").val() == 0){
-				$("#tombolubahharga").click();
-			}else{
-				$("#pesantext").text("Perubahan harga hanya untuk pelanggan UMUM...!!!");
-				$("#dialogwarning").dialog("open");
-			}
+			$("#tombolubahharga").click();
 		}
 	});
 	$("#barcode").autocomplete({
@@ -495,13 +497,6 @@ $(document).ready(function(){
 			$("#dialogubahqty2").dialog("close");
 		}
 	});
-	$("#totalbelanjauser").keyup(function(e){
-		kembali = $("#nilaibayar").val()-totalbelanja;
-		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
-		if (e.keyCode == 13){
-			akhiri_belanja(1);
-		}
-	});
 	$("#tgljual").datepicker({
 		changeMonth: true,
 		changeYear: true,
@@ -518,38 +513,44 @@ $(document).ready(function(){
 			$("#field_no_kartu").show();
 			$("#field_bayar").show();
 			$("#nilaibayar").val(totalbelanja).attr('readonly','readonly').removeAttr('disabled'); 
-			//$("#field_kembali").hide();
-			//$("#kembali").attr('disabled','disabled');
+			$("#field_kembali").hide();
+			$("#kembali").attr('disabled','disabled');
+			$("#kembali").removeAttr('readonly');
 			$("#nomerkartu").select();
 		}else if ($(this).val() == 'KEMUDIAN'){
 			$("#field_no_kartu").hide();
 			$("#field_bayar").hide();
-			//$("#field_kembali").hide();
-			//$("#kembali").attr('disabled','disabled');
+			$("#field_kembali").hide();
+			$("#kembali").attr('disabled','disabled');
+			$("#kembali").removeAttr('readonly');
 			$("#nilaibayar").attr('disabled','disabled');
+			$("#keterangan").select();
 		}else{
 			$("#field_no_kartu").hide();
+			$("#field_kembali").show();
 			$("#field_bayar").show();
 			//$("#field_kembali").show();
 			$("#nilaibayar").removeAttr('readonly').removeAttr('disabled');
-			//$("#kembali").removeAttr('disabled');
-			//$("#kembali").val($("#nilaibayar").val() - totalbelanja);
+			$("#kembali").removeAttr('disabled');
+			$("#kembali").attr('readonly','readonly');
+			$("#kembali").val($("#nilaibayar").val() - totalbelanja);
 			$("#nilaibayar").select();
 		}
 	});
 	$("#carabayar").change();
 	$("#nilaibayar").keyup(function(e){
+		kembali = $("#nilaibayar").val()-totalbelanja;
+		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 		if (e.keyCode == 13){
-			$("#simpan-cetak-customerorder").click(1);
+			if ($('#idmeja').val() != ''){
+				akhiri_belanja(cetakstruk);
+			}else{
+				$('#nomermeja').select();
+			}
+
 		}
 	});
-	$("#simpan-customerorder").click(function(){
-		akhiri_belanja(0);
-	});
-        $("#simpan-cetak-customerorder").click(function(){
-		akhiri_belanja(1);
-	});
-	$('#idpelanggan').chosen();	
+	$('#idpelanggan').chosen();
 	$("#dialogtambahpelanggan").dialog({
 		modal: true,
 		width: 550,
@@ -597,4 +598,21 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattabelkasir').css('width','780px');
 	$('#barcode').css('width','575px');
+	$('#tempattombolkasir').css('height','330px');
+	$('#nomormeja').autocomplete({
+		source: pathutama + "penjualan/autocarimeja",
+		select: function (event, ui) {
+			$("#nomormeja").val(ui.item.value);
+			$("#idmeja").val(ui.item.id);
+		}
+	});
+	$('#nomormeja').keypress(function(e) {
+		if (e.keyCode == 13){
+			if ($("#idmeja").val() != ""){
+				akhiri_belanja(cetakstruk);
+			}else{
+				$("#pesantext").text("Mohon isi nomer meja...!!!");
+				$("#dialogwarning").dialog("open");
+			}
+		}	});
 })

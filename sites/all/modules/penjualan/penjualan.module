@@ -82,6 +82,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.kasir.inc'
 	);
+	$items['penjualan/autocarimeja'] = array(
+		'title' => t('Pencarian Meja'),
+		'description' => 'Pencarian Meja',
+		'page callback' => 'cari_meja',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	$items['penjualan/simpanpenjualan'] = array(
     'title' => t('Simpan Penjualan'),
     'description' => 'Simpan Penjualan',

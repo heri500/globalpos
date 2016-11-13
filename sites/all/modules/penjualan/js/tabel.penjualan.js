@@ -109,7 +109,7 @@ function view_detail(idpenjualan,nonota){
 function print_penjualan(idpenjualan,nonota){
 	var konfirmasi = confirm('Yakin ingin mencetak nota penjualan dengan no nota : '+ nonota +' ini...??!!');
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?idpenjualan='+ idpenjualan);
+		window.open(pathutama + 'print/6?idpenjualangh='+ idpenjualan);
 	}
 }
 $(document).ready(function(){
