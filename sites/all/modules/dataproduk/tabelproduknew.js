@@ -11,15 +11,16 @@ var settings = {
     barHeight: 50
 };
 var statusstok = 0;
+var statusproduct = 1;
 function tampilkantabelproduk(){
-    oTable = $('#tabel_produk').dataTable( {
+    oTable = $('#tabel_produk').DataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
         'sPaginationType': 'full_numbers',
         'bInfo': true,
         'processing': true,
         'serverSide': true,
-        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=produk&statusstok='+ statusstok,
+        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=produk&statusstok='+ statusstok +'&status_product='+ statusproduct,
         'aoColumns': [
             { 'bSortable': false },null,null,{ 'bVisible': false },null,null,null,null,
             null,{ 'bVisible': false },{ 'bVisible': false },
@@ -398,8 +399,10 @@ function editproduk(idproduk){
     }
 }
 function view_status(kondisistok){
-    if (kondisistok != 'all'){
-        window.location = pathutama + 'dataproduk/produk?statusstok='+ kondisistok;
+    if (kondisistok != 'all' && kondisistok != 'nonaktif') {
+        window.location = pathutama + 'dataproduk/produk?statusstok=' + kondisistok;
+    }else if(kondisistok == 'nonaktif'){
+        window.location = pathutama + 'dataproduk/produk?status_product=0';
     }else{
         window.location = pathutama + 'dataproduk/produk';
     }
@@ -420,6 +423,7 @@ $(document).ready(function() {
     pathfile = Drupal.settings.filePath;
     alamatupdate = Drupal.settings.basePath + 'dataproduk/updateproduk';
     statusstok = Drupal.settings.statusstokfilter;
+    statusproduct = Drupal.settings.statusproduct;
     $('#dialogtambahkategori').dialog({
         modal: true,
         width: 350,
@@ -619,6 +623,68 @@ $(document).ready(function() {
         });
         if (selected_product != ''){
             window.open(pathutama + 'print/6?idproductlogo='+ selected_product);
+        }
+    });
+    $('#nonaktifkan').on('click', function(){
+        var confirmation = confirm('Yakin ingin menonaktifkan produk yang dipilih...??!')
+        if (confirmation){
+            var selected_product = new Array;
+            var counterData = 0;
+            $('.barcode-select').each(function(){
+                if ($(this).is(':checked')){
+                    selected_product.push($(this).val());
+                    counterData++;
+                }
+            });
+            if (counterData > 0){
+                var request = new Object();
+                request.selectedproduct = selected_product;
+                request.statusproduct = 0;
+                alamatupdatestatus = pathutama +'dataproduk/ubahstatusproduct';
+                $.ajax({
+                    type: 'POST',
+                    url: alamatupdatestatus,
+                    data: request,
+                    cache: false,
+                    success: function(data){
+                        oTable.draw(false);
+                        alert('Produk berhasil dinonaktifkan');
+                    }
+                });
+            }else{
+                alert('Mohon pilih produk terlebih dulu...!!?');
+            }
+        }
+    });
+    $('#aktifkan').on('click', function(){
+        var confirmation = confirm('Yakin ingin mengaktifkan produk yang dipilih...??!')
+        if (confirmation){
+            var selected_product = new Array;
+            var counterData = 0;
+            $('.barcode-select').each(function(){
+                if ($(this).is(':checked')){
+                    selected_product.push($(this).val());
+                    counterData++;
+                }
+            });
+            if (counterData > 0){
+                var request = new Object();
+                request.selectedproduct = selected_product;
+                request.statusproduct = 1;
+                alamatupdatestatus = pathutama +'dataproduk/ubahstatusproduct';
+                $.ajax({
+                    type: 'POST',
+                    url: alamatupdatestatus,
+                    data: request,
+                    cache: false,
+                    success: function(data){
+                        oTable.draw(false);
+                        alert('Produk berhasil diaktifkan');
+                    }
+                });
+            }else{
+                alert('Mohon pilih produk terlebih dulu...!!?');
+            }
         }
     });
 })

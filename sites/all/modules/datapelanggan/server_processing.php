@@ -114,7 +114,7 @@ function serverSideProduk($request){
 	$arrayColumn = array(
 		'prod.idproduct','kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
-		,'prod.minstok','prod.maxstok','prod.stok','prod.satuan','prod.keterangan','total_nilai'
+		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -130,7 +130,7 @@ function serverSideProduk($request){
 	$strSQL .= "prod.namaproduct,prod.hargapokok,prod.hargajual,prod.margin,prod.minstok,prod.maxstok,";
 	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan ,";
 	$strSQLFilteredTotal = "SELECT COUNT(prod.idproduct) ";
-	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargapokok AS total_nilai  ";
+	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargajual AS total_nilai  ";
 	$strSQL .= "FROM product AS prod ";
 	$strSQLFilteredTotal .= "FROM product AS prod ";
 	$strSQL .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
@@ -152,12 +152,17 @@ function serverSideProduk($request){
 	}
 	if (isset($_REQUEST['statusstok']) && $_REQUEST['statusstok'] != '0'){
 		if ($_REQUEST['statusstok'] == 'aman'){
-			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok) ";
+			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok && prod.minstok != prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'maksimum'){
 			$strCriteria .= "AND (stok > prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'minimum'){
 			$strCriteria .= "AND (stok < prod.minstok) ";
 		}
+	}
+	if (isset($_REQUEST['status_product'])){
+		$strCriteria .= "AND (status_product = ".$_REQUEST['status_product'].") ";
+	}else{
+		$strCriteria .= "AND (status_product = 1) ";
 	}
 	if ($pageLength != '-1'){
 		$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
@@ -214,7 +219,8 @@ function serverSideProduk($request){
 				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output
+			"data"            => $output,
+			"sql" 			  => $strSQL,
 		);
 }
 
