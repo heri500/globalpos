@@ -21,6 +21,12 @@ function customerorder(){
 	_addChosenJqueryPlugins();
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
+	drupal_add_js(
+		array(
+			'tglsekarang' => $tglsekarang,
+			'tgltampil' => $tgltampil,
+		),
+		'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/customerorder.form.js';
 	drupal_add_js($js_path);
 	if (isset($_GET['tanggal'])){

@@ -4,8 +4,8 @@ var giCount = 1;
 var totalbelanja = 0;
 var totalproduk = 0;
 var barisrubah;
-var tglsekarang = "'.$tglsekarang.'";
-var tgltampil = "'.$tgltampil.'";
+var tglsekarang = '';
+var tgltampil = '';
 var pelanggansaatini = 0;
 var cetakstruk = 0;
 function tampilkantabelkasir(){
@@ -255,6 +255,8 @@ function ubahharga(){
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
+	tglsekarang = Drupal.settings.tglsekarang;
+	tgltampil = Drupal.settings.tgltampil;
 	$("#dialogkasir").dialog({
 		modal: true,
 		width: 975,

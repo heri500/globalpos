@@ -578,9 +578,9 @@ $(document).ready(function(){
 			for (var i = 0;i < totaldetaildata;i++){
 				var dataDetail = Drupal.settings.data_order[i];
 				if (dataDetail.barcode != ''){
-					$('#barcode').val(dataDetail.barcode);
+					$('#barcode').val(dataDetail.barcode.trim());
 				}else{
-					$('#barcode').val(dataDetail.namaproduct);
+					$('#barcode').val(dataDetail.namaproduct.trim());
 				}
 				tambahproduk(dataDetail.sisa);
 			}

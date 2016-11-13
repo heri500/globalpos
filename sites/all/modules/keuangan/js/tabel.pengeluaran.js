@@ -191,9 +191,7 @@ jQuery(function ($) {
 				$('#edit-idkategori').val('');
 				$('#edit-keteranganpemasukan').val('');
 				$('#edit-jumlah').val('');
-				$('#edit-tanggal').val('');
 				$('#edit-idpemasukan').val('');
-				$('#edit-tglkirim').val('');
 				oTablePemasukan.fnDraw();
 				$('#form-input-pemasukan').unblock();
 				$('#edit-jumlah').focus();
@@ -223,9 +221,7 @@ jQuery(function ($) {
 				$('#edit-idkategori-1').val('');
 				$('#edit-keteranganpengeluaran').val('');
 				$('#edit-jumlah-1').val('');
-				$('#edit-tanggal').val('');
 				$('#edit-idpengeluaran').val('');
-				$('#edit-tglkirim-1').val('');
 				oTablePengeluaran.fnDraw();
 				$('#form-input-pengeluaran').unblock();
 				$('#edit-jumlah-1').focus();
