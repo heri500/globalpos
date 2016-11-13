@@ -113,6 +113,7 @@ function print_penjualan(idpenjualan,nonota){
 	}
 }
 $(document).ready(function(){
+        console.log(Drupal.settings.filterId);
 	pathutama = Drupal.settings.basePath;
 	urutan = Drupal.settings.urutan;
 	tampilData = Drupal.settings.tampilData;

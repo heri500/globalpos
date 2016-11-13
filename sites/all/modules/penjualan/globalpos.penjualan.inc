@@ -12,6 +12,7 @@ function view_tabel_penjualan(){
 		$tgl2 = date("Y-m-d");
 	}
 	$addedFilter = '';
+	$filterId = 0;
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
@@ -19,6 +20,9 @@ function view_tabel_penjualan(){
 		$urutan = 1;
 		$tampilData = 0;
 		$addedFilter = createPelangganSelection($idPelanggan,'ALL', false).'<input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+		if(isset($_POST['idpelanggan'])){
+			$filterId = $_POST['idpelanggan'];
+		}
 	}elseif ($_POST["pilihantampil"] == 'PRODUK'){
 		$produk = 'selected="selected"';
 		$idSupplier = isset($_POST['idsupplier']) ? $_POST['idsupplier'] : 0;
@@ -26,6 +30,9 @@ function view_tabel_penjualan(){
 		$urutan = 3;
 		$tampilData = 1;
 		$addedFilter = createSupplierSelection($idSupplier,'ALL',false).'<input type="hidden" id="idpelanggan" name="idpelanggan" value="0">';
+		if (isset($_POST['idsupplier'])){
+			$filterId = $_POST['idsupplier'];
+		}
 	}else{
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
 		$tabeltampil = tabel_penjualan($tgl1,$tgl2,$idPelanggan);
@@ -33,12 +40,9 @@ function view_tabel_penjualan(){
 		$urutan = 1;
 		$tampilData = 0;
 		$addedFilter = createPelangganSelection($idPelanggan,'ALL', false).'<input type="hidden" id="idsupplier" name="idsupplier" value="0">';
-	}
-	$filterId = 0;
-	if (isset($_POST['idsupplier'])){
-		$filterId = $_POST['idsupplier'];
-	}else if($_POST['idpelanggan']){
-		$filterId = $_POST['idpelanggan'];
+		if(isset($_POST['idpelanggan'])){
+			$filterId = $_POST['idpelanggan'];
+		}
 	}
 	drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
 	drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
