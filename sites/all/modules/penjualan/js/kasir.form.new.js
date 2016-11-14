@@ -398,33 +398,41 @@ $(document).ready(function(){
 			$("#nilaibayar").keyup();
 			$("#nilaibayar").select();
 			$("#idpelanggan").removeAttr("disabled");
-			alamat = pathutama + "datapelanggan/gettotalhutang/"+ $("#idpelanggan").val();
-			$.ajax({
-				type: "POST",
-				url: alamat,
-				cache: false,
-				success: function(data){
-					var returnData = eval(data);
-					var totalHutang = returnData[0];
-					if (totalHutang < 0){
-						$('#label-deposit').html('Deposit');
-						$("#carabayar option").each(function(){
-							if ($(this).attr('value') == 'DEPOSIT'){
-								$(this).removeAttr('disabled');
-							}
-						});
-					}else{
-						$('#label-deposit').html('Hutang');
-						$("#carabayar option").each(function(){
-							if ($(this).attr('value') == 'DEPOSIT'){
-								$(this).attr('disabled', 'disabled');
-							}
-						});
+			if ($("#idpelanggan").val() != 0){
+				alamat = pathutama + "datapelanggan/gettotalhutang/"+ $("#idpelanggan").val();
+				$.ajax({
+					type: "POST",
+					url: alamat,
+					cache: false,
+					success: function(data){
+						var returnData = eval(data);
+						var totalHutang = returnData[0];
+						if (totalHutang < 0){
+							$('#label-deposit').html('Deposit');
+							$("#carabayar option").each(function(){
+								if ($(this).attr('value') == 'DEPOSIT'){
+									$(this).removeAttr('disabled');
+								}
+							});
+						}else{
+							$('#label-deposit').html('Hutang');
+							$("#carabayar option").each(function(){
+								if ($(this).attr('value') == 'DEPOSIT'){
+									$(this).attr('disabled', 'disabled');
+								}
+							});
+						}
+						$('#depositpelanggan').val("Rp. "+ number_format(Math.abs(totalHutang),0,",","."));
+						$("#idpelanggan").attr("disabled","disabled");
 					}
-					$('#depositpelanggan').val("Rp. "+ number_format(Math.abs(totalHutang),0,",","."));
-					$("#idpelanggan").attr("disabled","disabled");
-				}
-			});
+				});
+			}else{
+				$("#carabayar option").each(function(){
+					if ($(this).attr('value') == 'DEPOSIT' || $(this).attr('value') == 'HUTANG'){
+						$(this).attr('disabled', 'disabled');
+					}
+				});
+			}
 		},
 		close: function(){
 			$("#barcode").select();
