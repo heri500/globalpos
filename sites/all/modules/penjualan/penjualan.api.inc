@@ -748,6 +748,22 @@ function printGHCOrder(){
     }
     return $tablePrint;
 }
+//Print customer order only GHC
+function printGHCOrderOnly(){
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+	_addBarcodePlugins();
+	drupal_add_js($js_path);
+	$js_path = drupal_get_path('module','penjualan').'/js/ghorder.barcode.js';
+	drupal_add_js($js_path);
+	$idGhOrder = isset($_GET['idghorderonly']) ? $_GET['idghorderonly'] : null;
+	$dataOrder = getCustomerOrder($idGhOrder);
+	$tablePrint = '';
+	if (count($dataOrder)){
+		$tablePrint = printKasirOrder($dataOrder);
+	}
+	return $tablePrint;
+}
 function printKasirOrder($dataOrder = null){
     if (count($dataOrder)){
         $printHeader = true;
@@ -769,13 +785,16 @@ function printKasirOrder($dataOrder = null){
             }
             $tablePrint .= '<tr><td colspan="3" style="font-weight: bold;font-size: 14px;text-align: center;"><span style="float: left">Meja</span><span style="float: right">'.strtoupper($orderInfo->meja).'</span></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;border-bottom: 1px solid #000;"><span style="float: left">Tanggal</span><span style="float: right">'.substr($orderInfo->tglorder,0,16).'</span></td></tr>';
+			$totalOrder = 0;
             for ($i = 0;$i < count($orderDetail);$i++){
                 $dataDetail = $orderDetail[$i];
                 $tablePrint .= '<tr>';
                 $tablePrint .= '<td colspan="2" style="font-size: 13px;">'.strtoupper($dataDetail['namaproduct']).'</td>';
-                $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;width: 50px;">x '.$dataDetail['jumlah'].'</td>';
+                $tablePrint .= '<td style="font-size: 12px;text-align: right;width: 100px;">'.number_format($dataDetail['hargajual'],0,',','.').' x '.$dataDetail['jumlah'].'</td>';
                 $tablePrint .= '</tr>';
+				$totalOrder = $totalOrder + ($dataDetail['hargajual']*$dataDetail['jumlah']);
             }
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalOrder,0,",",".").'</span></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">INGAT MAKAN INGAT TUHAN</td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px solid #000;">KRITIK/SARAN DAN PESAN ANTAR HUBUNGI</td></tr>';
@@ -909,7 +928,7 @@ function getDetailOrder($nidCustomerOrder = null){
 	if (!empty($nidCustomerOrder)) {
 		$dataCustomerOrder = getCustomerOrder($nidCustomerOrder);
 		$strSQL = 'SELECT b.idkategori, c.kategori, a.detailbarcode, a.jumlah, ';
-		$strSQL .= 'a.outstanding, b.namaproduct,a.masuk FROM detailcustomerorder a ';
+		$strSQL .= 'a.outstanding, b.namaproduct,a.masuk,a.hargajual FROM detailcustomerorder a ';
 		$strSQL .= 'LEFT JOIN product b ON a.idproduct = b.idproduct ';
 		$strSQL .= 'LEFT JOIN kategori c ON b.idkategori = c.idkategori ';
 		$strSQL .= 'WHERE a.idcustomerorder = %d ORDER BY idkategori';
@@ -926,6 +945,7 @@ function getDetailOrder($nidCustomerOrder = null){
 				'outstanding' => $data->outstanding,
 				'jammasuk' => date('H:i',$data->masuk),
 				'tglmasuk' => date('d-m-Y',$data->masuk),
+				'hargajual' => $data->hargajual,
 			);
 		}
 	}
@@ -960,7 +980,7 @@ function getDetailCustomerOrder($nidCustomerOrder = null){
 	$detailOrder = null;
 	if (!empty($nidCustomerOrder)) {
 		$strSQL = 'SELECT b.idkategori, c.kategori, a.detailbarcode, a.jumlah, ';
-		$strSQL .= 'a.outstanding, b.namaproduct,a.masuk FROM detailcustomerorder a ';
+		$strSQL .= 'a.outstanding, b.namaproduct,a.masuk,a.hargajual FROM detailcustomerorder a ';
 		$strSQL .= 'LEFT JOIN product b ON a.idproduct = b.idproduct ';
 		$strSQL .= 'LEFT JOIN kategori c ON b.idkategori = c.idkategori ';
 		$strSQL .= 'WHERE a.idcustomerorder = %d ORDER BY idkategori';
@@ -976,6 +996,7 @@ function getDetailCustomerOrder($nidCustomerOrder = null){
 				'outstanding' => $data->outstanding,
 				'jammasuk' => date('H:i',$data->masuk),
 				'tglmasuk' => date('d-m-Y',$data->masuk),
+				'hargajual' => $data->hargajual,
 			);
 		}
 	}
@@ -1003,8 +1024,10 @@ function cekPrinterCommand(){
 		$printOut = printCustomerOrderBarcodeNew($totalPrint);
 	}else if (isset($_GET['idmeja'])){
 		$printOut = printMejaBarcodeWithLogo();
-	}else if (isset($_GET['idghorder'])){
+	}else if (isset($_GET['idghorder'])) {
 		$printOut = printGHCOrder();
+	}else if (isset($_GET['idghorderonly'])){
+		$printOut = printGHCOrderOnly();
 	}else if (isset($_GET['idpenjualangh'])){
         $printOut = printOutPenjualanGHC();
     }
