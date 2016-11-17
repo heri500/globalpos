@@ -124,9 +124,20 @@ function remove_utf8_bom($text)
 	return $text;
 }
 
-function getTotalPembelian($field_name = null, $tglAwal = null, $tglAkhir = null){
+function getTotalPembelian($field_name = null, $tglAwal = null, $tglAkhir = null, $carabayar = 0){
 	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
-		$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+		$tglAwal = $tglAwal.' 00:00';
+		$tglAkhir = $tglAkhir.' 23:59';
+		if ($carabayar == 0){
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+		}else if ($carabayar == 1){
+			//Pembayaran Tunai atau DP
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND carabayar='TUNAI' AND kembali >= 0",$tglAwal,$tglAkhir));
+			$totalPembelian = $totalPembelian + db_result(db_query("SELECT SUM(bayar) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG'))",$tglAwal,$tglAkhir));
+		}else if($carabayar == 2){
+			//Pembayaran Debit Atau Giro
+			$totalPembelian = db_result(db_query("SELECT SUM($field_name) FROM pembelian WHERE tglpembelian BETWEEN '%s' AND '%s' AND carabayar IN ('DEBIT','GIRO')",$tglAwal,$tglAkhir));
+		}
 	}
 	return $totalPembelian;
 }

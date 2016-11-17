@@ -14,8 +14,8 @@ function tabel_pengeluaran_view(){
 			'idtabelkategori' => $idtabelkategori,
 			'idtabelpengeluaran' => $idtabelpengeluaran,
 			'idtabelpemasukan' => $idtabelpemasukan,
-		), 
-	'setting');
+		),
+		'setting');
 	$tabelkategoripengeluaran = '<div class="small-table-wrapper">'.tabel_kategori_pengeluaran($idtabelkategori).'</div>';
 	$tabelpengeluaran = '<div class="small-table-wrapper">'.tabel_pengeluaran($idtabelpengeluaran).'</div>';
 	$tabelpemasukan = '<div class="small-table-wrapper">'.tabel_pemasukan($idtabelpemasukan).'</div>';
@@ -65,15 +65,15 @@ function tabel_kategori_pengeluaran($idtabelkategori){
 	$header_array = array(
 		'edit' => array('data' => '&nbsp;', 'class' => 'tablebutton'),
 		'kategori' => array('data' => 'Kategori', 'class' => 'center'),
-    	'jeniskategoriview' => array('data' => 'Jenis Kategori', 'class' => 'center'),
-    	'katerangan' => array('data' => 'Keterangan', 'class' => 'center'),
+		'jeniskategoriview' => array('data' => 'Jenis Kategori', 'class' => 'center'),
+		'katerangan' => array('data' => 'Keterangan', 'class' => 'center'),
 		'jeniskategori' => array('data' => '', 'class' => 'hidden'),
 		'id' => array('data' => '', 'class' => 'hidden'),
 	);
 	$arraykategori = getKategoriPengeluaran();
 	$rows_array = array();
 	$jenisKategori = array('Pengeluaran', 'Pemasukkan');
-	for ($i = 0;$i < count($arraykategori);$i++){	
+	for ($i = 0;$i < count($arraykategori);$i++){
 		$editbutton = '<img title="Klik untuk mengubah kategori pengeluaran" onclick="edit_kategori('.$arraykategori[$i]->id.', this.parentNode.parentNode);" src="'.base_path().'misc/media/images/edit.ico" width="22">';
 		$cell_array = array();
 		$cell_array['edit'] = array('data' => $editbutton, 'class' => 'center');
@@ -105,9 +105,9 @@ function tabel_pengeluaran($idtabelpengeluaran, $periode = null){
 		'hapus' => array('data' => '&nbsp;', 'class' => 'tablebutton'),
 		'hari' => array('data' => 'Hari', 'class' => 'center'),
 		'tanggal' => array('data' => 'Tanggal', 'class' => 'center'),
-    	'kategori' => array('data' => 'Kategori', 'class' => 'center'),
-    	'keterangan' => array('data' => 'Keterangan', 'class' => 'center'),
-    	'nilai' => array('data' => 'Nilai', 'class' => 'center'),
+		'kategori' => array('data' => 'Kategori', 'class' => 'center'),
+		'keterangan' => array('data' => 'Keterangan', 'class' => 'center'),
+		'nilai' => array('data' => 'Nilai', 'class' => 'center'),
 		'idkategori' => array('data' => '', 'class' => 'hidden'),
 	);
 	$rows_array = array();
@@ -234,7 +234,12 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 			'keterangan' => array('data' => 'Total Omset Penjualan'),
 			'total' => array('data' => number_format($totalPenjualan,0,',','.'), 'class' => 'angka'),
 		);
-		$grandTotalPemasukan = $totalPenjualan;
+		$totalPembayaranHutang = getTotalPembayaran(null,$periodePemasukan);
+		$rows_array[] = array(
+			'keterangan' => array('data' => 'Total Pembayaran Hutang'),
+			'total' => array('data' => number_format($totalPembayaranHutang,0,',','.'), 'class' => 'angka'),
+		);
+		$grandTotalPemasukan = $totalPenjualan + $totalPembayaranHutang;
 		if (count($pemasukanByKategori)){
 			foreach ($pemasukanByKategori AS $idKategori => $totalPemasukan){
 				$cell_array = array();
@@ -257,8 +262,14 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 			'keterangan' => array('data' => 'Total Pembelian'),
 			'total' => array('data' => number_format($totalPembelian,0,',','.'), 'class' => 'angka'),
 		);
-		$grandTotalPengeluaran = $totalPembelian;
+		$totalPembayaranSupplier = getTotalPembayaranSupplier(null, $periodePemasukan);
+		$rows_array[] = array(
+			'keterangan' => array('data' => 'Total Pembayaran Hutang'),
+			'total' => array('data' => number_format($totalPembayaranSupplier,0,',','.'), 'class' => 'angka'),
+		);
+		$grandTotalPengeluaran = $totalPembelian + $totalPembayaranSupplier;
 		if (count($pengeluaranByKategori)){
+			$grandTotalPengeluaranSaja = 0;
 			foreach ($pengeluaranByKategori AS $idKategori => $totalPengeluaran){
 				$cell_array = array();
 				$keteranganPengeluaran = '-';
@@ -269,6 +280,7 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 				$cell_array['total'] = array('data' => number_format($totalPengeluaran,0,',','.'), 'class' => 'angka');
 				$rows_array[] = $cell_array;
 				$grandTotalPengeluaran = $grandTotalPengeluaran + $totalPengeluaran;
+				$grandTotalPengeluaranSaja = $grandTotalPengeluaranSaja + $totalPengeluaran;
 			}
 		}
 		$cell_array['keterangan'] = array('data' => '<strong>Grand Total Pengeluaran</strong>');
@@ -276,16 +288,29 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 		$rows_array[] = $cell_array;
 	}
 	$laporanPengeluaran = theme('table', $header_array, $rows_array, array('id' => 'laporan-pengeluaran','class' => 'display',));
-	$reportData = array($laporanPemasukan,$laporanPengeluaran,$grandTotalPemasukan,$grandTotalPengeluaran);
+	$totalCashPembelian = getTotalPembelian('total',$tgl1,$tgl2,1);
+	$totalCashPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,1) + $totalPembayaranHutang - $totalPembayaranSupplier - $totalCashPembelian - $grandTotalPengeluaranSaja;
+	$totalHutangPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,2);
+	$totalDebitPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,3);
+	$totalDepositPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,4);
+	$reportData = array(
+		$laporanPemasukan,$laporanPengeluaran,$grandTotalPemasukan,
+		$grandTotalPengeluaran,$totalCashPenjualan,$totalHutangPenjualan,
+		$totalDebitPenjualan,$totalDepositPenjualan
+	);
 	return $reportData;
 }
 function createReportAjax(){
 	$reportView = '<div class="report-view">';
 	if (isset($_POST['tglawal']) && isset($_POST['tglakhir'])){
-		$arrayLaporan = createLaporanKeuangan($_POST['tglawal'].' 00:00',$_POST['tglakhir'].' 23:59');
+		$arrayLaporan = createLaporanKeuangan($_POST['tglawal'],$_POST['tglakhir']);
 		$reportView .= '<div class="kolom-pemasukan">'.$arrayLaporan[0].'</div>';
 		$reportView .= '<div class="kolom-pengeluaran">'.$arrayLaporan[1].'</div>';
-		$reportView .= '<div class="kolom-grand-total">Pendapatan Bersih : '.number_format($arrayLaporan[2] - $arrayLaporan[3],0,',','.').'</div>';
+		$reportView .= '<div class="kolom-grand-total">Pendapatan Bersih : Rp. '.number_format($arrayLaporan[2] - $arrayLaporan[3],0,',','.').'</div>';
+		$reportView .= '<div class="kolom-grand-total-2">Total Cash: Rp. '.number_format($arrayLaporan[4],0,',','.').'  <div style="font-size: 10px;">(Cash Penjualan + Pembayaran Hutang Member - Pembayaran Hutang Ke Supplier - Cash Pembelian - Pengeluaran Cash)</div></div>';
+		$reportView .= '<div class="kolom-grand-total-2">Total Piutang: Rp. '.number_format(abs($arrayLaporan[5]),0,',','.').'</div>';
+		$reportView .= '<div class="kolom-grand-total-2">Total Debit/Giro: Rp. '.number_format($arrayLaporan[6],0,',','.').'</div>';
+		$reportView .= '<div class="kolom-grand-total-2">Total Penggunaan Deposit: Rp. '.number_format($arrayLaporan[7],0,',','.').'</div>';
 	}
 	$reportView .= '</div>';
 	print $reportView;

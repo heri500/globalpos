@@ -6,7 +6,7 @@ function getKategoriPengeluaran($restapi = null){
 	$object_array = fetchObjectToArray($object_rs);
 	if (is_null($restapi)){
 		return $object_array;
-	}else{	
+	}else{
 		print json_encode($object_array);
 		exit();
 	}
@@ -34,7 +34,7 @@ function insertKategoriPengeluaran($restapi = null,$variables = null){
 	$variables['changed'] = $variables['created'];
 	if ($variables['kategori'] != ''){
 		db_query("INSERT INTO `cms_kategoripengeluaran` (kategori, jeniskategori, keterangan, created, changed, uid) VALUES ('%s',%d,'%s',%d,%d,%d)",
-		$variables['kategori'],$variables['jeniskategori'],$variables['keterangan'],$variables['created'],$variables['changed'], $variables['uid']);
+				 $variables['kategori'],$variables['jeniskategori'],$variables['keterangan'],$variables['created'],$variables['changed'], $variables['uid']);
 		$variables['id'] = db_last_insert_id('cms_kategoripengeluaran', 'id');
 	}
 	if (is_null($restapi)){
@@ -65,15 +65,15 @@ function updateKategoriPengeluaran($restapi = null,$variables = null){
 	if (isset($variables['id'])){
 		if (isset($variables['kategori']) && $variables['kategori'] != ''){
 			db_query("UPDATE `cms_kategoripengeluaran` SET kategori='%s',changed=%d,uid=%d WHERE id=%d",
-			$variables['kategori'],$variables['changed'],$variables['uid'],$variables['id']);
+					 $variables['kategori'],$variables['changed'],$variables['uid'],$variables['id']);
 		}
 		if (isset($variables['keterangan'])){
 			db_query("UPDATE `cms_kategoripengeluaran` SET keterangan='%s',changed=%d,uid=%d WHERE id=%d",
-			$variables['keterangan'],$variables['changed'],$variables['uid'],$variables['id']);
+					 $variables['keterangan'],$variables['changed'],$variables['uid'],$variables['id']);
 		}
 		if (isset($variables['jeniskategori'])){
 			db_query("UPDATE `cms_kategoripengeluaran` SET jeniskategori='%d',changed=%d,uid=%d WHERE id=%d",
-			$variables['jeniskategori'],$variables['changed'],$variables['uid'],$variables['id']);
+					 $variables['jeniskategori'],$variables['changed'],$variables['uid'],$variables['id']);
 		}
 	}
 	if (is_null($restapi)){
@@ -90,18 +90,18 @@ function getPengeluaranByPeriode($restapi = null,$variables){
 	}
 	if (isset($variables['awal']) && isset($variables['akhir'])){
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
-		FROM `cms_pengeluaran` WHERE `tglpengeluaran` >= %d AND `tglpengeluaran` <= %d", $variables['awal'],$variables['akhir']);	
+		FROM `cms_pengeluaran` WHERE `tglpengeluaran` >= %d AND `tglpengeluaran` <= %d", $variables['awal'],$variables['akhir']);
 	}else{
 		$variables['awal'] = strtotime(date('Y-m').'-01 00:00');
 		$tglakhir = geLastDay(date('n'), date('Y'));
 		$variables['akhir'] = strtotime(date('Y-m').'-'.$tglakhir.' 23:59');
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
-		FROM `cms_pengeluaran` WHERE `tglpengeluaran` >= %d AND `tglpengeluaran` <= %d", $variables['awal'],$variables['akhir']);	
+		FROM `cms_pengeluaran` WHERE `tglpengeluaran` >= %d AND `tglpengeluaran` <= %d", $variables['awal'],$variables['akhir']);
 	}
 	$object_array = fetchObjectToArray($object_rs);
 	if (is_null($restapi)){
 		return $object_array;
-	}else{	
+	}else{
 		print json_encode($object_array);
 		exit();
 	}
@@ -112,15 +112,15 @@ function getPengeluaranByKategori($restapi = null,$variables){
 	}
 	if (isset($variables['idkategori'])){
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
-		FROM `cms_pengeluaran` WHERE `kategori` = %d", $variables['idkategori']);	
+		FROM `cms_pengeluaran` WHERE `kategori` = %d", $variables['idkategori']);
 	}else{
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
-		FROM `cms_pengeluaran`");	
+		FROM `cms_pengeluaran`");
 	}
 	$object_array = fetchObjectToArray($object_rs);
 	if (is_null($restapi)){
 		return $object_array;
-	}else{	
+	}else{
 		print json_encode($object_array);
 		exit();
 	}
@@ -135,11 +135,11 @@ function getPengeluaranByPeriodeKategori($restapi = null,$variables){
 		if (isset($variables['idkategori'])){
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 			FROM `cms_pengeluaran` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) AND `kategori`=%d",
-			strtotime($variables['awal']),strtotime($variables['akhir']),$variables['idkategori']);
+								  strtotime($variables['awal']),strtotime($variables['akhir']),$variables['idkategori']);
 		}else{
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 			FROM `cms_pengeluaran` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) ",
-			strtotime($variables['awal']),strtotime($variables['akhir']));
+								  strtotime($variables['awal']),strtotime($variables['akhir']));
 		}
 	}else{
 		$variables['awal'] = strtotime(date('Y-m').'-01 00:00');
@@ -148,17 +148,17 @@ function getPengeluaranByPeriodeKategori($restapi = null,$variables){
 		if (isset($variables['idkategori'])){
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 			FROM `cms_pengeluaran` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d)  AND `kategori`=%d ORDER BY kategori",
-			$variables['awal'],$variables['akhir'],$variables['idkategori']);	
+								  $variables['awal'],$variables['akhir'],$variables['idkategori']);
 		}else{
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 			FROM `cms_pengeluaran` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) ORDER BY kategori",
-			$variables['awal'],$variables['akhir']);	
+								  $variables['awal'],$variables['akhir']);
 		}
 	}
 	$object_array = fetchObjectToArray($object_rs);
 	if (is_null($restapi)){
 		return $object_array;
-	}else{	
+	}else{
 		print json_encode($object_array);
 		exit();
 	}
@@ -171,14 +171,14 @@ function getPemasukanByPeriode($restapi = null,$variables){
 	if (isset($variables['awal']) && isset($variables['akhir'])){
 		$object_rs = db_query("SELECT `id`, `keterangan`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 		FROM `cms_pemasukan` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) AND `kategori`=%d",
-		strtotime($variables['awal']),strtotime($variables['akhir']),$variables['idkategori']);
+							  strtotime($variables['awal']),strtotime($variables['akhir']),$variables['idkategori']);
 	}else{
 		$variables['awal'] = strtotime(date('Y-m').'-01 00:00');
 		$tglakhir = geLastDay(date('n'), date('Y'));
 		$variables['akhir'] = strtotime(date('Y-m').'-'.$tglakhir.' 23:59');
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 		FROM `cms_pemasukan` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d)",
-		$variables['awal'],$variables['akhir']);
+							  $variables['awal'],$variables['akhir']);
 	}
 	$object_array = fetchObjectToArray($object_rs);
 	if (is_null($restapi)){
@@ -218,11 +218,11 @@ function getPemasukanByPeriodeKategori($restapi = null,$variables){
 		if (isset($variables['idkategori'])){
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpemasukan`, `created`, `changed`, `uid`
 			FROM `cms_pemasukan` WHERE (`tglpemasukan` >= %d AND `tglpemasukan` <= %d)  AND `kategori`=%d ORDER BY kategori",
-			$variables['awal'],$variables['akhir'],$variables['idkategori']);
+								  $variables['awal'],$variables['akhir'],$variables['idkategori']);
 		}else{
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpemasukan`, `created`, `changed`, `uid`
 			FROM `cms_pemasukan` WHERE (`tglpemasukan` >= %d AND `tglpemasukan` <= %d) ORDER BY kategori",
-			$variables['awal'],$variables['akhir']);
+								  $variables['awal'],$variables['akhir']);
 		}
 	}
 	$object_array = fetchObjectToArray($object_rs);
@@ -238,19 +238,19 @@ function fetchObjectToArray($object_rs){
 	while ($object_dt = db_fetch_object($object_rs)){
 		$object_array[] = $object_dt;
 	}
-	return $object_array;	
+	return $object_array;
 }
 function geLastDay($mon, $year) {
 	$daysinmonth = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	$days = $daysinmonth[$mon-1];
 	if ($mon == 2 && ($year % 4) == 0 && (($year % 100) != 0 ||
-	($year % 400) == 0)) $days++;
+			($year % 400) == 0)) $days++;
 	//if ($mon == 2 && ($year % 4) == 0 && ($year % 1000) != 0) $days++;
 	$lastday = $days;
 	return $lastday;
 }
 function arrayHari(){
-	$hari_array = array('Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu');	
+	$hari_array = array('Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu');
 	return $hari_array;
 }
 function arrayBulanSingkat(){
@@ -290,15 +290,17 @@ function insertPengeluaran($restapi = null,$variables = null){
 		$variables['jumlah'] = $_POST['jumlah'];
 		$variables['keterangan'] = $_POST['keterangan'];
 		$splitTanggal = explode('-',$_POST['tanggal']);
-		$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+		$jamPengeluaran = date('H');
+		$menitPengeluaran = date('m');
+		$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 	}
 	$variables['uid'] = $user->uid;
 	$variables['created'] = time();
 	$variables['changed'] = $variables['created'];
 	if ($variables['idkategori'] != '' && $variables['jumlah'] > 0 && $variables['tanggal'] != ''){
 		db_query("INSERT INTO cms_pengeluaran (kategori, nilai, tglpengeluaran, keterangan, created, changed, uid) VALUES (%d,'%f',%d,'%s',%d,%d,%d)",
-		$variables['idkategori'],$variables['jumlah'],$variables['tanggal'],
-		$variables['keterangan'],$variables['created'],$variables['changed'], $variables['uid']);
+				 $variables['idkategori'],$variables['jumlah'],$variables['tanggal'],
+				 $variables['keterangan'],$variables['created'],$variables['changed'], $variables['uid']);
 		$variables['id'] = db_last_insert_id('cms_pengeluaran', 'id');
 	}
 	if (is_null($restapi)){
@@ -319,7 +321,9 @@ function updatePengeluaran($restapi = null,$variables = null){
 		}
 		if (isset($_POST['tanggal'])){
 			$splitTanggal = explode('-',$_POST['tanggal']);
-			$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+			$jamPengeluaran = date('H');
+			$menitPengeluaran = date('m');
+			$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		}
 		if (isset($_POST['keterangan'])){
 			$variables['keterangan'] = $_POST['keterangan'];
@@ -369,7 +373,9 @@ function insertPemasukan($restapi = null,$variables = null){
 		$variables['jumlah'] = $_POST['jumlah'];
 		$variables['keterangan'] = $_POST['keterangan'];
 		$splitTanggal = explode('-',$_POST['tanggal']);
-		$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+		$jamPengeluaran = date('H');
+		$menitPengeluaran = date('m');
+		$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 	}
 	$variables['uid'] = $user->uid;
 	$variables['created'] = time();
@@ -398,7 +404,9 @@ function updatePemasukan($restapi = null,$variables = null){
 		}
 		if (isset($_POST['tanggal'])){
 			$splitTanggal = explode('-',$_POST['tanggal']);
-			$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+			$jamPengeluaran = date('H');
+			$menitPengeluaran = date('m');
+			$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		}
 		if (isset($_POST['keterangan'])){
 			$variables['keterangan'] = $_POST['keterangan'];

@@ -102,9 +102,9 @@ function tabel_laundry($tgl1,$tgl2){
 	}else{
 		$tabellaundry .= '<th style="text-align:right" colspan="7">Total:&nbsp;&nbsp;</th>';
 	}
-	$totaljual = 0;
-	$totalbayar = 0;
-	$totalSisa = 0;
+	$totaljual = getTotalLaundry('total',$tgl1,$tgl2);
+	$totalbayar = getTotalLaundry('bayar',$tgl1,$tgl2);
+	$totalSisa = getTotalLaundry('total-bayar',$tgl1,$tgl2);
 	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabellaundry .= '<th>&nbsp;</th>';
 	$tabellaundry .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
