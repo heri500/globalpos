@@ -199,15 +199,12 @@ function simpan_laundry(){
 			}
 		}
 		$pecahdetail = explode("&",$_POST["detail_produk"]);
+		dpm($pecahdetail);
 		$totalmodal = 0;
 		foreach ($pecahdetail as $parameter){
 			$pecahparameter = explode("=",$parameter);
 			$pecahnilai = explode("___",$pecahparameter[1]);
-			if (is_string($pecahnilai[0])){
-				$IDPRODUK =	substr($pecahnilai[0],3);
-			}else if(is_integer($pecahnilai[0])){
-				$IDPRODUK =	$pecahnilai[0];
-			}
+			$IDPRODUK =	$pecahnilai[0];
 			$QTY = $pecahnilai[1];
 			$HARGAJUAL = $pecahnilai[2];
 			$DISKON = $pecahnilai[3];

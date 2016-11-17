@@ -55,7 +55,7 @@ function tambahproduk(){
 		success: function(data){
 			var pecahdata = new Array();
 			pecahdata = data.split(";");
-			if (pecahdata[0] != "error"){
+			if (pecahdata[0].trim() != "error"){
 				nilaisubtotal = pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100);
 				subtotal = number_format(nilaisubtotal,0,",",".");
 				nilaikirim = pecahdata[0] +"___1___"+ pecahdata[2] +"___"+ pecahdata[3] +"___"+ pecahdata[5];
