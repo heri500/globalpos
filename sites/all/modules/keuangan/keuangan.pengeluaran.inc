@@ -118,7 +118,7 @@ function tabel_pengeluaran($idtabelpengeluaran, $periode = null){
 		$cell_array['edit'] = array('data' => $editbutton, 'class' => 'center');
 		$cell_array['hapus'] = array('data' => $deletebutton, 'class' => 'center');
 		$index_hari = date('w', $array_pengeluaran[$i]->tglpengeluaran);
-		$tglpengeluaran = date('d-m-Y', $array_pengeluaran[$i]->tglpengeluaran);
+		$tglpengeluaran = date('Y-m-d', $array_pengeluaran[$i]->tglpengeluaran);
 		$cell_array['hari'] = array('data' => $arrayhari[$index_hari], 'class' => 'center');
 		$cell_array['tanggal'] = array('data' => $tglpengeluaran, 'class' => 'center');
 		$cell_array['kategori'] = array('data' => $array_pengeluaran[$i]->kategori, 'class' => 'align-left');
@@ -163,7 +163,7 @@ function tabel_pemasukan($idtabelpemasukan, $periode = null){
 		$cell_array['edit'] = array('data' => $editbutton, 'class' => 'center');
 		$cell_array['hapus'] = array('data' => $deletebutton, 'class' => 'center');
 		$index_hari = date('w', $array_pemasukan[$i]->tglpemasukan);
-		$tglpemasukan = date('d-m-Y', $array_pemasukan[$i]->tglpemasukan);
+		$tglpemasukan = date('Y-m-d', $array_pemasukan[$i]->tglpemasukan);
 		$cell_array['hari'] = array('data' => $arrayhari[$index_hari], 'class' => 'center');
 		$cell_array['tanggal'] = array('data' => $tglpemasukan, 'class' => 'center');
 		$cell_array['kategori'] = array('data' => $array_pemasukan[$i]->kategori, 'class' => 'align-left');
