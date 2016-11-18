@@ -110,3 +110,30 @@ function do_pembayaran_hutang($variables = null){
 		}
 	}
 }
+function getTotalPembayaranSupplier($idSupplier = null, $periode = null){
+	$totalpembayaran = 0;
+	if (!empty($idSupplier)){
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d'", $idSupplier)
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d' AND tglbayar BETWEEN '%s' AND '%s' ", $idSupplier, $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}else{
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang")
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE tglbayar BETWEEN '%s' AND '%s' ", $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}
+	return $totalpembayaran;
+}
