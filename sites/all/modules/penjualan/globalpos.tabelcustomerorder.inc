@@ -140,11 +140,10 @@ function detail_customerorder(){
 		$tabelcustomerorder .= '<th class="qty">QTY</th>';
 		$tabelcustomerorder .= '<th class="qty">DIAMBIL</th>';
 		$tabelcustomerorder .= '<th class="qty">SISA</th>';
-		$tabelcustomerorder .= '<th class="qty">PRODUKSI</th>';
-		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
-		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
 		$tabelcustomerorder .= '<th>H.JUAL</th>';
 		$tabelcustomerorder .= '<th>SUBTOTAL</th>';
+		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
+		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
 		$tabelcustomerorder .= '</tr>';
 		$tabelcustomerorder .= '</thead>';
 		$tabelcustomerorder .= '<tbody>';

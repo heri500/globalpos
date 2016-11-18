@@ -70,7 +70,7 @@ function tampiltabelcustomerorder(){
 		]
 	});
 }
-function tampiltabelcustomerorderdetail(){
+function tampiltabelcustomerorderdetail(selectedId){
 	oTable = $("#tabel_detail_customerorder").dataTable( {
 		"bJQueryUI": true,
 		"bAutoWidth": false,
@@ -78,7 +78,12 @@ function tampiltabelcustomerorderdetail(){
 		"bLengthChange": false,
 		"bInfo": false,
 		"aaSorting": [[0, "asc"]],
-		"sDom": "<'H'<'toolbar'>fr>t<'F'ip>"
+		"sDom": "<'H'<'toolbar'>fr>t<'F'ip>",
+		'scrollY': '330px',
+		'scrollCollapse': true,
+		'processing': true,
+		'serverSide': true,
+		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailcustomerorder&idcustomerorder=' + selectedId,
 	});
 }
 function view_detail(idcustomerorder,nonota){
@@ -92,7 +97,7 @@ function view_detail(idcustomerorder,nonota){
 		cache: false,
 		success: function(data){
 			$('#dialogdetail').html(data);
-			tampiltabelcustomerorderdetail();
+			tampiltabelcustomerorderdetail(idcustomerorder);
 			$('div.toolbar').html('No. Nota : '+ nonota);
 			$('#dialogdetail').dialog('open');
 		}
