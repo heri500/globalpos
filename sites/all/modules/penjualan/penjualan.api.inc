@@ -495,11 +495,11 @@ function getTotalLaundry($field_name = null, $tglAwal = null, $tglAkhir = null, 
 			}
 			if (empty($idPelanggan)) {
 				$strSQL = "SELECT SUM(bayar) FROM titipanlaundry WHERE tglpenjualan BETWEEN '%s' AND ";
-				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG'))";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN'))";
 				$totalLaundryDP = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
 			}else{
 				$strSQL = "SELECT SUM(bayar) FROM titipanlaundry WHERE tglpenjualan BETWEEN '%s' AND ";
-				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='HUTANG')) AND idpelanggan = %d";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN')) AND idpelanggan = %d";
 				$totalLaundryDP = db_result(db_query($strSQL,$tglAwal,$tglAkhir,$idPelanggan));
 			}
 			$totalLaundry = $totalLaundryCash + $totalLaundryDP;
