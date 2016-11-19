@@ -472,6 +472,70 @@ function getTotalPenjualan2($field_name1 = null, $field_name2 = null, $tglAwal =
 	}
 	return $totalPenjualan;
 }
+function getTotalCustomerOrder($field_name = null, $tglAwal = null, $tglAkhir = null, $carabayar = 0, $idPelanggan = 0){
+	if (!empty($field_name) && !empty($tglAwal) && !empty($tglAkhir)){
+		$tglAwal = $tglAwal.' 00:00';
+		$tglAkhir = $tglAkhir.' 23:59';
+		if ($carabayar == 0){
+			if (!empty($idPelanggan)){
+				$totalCustomerOrder = db_result(db_query("SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s' AND idpelanggan=%d",$tglAwal,$tglAkhir, $idPelanggan));
+			}else{
+				$totalCustomerOrder = db_result(db_query("SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s'",$tglAwal,$tglAkhir));
+			}
+		}else if($carabayar == 1){
+			//Untuk mendapatkan total cash saja
+			if (empty($idPelanggan)){
+				$strSQL = "SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s' AND carabayar='TUNAI' AND kembali >= 0";
+				$totalCustomerOrderCash = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+			}else{
+				$strSQL = "SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s' AND carabayar='TUNAI' AND kembali >= 0 AND idpelanggan=%d";
+				$totalCustomerOrderCash = db_result(db_query($strSQL,$tglAwal,$tglAkhir,$idPelanggan));
+			}
+			if (empty($idPelanggan)) {
+				$strSQL = "SELECT SUM(bayar) FROM customer_order WHERE tglorder BETWEEN '%s' AND ";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN'))";
+				$totalCustomerOrderDP = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+			}else{
+				$strSQL = "SELECT SUM(bayar) FROM customer_order WHERE tglorder BETWEEN '%s' AND ";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN')) AND idpelanggan = %d";
+				$totalCustomerOrderDP = db_result(db_query($strSQL,$tglAwal,$tglAkhir,$idPelanggan));
+			}
+			$totalCustomerOrder = $totalCustomerOrderCash + $totalCustomerOrderDP;
+		}else if($carabayar == 2){
+			//Untuk mendapatkan total hutang dari customer_order
+			if (empty($idPelanggan)) {
+				$strSQL = "SELECT SUM(kembali) FROM customer_order WHERE tglorder BETWEEN '%s' AND ";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN'))";
+				$totalCustomerOrder = db_result(db_query($strSQL,$tglAwal,$tglAkhir));
+			}else{
+				$strSQL = "SELECT SUM(kembali) FROM customer_order WHERE tglorder BETWEEN '%s' AND ";
+				$strSQL .= "'%s' AND ((carabayar='TUNAI' AND kembali < 0) OR (carabayar='KEMUDIAN')) AND idpelanggan = %d";
+				$totalCustomerOrder = db_result(db_query($strSQL,$tglAwal,$tglAkhir,$idPelanggan));
+			}
+		}else if($carabayar == 3){
+			//Untuk mendapatkan total debit/giro saja
+			if (empty($idPelanggan)) {
+				$totalCustomerOrder = db_result(
+					db_query(
+						"SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s' AND carabayar IN ('DEBIT','GIRO')",
+						$tglAwal,
+						$tglAkhir
+					)
+				);
+			}else{
+				$totalCustomerOrder = db_result(
+					db_query(
+						"SELECT SUM($field_name) FROM customer_order WHERE tglorder BETWEEN '%s' AND '%s' AND carabayar IN ('DEBIT','GIRO') AND idpelanggan=%d",
+						$tglAwal,
+						$tglAkhir,
+						$idPelanggan
+					)
+				);
+			}
+		}
+	}
+	return $totalCustomerOrder;
+}
 function getRandomString($length=22)
 {
 	$key = '';

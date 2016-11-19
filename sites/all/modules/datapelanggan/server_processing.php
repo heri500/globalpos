@@ -985,12 +985,12 @@ function serverSideDetailCustomerOrder($request){
 		8 => 'detord.hargajual',
 		9 => '(detord.jumlah*detord.hargajual)',
 	);
-	$orderColumnArray = $_REQUEST['order'];
+	$orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
+	if (is_null($pageLength) || $pageLength == -1){
 		$pageLength = 25;
 	}
 	$firstRecord = $pageStart;
@@ -1026,14 +1026,22 @@ function serverSideDetailCustomerOrder($request){
 	}
 	while($data = db_fetch_object($result)){
 		$rowData = array();
-		$deletebutton = '<img title="Klik untuk menghapus detail order" onclick="hapus_detail('.$data->id.');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$deletebutton = '<img title="Klik untuk menghapus detail order" onclick="hapus_detail('.$data->id.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
 		$rowData[] = $deletebutton;
 		$rowData[] = $data->barcode;
 		$rowData[] = $data->namaproduct;
 		$rowData[] = $data->jumlah;
 		$rowData[] = $data->jumlah - $data->sisa;
 		$rowData[] = $data->sisa;
-		$rowData[] = $data->kategori;
+		$rowData[] = number_format($data->hargajual,0,',','.');
+		$rowData[] = number_format($data->subtotal,0,',','.');
+		$rowData[] = date('d M H:i',$data->perkiraan_ambil);
+		if (!empty($data->diambil)){
+			$rowData[] = date('d M H:i',$data->diambil);
+		}else{
+			$rowData[] = '-';
+		}
+		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
 	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM detailcustomerorder"));
@@ -1045,6 +1053,44 @@ function serverSideDetailCustomerOrder($request){
 		"recordsFiltered" => intval( $recordsFiltered ),
 		"data"            => $output
 	);
+}
+function serverSideGetProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
+function serverSideGetOneProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 1",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
 }
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
@@ -1066,6 +1112,10 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideCustomerOrder($_GET);
 }else if($_GET['request_data'] == 'detailcustomerorder'){
 	$returnArray = serverSideDetailCustomerOrder($_GET);
+}else if($_GET['request_data'] == 'getproduct'){
+	$returnArray = serverSideGetProduct($_GET);
+}else if($_GET['request_data'] == 'getproductbarcode'){
+	$returnArray = serverSideGetOneProduct($_GET);
 }
 echo json_encode($returnArray);
 ?>

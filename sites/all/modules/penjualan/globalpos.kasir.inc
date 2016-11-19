@@ -439,8 +439,13 @@ function cari_barang(){
 		$KATACARI = '%'.$_GET["term"].'%';
 		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
-		while ($data = db_fetch_object($result)){
-			$items[] = array('value' => $data->namaproduct.'--->[Rp. '.number_format($data->hargajual,0,',','.').']['.$data->stok.']','barcode' => $data->barcode,'alt_code' => $data->alt_code);
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct . '--->[Rp. ' . number_format($data->hargajual,0,',','.') . '][' . $data->stok . ']',
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+			);
 		}
 		print json_encode($items);
 	}
