@@ -192,16 +192,16 @@ function customerorder_produk($tgl1,$tgl2){
 	$tabelcustomerorder .= '<thead>';
 	$tabelcustomerorder .= '<tr>';
 	$tabelcustomerorder .= '<th>BARCODE</th>';
-	$tabelcustomerorder .= '<th>JASA</th>';
+	$tabelcustomerorder .= '<th>PRODUCT</th>';
 	$tabelcustomerorder .= '<th class="qty">QTY</th>';
 	$tabelcustomerorder .= '<th>H.JUAL</th>';
 	$tabelcustomerorder .= '<th>SUBTOTAL</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
-	$result = db_query("SELECT d.namasupplier, a.tglpenjualan, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
-	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN titipancustomerorder a ON a.idcustomerorder=b.idcustomerorder
-	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglpenjualan BETWEEN '%s' AND '%s'
+	$result = db_query("SELECT d.namasupplier, a.tglorder, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
+	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN customer_order a ON a.id=b.idcustomerorder
+	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglorder BETWEEN '%s' AND '%s'
 	GROUP BY b.idproduct",$tgl1,$tgl2);
 	$totaljual = 0;
 	$totalmodal = 0;

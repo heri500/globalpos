@@ -17,102 +17,198 @@ function addCommas(nStr){
 	return x1 + x2;
 }
 function tampiltabelcustomerorder(){
-	oTable = $('#tabel_customerorder').dataTable( {
-        'bJQueryUI': true,
-        'bAutoWidth': false,
-        'sPaginationType': 'full_numbers',
-        'bInfo': true,
-        'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
-        'iDisplayLength': 100,
-        'order': [[ 7, "desc" ]],
-        'processing': true,
-        'serverSide': true,
-        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
-        buttons: [
-            {
-                extend: 'colvis',
-                columns: [4,5,6,7,8,9,10,11,12,13,14,15]
-            }, 'copy', 'excel', 'print'
-        ],
-        'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
-        'createdRow': function ( row, data, index ) {
-            row.id = data[(data.length - 1)];
-            $('td', row).eq(1).addClass('center');
-            $('td', row).eq(2).addClass('center');
-            $('td', row).eq(3).addClass('center');
-            $('td', row).eq(4).addClass('center');
-            $('td', row).eq(5).addClass('center');
-            $('td', row).eq(6).addClass('center');
-            $('td', row).eq(7).addClass('center');
-			$('td', row).eq(8).addClass('center');
-            $('td', row).eq(9).addClass('angka');
-            $('td', row).eq(10).addClass('angka');
-            $('td', row).eq(11).addClass('center');
-            $('td', row).eq(12).addClass('angka');
-            $('td', row).eq(13).addClass('angka');
-            $('td', row).eq(14).addClass('center');
-            $('td', row).eq(15).addClass('center');
-            $('td', row).eq(16).addClass('center');
-			$('td', row).eq(17).addClass('center');
-        },
-		'drawCallback': function( settings ) {
-			var renderer = "bmp";
-			var btype = "ean13";
-			var settings = {
-				output:renderer,
-				barWidth: 1,
-				barHeight: 20
-			};
-			$(".barcode-place").each(function(){
-				barcode_value = $(this).attr('id');
-				$(this).barcode(barcode_value, btype, settings);
-			});
-		},
-		"aoColumnDefs": [
-			{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
-		],
-        'footerCallback': function ( row, data, start, end, display ) {
-            var api = this.api(), data;
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                i.replace(/[\$.]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-            // Total over all pages
-            total = api
-                .column( 10 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            // Update footer
-            $( api.column( 10 ).footer() ).html(
-                'Rp. '+ addCommas(total)
-            ).addClass('angka');
-            total = api
-                .column( 12 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            // Update footer
-            $( api.column( 12 ).footer() ).html(
-                'Rp. '+ addCommas(total)
-            ).addClass('angka');
-            total = api
-                .column( 13 )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-            // Update footer
-            $( api.column( 13 ).footer() ).html(
-                'Rp. '+ addCommas(total)
-            ).addClass('angka');
-        },
-	});
+	if (Drupal.settings.urutan == 1){
+		oTable = $('#tabel_customerorder').dataTable( {
+			'bJQueryUI': true,
+			'bAutoWidth': false,
+			'sPaginationType': 'full_numbers',
+			'bInfo': true,
+			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+			'iDisplayLength': 100,
+			'order': [[ 7, "desc" ]],
+			'processing': true,
+			'serverSide': true,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
+			buttons: [
+				{
+					extend: 'colvis',
+					columns: [4,5,6,7,8,9,10,11,12,13,14,15]
+				}, 'copy', 'excel', 'print'
+			],
+			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
+			'createdRow': function ( row, data, index ) {
+				row.id = data[(data.length - 1)];
+				$('td', row).eq(1).addClass('center');
+				$('td', row).eq(2).addClass('center');
+				$('td', row).eq(3).addClass('center');
+				$('td', row).eq(4).addClass('center');
+				$('td', row).eq(5).addClass('center');
+				$('td', row).eq(6).addClass('center');
+				$('td', row).eq(7).addClass('center');
+				$('td', row).eq(8).addClass('center');
+				$('td', row).eq(9).addClass('angka');
+				$('td', row).eq(10).addClass('angka');
+				$('td', row).eq(11).addClass('center');
+				$('td', row).eq(12).addClass('angka');
+				$('td', row).eq(13).addClass('angka');
+				$('td', row).eq(14).addClass('center');
+				$('td', row).eq(15).addClass('center');
+				$('td', row).eq(16).addClass('center');
+				$('td', row).eq(17).addClass('center');
+			},
+			'drawCallback': function( settings ) {
+				var renderer = "bmp";
+				var btype = "ean13";
+				var settings = {
+					output:renderer,
+					barWidth: 1,
+					barHeight: 20
+				};
+				$(".barcode-place").each(function(){
+					barcode_value = $(this).attr('id');
+					$(this).barcode(barcode_value, btype, settings);
+				});
+			},
+			"aoColumnDefs": [
+				{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
+			],
+			'footerCallback': function ( row, data, start, end, display ) {
+				var api = this.api(), data;
+				// Remove the formatting to get integer data for summation
+				var intVal = function ( i ) {
+					return typeof i === 'string' ?
+					i.replace(/[\$.]/g, '')*1 :
+						typeof i === 'number' ?
+							i : 0;
+				};
+				// Total over all pages
+				total = api
+					.column( 10 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 10 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 12 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 12 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 13 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 13 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+			},
+		});
+	}else{
+		oTable = $('#tabel_customerorder').dataTable( {
+			'bJQueryUI': true,
+			'bAutoWidth': false,
+			'sPaginationType': 'full_numbers',
+			'bInfo': true,
+			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+			'iDisplayLength': 100,
+			'order': [[ 1, "desc" ]],
+			/*'processing': true,
+			'serverSide': true,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,*/
+			buttons: [
+				'copy', 'excel', 'print'
+			],
+			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
+			/*'createdRow': function ( row, data, index ) {
+				row.id = data[(data.length - 1)];
+				$('td', row).eq(1).addClass('center');
+				$('td', row).eq(2).addClass('center');
+				$('td', row).eq(3).addClass('center');
+				$('td', row).eq(4).addClass('center');
+				$('td', row).eq(5).addClass('center');
+				$('td', row).eq(6).addClass('center');
+				$('td', row).eq(7).addClass('center');
+				$('td', row).eq(8).addClass('center');
+				$('td', row).eq(9).addClass('angka');
+				$('td', row).eq(10).addClass('angka');
+				$('td', row).eq(11).addClass('center');
+				$('td', row).eq(12).addClass('angka');
+				$('td', row).eq(13).addClass('angka');
+				$('td', row).eq(14).addClass('center');
+				$('td', row).eq(15).addClass('center');
+				$('td', row).eq(16).addClass('center');
+				$('td', row).eq(17).addClass('center');
+			},
+			'drawCallback': function( settings ) {
+				var renderer = "bmp";
+				var btype = "ean13";
+				var settings = {
+					output:renderer,
+					barWidth: 1,
+					barHeight: 20
+				};
+				$(".barcode-place").each(function(){
+					barcode_value = $(this).attr('id');
+					$(this).barcode(barcode_value, btype, settings);
+				});
+			},
+			"aoColumnDefs": [
+				{ "bSortable": false, "aTargets": [ 0,1,2,3,4,6,8,12,13,16,18 ] }
+			],
+			'footerCallback': function ( row, data, start, end, display ) {
+				var api = this.api(), data;
+				// Remove the formatting to get integer data for summation
+				var intVal = function ( i ) {
+					return typeof i === 'string' ?
+					i.replace(/[\$.]/g, '')*1 :
+						typeof i === 'number' ?
+							i : 0;
+				};
+				// Total over all pages
+				total = api
+					.column( 10 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 10 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 12 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 12 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 13 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 13 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+			},*/
+		});
+	}
 }
 function tampiltabelcustomerorderdetail(selectedId){
 	selectedOrder = selectedId;
