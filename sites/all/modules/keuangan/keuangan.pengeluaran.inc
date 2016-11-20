@@ -241,6 +241,7 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 		);
 		$grandTotalPemasukan = $totalPenjualan + $totalPembayaranHutang;
 		if (count($pemasukanByKategori)){
+			$grandTotalPemasukanSaja = 0;
 			foreach ($pemasukanByKategori AS $idKategori => $totalPemasukan){
 				$cell_array = array();
 				$keteranganPemasukan = '-';
@@ -251,6 +252,7 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 				$cell_array['total'] = array('data' => number_format($totalPemasukan,0,',','.'), 'class' => 'angka');
 				$rows_array[] = $cell_array;
 				$grandTotalPemasukan = $grandTotalPemasukan + $totalPemasukan;
+				$grandTotalPemasukanSaja = $grandTotalPemasukanSaja + $totalPemasukan;
 			}
 		}
 		$cell_array['keterangan'] = array('data' => '<strong>Grand Total Pemasukan</strong>');
@@ -289,7 +291,7 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 	}
 	$laporanPengeluaran = theme('table', $header_array, $rows_array, array('id' => 'laporan-pengeluaran','class' => 'display',));
 	$totalCashPembelian = getTotalPembelian('total',$tgl1,$tgl2,1);
-	$totalCashPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,1) + $totalPembayaranHutang - $totalPembayaranSupplier - $totalCashPembelian - $grandTotalPengeluaranSaja;
+	$totalCashPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,1) + $grandTotalPemasukanSaja + $totalPembayaranHutang - $totalPembayaranSupplier - $totalCashPembelian - $grandTotalPengeluaranSaja;
 	$totalHutangPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,2);
 	$totalDebitPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,3);
 	$totalDepositPenjualan = getTotalPenjualan('total',$tgl1,$tgl2,4);
@@ -307,7 +309,7 @@ function createReportAjax(){
 		$reportView .= '<div class="kolom-pemasukan">'.$arrayLaporan[0].'</div>';
 		$reportView .= '<div class="kolom-pengeluaran">'.$arrayLaporan[1].'</div>';
 		$reportView .= '<div class="kolom-grand-total">Pendapatan Bersih : Rp. '.number_format($arrayLaporan[2] - $arrayLaporan[3],0,',','.').'</div>';
-		$reportView .= '<div class="kolom-grand-total-2">Total Cash: Rp. '.number_format($arrayLaporan[4],0,',','.').'  <div style="font-size: 10px;">(Cash Penjualan + Pembayaran Hutang Member - Pembayaran Hutang Ke Supplier - Cash Pembelian - Pengeluaran Cash)</div></div>';
+		$reportView .= '<div class="kolom-grand-total-2">Total Cash: Rp. '.number_format($arrayLaporan[4],0,',','.').'  <div style="font-size: 10px;">(Cash Penjualan + Pemasukan Lain + Pembayaran Hutang Member - Pembayaran Hutang Ke Supplier - Cash Pembelian - Pengeluaran Cash)</div></div>';
 		$reportView .= '<div class="kolom-grand-total-2">Total Piutang: Rp. '.number_format(abs($arrayLaporan[5]),0,',','.').'</div>';
 		$reportView .= '<div class="kolom-grand-total-2">Total Debit/Giro: Rp. '.number_format($arrayLaporan[6],0,',','.').'</div>';
 		$reportView .= '<div class="kolom-grand-total-2">Total Penggunaan Deposit: Rp. '.number_format($arrayLaporan[7],0,',','.').'</div>';
