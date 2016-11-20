@@ -1010,7 +1010,7 @@ function serverSideDetailCustomerOrder($request){
 	$strCriteria = "";
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (product.barcode LIKE '%%%s%%' OR ";
-		$strCriteria .= "product.namaproduct LIKE '%%%s%%' OR ";
+		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
 	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";

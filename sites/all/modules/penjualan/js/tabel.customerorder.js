@@ -236,7 +236,10 @@ function tampiltabelcustomerorderdetail(selectedId){
 				select: true,
 				style   : 'margin: 0',
 				tooltip   : 'Klik untuk mengubah jumlah barang',
-				indicator : 'Saving...'
+				indicator : 'Saving...',
+				callback : function(value, settings) {
+					oTable2.fnDraw();
+				}
 			});
 			$('td', row).eq(4).addClass('angka');
 			$('td', row).eq(5).addClass('angka');
