@@ -1,0 +1,137 @@
+<?php
+
+function datapremis_menu() {
+    $items['datapremis'] = array(
+        'title' => t('Informasi Premis'),
+        'description' => 'Manajemen data premis',
+        'page callback' => 'data_premis',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+} // end hook menu
+
+function datapremis_perm() {
+    return array('Access Data Premis','Admin Data Premis');
+}
+function array_zone_gisb(){
+    return array(
+        '001' => 'Utara',
+        '002' => 'Kedah',
+        '003' => 'PKBM',
+        '004' => 'Penang',
+        '005' => 'Perak',
+        '006' => 'Barat',
+        '007' => 'Pusat',
+        '008' => 'Tengah',
+        '009' => 'Utama',
+        '010' => 'Eksekutif',
+        '011' => 'Yayasan',
+        '012' => 'Negeri Sembilan',
+        '013' => 'Melaka',
+        '014' => 'Johor 1',
+        '015' => 'Johor 2',
+        '016' => 'Pahang',
+        '017' => 'Trengganu',
+        '018' => 'Kelantan',
+        '019' => 'Sabah 1/3',
+        '020' => 'Sabah 2/4',
+        '021' => 'Sarawak 1',
+        '022' => 'Sarawak 2',
+        '023' => 'Labuan',
+        '024' => 'Thailand 1',
+        '025' => 'Thailand 2',
+        '026' => 'Thailand 3',
+        '027' => 'Pendidikan Insaniah',
+        '028' => 'Pendidikan Vokasional',
+        '029' => 'Australia T',
+        '030' => 'Australia B',
+        '031' => 'Sumatera 1',
+        '032' => 'Sumatera 2',
+        '033' => 'Sumatera 3',
+        '034' => 'Jawa  1/2',
+        '035' => 'Jawa  3/4',
+        '036' => 'Makassar',
+        '037' => 'Papua',
+        '038' => 'Syam',
+        '039' => 'Afrika Utara',
+        '040' => 'Haramain',
+        '041' => 'Mesir',
+    );
+}
+function data_premis(){
+    _addCustomCSS();
+    $formPremis = drupal_get_form('datapremis_input_form');
+    return $formPremis;
+}
+function datapremis_input_form(){
+    $form['#attributes'] = array('class' => 'form-item-lined-up');
+    $form['zone'] = array(
+        '#type' => 'select',
+        '#title' => t('Zone Premis'),
+        '#options' => array_zone_gisb(),
+        '#description' => t('Pilih zone premis.'),
+    );
+    $form['id'] = array(
+        '#title' => t('id'),
+        '#type' => 'textfield',
+        '#description' => t('auto generated berdasarkan zone'),
+    );
+    $form['nama'] = array(
+        '#title' => t('Nama Premis'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nama premis'),
+    );
+    $form['alamat'] = array(
+        '#title' => t('Alamat Premis'),
+        '#type' => 'textarea',
+        '#cols' => 40,
+        '#rows' => 3,
+        '#description' => t('Input alamat premis disini.'),
+    );
+    $form['telepon'] = array(
+        '#title' => t('No. Telepon'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nomer telepon premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['whatsapp'] = array(
+        '#title' => t('No. Whatsapp'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nomer whatsapp premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['bbm'] = array(
+        '#title' => t('Pin BBM'),
+        '#type' => 'textfield',
+        '#description' => t('Isi pin bbm premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['telegram'] = array(
+        '#title' => t('No. Telegram'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nomer telegram premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['email'] = array(
+        '#title' => t('Email'),
+        '#type' => 'textfield',
+        '#description' => t('Isi email premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['website'] = array(
+        '#title' => t('Website'),
+        '#type' => 'textfield',
+        '#description' => t('Isi website premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Simpan')
+    );
+    return $form;
+}
+function datapremis_input_form_validate($form, &$form_state) {
+    if ($form_state['values']['name'] == '') {
+        form_set_error('', t('You must select a name for this group of settings.'));
+    }
+}
+function datapremis_input_form_submit($form, &$form_state) {
+    db_query("INSERT INTO {table} (name, log, hidden) VALUES ('%s', %d, '%s')", $form_state['values']['name'], $form_state['values']['access']['log'],  $form_state['values']['hidden']);
+    drupal_set_message(t('Your form has been saved.'));
+}

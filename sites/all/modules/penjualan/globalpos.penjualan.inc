@@ -13,6 +13,9 @@ function view_tabel_penjualan(){
 	}
 	$addedFilter = '';
 	$filterId = 0;
+	$nota = '';
+	$produk = '';
+	$kategoriproduk = '';
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
@@ -23,16 +26,26 @@ function view_tabel_penjualan(){
 		if(isset($_POST['idpelanggan'])){
 			$filterId = $_POST['idpelanggan'];
 		}
-	}elseif ($_POST["pilihantampil"] == 'PRODUK'){
+	}elseif ($_POST["pilihantampil"] == 'PRODUK') {
 		$produk = 'selected="selected"';
 		$idSupplier = isset($_POST['idsupplier']) ? $_POST['idsupplier'] : 0;
-		$tabeltampil = penjualan_produk($tgl1,$tgl2,$idSupplier);
+		$tabeltampil = penjualan_produk($tgl1, $tgl2, $idSupplier);
 		$urutan = 3;
 		$tampilData = 1;
-		$addedFilter = createSupplierSelection($idSupplier,'ALL',false).'<input type="hidden" id="idpelanggan" name="idpelanggan" value="0">';
-		if (isset($_POST['idsupplier'])){
+		$addedFilter = createSupplierSelection(
+				$idSupplier,
+				'ALL',
+				false
+			) . '<input type="hidden" id="idpelanggan" name="idpelanggan" value="0">';
+		if (isset($_POST['idsupplier'])) {
 			$filterId = $_POST['idsupplier'];
 		}
+	}else if($_POST['pilihantampil'] == 'KATEGORI PRODUK'){
+		$kategoriproduk = 'selected="selected"';
+		$addedFilter = '<input type="hidden" id="idsupplier" name="idsupplier" value="0"><input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+		$urutan = 0;
+		$tampilData = 2;
+		$tabeltampil = tabel_penjualan_kategori($tgl1,$tgl2);
 	}else{
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
 		$tabeltampil = tabel_penjualan($tgl1,$tgl2,$idPelanggan);
@@ -74,6 +87,7 @@ function view_tabel_penjualan(){
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';
+	$pilihantampil .= '<option '.$kategoriproduk.'>KATEGORI PRODUK</option>';
 	$pilihantampil .= '</select>';
 	$pilihperiode = '<form action="'.base_path().'penjualan/viewpenjualan" method="post"><div id="pilihanperiode"><label>PILIH PERIODE PENJUALAN </label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.$tgl1.'">';
 	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.$tgl2.'">'.$pilihantampil.'&nbsp;'.$addedFilter.'<button>LIHAT PENJUALAN</button></div></form>';
@@ -201,6 +215,30 @@ function penjualan_produk($tgl1,$tgl2,$idSupplier){
 	$tabelpenjualan .= '</tfoot>';
 	$tabelpenjualan .= '</table>';
 	return $tabelpenjualan;	
+}
+
+function tabel_penjualan_kategori(){
+	$tabelpenjualan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_penjualan">';
+	$tabelpenjualan .= '<thead>';
+	$tabelpenjualan .= '<tr>';
+	$tabelpenjualan .= '<th>KODE</th>';
+	$tabelpenjualan .= '<th>KATEGORI</th>';
+	$tabelpenjualan .= '<th>SUBTOTAL</th>';
+	$tabelpenjualan .= '<th>MODAL</th>';
+	$tabelpenjualan .= '<th>LABA</th>';
+	$tabelpenjualan .= '</tr>';
+	$tabelpenjualan .= '</thead>';
+	$tabelpenjualan .= '<tbody>';
+	$tabelpenjualan .= '<tfoot>';
+	$tabelpenjualan .= '<tr>';
+	$tabelpenjualan .= '<th style="text-align:right" colspan="2">Total:&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '</tr>';
+	$tabelpenjualan .= '</tfoot>';
+	$tabelpenjualan .= '</table>';
+	return $tabelpenjualan;
 }
 
 function DateAdd($v,$d=null , $f="m/d/Y"){ 

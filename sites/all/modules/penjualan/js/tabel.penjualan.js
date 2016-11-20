@@ -6,6 +6,17 @@ var urutan = 0;
 var tampilData = 0;
 var idpelanggan = 0;
 var idsupplier = 0;
+function addCommas(nStr){
+	nStr += "";
+	x = nStr.split(",");
+	x1 = x[0];
+	x2 = x.length > 1 ? "," + x[1] : "";
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, "$1" + "." + "$2");
+	}
+	return x1 + x2;
+}
 function tampiltabeljual(){
 	if (tampilData == 0){
 		oTable = $('#tabel_penjualan').dataTable( {
@@ -43,7 +54,68 @@ function tampiltabeljual(){
 			},
             'aoColumnDefs': [
                 { 'bSortable': false, 'aTargets': [ 0,3,12 ] }
-            ]
+            ],
+			'footerCallback': function ( row, data, start, end, display ) {
+				var api = this.api(), data;
+				// Remove the formatting to get integer data for summation
+				var intVal = function ( i ) {
+					return typeof i === 'string' ?
+					i.replace(/[\$.]/g, '')*1 :
+						typeof i === 'number' ?
+							i : 0;
+				};
+				// Total over all pages
+				total = api
+					.column( 4 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 4 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 5 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 5 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 6 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 6 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 8 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 8 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 9 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 9 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+			},
 		});
 	}else if (tampilData == 1){
 		oTable = $('#tabel_penjualan').dataTable( {
@@ -74,7 +146,115 @@ function tampiltabeljual(){
 				$('td', row).eq(8).addClass('angka');
 				$('td', row).eq(9).addClass('angka');
 				$('td', row).eq(10).addClass('angka');
-			}
+			},
+			'footerCallback': function ( row, data, start, end, display ) {
+				var api = this.api(), data;
+				// Remove the formatting to get integer data for summation
+				var intVal = function ( i ) {
+					return typeof i === 'string' ?
+					i.replace(/[\$.]/g, '')*1 :
+						typeof i === 'number' ?
+							i : 0;
+				};
+				// Total over all pages
+				total = api
+					.column( 8 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 8 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 9 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 9 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 10 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 10 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+			},
+		});
+	}else if (tampilData == 2){
+		oTable = $('#tabel_penjualan').dataTable( {
+			'bJQueryUI': true,
+			'bAutoWidth': false,
+			'sPaginationType': 'full_numbers',
+			'bInfo': true,
+			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+			'iDisplayLength': 100,
+			'aaSorting': [[urutan, 'desc']],
+			'processing': true,
+			'serverSide': true,
+			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=penjualan3&tglawal='+ tglAwal +'&tglakhir='+ tglAkhir,
+			buttons: [
+				{
+					extend: 'colvis'
+				}, 'copy', 'excel', 'print'
+			],
+			'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
+			'createdRow': function ( row, data, index ) {
+				row.id = data[(data.length - 1)];
+				$('td', row).eq(0).addClass('center');
+				$('td', row).eq(2).addClass('angka');
+				$('td', row).eq(3).addClass('angka');
+				$('td', row).eq(4).addClass('angka');
+			},
+			'footerCallback': function ( row, data, start, end, display ) {
+				var api = this.api(), data;
+				// Remove the formatting to get integer data for summation
+				var intVal = function ( i ) {
+					return typeof i === 'string' ?
+					i.replace(/[\$.]/g, '')*1 :
+						typeof i === 'number' ?
+							i : 0;
+				};
+				// Total over all pages
+				total = api
+					.column( 2 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 2 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 3 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 3 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 4 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 4 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+			},
 		});
 	}
 }
