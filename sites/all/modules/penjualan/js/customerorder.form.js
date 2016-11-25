@@ -204,7 +204,7 @@ function akhiri_belanja(cetak){
 			var returndata = data.trim();
 			if (returndata != "error"){
                                 if (cetak == 1){
-					window.open(pathutama + "print/6?idghorder="+ returndata);
+					window.open(pathutama + "print/6?idcustomerorder="+ returndata);
 				}
 				window.location = pathutama + "penjualan/customerorder?tanggal="+ request.tgljual;
 			}else{
