@@ -842,6 +842,96 @@ function pemasukan($request){
 		"data"            => $output
 	);
 }
+function serverSideDetailCustomerOrder($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$idCustomerOrder = $_REQUEST['idcustomerorder'];
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		1 => 'product.barcode',
+		2 => 'product.namaproduct',
+		3 => 'detord.jumlah',
+		4 => '(detord.jumlah - detord.sisa)',
+		5 => 'detord.sisa',
+		6 => 'totproduksi',
+		7 => 'detord.perkiraan_ambil',
+		8 => 'detord.diambil',
+		9 => 'detord.hargajual',
+		10 => '(detord.jumlah*detord.hargajual)',
+	);
+	$orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength) || $pageLength == -1){
+		$pageLength = 25;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = 'SELECT detord.id,product.barcode, product.namaproduct, detord.jumlah,';
+	$strSQL .= 'detord.hargajual,(detord.hargajual*detord.jumlah) AS subtotal,detord.sisa,';
+	$strSQL .= 'detord.diambil,detord.perkiraan_ambil,detord.outstanding,';
+	$strSQL .= '(detord.jumlah - detord.outstanding) AS totproduksi FROM ';
+	$strSQL .= 'detailcustomerorder detord LEFT JOIN product product ';
+	$strSQL .= 'ON detord.idproduct=product.idproduct ';
+	$strSQL .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+	$strSQL .= 'WHERE detord.idcustomerorder=%d ';
+	$strSQLFilteredTotal = 'SELECT COUNT(detord.id) FROM ';
+	$strSQLFilteredTotal .= 'detailcustomerorder detord LEFT JOIN product product ';
+	$strSQLFilteredTotal .= 'ON detord.idproduct=product.idproduct ';
+	$strSQLFilteredTotal .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+	$strSQLFilteredTotal .= 'WHERE detord.idcustomerorder=%d ';
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (product.barcode LIKE '%%%s%%' OR ";
+		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
+		$strCriteria .= ")";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)) {
+		$result = db_query($strSQL, $idCustomerOrder, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+		$recordsFiltered = db_result(
+			db_query($strSQLFilteredTotal, $idCustomerOrder, $searchQuery, $searchQuery)
+		);
+	}else{
+		$result = db_query($strSQL,$idCustomerOrder,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idCustomerOrder));
+	}
+	while($data = db_fetch_object($result)){
+		$rowData = array();
+		$deletebutton = '<img title="Klik untuk menghapus detail order" onclick="hapus_detail('.$data->id.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$rowData[] = $deletebutton;
+		$rowData[] = $data->barcode;
+		$rowData[] = $data->namaproduct;
+		$rowData[] = $data->jumlah;
+		$rowData[] = $data->jumlah - $data->sisa;
+		$rowData[] = $data->sisa;
+		$rowData[] = $data->totproduksi;
+		$rowData[] = number_format($data->hargajual,0,',','.');
+		$rowData[] = number_format($data->subtotal,0,',','.');
+		$rowData[] = date('d M H:i',$data->perkiraan_ambil);
+		if (!empty($data->diambil)){
+			$rowData[] = date('d M H:i',$data->diambil);
+		}else{
+			$rowData[] = '-';
+		}
+		$rowData[] = $data->id;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(id) FROM detailcustomerorder"));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
 function serverSideGetProduct($request){
 	$items = array();
 	if ($_GET["term"]){

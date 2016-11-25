@@ -21,6 +21,12 @@ function customerorder(){
 	_addChosenJqueryPlugins();
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
+	drupal_add_js(
+		array(
+			'tglsekarang' => $tglsekarang,
+			'tgltampil' => $tgltampil,
+		),
+		'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/customerorder.form.js';
 	drupal_add_js($js_path);
 	if (isset($_GET['tanggal'])){
@@ -35,8 +41,8 @@ function customerorder(){
 	$tombolcari = '<a id="tombolubahharga" class="cari" onclick="ubahharga()">F2:UBAH HARGA</a>';
 	$tombolqty = '<a id="tombolubahqty" onclick="ubahqty()" class="buttonqty">F3:UBAH QTY</a>';
 	$tombolhapus = '<a class="buttonhapus" onclick="hapus_latest_produk()">F4:HAPUS ITEM</a>';
-	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data()">F5:SIMPAN</a>';
-	//$tombolprint = '<a class="buttonprint" onclick="kirim_data()">F6:BAYAR&PRINT</a>';
+	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(0)">F5:SIMPAN</a>';
+	$tombolprint = '<a class="buttonprint" onclick="kirim_data(1)">F6:SIMPAN&PRINT</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
 	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
@@ -89,6 +95,7 @@ function customerorder(){
 	$penjualan .= $tombolqty;
 	$penjualan .= $tombolhapus;
 	$penjualan .= $tombolselesai;
+	$penjualan .= $tombolprint;
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
@@ -110,7 +117,7 @@ function customerorder(){
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="PEMBAYARAN" id="dialogbayar">';
 	$carabayar = '<select id="carabayar" name="carabayar">';
-	$result = db_query("SELECT carabayar FROM carabayartitipanlaundry");
+	$result = db_query("SELECT carabayar FROM carabayartitipanlaundry ORDER BY weight");
 	$i = 0;
 	while($data = db_fetch_object($result)){
 		if ($i == 0){
@@ -140,18 +147,21 @@ function customerorder(){
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
 	$keterangan = '<textarea id="keterangan" name="keterangan" style="width: 300px;"></textarea>';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
+	$meja = '<input type="text" id="nomormeja" name="nomormeja">';
+	$meja .= '<input type="hidden" id="idmeja" name="idmeja">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
-	$penjualan .= '<div class="barisbayar"><label>Total Laundy</label>'.$totalbelanja.'</div>';
-	$penjualan .= '<div class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
+	$penjualan .= '<div class="barisbayar"><label>Total Order</label>'.$totalbelanja.'</div>';
+	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
 	$penjualan .= '<div id="field_bayar" class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Keterangan</label>'.$keterangan.'</div>';
-	//$penjualan .= '<div id="field_kembali" class="barisbayar" style="display: none;"><label>Kembali</label>'.$kembali.'</div>';
-	$penjualan .= '<div class="barisbayar" style="text-align: center;">';
-	$penjualan .= '<button id="simpan-cetak-customerorder" style="margin-top: 10px;font-size: 0.8em;">SIMPAN & PRINT</button>&nbsp;&nbsp;';
-	$penjualan .= '<button id="simpan-customerorder" style="margin-top: 10px;font-size: 0.8em;">SIMPAN</button>';
-	$penjualan .= '</div>';
+	$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
+	$penjualan .= '<div id="field_kembali" class="barisbayar" style="display: none;"><label>Kembali</label>'.$kembali.'</div>';
+	//$penjualan .= '<div class="barisbayar" style="text-align: center;">';
+	//$penjualan .= '<button id="simpan-cetak-customerorder" style="margin-top: 10px;font-size: 0.8em;">SIMPAN & PRINT</button>&nbsp;&nbsp;';
+	//$penjualan .= '<button id="simpan-customerorder" style="margin-top: 10px;font-size: 0.8em;">SIMPAN</button>';
+	//$penjualan .= '</div>';
 	$penjualan .= '</div>';
 	//Form Tambah Pelanggan
 	$formPelanggan = '<div title="TAMBAH PELANGGAN" id="dialogtambahpelanggan" class="form-add-dialog">';
@@ -183,12 +193,12 @@ function simpan_customerorder(){
 		$splitJam = explode(':',date("H:i:s"));
 		$intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		global $user;
-		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, tglorder, idpelanggan, keterangan) 
-		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s')",
-				 $no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"], $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"]);
+		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, tglorder, idpelanggan, keterangan, idmeja)
+		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d')",
+				 $no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"], $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"],$_POST["idmeja"]);
 		$next_id = db_last_insert_id('customer_order', 'id');
 		print $next_id;
-		if (isset($_POST["bayar"])){
+		if (isset($_POST["bayar"]) && isset($_POST["idpelanggan"]) && (int)$_POST["idpelanggan"] > 0){
 			if ((int)$_POST["bayar"] > 0){
 				$variables['idpelanggan'] = $_POST["idpelanggan"];
 				$variables['hutang'] = getTotalHutang($_POST["idpelanggan"]);
@@ -204,11 +214,7 @@ function simpan_customerorder(){
 		foreach ($pecahdetail as $parameter){
 			$pecahparameter = explode("=",$parameter);
 			$pecahnilai = explode("___",$pecahparameter[1]);
-			if (is_string($pecahnilai[0])){
-				$IDPRODUK =	substr($pecahnilai[0],3);
-			}else if(is_integer($pecahnilai[0])){
-				$IDPRODUK =	$pecahnilai[0];
-			}
+			$IDPRODUK =	$pecahnilai[0];
 			$QTY = $pecahnilai[1];
 			$HARGAJUAL = $pecahnilai[2];
 			$DISKON = $pecahnilai[3];
@@ -270,14 +276,21 @@ function cari_nota_order(){
 	if ($_GET["term"]){
 		$KATACARI = '%'.strtolower($_GET["term"]).'%';
 		$result = db_query("SELECT custord.id, custord.nonota, custord.tglorder,
-        custord.total,plg.namapelanggan,plg.telp FROM customer_order AS custord LEFT JOIN
-        pelanggan AS plg ON custord.idpelanggan=plg.idpelanggan WHERE
-        LOWER(custord.nonota) LIKE '%s' OR LOWER(plg.namapelanggan) LIKE '%s'
+        custord.total,plg.namapelanggan,plg.telp,meja.meja FROM customer_order AS custord
+        LEFT JOIN pelanggan AS plg ON custord.idpelanggan=plg.idpelanggan
+        LEFT JOIN meja AS meja ON custord.idmeja = meja.id
+        WHERE LOWER(custord.nonota) LIKE '%s' OR LOWER(plg.namapelanggan) LIKE '%s'
         AND custord.status_order < 2
         ORDER BY custord.tglorder DESC LIMIT 50",$KATACARI,$KATACARI);
 		$items = array();
 		while ($rowDb = db_fetch_object($result)){
-			$valueData = $rowDb->nonota.' - '.$rowDb->namapelanggan;
+			if (!empty($rowDb->namapelanggan)) {
+				$valueData = $rowDb->nonota . ' - ' . $rowDb->namapelanggan;
+			}else if (!empty($rowDb->meja)){
+				$valueData = $rowDb->nonota . ' - ' . $rowDb->meja;
+			}else{
+				$valueData = $rowDb->nonota;
+			}
 			if (!empty($rowDb->telp)){
 				$valueData .= ' - '.$rowDb->telp;
 			}
@@ -380,4 +393,16 @@ function simpan_hasil_produksi(){
 			db_query($strSQL,$_POST['qtyupdate'],$dataDetailOrder->id);
 		}
 	}
+}
+function cari_meja(){
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT id, barcodemeja, kodemeja, meja FROM meja WHERE kodemeja LIKE '%s' OR barcodemeja LIKE '%s' OR UPPER(meja) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)){
+			$items[] = array('value' => $data->meja,'barcodemeja' => $data->barcodemeja,'kodemeja' => $data->kodemeja, 'id' => $data->id);
+		}
+		print json_encode($items);
+	}
+	exit();
 }

@@ -82,6 +82,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.kasir.inc'
 	);
+	$items['penjualan/autocarimeja'] = array(
+		'title' => t('Pencarian Meja'),
+		'description' => 'Pencarian Meja',
+		'page callback' => 'cari_meja',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	$items['penjualan/simpanpenjualan'] = array(
     'title' => t('Simpan Penjualan'),
     'description' => 'Simpan Penjualan',
@@ -261,6 +270,33 @@ function penjualan_menu() {
 		'access arguments' => array('Input Customer Order'),
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.customerorder.inc'
+	);
+	$items['penjualan/updatedetailcustomerorder'] = array(
+		'title' => t('Update Detail Customer Order'),
+		'description' => 'Update detail customer order',
+		'page callback' => 'update_detail_customer_order',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
+	$items['penjualan/simpandetailorder'] = array(
+		'title' => t('Insert Detail Customer Order'),
+		'description' => 'Insert detail customer order',
+		'page callback' => 'insert_detail_customer_order',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
+	$items['penjualan/deletedetailorder'] = array(
+		'title' => t('Delete Detail Customer Order'),
+		'description' => 'Delete detail customer order',
+		'page callback' => 'delete_detail_customer_order_ajax',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.delete.inc'
 	);
 	return $items;
 } // end hook menu

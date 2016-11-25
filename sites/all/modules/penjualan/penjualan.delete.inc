@@ -111,3 +111,23 @@ function delete_customer_order($idcustomerorder = null){
 		}
 	}
 }
+function delete_detail_customer_order($iddetail = null, $idcustomerorder = null){
+	$deleteStatus[] = array('message' => 'Penghapusan detail order gagal...!!!');
+	if (!empty($iddetail) && !empty($idcustomerorder)){
+		$deleteStatus = array();
+		$strSQL = 'DELETE FROM detailcustomerorder WHERE id=%d';
+		db_query($strSQL,$iddetail);
+		$strSQL = 'SELECT SUM(hargajual*jumlah) AS total_order FROM detailcustomerorder WHERE idcustomerorder=%d';
+		$totalOrder = db_result(db_query($strSQL,$idcustomerorder));
+		$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailcustomerorder WHERE idcustomerorder=%d';
+		$totalModal = db_result(db_query($strSQL,$idcustomerorder));
+		$strSQL = 'UPDATE customer_order SET total=\'%f\', totalmodal=\'%f\' WHERE id=%d';
+		db_query($strSQL,$totalOrder,$totalModal,$idcustomerorder);
+		$deleteStatus[] = array('message' => 'Penghapusan detail order berhasil...!!!');
+	}
+	return $deleteStatus;
+}
+function delete_detail_customer_order_ajax(){
+	print json_encode(delete_detail_customer_order($_POST['iddetailorder'],$_POST['idcustomerorder']));
+	exit();
+}

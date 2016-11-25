@@ -49,8 +49,9 @@ table th.subtotal{
 	font-size: 14px;
 	font-weight: bold;	
 }
-table td.angka{
-	text-align: right;
+table td.angka, table th.angka{
+	text-align: right !important;
+	padding-right: 10px !important;
 }
 table td img{
 	cursor: pointer;	
@@ -358,7 +359,7 @@ div.baris input[type="text"]{
 	height: 350px;
 }
 input[type="text"].barcodekasir{
-	width: 525px;
+	width: 500px;
 	font-size: 14px;
 	font-weight: bold;
 	padding: .3em;	
@@ -807,7 +808,7 @@ table.dataTable thead th div.DataTables_sort_wrapper span{
 	width: 95px;
 }
 table.dataTable tfoot th, table.dataTable tfoot td{
-padding: 10px 6px 6px 6px !important;
+padding: 10px 10px 6px 6px !important;
 }
 .kolom-pemasukan{
 	width: 48%;
@@ -831,6 +832,14 @@ padding: 10px 6px 6px 6px !important;
 	font-weight: bold;
 	font-size: 16px;
 }
+.kolom-grand-total-2{
+	width: 98%;
+	float: left;
+	padding: 4px 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 13px;
+}
 body.lightbox-processed{
 	margin: 8px 0 !important;
 }
@@ -849,4 +858,60 @@ tr.selected td {
 	width: 78%;
 	float: left;
 	padding: 4px;
+}
+.ui-dialog-title{
+	font-size: 85% !important;
+}
+#add-new-item {
+	margin-top: 10px;
+	padding: 6px;
+	float: left;
+	width: 98.5%;
+	border: 1px solid #999;
+	border-radius: 6px;
+}
+#add-new-item label{
+	width: 120px;
+	float: left;
+	height: 27px;
+	padding-top: 4px;
+}
+label.small-label{
+	width: 40px !important;
+	height: 21px;
+	float: left;
+}
+#add-new-item input{
+	float: left;
+	margin-right: 6px;
+	height: 21px;
+}
+#add-new-item h5{
+	padding : 0 0 8px;
+}
+.no-margin{
+	margin : 0 !important;
+}
+ul.ui-autocomplete {
+	position:absolute;
+	cursor:default;
+	z-index:2001 !important
+}
+#print-slip{
+	margin-top: 10px;
+}
+form.form-item-lined-up, .form-item-lined-up{
+	display: inline-block !important;
+}
+.form-item-lined-up .form-item label{
+	display: inline-block !important;
+	width: 150px !important;
+}
+.form-item-lined-up .form-item select, .form-item-lined-up .form-item input
+.form-item-lined-up .form-item textarea{
+	display: inline-block;
+}
+.form-item-lined-up .form-item textarea,
+.form-item-lined-up .resizable-textarea{
+	width: 100% !important;
 }

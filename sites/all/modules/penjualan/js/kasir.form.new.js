@@ -204,7 +204,7 @@ function akhiri_belanja(cetak){
 				var returndata = data.trim();
 				if (returndata != "error"){
 					if (cetak == 1){
-						window.open(pathutama + "print/6?idpenjualan="+ returndata);
+						window.open(pathutama + "print/6?idpenjualangh="+ returndata);
 					}
 					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
 						window.location = pathutama + 'penjualan/' + alamatasal;
@@ -267,7 +267,7 @@ $(document).ready(function(){
 			modal: true,
 			width: 925,
 			closeOnEscape: false,
-			height: 640,
+			height: 650,
 			resizable: false,
 			autoOpen: false,
 			open: function (event, ui) {
@@ -286,7 +286,7 @@ $(document).ready(function(){
 			modal: true,
 			width: 925,
 			closeOnEscape: false,
-			height: 600,
+			height: 630,
 			resizable: false,
 			autoOpen: false,
 			open: function (event, ui) {
@@ -476,10 +476,6 @@ $(document).ready(function(){
 			tambahproduk(1);
 		}
 	});
-	$("#newqty").autotab_filter({
-		format: "numeric",
-		nospace: true
-	});
 	$("#newharga").keypress(function(e) {
 		if (e.keyCode == 13){
 			var baris_int = totalproduk-1;
@@ -540,7 +536,7 @@ $(document).ready(function(){
 			$("#dialogubahqty2").dialog("close");
 		}
 	});
-	$("#nilaibayar").keyup(function(e){
+	$("#nilaibayar,#nomerkartu").keyup(function(e){
 		kembali = $("#nilaibayar").val() - totalbelanja;
 		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 		if (kembali > 0){
@@ -578,9 +574,9 @@ $(document).ready(function(){
 			for (var i = 0;i < totaldetaildata;i++){
 				var dataDetail = Drupal.settings.data_order[i];
 				if (dataDetail.barcode != ''){
-					$('#barcode').val(dataDetail.barcode);
+					$('#barcode').val(dataDetail.barcode.trim());
 				}else{
-					$('#barcode').val(dataDetail.namaproduct);
+					$('#barcode').val(dataDetail.namaproduct.trim());
 				}
 				tambahproduk(dataDetail.sisa);
 			}

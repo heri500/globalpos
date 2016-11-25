@@ -110,29 +110,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="tempatkosong">';
 	$penjualan .= '<div id="tempatsupplier"><label>PELANGGAN</label></div>';
-	$pilihpelanggan = '<select id="idpelanggan" name="idpelanggan" onchange="inisialulang()">';
-	if ($_GET["idpelanggan"] == 0 && $idPelanggan == 0){
-		$pilihpelanggan .= '<option selected value="0">UMUM</option>';	
-	}else{
-		$pilihpelanggan .= '<option value="0">UMUM</option>';	
-	}
-	$resultpelanggan = db_query("SELECT idpelanggan,namapelanggan FROM pelanggan");
-	if (!isset($_GET["idpelanggan"])){
-		if (!empty($idPelanggan)){
-			$selectedpelanggan = $idPelanggan;	
-		}
-	}else{
-		$selectedpelanggan = $_GET["idpelanggan"];
-	}
-	while ($datapelanggan = db_fetch_object($resultpelanggan)){
-		if ($datapelanggan->idpelanggan == $selectedpelanggan){
-			$pilihpelanggan .= '<option selected value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';	
-		}else{
-			$pilihpelanggan .= '<option value="'.$datapelanggan->idpelanggan.'">'.$datapelanggan->namapelanggan.'</option>';	
-		}
-	}
-	$pilihpelanggan .= '</select>';
-	$penjualan .= '<div id="tempatsupplier2">'.$pilihpelanggan.'</div>';
+	$penjualan .= '<div id="tempatsupplier2">'.createPelangganSelection($_GET['idpelanggan']).'</div>';
 	if (!empty($idtitipanlaundry)){
 		$penjualan .= '<div id="tempatsupplier"><label>TGL '.$labelTgl.'</label><input readonly="readonly" type="text" id="tglmasuk" name="tglmasuk" value="'.$tglTampilLaundry.'">';
 		$penjualan .= '</div>';
@@ -288,14 +266,17 @@ function simpan_penjualan(){
 			}
 		}
 		if ($_POST["carabayar"] == "DEPOSIT"){
-			$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"])); 
-			$variables['idpelanggan'] = $_POST["idpelanggan"];
-			$variables['deposit'] = $sisaDeposit;
-			$variables['penggunaan'] = $_POST["bayar"];
-			$variables['tglbayar'] = $waktujual;
-			$variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : '.$no_nota.' Tanggal : '.$waktujual;
-			$variables['idpenjualan'] = $next_id;
-			penggunaandeposit($variables);
+			if (isset($_POST["idpelanggan"]) && !empty($_POST["idpelanggan"])){
+				$sisaDeposit = getTotalPembayaran($_POST["idpelanggan"]) - (getTotalHutang($_POST["idpelanggan"]) + getTotalPenggunaanDeposit($_POST["idpelanggan"]));
+				$variables['idpelanggan'] = $_POST["idpelanggan"];
+				$variables['deposit'] = $sisaDeposit;
+				$variables['penggunaan'] = $_POST["bayar"];
+				$variables['tglbayar'] = $waktujual;
+				$variables['keterangan'] = 'Penggunaan deposit untuk pembayaran nota : '.$no_nota.' Tanggal : '.$waktujual;
+				$variables['idpenjualan'] = $next_id;
+				penggunaandeposit($variables);
+				syncHutangPelanggan($_POST["idpelanggan"]);
+			}
 		}
 		$detailTitipanLaundry = null;
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
@@ -458,8 +439,13 @@ function cari_barang(){
 		$KATACARI = '%'.$_GET["term"].'%';
 		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
-		while ($data = db_fetch_object($result)){
-			$items[] = array('value' => $data->namaproduct.'--->[Rp. '.number_format($data->hargajual,0,',','.').']['.$data->stok.']','barcode' => $data->barcode,'alt_code' => $data->alt_code);
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct . '--->[Rp. ' . number_format($data->hargajual,0,',','.') . '][' . $data->stok . ']',
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+			);
 		}
 		print json_encode($items);
 	}

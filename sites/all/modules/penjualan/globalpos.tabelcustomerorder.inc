@@ -42,8 +42,8 @@ function view_tabel_customerorder(){
     drupal_add_css('misc/media/datatables.1.10/extensions/Buttons/css/buttons.jqueryui.css');
 	//_addJqueryPlugins();
     drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
-	drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
-	_addTimePickerPlugins();
+	//drupal_add_js('misc/media/jquery-ui-1.8.custom.min.js');
+	//_addTimePickerPlugins();
 	_addJeditablePlugins();
 	_addAutotabPlugins();
 	_addBarcodePlugins();
@@ -72,7 +72,24 @@ function view_tabel_customerorder(){
 	$pilihperiode = '<form action="'.base_path().'penjualan/viewcustomerorder" method="post"><div id="pilihanperiode"><label>PILIH PERIODE</label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
 	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT ORDER</button></div></form>';
 	$viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
-	$viewcustomerorder .= '<div id="dialogdetail" title="DETAIL CUSTOMER ORDER"></div>';
+	$viewcustomerorder .= '<div id="dialogdetail" title="DETAIL CUSTOMER ORDER">';
+	$viewcustomerorder .= '<div id="table-detail-wrapper"></div>';
+	$viewcustomerorder .= '<div id="add-new-item">';
+	$viewcustomerorder .= '<h5 class="no-margin">ADD NEW ORDER</h5>';
+	$inputProduct = '<input type="text" id="new-product" name="new-product" size="35">';
+	$inputProduct .= '<input type="hidden" id="idproduct" name="idproduct">';
+	$viewcustomerorder .= '<label>Product</label>'.$inputProduct;
+	$inputHarga = '<input type="text" id="harga-view" name="harga-view" size="10" readonly="readonly">';
+	$inputHarga .= '<input type="hidden" id="hargajual" name="hargajual">';
+	$inputHarga .= '<input type="hidden" id="hargapokok" name="hargapokok">';
+	$inputSubtotal = '<input type="text" id="subtotal-view" name="subtotal-view" size="14" readonly="readonly">';
+	$inputQty = '<input type="text" id="qty-new" name="qty-new" size="6">';
+	$viewcustomerorder .= $inputHarga.'<label class="small-label">Qty</label>'.$inputQty.$inputSubtotal;
+	$buttonAddNew = '<button id="add-new-button">Add Order</button>';
+	$buttonPrintSlip = '<button id="print-slip">Print Slip</button>';
+	$viewcustomerorder .= $buttonAddNew.'</div>'.$buttonPrintSlip;
+	$viewcustomerorder .= '</div>';
+
 	return $viewcustomerorder;
 }
 
@@ -110,13 +127,13 @@ function tabel_customerorder($tgl1,$tgl2){
 	}else{
 		$tabelcustomerorder .= '<th style="text-align:right" colspan="8">Total:&nbsp;&nbsp;</th>';
 	}
-    $totaljual = 0;
-    $totalbayar = 0;
-    $totalSisa = 0;
-	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+    $totaljual = getTotalCustomerOrder('total',$tgl1, $tgl2);
+    $totalbayar = getTotalCustomerOrder('bayar',$tgl1, $tgl2);
+    $totalSisa = getTotalCustomerOrder('total-bayar',$tgl1, $tgl2);
+	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
-	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelcustomerorder .= '<th style="text-align: right">Rp. '.number_format($totalSisa,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
+	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
@@ -134,46 +151,37 @@ function detail_customerorder(){
 		$tabelcustomerorder ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_customerorder">';
 		$tabelcustomerorder .= '<thead>';
 		$tabelcustomerorder .= '<tr>';
+		$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 		$tabelcustomerorder .= '<th>BARCODE</th>';
 		$tabelcustomerorder .= '<th>PRODUK</th>';
-		$tabelcustomerorder .= '<th class="qty">QTY</th>';
-		$tabelcustomerorder .= '<th class="qty">DIAMBIL</th>';
-		$tabelcustomerorder .= '<th class="qty">SISA</th>';
-		$tabelcustomerorder .= '<th class="qty">PRODUKSI</th>';
-		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
-		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
+		$tabelcustomerorder .= '<th>QTY</th>';
+		$tabelcustomerorder .= '<th>DIAMBIL</th>';
+		$tabelcustomerorder .= '<th>SISA</th>';
+		$tabelcustomerorder .= '<th>PROD</th>';
 		$tabelcustomerorder .= '<th>H.JUAL</th>';
 		$tabelcustomerorder .= '<th>SUBTOTAL</th>';
+		$tabelcustomerorder .= '<th class="qty">PERKIRAAN</th>';
+		$tabelcustomerorder .= '<th class="qty">TGL AMBIL</th>';
 		$tabelcustomerorder .= '</tr>';
 		$tabelcustomerorder .= '</thead>';
 		$tabelcustomerorder .= '<tbody>';
-		$strSQL = 'SELECT b.id,c.barcode, c.namaproduct, b.jumlah, b.hargajual,';
-		$strSQL .= '(b.hargajual*b.jumlah) AS subtotal,sisa, diambil,perkiraan_ambil,outstanding FROM ';
-		$strSQL .= 'detailcustomerorder b LEFT JOIN product c ON b.idproduct=c.idproduct ';
-		$strSQL .= 'LEFT JOIN supplier a ON c.idsupplier=a.idsupplier WHERE b.idcustomerorder=%d';
-		$result = db_query($strSQL,$_POST["idcustomerorder"]);
-		while($data = db_fetch_object($result)){
-			$iddetail = $data->iddetail;
-			$tabelcustomerorder .= '<tr>';
-			$tabelcustomerorder .= '<td>'.$data->barcode.'</td>';
-			$tabelcustomerorder .= '<td>'.$data->namaproduct.'</td>';
-			$tabelcustomerorder .= '<td id="detailjumlah-'.$iddetail.'" class="angka edit-jumlah">'.$data->jumlah.'</td>';
-			$tabelcustomerorder .= '<td class="angka">'.($data->jumlah - $data->sisa).'</td>';
-			$tabelcustomerorder .= '<td class="angka">'.$data->sisa.'</td>';
-			$qtyProduksi = $data->jumlah - $data->outstanding;
-			$tabelcustomerorder .= '<td class="angka">'.$qtyProduksi.'</td>';
-			$tglambil = '-';
-			if (!empty($data->diambil)){
-				$tglambil = date('d-m-Y H:i', $data->diambil);
-			}
-			$tabelcustomerorder .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.date('d-m-Y H:i', $data->perkiraan_ambil).'</td>';
-			$tabelcustomerorder .= '<td id="tglambil-'.$iddetail.'" class="center edit-tanggal">'.$tglambil.'</td>';
-			$tabelcustomerorder .= '<td id="detailharga-'.$iddetail.'" class="angka edit-hargajual">'.number_format($data->hargajual,0,",",".").'</td>';
-			$tabelcustomerorder .= '<td class="angka">'.number_format($data->subtotal,0,",",".").'</td>';
-			$tabelcustomerorder .= '</tr>';
-		}
 		$tabelcustomerorder .= '</tbody>';
-		$tabelcustomerorder .= '</table><br><br>';
+		$tabelcustomerorder .= '<tfoot>';
+		$tabelcustomerorder .= '<tr>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '<th>&nbsp;</th>';
+		$tabelcustomerorder .= '</tr>';
+		$tabelcustomerorder .= '</tfoot>';
+		$tabelcustomerorder .= '</table>';
 		print $tabelcustomerorder;
 	}
 	exit();
@@ -185,16 +193,16 @@ function customerorder_produk($tgl1,$tgl2){
 	$tabelcustomerorder .= '<thead>';
 	$tabelcustomerorder .= '<tr>';
 	$tabelcustomerorder .= '<th>BARCODE</th>';
-	$tabelcustomerorder .= '<th>JASA</th>';
+	$tabelcustomerorder .= '<th>PRODUCT</th>';
 	$tabelcustomerorder .= '<th class="qty">QTY</th>';
 	$tabelcustomerorder .= '<th>H.JUAL</th>';
 	$tabelcustomerorder .= '<th>SUBTOTAL</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
-	$result = db_query("SELECT d.namasupplier, a.tglpenjualan, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
-	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN titipancustomerorder a ON a.idcustomerorder=b.idcustomerorder
-	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglpenjualan BETWEEN '%s' AND '%s'
+	$result = db_query("SELECT d.namasupplier, a.tglorder, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty, c.hargajual,
+	SUM(b.hargajual*b.jumlah) AS subtotal FROM detailcustomerorder b LEFT JOIN customer_order a ON a.id=b.idcustomerorder
+	LEFT JOIN product c ON b.idproduct=c.idproduct LEFT JOIN supplier d ON c.idsupplier=d.idsupplier WHERE  a.tglorder BETWEEN '%s' AND '%s'
 	GROUP BY b.idproduct",$tgl1,$tgl2);
 	$totaljual = 0;
 	$totalmodal = 0;
