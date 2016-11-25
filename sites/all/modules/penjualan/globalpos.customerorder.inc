@@ -223,6 +223,9 @@ function simpan_customerorder(){
 			$HARGAPOKOK = $data->hargapokok;
 			$totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
 			$detailbarcode = createEAN13Code(getRandomString(9));
+			while (cekDetailOrderBarcodeExist($detailbarcode)){
+				$detailbarcode = createEAN13Code(getRandomString(9));
+			}
 			db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah,
 			hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil, detailbarcode,
 			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s','%d')",
@@ -375,22 +378,31 @@ function cari_nota_produksi(){
 	}
 }
 function simpan_hasil_produksi(){
-	if (isset($_POST['detailbarcode']) && !empty($_POST['detailbarcode']) && isset($_POST['qtyupdate']) && !empty($_POST['qtyupdate'])){
-		$strSQL = 'SELECT id, idproduct, idcustomerorder,outstanding FROM detailcustomerorder WHERE detailbarcode = \'%s\'';
-		$result = db_query($strSQL,$_POST['detailbarcode']);
-		$dataDetailOrder = db_fetch_object($result);
-		if ($dataDetailOrder){
-			$strSQL = 'SELECT stok FROM product WHERE idproduct=%d';
-			$stokSebelum = db_result(db_query($strSQL,$dataDetailOrder->idproduct));
-			$stokSesudah = $stokSebelum + $_POST['qtyupdate'];
-			$strSQL = 'UPDATE product SET stok = %d WHERE idproduct = %d';
-			db_query($strSQL,$stokSesudah,$dataDetailOrder->idproduct);
-			$keterangan = 'Hasil Produksi Dari Pesanan Detail Barcode : '.$_POST['detailbarcode'];
-			db_query("INSERT INTO transaksistock (idproduk, idcustomerorder, stocksebelum, masuk, stocksetelah, keterangan) VALUES
-			('%d', '%d', '%f', '%f', '%f', '%s')",$dataDetailOrder->idproduct,$dataDetailOrder->idcustomerorder,
-			$stokSebelum ,$_POST['qtyupdate'],$stokSesudah,$keterangan);
-			$strSQL = 'UPDATE detailcustomerorder SET outstanding = outstanding - %d WHERE id = %d';
-			db_query($strSQL,$_POST['qtyupdate'],$dataDetailOrder->id);
+	if (isset($_REQUEST['barcode']) && isset($_REQUEST['qty'])){
+		if (count($_REQUEST['barcode'])){
+			$dataBarcode = $_REQUEST['barcode'];
+			$dataQty = $_REQUEST['qty'];
+			foreach($dataBarcode as $idx => $strDetailBarcode){
+				$qtyUpdate = $dataQty[$idx];
+				$splitBarcode = explode('_',$strDetailBarcode);
+				$detailBarcode = trim($splitBarcode[1]);
+				$strSQL = 'SELECT id, idproduct, idcustomerorder,outstanding FROM detailcustomerorder WHERE detailbarcode = \'%s\'';
+				$result = db_query($strSQL,$detailBarcode);
+				$dataDetailOrder = db_fetch_object($result);
+				if ($dataDetailOrder){
+					$strSQL = 'SELECT stok FROM product WHERE idproduct=%d';
+					$stokSebelum = db_result(db_query($strSQL,$dataDetailOrder->idproduct));
+					$stokSesudah = $stokSebelum + $qtyUpdate;
+					$strSQL = 'UPDATE product SET stok = %d WHERE idproduct = %d';
+					db_query($strSQL,$stokSesudah,$dataDetailOrder->idproduct);
+					$keterangan = 'Hasil Produksi Dari Pesanan Detail Barcode : '.$detailBarcode;
+					db_query("INSERT INTO transaksistock (idproduk, idcustomerorder, stocksebelum, masuk, stocksetelah, keterangan) VALUES
+					('%d', '%d', '%f', '%f', '%f', '%s')",$dataDetailOrder->idproduct,$dataDetailOrder->idcustomerorder,
+					$stokSebelum ,$qtyUpdate,$stokSesudah,$keterangan);
+					$strSQL = 'UPDATE detailcustomerorder SET outstanding = outstanding - %d WHERE id = %d';
+					db_query($strSQL,$qtyUpdate,$dataDetailOrder->id);
+				}
+			}
 		}
 	}
 }

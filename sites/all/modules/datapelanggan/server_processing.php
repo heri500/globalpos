@@ -934,8 +934,8 @@ function serverSideDetailCustomerOrder($request){
 }
 function serverSideGetProduct($request){
 	$items = array();
-	if ($_GET["term"]){
-		$KATACARI = '%'.$_GET["term"].'%';
+	if (isset($request["term"])){
+		$KATACARI = '%'.$request["term"].'%';
 		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
@@ -953,8 +953,8 @@ function serverSideGetProduct($request){
 }
 function serverSideGetOneProduct($request){
 	$items = array();
-	if ($_GET["term"]){
-		$KATACARI = '%'.$_GET["term"].'%';
+	if (isset($request["term"])){
+		$KATACARI = '%'.$request["term"].'%';
 		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 1",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
@@ -965,6 +965,36 @@ function serverSideGetOneProduct($request){
 				'hargajual' => $data->hargajual,
 				'hargapokok' => $data->hargapokok,
 				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
+function serverGetNotaProduksi($request = null){
+	$items = null;
+	if (isset($request['term'])){
+		$searchText = '%'.strtolower($request["term"]).'%';
+		$strSQL = 'SELECT detOrd.id, detOrd.detailbarcode, custOrd.nonota, custOrd.tglorder,plg.namapelanggan,prod.namaproduct,';
+		$strSQL .= 'detOrd.jumlah,detOrd.outstanding FROM detailcustomerorder detOrd ';
+		$strSQL .= 'LEFT JOIN customer_order custOrd ON detOrd.idcustomerorder = custOrd.id ';
+		$strSQL .= 'LEFT JOIN pelanggan plg ON custOrd.idpelanggan = plg.idpelanggan ';
+		$strSQL .= 'LEFT JOIN product prod ON detOrd.idproduct = prod.idproduct ';
+		$strSQL .= 'WHERE LOWER(detOrd.detailbarcode) LIKE \'%s\'';
+		$result = db_query($strSQL,$searchText);
+		$items = array();
+		while ($rowDb = db_fetch_object($result)){
+			$labelData = $rowDb->nonota.' - '.$rowDb->namapelanggan.'-'.$rowDb->namaproduct;
+			$items[] = array(
+				'id'    => $rowDb->id,
+				'label' => $labelData,
+				'value' => $rowDb->detailbarcode,
+				'detailbarcode' => $rowDb->detailbarcode,
+				'nonota' => $rowDb->nonota,
+				'tglorder' => $rowDb->tglorder,
+				'namapelanggan' => $rowDb->namapelanggan,
+				'namaproduct' => $rowDb->namaproduct,
+				'jumlah' => $rowDb->jumlah,
+				'outstanding' => $rowDb->outstanding,
 			);
 		}
 	}
@@ -996,6 +1026,8 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetProduct($_GET);
 }else if($_GET['request_data'] == 'getproductbarcode'){
 	$returnArray = serverSideGetOneProduct($_GET);
+}else if($_GET['request_data'] == 'notaproduksi'){
+	$returnArray = serverGetNotaProduksi($_GET);
 }
 echo json_encode($returnArray);
 ?>

@@ -42,11 +42,12 @@ $(document).ready(function() {
     $('#detailbarcode').focus();
     tampilkantabelproduction();
     $('#detailbarcode').autocomplete({
-        source: Drupal.settings.basePath + 'penjualan/carinotaproduksi',
+        source: Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=notaproduksi',
         minLength: 2,
         select: function( event, ui ) {
-            var returnVal = ui;
-            var idrow = returnVal[0].id;
+            var returnVal = ui.item;
+            console.log(returnVal);
+            var idrow = returnVal.id;
             var icondelete = '<img onclick="hapus_produk(\''+ returnVal.detailbarcode +'\')" title="Klik untuk menghapus" src="'+ Drupal.settings.basePath +'misc/media/images/close.ico" width="24">';
             var newRow = new Array;
             newRow.push(icondelete);
@@ -64,17 +65,17 @@ $(document).ready(function() {
                 var nTr = $("#"+ returnVal.detailbarcode.trim()).get(0);
                 var posisibaris = oTable.row(nTr).index();
                 console.log(posisibaris);
-                qtyInput[returnVal.detailbarcode]++;
-                outstandingVal = parseInt(returnVal.outstanding.trim()) - qtyInput[returnVal.detailbarcode];
+                qtyInput['det_'+ returnVal.detailbarcode]++;
+                outstandingVal = parseInt(returnVal.outstanding.trim()) - qtyInput['det_'+ returnVal.detailbarcode];
                 if (outstandingVal >= 0){
-                    oTable.cell(posisibaris,7).data(qtyInput[returnVal.detailbarcode]);
+                    oTable.cell(posisibaris,7).data(qtyInput['det_'+ returnVal.detailbarcode]);
                     oTable.cell(posisibaris,8).data(outstandingVal);
                 }else{
                     alert('Produksi kelebihan ....!!?');
-		    qtyInput[returnVal.detailbarcode]--;
+		    qtyInput['det_'+ returnVal.detailbarcode]--;
                 }
             }else{
-                qtyInput[returnVal[0].detailbarcode] = 1;
+                qtyInput['det_'+ returnVal.detailbarcode] = 1;
                 oTable.row.add(newRow).draw( false );
             }
             $("#detailbarcode").select();
@@ -113,18 +114,17 @@ $(document).ready(function() {
                         if (typeof $('#'+ returnVal[0].detailbarcode.trim()).attr('id') != 'undefined'){
                             var nTr = $("#"+ returnVal[0].detailbarcode.trim()).get(0);
                             var posisibaris = oTable.row(nTr).index();
-                            console.log(posisibaris);
-                            qtyInput[returnVal[0].detailbarcode]++;
-                            outstandingVal = parseInt(returnVal[0].outstanding.trim()) - qtyInput[returnVal[0].detailbarcode];
+                            qtyInput['det_'+ returnVal[0].detailbarcode]++;
+                            outstandingVal = parseInt(returnVal[0].outstanding.trim()) - qtyInput['det_'+ returnVal[0].detailbarcode];
                             if (outstandingVal >= 0){
-                                oTable.cell(posisibaris,7).data(qtyInput[returnVal[0].detailbarcode]);
+                                oTable.cell(posisibaris,7).data(qtyInput['det_'+ returnVal[0].detailbarcode]);
                                 oTable.cell(posisibaris,8).data(outstandingVal);
                             }else{
                                 alert('Produksi kelebihan ....!!?');
-				qtyInput[returnVal[0].detailbarcode]--;
+				                qtyInput['det_'+ returnVal[0].detailbarcode]--;
                             }
                         }else{
-                            qtyInput[returnVal[0].detailbarcode] = 1;
+                            qtyInput['det_'+ returnVal[0].detailbarcode] = 1;
                             oTable.row.add(newRow).draw( false );
                         }
                         $("#detailbarcode").select();
@@ -134,22 +134,27 @@ $(document).ready(function() {
         }
     });
     $('#simpan-produksi').button().on('click', function(){
+        var barcodeArray = new Array;
+        var barcodeQty = new Array;
         for (key in qtyInput) {
             if (qtyInput.hasOwnProperty(key)) {
-                var request = new Object();
-                request.detailbarcode = key;
-                request.qtyupdate = qtyInput[key];
-                alamat = Drupal.settings.basePath + 'penjualan/simpanhasilproduksi';
-                $.ajax({
-                    type: 'POST',
-                    url: alamat,
-                    data: request,
-                    cache: false,
-                    success: function (data) {
-                        alert('Produksi berhasil disimpan');
-                    }
-                })
+                barcodeArray.push(key);
+                barcodeQty.push(qtyInput[key]);
             }
         }
+        var request = new Object();
+        request.barcode = barcodeArray;
+        request.qty = barcodeQty;
+        alamat = Drupal.settings.basePath + 'penjualan/simpanhasilproduksi';
+        $.ajax({
+            type: 'POST',
+            url: alamat,
+            data: request,
+            cache: false,
+            success: function (data) {
+                alert('Produksi berhasil disimpan');
+                window.location = Drupal.settings.basePath + 'penjualan/orderselesai';
+            }
+        })
     });
 })

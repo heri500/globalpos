@@ -1067,6 +1067,17 @@ function getDetailCustomerOrder($nidCustomerOrder = null){
 	}
 	return $detailOrder;
 }
+function cekDetailOrderBarcodeExist($detailBarcode = null){
+	$detailBarcodeExists = false;
+	if (!empty($detailBarcode)){
+		$strSQL = 'SELECT COUNT(id) FROM detailcustomerorder WHERE detailbarcode=\'%s\'';
+		$countDetailBarcode = db_result(db_query($strSQL, $detailBarcode));
+		if ($countDetailBarcode > 0){
+			$detailBarcodeExists = true;
+		}
+	}
+	return $detailBarcodeExists;
+}
 function cekPrinterCommand(){
 	$printOut = '';
 	if (isset($_GET['nidlaundry'])){
