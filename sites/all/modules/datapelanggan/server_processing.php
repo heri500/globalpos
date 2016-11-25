@@ -114,7 +114,7 @@ function serverSideProduk($request){
 	$arrayColumn = array(
 		'prod.idproduct','kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
-		,'prod.minstok','prod.maxstok','prod.stok','prod.satuan','prod.keterangan','total_nilai'
+		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -130,7 +130,7 @@ function serverSideProduk($request){
 	$strSQL .= "prod.namaproduct,prod.hargapokok,prod.hargajual,prod.margin,prod.minstok,prod.maxstok,";
 	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan ,";
 	$strSQLFilteredTotal = "SELECT COUNT(prod.idproduct) ";
-	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargapokok AS total_nilai  ";
+	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargajual AS total_nilai  ";
 	$strSQL .= "FROM product AS prod ";
 	$strSQLFilteredTotal .= "FROM product AS prod ";
 	$strSQL .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
@@ -152,14 +152,23 @@ function serverSideProduk($request){
 	}
 	if (isset($_REQUEST['statusstok']) && $_REQUEST['statusstok'] != '0'){
 		if ($_REQUEST['statusstok'] == 'aman'){
-			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok) ";
+			$strCriteria .= "AND (stok >= prod.minstok AND stok <= prod.maxstok && prod.minstok != prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'maksimum'){
 			$strCriteria .= "AND (stok > prod.maxstok) ";
 		}else if($_REQUEST['statusstok'] == 'minimum'){
 			$strCriteria .= "AND (stok < prod.minstok) ";
 		}
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if (isset($_REQUEST['status_product'])){
+		$strCriteria .= "AND (status_product = ".$_REQUEST['status_product'].") ";
+	}else{
+		$strCriteria .= "AND (status_product = 1) ";
+	}
+	if ($pageLength != '-1'){
+		$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria." ORDER BY $orderColumn";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -184,9 +193,9 @@ function serverSideProduk($request){
 		$rowData[] = number_format($data->hargajual,0,",",".");
 		$rowData[] = number_format($data->margin,0,",",".");
 		$rowData[] = $data->minstok;
-    $rowData[] = $data->maxstok;
-    $rowData[] = number_format($data->stok,0,",",".");
-    if ($data->stok < $data->minstok){
+		$rowData[] = $data->maxstok;
+		$rowData[] = number_format($data->stok,0,",",".");
+		if ($data->stok < $data->minstok){
 			$rowData[] = "<img title=\"Stok dibawah minimum\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
 		}elseif ($data->stok > $data->maxstok){
 			$rowData[] = "<img title=\"Stok berlebihan/diatas maksimum stok\" src=\"$baseDirectory/misc/media/images/statuskuning.png\">";
@@ -205,13 +214,14 @@ function serverSideProduk($request){
 	}
 	$recordsTotal = db_result(db_query("SELECT COUNT(idproduct) FROM product"));
 	return array(
-			"draw"            => isset ( $request['draw'] ) ?
-				intval( $request['draw'] ) :
-				0,
-			"recordsTotal"    => intval( $recordsTotal ),
-			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => $output
-		);
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output,
+		"sql" 			  => $strSQL,
+	);
 }
 
 function serverSidePenjualan($request){
@@ -677,7 +687,10 @@ function pengeluaran($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'pengeluaran.tglpengeluaran','pengeluaran.kategori', 'pengeluaran.keterangan', 'pengeluaran.nilai'
+		3 => 'pengeluaran.tglpengeluaran',
+		4 => 'pengeluaran.kategori',
+		5 => 'pengeluaran.keterangan',
+		6 => 'pengeluaran.nilai'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -693,10 +706,11 @@ function pengeluaran($request){
 	$strSQL .= "pengeluaran.nilai, pengeluaran.tglpengeluaran, pengeluaran.created, ";
 	$strSQL .= "pengeluaran.changed, pengeluaran.uid, ";
 	$strSQL .= "katpengeluaran.kategori AS kategori_title ";
-	$strSQLFilteredTotal = "SELECT COUNT(pengeluaran.id) ";
 	$strSQL .= "FROM cms_pengeluaran AS pengeluaran ";
 	$strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
 	$strSQL .= "ON pengeluaran.kategori=katpengeluaran.id ";
+	$strSQL .= "WHERE 1=1 ";
+	$strSQLFilteredTotal = "SELECT COUNT(pengeluaran.id) ";
 	$strSQLFilteredTotal .= "FROM cms_pengeluaran AS pengeluaran ";
 	$strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpengeluaran ";
 	$strSQLFilteredTotal .= "ON pengeluaran.kategori=katpengeluaran.id ";
@@ -728,7 +742,7 @@ function pengeluaran($request){
 		$rowData[] = $editbutton;
 		$rowData[] = $deletebutton;
 		$index_hari = date('w', $data->tglpengeluaran);
-		$tglpengeluaran = date('d-m-Y', $data->tglpengeluaran);
+		$tglpengeluaran = date('Y-m-d', $data->tglpengeluaran);
 		$rowData[] = $arrayhari[$index_hari];
 		$rowData[] = $tglpengeluaran;
 		$rowData[] = $data->kategori_title;
@@ -754,7 +768,10 @@ function pemasukan($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'pemasukan.tglpemasukan','pemasukan.kategori', 'pemasukan.keterangan', 'pemasukan.nilai'
+		3 => 'pemasukan.tglpemasukan',
+		4 => 'pemasukan.kategori',
+		5 => 'pemasukan.keterangan',
+		6 => 'pemasukan.nilai'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -770,10 +787,11 @@ function pemasukan($request){
 	$strSQL .= "pemasukan.nilai, pemasukan.tglpemasukan, pemasukan.created, ";
 	$strSQL .= "pemasukan.changed, pemasukan.uid, ";
 	$strSQL .= "katpemasukan.kategori AS kategori_title ";
-	$strSQLFilteredTotal = "SELECT COUNT(pemasukan.id) ";
 	$strSQL .= "FROM cms_pemasukan AS pemasukan ";
 	$strSQL .= "LEFT JOIN cms_kategoripengeluaran AS katpemasukan ";
 	$strSQL .= "ON pemasukan.kategori=katpemasukan.id ";
+	$strSQL .= "WHERE 1=1 ";
+	$strSQLFilteredTotal = "SELECT COUNT(pemasukan.id) ";
 	$strSQLFilteredTotal .= "FROM cms_pemasukan AS pemasukan ";
 	$strSQLFilteredTotal .= "LEFT JOIN cms_kategoripengeluaran AS katpemasukan ";
 	$strSQLFilteredTotal .= "ON pemasukan.kategori=katpemasukan.id ";
@@ -805,7 +823,7 @@ function pemasukan($request){
 		$rowData[] = $editbutton;
 		$rowData[] = $deletebutton;
 		$index_hari = date('w', $data->tglpemasukan);
-		$tglpemasukan = date('d-m-Y', $data->tglpemasukan);
+		$tglpemasukan = date('Y-m-d', $data->tglpemasukan);
 		$rowData[] = $arrayhari[$index_hari];
 		$rowData[] = $tglpemasukan;
 		$rowData[] = $data->kategori_title;
@@ -824,6 +842,44 @@ function pemasukan($request){
 		"data"            => $output
 	);
 }
+function serverSideGetProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
+function serverSideGetOneProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 1",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -832,8 +888,10 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePenjualan($_GET);
 }else if($_GET['request_data'] == 'penjualan2'){
 	$returnArray = serverSidePenjualan2($_GET);
+}else if($_GET['request_data'] == 'penjualan3'){
+	$returnArray = serverSidePenjualan3($_GET);
 }else if($_GET['request_data'] == 'laundry'){
-    $returnArray = serverSideLaundry($_GET);
+	$returnArray = serverSideLaundry($_GET);
 }else if($_GET['request_data'] == 'kategoripengeluaran'){
 	$returnArray = kategoriPengeluaran($_GET);
 }else if($_GET['request_data'] == 'pengeluaran'){
@@ -842,6 +900,12 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = pemasukan($_GET);
 }else if($_GET['request_data'] == 'customerorder'){
 	$returnArray = serverSideCustomerOrder($_GET);
+}else if($_GET['request_data'] == 'detailcustomerorder'){
+	$returnArray = serverSideDetailCustomerOrder($_GET);
+}else if($_GET['request_data'] == 'getproduct'){
+	$returnArray = serverSideGetProduct($_GET);
+}else if($_GET['request_data'] == 'getproductbarcode'){
+	$returnArray = serverSideGetOneProduct($_GET);
 }
 echo json_encode($returnArray);
 ?>

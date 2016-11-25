@@ -133,6 +133,7 @@ $(document).ready(function() {
             }
         }
     });
+    //TODO : Fix saving process to be single saving process
     $('#simpan-produksi').button().on('click', function(){
         for (key in qtyInput) {
             if (qtyInput.hasOwnProperty(key)) {
