@@ -989,7 +989,10 @@ function pemasukan($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'pemasukan.tglpemasukan','pemasukan.kategori', 'pemasukan.keterangan', 'pemasukan.nilai'
+		3 => 'pemasukan.tglpemasukan',
+		4 => 'pemasukan.kategori',
+		5 => 'pemasukan.keterangan',
+		6 => 'pemasukan.nilai'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];

@@ -90,7 +90,7 @@ function insert_detail_customer_order(){
 				$executedSQL[] = $strSQL;
 				db_query(
 					$strSQL,$_POST['idcustomerorder'],$_POST['idproduk'],$detailBarcode,$_POST['qty'],
-					$_POST['hargajual'],$_POST['hargapokok'],$_POST['qty'],time(),$_POST['qty'],$perkiraanAmbil
+					$_POST['hargapokok'],$_POST['hargajual'],$_POST['qty'],time(),$_POST['qty'],$perkiraanAmbil
 				);
 			}
 			$strSQL = 'SELECT SUM(hargajual*jumlah) AS total_order FROM detailcustomerorder WHERE idcustomerorder=%d';
