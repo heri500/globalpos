@@ -193,7 +193,7 @@ function akhiri_belanja(cetak){
 	request.nomerkartu = $("#nomerkartu").val();
 	request.tgljual = $("#tgljualkirim").val();
 	request.keterangan = $("#keterangan").val();
-	request.idmeja = $("#idmeja").val();
+	//request.idmeja = $("#idmeja").val();
 	alamat = pathutama + "penjualan/simpancustomerorder";
 	$.ajax({
 		type: "POST",
@@ -542,12 +542,12 @@ $(document).ready(function(){
 		kembali = $("#nilaibayar").val()-totalbelanja;
 		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 		if (e.keyCode == 13){
-			if ($('#idmeja').val() != ''){
-				akhiri_belanja(cetakstruk);
-			}else{
-				$('#nomermeja').select();
-			}
-
+			akhiri_belanja(cetakstruk);
+		}
+	});
+	$("#keterangan").keyup(function(e){
+		if (e.keyCode == 13){
+			akhiri_belanja(cetakstruk);
 		}
 	});
 	$('#idpelanggan').chosen();
@@ -599,20 +599,4 @@ $(document).ready(function(){
 	$('#tempattabelkasir').css('width','780px');
 	$('#barcode').css('width','575px');
 	$('#tempattombolkasir').css('height','330px');
-	$('#nomormeja').autocomplete({
-		source: pathutama + "penjualan/autocarimeja",
-		select: function (event, ui) {
-			$("#nomormeja").val(ui.item.value);
-			$("#idmeja").val(ui.item.id);
-		}
-	});
-	$('#nomormeja').keypress(function(e) {
-		if (e.keyCode == 13){
-			if ($("#idmeja").val() != ""){
-				akhiri_belanja(cetakstruk);
-			}else{
-				$("#pesantext").text("Mohon isi nomer meja...!!!");
-				$("#dialogwarning").dialog("open");
-			}
-		}	});
 })

@@ -147,8 +147,8 @@ function customerorder(){
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
 	$keterangan = '<textarea id="keterangan" name="keterangan" style="width: 300px;"></textarea>';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
-	$meja = '<input type="text" id="nomormeja" name="nomormeja">';
-	$meja .= '<input type="hidden" id="idmeja" name="idmeja">';
+	//$meja = '<input type="text" id="nomormeja" name="nomormeja">';
+	//$meja .= '<input type="hidden" id="idmeja" name="idmeja">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Total Order</label>'.$totalbelanja.'</div>';
 	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
@@ -156,7 +156,7 @@ function customerorder(){
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
 	$penjualan .= '<div id="field_bayar" class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Keterangan</label>'.$keterangan.'</div>';
-	$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
+	//$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
 	$penjualan .= '<div id="field_kembali" class="barisbayar" style="display: none;"><label>Kembali</label>'.$kembali.'</div>';
 	//$penjualan .= '<div class="barisbayar" style="text-align: center;">';
 	//$penjualan .= '<button id="simpan-cetak-customerorder" style="margin-top: 10px;font-size: 0.8em;">SIMPAN & PRINT</button>&nbsp;&nbsp;';
@@ -193,9 +193,9 @@ function simpan_customerorder(){
 		$splitJam = explode(':',date("H:i:s"));
 		$intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		global $user;
-		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, tglorder, idpelanggan, keterangan, idmeja)
-		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d')",
-				 $no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"], $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"],$_POST["idmeja"]);
+		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, tglorder, idpelanggan, keterangan)
+		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s')",
+				 $no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"], $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"]);
 		$next_id = db_last_insert_id('customer_order', 'id');
 		print $next_id;
 		if (isset($_POST["bayar"]) && isset($_POST["idpelanggan"]) && (int)$_POST["idpelanggan"] > 0){
@@ -240,6 +240,9 @@ function simpan_customerorder(){
 }
 function buat_nota_customerorder($id){
 	$no_nota = createEAN13Code(getRandomString(9));
+	while (cekNonotaBarcodeExist($no_nota)){
+		$no_nota = createEAN13Code(getRandomString(9));
+	}
 	return $no_nota;
 }
 function view_kasir_customerorder(){

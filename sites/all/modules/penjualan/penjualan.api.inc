@@ -1078,6 +1078,17 @@ function cekDetailOrderBarcodeExist($detailBarcode = null){
 	}
 	return $detailBarcodeExists;
 }
+function cekNonotaBarcodeExist($notaBarcode = null){
+	$notaBarcodeExists = false;
+	if (!empty($notaBarcode)){
+		$strSQL = 'SELECT COUNT(id) FROM customer_order WHERE nonota=\'%s\'';
+		$countNotaBarcode = db_result(db_query($strSQL, $notaBarcode));
+		if ($countNotaBarcode > 0){
+			$notaBarcodeExists = true;
+		}
+	}
+	return $notaBarcodeExists;
+}
 function cekPrinterCommand(){
 	$printOut = '';
 	if (isset($_GET['nidlaundry'])){
