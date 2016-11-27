@@ -86,10 +86,11 @@ function edit_kategori(nid, nTr){
 function edit_pemasukan(nid, nTr){
 	var aPos = oTablePemasukan.fnGetPosition( nTr );
 	var aData = oTablePemasukan.fnGetData( aPos );
+	var tglsplit = aData[3].split('-');
+	var tgledit = tglsplit[2] +'-'+ tglsplit[1] +'-'+ tglsplit[0]; 	
 	$('#edit-idkategori').val(aData[7]);
-	$('#edit-tanggal').val(aData[3]);
-	var splitDate = aData[3].split('-');
-	var tglkirim = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+	$('#edit-tanggal').val(tgledit);
+	var tglkirim = aData[3];
 	$('#edit-tglkirim').val(tglkirim);
 	$('#edit-keteranganpemasukan').val(aData[5]);
 	console.log(aData[6]);
@@ -106,9 +107,10 @@ function edit_pengeluaran(nid, nTr){
 	var aPos = oTablePengeluaran.fnGetPosition( nTr );
 	var aData = oTablePengeluaran.fnGetData( aPos );
 	$('#edit-idkategori-1').val(aData[7]);
-	$('#edit-tanggal-1').val(aData[3]);
-	var splitDate = aData[3].split('-');
-	var tglkirim = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+	var tglsplit = aData[3].split('-');
+	var tgledit = tglsplit[2] +'-'+ tglsplit[1] +'-'+ tglsplit[0]; 	
+	$('#edit-tanggal-1').val(tgledit);
+	var tglkirim = aData[3];
 	$('#edit-tglkirim-1').val(tglkirim);
 	$('#edit-keteranganpengeluaran').val(aData[5]);
 	console.log(aData[6]);

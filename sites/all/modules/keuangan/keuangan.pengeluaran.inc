@@ -264,7 +264,7 @@ function createLaporanKeuangan($tgl1 = null, $tgl2 = null){
 			'keterangan' => array('data' => 'Total Pembelian'),
 			'total' => array('data' => number_format($totalPembelian,0,',','.'), 'class' => 'angka'),
 		);
-		$totalPembayaranSupplier = getTotalPembayaranSupplier(null, $periodePemasukan);
+		$totalPembayaranSupplier = 0;//getTotalPembayaranSupplier(null, $periodePemasukan);
 		$rows_array[] = array(
 			'keterangan' => array('data' => 'Total Pembayaran Hutang'),
 			'total' => array('data' => number_format($totalPembayaranSupplier,0,',','.'), 'class' => 'angka'),
