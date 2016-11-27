@@ -110,3 +110,54 @@ function do_pembayaran_hutang($variables = null){
 		}
 	}
 }
+function createSupplierSelection($defaultValue = null, $emptyText = null, $inisialUlang = true){
+	if ($inisialUlang){
+		$pilihsupplier = '<select id="idsupplier" name="idsupplier" onchange="inisialulangautocomplete()">';
+	}else{
+		$pilihsupplier = '<select id="idsupplier" name="idsupplier">';
+	}
+	if (!empty($emptyText)){
+		if (empty($defaultValue)){
+			$pilihsupplier .= '<option value="0" selected>'.$emptyText.'</option>';
+		}else{
+			$pilihsupplier .= '<option value="0">'.$emptyText.'</option>';
+		}
+	}
+	$resultsupplier = db_query("SELECT idsupplier,namasupplier FROM supplier");
+	while ($datasupplier = db_fetch_object($resultsupplier)){
+		if (!empty($defaultValue) && $datasupplier->idsupplier == $defaultValue){
+			$pilihsupplier .= '<option value="'.$datasupplier->idsupplier.'" selected>'.$datasupplier->namasupplier.'</option>';
+		}else{
+			$pilihsupplier .= '<option value="'.$datasupplier->idsupplier.'">'.$datasupplier->namasupplier.'</option>';
+		}
+	}
+	$pilihsupplier .= '</select>';
+	return $pilihsupplier;
+}
+function getTotalPembayaranSupplier($idSupplier = null, $periode = null){
+	$totalpembayaran = 0;
+	if (!empty($idSupplier)){
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d'", $idSupplier)
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE idsupplier='%d' AND tglbayar BETWEEN '%s' AND '%s' ", $idSupplier, $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}else{
+		if (empty($periode)) {
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang")
+			);
+		}else if (!empty($periode) && isset($periode['awal']) && isset($periode['akhir'])){
+			$result = db_result(
+				db_query("SELECT SUM(pembayaran) FROM pembayaranhutang WHERE tglbayar BETWEEN '%s' AND '%s' ", $periode['awal'], $periode['akhir'])
+			);
+		}
+		$totalpembayaran = $result;
+	}
+	return $totalpembayaran;
+}

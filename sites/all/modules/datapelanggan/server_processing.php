@@ -393,6 +393,96 @@ function serverSidePenjualan2($request){
 		);
 }
 
+function serverSidePenjualan3($request){
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		'kateg.kodekategori','kateg.kategori','totaljual',
+		'totalmodal','totallaba'
+	);
+	$orderColumnArray = $_REQUEST['order'];
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength)){
+		$pageLength = 100;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = "SELECT kateg.idkategori,kateg.kodekategori,kateg.kategori,";
+	$strSQL .= "SUM(detail.hargajual*detail.jumlah) AS totaljual,";
+	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
+	$strSQL .= "SUM((detail.hargajual - detail.hargapokok) * detail.jumlah) AS totallaba ";
+	$strSQL .= "FROM detailpenjualan AS detail ";
+	$strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+	$strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+	$strSQL .= "LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori ";
+	$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	$strSQLFilteredTotal = "SELECT COUNT(kateg.idkategori) ";
+	$strSQLFilteredTotal .= "FROM detailpenjualan AS detail ";
+	$strSQLFilteredTotal .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
+	$strSQLFilteredTotal .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
+	$strSQLFilteredTotal .= "LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori ";
+	$strSQLFilteredTotal .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (kateg.kodekategori LIKE '%%%s%%' OR ";
+		$strCriteria .= "kateg.kategori LIKE '%%%s%%' ) ";
+	}
+	$strSQL .= $strCriteria." GROUP BY kateg.idkategori ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria." GROUP BY kateg.idkategori";
+	if (!empty($searchQuery)){
+		$result = db_query(
+			$strSQL,
+			$tglAwal,
+			$tglAkhir,
+			$searchQuery,
+			$searchQuery,
+			$firstRecord,
+			$lastRecord
+		);
+		$recordsFiltered = db_result(
+			db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $searchQuery, $searchQuery)
+		);
+	}else{
+		$result = db_query($strSQL, $tglAwal, $tglAkhir, $firstRecord, $lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
+	}
+	$output = array();
+	while ($data = db_fetch_object($result)){
+		$rowData = array();
+		$rowData[] = $data->kodekategori;
+		$rowData[] = $data->kategori;
+		$rowData[] = number_format($data->totaljual,0,",",".");
+		$rowData[] = number_format($data->totalmodal,0,",",".");
+		$rowData[] = number_format(($data->totallaba),0,",",".");
+		$rowData[] = $data->idkategori;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(
+		db_query("SELECT COUNT(kateg.idkategori) FROM detailpenjualan AS detail
+				LEFT JOIN penjualan AS penj ON detail.idpenjualan=penj.idpenjualan
+				LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct
+				LEFT JOIN kategori AS kateg ON prod.idkategori = kateg.idkategori
+				WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' GROUP BY kateg.idkategori",
+				 $tglAwal,$tglAkhir
+		)
+	);
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
+
 function serverSideLaundry($request){
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
