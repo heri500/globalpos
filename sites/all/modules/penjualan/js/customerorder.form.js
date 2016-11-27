@@ -203,8 +203,8 @@ function akhiri_belanja(cetak){
 		success: function(data){
 			var returndata = data.trim();
 			if (returndata != "error"){
-                                if (cetak == 1){
-					window.open(pathutama + "print/6?idcustomerorder="+ returndata);
+                if (cetak == 1){
+					window.open(pathutama + "print/6?idorder="+ returndata +"&totalprint=2");
 				}
 				window.location = pathutama + "penjualan/customerorder?tanggal="+ request.tgljual;
 			}else{

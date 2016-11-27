@@ -298,7 +298,7 @@ function delete_customerorder(idcustomerorder,nonota){
 function print_customerorder(idcustomerorder,nonota){
 	var konfirmasi = confirm('Yakin ingin mencetak kembali customerorder dengan no nota : '+ nonota +' ini...??!!');	
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?idcustomerorder='+ idcustomerorder);
+		window.open(pathutama + 'print/6?idorder='+ idcustomerorder);
 	}
 }
 function print_production(idcustomerorder,nonota){
