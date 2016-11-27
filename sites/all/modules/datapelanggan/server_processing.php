@@ -979,7 +979,7 @@ function serverGetNotaProduksi($request = null){
 		$strSQL .= 'LEFT JOIN customer_order custOrd ON detOrd.idcustomerorder = custOrd.id ';
 		$strSQL .= 'LEFT JOIN pelanggan plg ON custOrd.idpelanggan = plg.idpelanggan ';
 		$strSQL .= 'LEFT JOIN product prod ON detOrd.idproduct = prod.idproduct ';
-		$strSQL .= 'WHERE LOWER(detOrd.detailbarcode) LIKE \'%s\'';
+		$strSQL .= 'WHERE LOWER(detOrd.detailbarcode) LIKE \'%s\' AND detOrd.outstanding > 0 ';
 		$result = db_query($strSQL,$searchText);
 		$items = array();
 		while ($rowDb = db_fetch_object($result)){
