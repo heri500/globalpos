@@ -117,7 +117,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	}
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
-	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
+	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"><input type="hidden" id="hiddenbarcode" name="hiddenbarcode"></div>';
 	$tablekasir = view_kasir($idtitipanlaundry,$alamatasal);
 	$penjualan .= '<div id="tempattabelkasir">'.$tablekasir.'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
@@ -410,7 +410,7 @@ function cari_produk(){
 	if ($_POST["katacari"]){
 		$KATACARI = '%'.$_POST["katacari"].'%';
 		//$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
-		$result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
+		$result = db_query("SELECT idproduct,barcode,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
 		berlaku_sebelum_zuhur FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' 
 		OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$data = db_fetch_object($result);
@@ -427,7 +427,7 @@ function cari_produk(){
 				$DISKON = 0;
 			}
 			$takeTime = calculateTakeTime($data->lead_time, $_POST["waktumasuk"],$data->aturan_jam_kerja,$data->berlaku_sebelum_zuhur);
-			print $data->idproduct.';'.$data->namaproduct.';'.$data->hargajual.';'.$DISKON.';'.$takeTime[0].';'.$takeTime[1];
+			print $data->idproduct.';'.$data->namaproduct.';'.$data->hargajual.';'.$DISKON.';'.$takeTime[0].';'.$takeTime[1].';'.$data->barcode;
 		}else{
 			print "error";
 		}

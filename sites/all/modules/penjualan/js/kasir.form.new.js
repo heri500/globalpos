@@ -39,7 +39,11 @@ function ubah_qty_produk(posisi,nTr,idproduk){
 }
 function tambahproduk(qtyAdd){
 	var request = new Object();
-	var katacari = $("#barcode").val();
+	if ($('#hiddenbarcode').val() != ''){
+		var katacari = $("#hiddenbarcode").val();
+	}else{
+		var katacari = $("#barcode").val();
+	}
 	var pecahkatacari = katacari.split("--->");
 	request.katacari = pecahkatacari[0];
 	request.idpelanggan = $("#idpelanggan").val();
@@ -55,8 +59,8 @@ function tambahproduk(qtyAdd){
             if (pecahdata[0].trim() != "error"){
 				nilaisubtotal = (pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100)) * qtyAdd;
 				subtotal = number_format(nilaisubtotal,0,",",".");
-				nilaikirim = pecahdata[0] +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3];
-				index_cek_box = pecahdata[0];
+				nilaikirim = pecahdata[0].trim() +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3];
+				index_cek_box = pecahdata[0].trim();
 				namacekbox = "cekbox_"+ index_cek_box;
 				if($("#"+ namacekbox).val()){
 					var nilaicekbox = $("#"+ namacekbox).val();
@@ -75,6 +79,9 @@ function tambahproduk(qtyAdd){
 					posisiakhir = totalproduk-1;
 					if (posisibaris == posisiakhir){
 						$("#lastqty").val(qtybaru);
+					}
+					if (typeof pecahnilai[6] != 'undefined'){
+						$("#hiddenbarcode").val(pecahnilai[6].trim());
 					}
 				}else{
 					var icondelete = "<img onclick=\"hapus_produk(\'"+ index_cek_box +"\',this.parentNode.parentNode,\'"+ pecahdata[0] +"\')\" title=\"Klik untuk menghapus\" src=\""+ pathutama +"misc/media/images/close.ico\" width=\"24\">";
@@ -436,7 +443,6 @@ $(document).ready(function(){
 	$(".ui-dialog-titlebar").css("font-size","14px");
 	$("button").button();
 	$("#barcode").keypress(function(e) {
-		console.log(e.keyCode);
 		if (e.keyCode == 114){
 			$("#tombolubahqty").click();
 		}else if (e.keyCode == 13){
@@ -473,6 +479,7 @@ $(document).ready(function(){
 			}else if(!ui.item.barcode && !ui.item.alt_code){
 				$("#barcode").val(ui.item.value);
 			}
+			$('#hiddenbarcode').val(ui.item.barcode);
 			tambahproduk(1);
 		}
 	});

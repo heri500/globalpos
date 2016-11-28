@@ -81,7 +81,7 @@ function customerorder(){
 	$penjualan .= '<div id="tempatsupplier2">'.$pilihpelanggan.' <img id="add-pelanggan" src="'.base_path().'misc/media/images/add-small.ico" style="margin: 4px;cursor:pointer;"></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
-	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
+	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"><input type="hidden" id="hiddenbarcode" name="hiddenbarcode"></div>';
 	$penjualan .= '<div id="tempattabelkasir">'.view_kasir_customerorder().'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
