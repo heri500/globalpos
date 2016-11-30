@@ -89,6 +89,8 @@ function getPengeluaranByPeriode($restapi = null,$variables){
 		$variables['akhir'] = $_POST['tglakhir'];
 	}
 	if (isset($variables['awal']) && isset($variables['akhir'])){
+		$variables['awal'] = $variables['awal'].' 00:00';
+		$variables['akhir'] = $variables['akhir'].' 23:59';
 		$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 		FROM `cms_pengeluaran` WHERE `tglpengeluaran` >= %d AND `tglpengeluaran` <= %d", $variables['awal'],$variables['akhir']);	
 	}else{
@@ -132,6 +134,8 @@ function getPengeluaranByPeriodeKategori($restapi = null,$variables){
 		$variables['idkategori'] = $_POST['idkategori'];
 	}
 	if (isset($variables['awal']) && isset($variables['akhir'])){
+		$variables['awal'] = $variables['awal'].' 00:00';
+		$variables['akhir'] = $variables['akhir'].' 23:59';
 		if (isset($variables['idkategori'])){
 			$object_rs = db_query("SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 			FROM `cms_pengeluaran` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) AND `kategori`=%d",
@@ -169,6 +173,8 @@ function getPemasukanByPeriode($restapi = null,$variables){
 		$variables['akhir'] = $_POST['tglakhir'];
 	}
 	if (isset($variables['awal']) && isset($variables['akhir'])){
+		$variables['awal'] = $variables['awal'].' 00:00';
+		$variables['akhir'] = $variables['akhir'].' 23:59';
 		$object_rs = db_query("SELECT `id`, `keterangan`, `nilai`, `tglpengeluaran`, `created`, `changed`, `uid`
 		FROM `cms_pemasukan` WHERE (`tglpengeluaran` >= %d AND `tglpengeluaran` <= %d) AND `kategori`=%d",
 		strtotime($variables['awal']),strtotime($variables['akhir']),$variables['idkategori']);
@@ -195,6 +201,8 @@ function getPemasukanByPeriodeKategori($restapi = null,$variables){
 		$variables['idkategori'] = $_POST['idkategori'];
 	}
 	if (isset($variables['awal']) && isset($variables['akhir'])){
+		$variables['awal'] = $variables['awal'].' 00:00';
+		$variables['akhir'] = $variables['akhir'].' 23:59';
 		if (isset($variables['idkategori'])) {
 			$object_rs = db_query(
 				"SELECT `id`, `keterangan`, `kategori`, `nilai`, `tglpemasukan`, `created`, `changed`, `uid`
@@ -290,7 +298,9 @@ function insertPengeluaran($restapi = null,$variables = null){
 		$variables['jumlah'] = $_POST['jumlah'];
 		$variables['keterangan'] = $_POST['keterangan'];
 		$splitTanggal = explode('-',$_POST['tanggal']);
-		$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+		$jamPengeluaran = date('H');
+		$menitPengeluaran = date('m');
+		$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 	}
 	$variables['uid'] = $user->uid;
 	$variables['created'] = time();
@@ -319,7 +329,9 @@ function updatePengeluaran($restapi = null,$variables = null){
 		}
 		if (isset($_POST['tanggal'])){
 			$splitTanggal = explode('-',$_POST['tanggal']);
-			$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+			$jamPengeluaran = date('H');
+			$menitPengeluaran = date('m');
+			$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		}
 		if (isset($_POST['keterangan'])){
 			$variables['keterangan'] = $_POST['keterangan'];
@@ -369,7 +381,9 @@ function insertPemasukan($restapi = null,$variables = null){
 		$variables['jumlah'] = $_POST['jumlah'];
 		$variables['keterangan'] = $_POST['keterangan'];
 		$splitTanggal = explode('-',$_POST['tanggal']);
-		$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+		$jamPengeluaran = date('H');
+		$menitPengeluaran = date('m');
+		$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 	}
 	$variables['uid'] = $user->uid;
 	$variables['created'] = time();
@@ -398,7 +412,9 @@ function updatePemasukan($restapi = null,$variables = null){
 		}
 		if (isset($_POST['tanggal'])){
 			$splitTanggal = explode('-',$_POST['tanggal']);
-			$variables['tanggal'] = mktime(0,0,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+			$jamPengeluaran = date('H');
+			$menitPengeluaran = date('m');
+			$variables['tanggal'] = mktime($jamPengeluaran,$menitPengeluaran,0,$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
 		}
 		if (isset($_POST['keterangan'])){
 			$variables['keterangan'] = $_POST['keterangan'];

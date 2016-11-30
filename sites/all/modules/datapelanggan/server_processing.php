@@ -815,7 +815,10 @@ function pengeluaran($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'pengeluaran.tglpengeluaran','pengeluaran.kategori', 'pengeluaran.keterangan', 'pengeluaran.nilai'
+		3 => 'pengeluaran.tglpengeluaran',
+		4 => 'pengeluaran.kategori',
+		5 => 'pengeluaran.keterangan',
+		6 => 'pengeluaran.nilai'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -866,7 +869,7 @@ function pengeluaran($request){
 		$rowData[] = $editbutton;
 		$rowData[] = $deletebutton;
 		$index_hari = date('w', $data->tglpengeluaran);
-		$tglpengeluaran = date('d-m-Y', $data->tglpengeluaran);
+		$tglpengeluaran = date('Y-m-d', $data->tglpengeluaran);
 		$rowData[] = $arrayhari[$index_hari];
 		$rowData[] = $tglpengeluaran;
 		$rowData[] = $data->kategori_title;
@@ -892,7 +895,10 @@ function pemasukan($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'pemasukan.tglpemasukan','pemasukan.kategori', 'pemasukan.keterangan', 'pemasukan.nilai'
+		3 => 'pemasukan.tglpemasukan',
+		4 => 'pemasukan.kategori',
+		5 => 'pemasukan.keterangan',
+		6 => 'pemasukan.nilai'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -943,7 +949,7 @@ function pemasukan($request){
 		$rowData[] = $editbutton;
 		$rowData[] = $deletebutton;
 		$index_hari = date('w', $data->tglpemasukan);
-		$tglpemasukan = date('d-m-Y', $data->tglpemasukan);
+		$tglpemasukan = date('Y-m-d', $data->tglpemasukan);
 		$rowData[] = $arrayhari[$index_hari];
 		$rowData[] = $tglpemasukan;
 		$rowData[] = $data->kategori_title;

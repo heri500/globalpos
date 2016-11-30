@@ -411,8 +411,8 @@ function cari_produk(){
 		$KATACARI = '%'.$_POST["katacari"].'%';
 		//$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
 		$result = db_query("SELECT idproduct,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
-		berlaku_sebelum_zuhur FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' 
-		OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		berlaku_sebelum_zuhur FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' 
+		OR UPPER(namaproduct) LIKE '%s') AND status_product = 1 LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$data = db_fetch_object($result);
 		if ($data->idproduct){
 			$result2 = db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
@@ -437,7 +437,7 @@ function cari_produk(){
 function cari_barang(){
 	if ($_GET["term"]){
 		$KATACARI = '%'.$_GET["term"].'%';
-		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s') AND status_product=1 LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)){
 			$items[] = array('value' => $data->namaproduct.'--->[Rp. '.number_format($data->hargajual,0,',','.').']['.$data->stok.']','barcode' => $data->barcode,'alt_code' => $data->alt_code);
