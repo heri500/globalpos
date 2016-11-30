@@ -60,7 +60,9 @@ function pembelian(){
 	$pembelian .= '<div id="tempatsupplier2">'.createSupplierSelection().'</div>';
 	$pembelian .= '</div>';
 	$pembelian .= '</div>';
-	$pembelian .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
+	$pembelian .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : ';
+	$pembelian .= '<input type="text" id="barcode" name="barcode" class="barcodekasir">';
+	$pembelian .= '<input type="hidden" id="hiddenbarcode" name="hiddenbarcode"></div>';
 	$pembelian .= '<div id="tempattabelkasir">'.view_kasir_pembelian().'</div>';
 	$pembelian .= '<input type="hidden" id="last_id" name="last_id"><input type="hidden" id="lastqty" name="lastqty" value="1"><input type="hidden" id="lastharga" name="lastharga">';
 	$pembelian .= '<input type="hidden" id="nilaikirim" name="nilaikirim">';
@@ -200,13 +202,13 @@ function cari_produk_pembelian(){
 	if ($_POST["katacari"]){
 		$KATACARI = '%'.$_POST["katacari"].'%';
 		if ($_GET["idsupplier"]){
-			$result = db_query("SELECT idproduct,namaproduct,hargapokok,stok FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s') AND idsupplier='%d'",$KATACARI,$KATACARI,$KATACARI,$_GET["idsupplier"]);
+			$result = db_query("SELECT idproduct,barcode,namaproduct,hargapokok,stok FROM product WHERE (alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s') AND idsupplier='%d'",$KATACARI,$KATACARI,$KATACARI,$_GET["idsupplier"]);
 		}else{
-			$result = db_query("SELECT idproduct,namaproduct,hargapokok,stok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s'",$KATACARI,$KATACARI,$KATACARI);
+			$result = db_query("SELECT idproduct,barcode,namaproduct,hargapokok,stok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s'",$KATACARI,$KATACARI,$KATACARI);
 		}
 		$data = db_fetch_object($result);
 		if ($data->idproduct){
-			print $data->idproduct.';'.$data->namaproduct.';'.$data->hargapokok.';'.$data->stok;
+			print $data->idproduct.';'.$data->namaproduct.';'.$data->hargapokok.';'.$data->stok.';'.$data->barcode;
 		}else{
 			print "error";
 		}
