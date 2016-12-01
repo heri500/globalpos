@@ -251,10 +251,9 @@ function serverSidePenjualan($request){
 	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
 	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
-	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, plg.namapelanggan ";
-	$strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
+	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, ";
+    $strSQL .= "penj.idpelanggan, plg.namapelanggan ";
 	$strSQL .= "FROM penjualan AS penj ";
-	$strSQLFilteredTotal .= "FROM penjualan AS penj ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
 	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
 	if (empty($idpelanggan)){
@@ -262,6 +261,8 @@ function serverSidePenjualan($request){
 	}else{
 		$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' AND penj.idpelanggan=%d ";
 	}
+    $strSQLFilteredTotal = "SELECT COUNT(penj.idpenjualan) ";
+    $strSQLFilteredTotal .= "FROM penjualan AS penj ";
 	$strSQLFilteredTotal .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
 	$strSQLFilteredTotal .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
 	if (empty($idpelanggan)){
@@ -348,7 +349,7 @@ function serverSidePenjualan($request){
 	$output = array();
 	while ($data = db_fetch_object($result)){
 		$rowData = array();
-		$imgDetail = "<img title=\"Klik untuk melihat detail penjualan\" onclick=\"view_detail(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\">";
+		$imgDetail = "<img title=\"Klik untuk melihat detail penjualan\" onclick=\"view_detail(".$data->idpenjualan.",'".$data->nonota."',".$data->idpelanggan.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\">";
 		$rowData[] = $imgDetail;
 		$rowData[] = $data->nonota;
 		$rowData[] = $data->tanggal;
@@ -752,7 +753,8 @@ function serverSideCustomerOrder($request){
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
 	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
 	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";
-	$strSQL .= "plg.namapelanggan, customerorder.keterangan, user.name, meja.meja ";
+	$strSQL .= "customerorder.idpelanggan, plg.namapelanggan, customerorder.keterangan, ";
+    $strSQL .= "user.name, meja.meja ";
 	$strSQL .= "FROM customer_order AS customerorder ";
 	$strSQL .= "LEFT JOIN meja AS meja ON meja.id = customerorder.idmeja ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
@@ -784,7 +786,7 @@ function serverSideCustomerOrder($request){
 	$output = array();
 	while ($data = db_fetch_object($result)){
 		$rowData = array();
-		$tomboldetail = "<img title=\"Klik untuk melihat detail customer order\" onclick=\"view_detail(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
+		$tomboldetail = "<img title=\"Klik untuk melihat detail customer order\" onclick=\"view_detail(".$data->id.",'".$data->nonota."',".$data->idpelanggan.");\" src=\"$baseDirectory/misc/media/images/forward_enabled.ico\" width=\"22\">";
 		$tombolambil = "<img title=\"Klik untuk mengisi form pengambilan customer order\" onclick=\"pickup_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/update.ico\" width=\"22\">";
 		$tombolhapus = "<img title=\"Klik untuk menghapus customer order\" onclick=\"delete_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/del.ico\" width=\"22\">";
 		$tombolprint = "<img title=\"Klik untuk mencetak customer order\" onclick=\"print_customerorder(".$data->id.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
@@ -1076,10 +1078,10 @@ function serverSideDetailCustomerOrder($request){
 		3 => 'detord.jumlah',
 		4 => '(detord.jumlah - detord.sisa)',
 		5 => 'detord.sisa',
-		6 => 'detord.perkiraan_ambil',
-		7 => 'detord.diambil',
-		8 => 'detord.hargajual',
-		9 => '(detord.jumlah*detord.hargajual)',
+        6 => 'detord.hargajual',
+        7 => '(detord.jumlah*detord.hargajual)',
+		8 => 'detord.perkiraan_ambil',
+		9 => 'detord.diambil',
 	);
 	$orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -1154,15 +1156,32 @@ function serverSideGetProduct($request){
 	$items = array();
 	if ($_GET["term"]){
 		$KATACARI = '%'.$_GET["term"].'%';
-		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
+            $diskon = 0;
+            if ($data->idproduct) {
+                $idpelanggan = 0;
+                if (isset($_GET["idpelanggan"])){
+                    $idpelanggan = $_GET["idpelanggan"];
+                }
+                $result2 = db_query(
+                    "SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+                    $idpelanggan,
+                    $data->idkategori
+                );
+                $datadiskon = db_fetch_object($result2);
+                if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+                    $diskon = $datadiskon->besardiskon;
+                }
+            }
 			$items[] = array(
 				'value' => $data->namaproduct,
 				'barcode'   => $data->barcode,
 				'alt_code'  => $data->alt_code,
 				'hargajual' => $data->hargajual,
 				'hargapokok' => $data->hargapokok,
+                'diskon' => $diskon,
 				'id' => $data->idproduct,
 			);
 		}
@@ -1176,17 +1195,117 @@ function serverSideGetOneProduct($request){
 		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 1",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
+            $diskon = 0;
+            if ($data->idproduct) {
+                $idpelanggan = 0;
+                if (isset($_GET["idpelanggan"])){
+                    $idpelanggan = $_GET["idpelanggan"];
+                }
+                $result2 = db_query(
+                    "SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+                    $idpelanggan,
+                    $data->idkategori
+                );
+                $datadiskon = db_fetch_object($result2);
+                if ($datadiskon->besardiskon >= 0) {
+                    $diskon = $datadiskon->besardiskon;
+                }
+            }
 			$items[] = array(
 				'value' => $data->namaproduct,
 				'barcode'   => $data->barcode,
 				'alt_code'  => $data->alt_code,
 				'hargajual' => $data->hargajual,
 				'hargapokok' => $data->hargapokok,
+                'diskon' => $diskon,
 				'id' => $data->idproduct,
 			);
 		}
 	}
 	return $items;
+}
+function serverSideDetailPenjualan($request){
+    global $baseDirectory;
+    $pageStart = $_GET['start'];
+    $pageLength = $_GET['length'];
+    $searchArray = $_REQUEST['search'];
+    $idPenjualan = $_REQUEST['idpenjualan'];
+    $searchQuery = $searchArray['value'];
+    $arrayColumn = array(
+        1 => 'product.barcode',
+        2 => 'product.namaproduct',
+        3 => 'detail.jumlah',
+        4 => 'detail.hargajual',
+        5 => 'detail.hargapokok',
+        6 => '(detail.jumlah*detail.hargajual)',
+        7 => '(detail.jumlah*detail.hargapokok)',
+        8 => '(detail.jumlah*(detail.hargajual - detail.hargapokok))',
+    );
+    $orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+    $orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+    if (is_null($pageStart)){
+        $pageStart = 0;
+    }
+    if (is_null($pageLength) || $pageLength == -1){
+        $pageLength = 25;
+    }
+    $firstRecord = $pageStart;
+    $lastRecord = $pageStart + $pageLength;
+    $strSQL = 'SELECT detail.iddetail,product.barcode, product.namaproduct, detail.jumlah,';
+    $strSQL .= 'detail.hargapokok,detail.hargajual,(detail.hargajual*detail.jumlah) AS subtotal,';
+    $strSQL .= '(detail.hargapokok*detail.jumlah) AS modal,';
+    $strSQL .= '((detail.hargajual-detail.hargapokok)*detail.jumlah) AS laba ';
+    $strSQL .= 'FROM detailpenjualan detail LEFT JOIN product product ';
+    $strSQL .= 'ON detail.idproduct=product.idproduct ';
+    $strSQL .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+    $strSQL .= 'WHERE detail.idpenjualan=%d ';
+    $strSQLFilteredTotal = 'SELECT COUNT(detail.iddetail) FROM ';
+    $strSQLFilteredTotal .= 'detailpenjualan detail LEFT JOIN product product ';
+    $strSQLFilteredTotal .= 'ON detail.idproduct=product.idproduct ';
+    $strSQLFilteredTotal .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+    $strSQLFilteredTotal .= 'WHERE detail.idpenjualan=%d ';
+    $strCriteria = "";
+    if (!empty($searchQuery)){
+        $strCriteria .= "AND (product.barcode LIKE '%%%s%%' OR ";
+        $strCriteria .= "product.namaproduct LIKE '%%%s%%'";
+        $strCriteria .= ")";
+    }
+    $strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    $strSQLFilteredTotal .= $strCriteria;
+    if (!empty($searchQuery)) {
+        $result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+        $recordsFiltered = db_result(
+            db_query($strSQLFilteredTotal, $idPenjualan, $searchQuery, $searchQuery)
+        );
+    }else{
+        $result = db_query($strSQL,$idPenjualan,$firstRecord,$lastRecord);
+        $recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idPenjualan));
+    }
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $rowData = array();
+        $deletebutton = '<img title="Klik untuk menghapus detail penjualan" onclick="hapus_detail('.$data->iddetail.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+        $rowData[] = $deletebutton;
+        $rowData[] = $data->barcode;
+        $rowData[] = $data->namaproduct;
+        $rowData[] = $data->jumlah;
+        $rowData[] = number_format($data->hargajual,0,',','.');
+        $rowData[] = number_format($data->hargapokok,0,',','.');
+        $rowData[] = number_format($data->subtotal,0,',','.');
+        $rowData[] = number_format($data->modal,0,',','.');
+        $rowData[] = number_format($data->laba,0,',','.');
+        $rowData[] = $data->iddetail;
+        $output[] = $rowData;
+    }
+    $recordsTotal = db_result(db_query("SELECT COUNT(iddetail) FROM detailpenjualan"));
+    return array(
+        "draw"            => isset ( $request['draw'] ) ?
+            intval( $request['draw'] ) :
+            0,
+        "recordsTotal"    => intval( $recordsTotal ),
+        "recordsFiltered" => intval( $recordsFiltered ),
+        "data"            => $output
+    );
 }
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
@@ -1214,6 +1333,8 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetProduct($_GET);
 }else if($_GET['request_data'] == 'getproductbarcode'){
 	$returnArray = serverSideGetOneProduct($_GET);
+}else if($_GET['request_data'] == 'detailpenjualan'){
+    $returnArray = serverSideDetailPenjualan($_GET);
 }
 echo json_encode($returnArray);
 ?>

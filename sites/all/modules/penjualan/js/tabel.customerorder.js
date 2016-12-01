@@ -5,6 +5,7 @@ var urutan = '';
 var alamatupdatedetailorder = '';
 var selectedOrder = 0;
 var selectedNota = '';
+var selectedPelanggan = 0;
 function addCommas(nStr){
 	nStr += "";
 	x = nStr.split(",");
@@ -271,8 +272,9 @@ function tampiltabelcustomerorderdetail(selectedId){
 		},
 	});
 }
-function view_detail(idcustomerorder,nonota){
+function view_detail(idcustomerorder,nonota,idpelanggan){
     selectedNota = nonota;
+	selectedPelanggan = idpelanggan;
 	var request = new Object();
 	request.idcustomerorder = idcustomerorder;
 	alamat = pathutama + 'penjualan/detailcustomerorder';
@@ -424,7 +426,7 @@ $(document).ready(function(){
 		dateFormat: 'dd-mm-yy'
 	});
 	$("#new-product").autocomplete({
-		source: pathutama + 'sites/all/modules/datapelanggan/server_processing.php?request_data=getproduct',
+		source: pathutama + 'sites/all/modules/datapelanggan/server_processing.php?request_data=getproduct&idpelanggan='+ selectedPelanggan,
 		select: function (event, ui) {
 			if (ui.item.barcode){
 				$('#new-product').val(ui.item.barcode);
@@ -434,10 +436,17 @@ $(document).ready(function(){
 				$('#new-product').val(ui.item.value);
 			}
 			$('#idproduct').val(ui.item.id);
-			$('#harga-view').val('Rp. '+ addCommas(ui.item.hargajual));
-			$('#hargajual').val(ui.item.hargajual);
+			var hargajual = ui.item.hargajual;
+			var diskonview = '';
+			if (ui.item.diskon > 0){
+				hargajual = hargajual - (hargajual * ui.item.diskon/100);
+				diskonview = '('+ ui.item.diskon +'%)';
+			}
+			$('#diskon').val(ui.item.diskon);
+			$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
+			$('#hargajual').val(hargajual);
 			$('#hargapokok').val(ui.item.hargapokok);
-			$('#subtotal-view').val('Rp. '+ addCommas(ui.item.hargajual));
+			$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
 			$('#qty-new').val('1');
 			$('#qty-new').select();
 		}
@@ -456,6 +465,7 @@ $(document).ready(function(){
 			if ($("#new-product").val() != ''){
 				var request = new Object();
 				request.request_data = 'getproductbarcode';
+				request.idpelanggan = selectedPelanggan;
 				request.term = $("#new-product").val();
 				alamat = pathutama + 'sites/all/modules/datapelanggan/server_processing.php';
 				$.ajax({
@@ -465,13 +475,19 @@ $(document).ready(function(){
 					cache: false,
 					success: function(data){
 						var returnData = eval(data);
-						console.log(returnData);
 						$('#new-product').val(returnData[0].value);
 						$('#idproduct').val(returnData[0].id);
-						$('#hargajual').val(returnData[0].hargajual);
+						var hargajual = returnData[0].hargajual;
+						var diskonview = '';
+						if (returnData[0].diskon > 0){
+							hargajual = hargajual - (hargajual * returnData[0].diskon/100);
+							diskonview = '('+ returnData[0].diskon +'%)';
+						}
+						$('#diskon').val(returnData[0].diskon);
+						$('#hargajual').val(hargajual);
 						$('#hargapokok').val(returnData[0].hargapokok);
-						$('#harga-view').val('Rp. '+ addCommas(returnData[0].hargajual));
-						$('#subtotal-view').val('Rp. '+ addCommas(returnData[0].hargajual));
+						$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
+						$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
 						$('#qty-new').val('1');
 						$('#qty-new').select();
 					}
@@ -485,6 +501,7 @@ $(document).ready(function(){
 		request.idproduk = $('#idproduct').val();
 		request.hargajual = $('#hargajual').val();
 		request.hargapokok = $('#hargapokok').val();
+		request.diskon = $('#diskon').val();
 		request.qty = $('#qty-new').val();
 		alamat = pathutama + 'penjualan/simpandetailorder';
 		$.ajax({
@@ -496,6 +513,7 @@ $(document).ready(function(){
 				oTable2.fnDraw();
 				$('#new-product').val('');
 				$('#idproduct').val('');
+				$('#diskon').val('');
 				$('#hargajual').val('');
 				$('#hargapokok').val('');
 				$('#harga-view').val('');

@@ -82,6 +82,7 @@ function view_tabel_customerorder(){
 	$inputHarga = '<input type="text" id="harga-view" name="harga-view" size="10" readonly="readonly">';
 	$inputHarga .= '<input type="hidden" id="hargajual" name="hargajual">';
 	$inputHarga .= '<input type="hidden" id="hargapokok" name="hargapokok">';
+	$inputHarga .= '<input type="hidden" id="diskon" name="diskon">';
 	$inputSubtotal = '<input type="text" id="subtotal-view" name="subtotal-view" size="14" readonly="readonly">';
 	$inputQty = '<input type="text" id="qty-new" name="qty-new" size="6">';
 	$viewcustomerorder .= $inputHarga.'<label class="small-label">Qty</label>'.$inputQty.$inputSubtotal;
