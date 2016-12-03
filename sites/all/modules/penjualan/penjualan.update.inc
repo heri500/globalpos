@@ -166,12 +166,12 @@ function insert_detail_penjualan(){
 			$idDetailExist = db_result(db_query($strSQL, $_POST['idproduk'],$_POST['idpenjualan']));
 			if ($idDetailExist > 0){
 				$strSQL = 'UPDATE detailpenjualan SET jumlah = jumlah + \'%f\', hargajual=\'%f\', ';
-				$strSQL .= 'hargapokok=\'%f\', sisa = sisa + \'%f\', outstanding = outstanding + \'%f\', ';
-				$strSQL .= 'masuk=%d,diskon=\'%f\' WHERE id=%d';
+				$strSQL .= 'hargapokok=\'%f\', ';
+				$strSQL .= 'diskon=\'%f\' WHERE iddetail=%d';
 				$executedSQL[] = $strSQL;
 				db_query(
 					$strSQL,$_POST['qty'],$_POST['hargajual'],$_POST['hargapokok'],
-					$_POST['qty'],$_POST['qty'],time(),$_POST['diskon'],$idDetailExist
+					$_POST['diskon'],$idDetailExist
 				);
 			}else{
 				$strSQL = 'INSERT INTO detailpenjualan (idpenjualan, idproduct, jumlah, ';
