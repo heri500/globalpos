@@ -111,3 +111,52 @@ function delete_customer_order($idcustomerorder = null){
 		}
 	}
 }
+function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
+	$deleteStatus[] = array('message' => 'Penghapusan detail penjualan gagal...!!!');
+	if (!empty($iddetail) && !empty($idPenjualan)){
+		$deleteStatus = array();
+		/* Update Stok Product */
+		$qtyJual = db_result(db_query('SELECT jumlah FROM detailpenjualan WHERE iddetail=%d', $iddetail));
+		$idproduct = db_result(db_query('SELECT idproduct FROM detailpenjualan WHERE iddetail=%d', $iddetail));
+		$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
+		$stoksekarang = $stockproduct + $qtyJual;
+		if (!empty($idproduct)){
+			db_query("UPDATE product SET stok = stok + '%f' WHERE idproduct='%d'",$qtyJual,$idproduct);
+			$keterangan = 'Revisi Penjualan - Hapus Detail Penjualan';
+			db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES
+				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPenjualan,$stokproduct,$qtyJual,$stoksekarang,$keterangan);
+		}
+		/* End Update Stok Product */
+		/* Delete Detail Penjualan */
+		$strSQL = 'DELETE FROM detailpenjualan WHERE iddetail=%d';
+		db_query($strSQL,$iddetail);
+		/* End Delete Detail Penjualan */
+		/* Update Penjualan */
+		$strSQL = 'SELECT SUM(hargajual*jumlah) AS total_order FROM detailpenjualan WHERE idpenjualan=%d';
+		$totalOrder = db_result(db_query($strSQL,$idPenjualan));
+		$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
+		$totalModal = db_result(db_query($strSQL,$idPenjualan));
+		$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\' WHERE idpenjualan=%d';
+		db_query($strSQL,$totalOrder,$totalModal,$idPenjualan);
+		/* End Update Penjualan */
+		/* Update Hutang Penjualan Jika Ada */
+		$caraJual = db_result(db_query('SELECT carabayar FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
+		$kembali = db_result(db_query('SELECT kembali FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
+		$idPelanggan = db_result(db_query('SELECT idpelanggan FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
+		$bayar = db_result(db_query('SELECT bayar FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
+		if (!empty($idPelanggan) && ($caraJual == 'HUTANG' || $kembali < 0)){
+			$besarHutang = $totalOrder - $bayar;
+			$sqlUpdatePiutang = 'UPDATE detailpiutang SET besarhutang=\'%f\' ';
+			$sqlUpdatePiutang .= 'WHERE idpelanggan=%d AND idpenjualan=%d';
+			db_query($sqlUpdatePiutang, $besarHutang, $idPelanggan, $idPenjualan);
+			syncHutangPelanggan($idPelanggan);
+		}
+		/* End Update Hutang Penjualan Jika Ada */
+		$deleteStatus[] = array('message' => 'Penghapusan detail penjualan berhasil...!!!');
+	}
+	return $deleteStatus;
+}
+function delete_detail_penjualan_ajax(){
+	print json_encode(delete_detail_penjualan($_POST['iddetail'],$_POST['idpenjualan']));
+	exit();
+}

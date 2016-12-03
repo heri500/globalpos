@@ -858,3 +858,56 @@ tr.selected td {
 	float: left;
 	padding: 4px;
 }
+#add-new-item {
+	margin-top: 10px;
+	padding: 6px;
+	float: left;
+	width: 98.5%;
+	border: 1px solid #999;
+	border-radius: 6px;
+}
+#add-new-item label{
+	width: 120px;
+	float: left;
+	height: 27px;
+	padding-top: 4px;
+}
+label.small-label{
+	width: 40px !important;
+	height: 21px;
+	float: left;
+}
+#add-new-item input{
+	float: left;
+	margin-right: 6px;
+	height: 21px;
+}
+#add-new-item h5{
+	padding : 0 0 8px;
+}
+.no-margin{
+	margin : 0 !important;
+}
+ul.ui-autocomplete {
+	position:absolute;
+	cursor:default;
+	z-index:2001 !important
+}
+#print-slip{
+	margin-top: 10px;
+}
+form.form-item-lined-up, .form-item-lined-up{
+	display: inline-block !important;
+}
+.form-item-lined-up .form-item label{
+	display: inline-block !important;
+	width: 150px !important;
+}
+.form-item-lined-up .form-item select, .form-item-lined-up .form-item input
+.form-item-lined-up .form-item textarea{
+	display: inline-block;
+}
+.form-item-lined-up .form-item textarea,
+.form-item-lined-up .resizable-textarea{
+	width: 100% !important;
+}
