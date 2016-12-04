@@ -968,6 +968,161 @@ function pemasukan($request){
 		"data"            => $output
 	);
 }
+function serverSideGetProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$diskon = 0;
+			if ($data->idproduct) {
+				$idpelanggan = 0;
+				if (isset($_GET["idpelanggan"])){
+					$idpelanggan = $_GET["idpelanggan"];
+				}
+				$result2 = db_query(
+					"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+					$idpelanggan,
+					$data->idkategori
+				);
+				$datadiskon = db_fetch_object($result2);
+				if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+					$diskon = $datadiskon->besardiskon;
+				}
+			}
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'diskon' => $diskon,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
+function serverSideGetOneProduct($request){
+	$items = array();
+	if ($_GET["term"]){
+		$KATACARI = '%'.$_GET["term"].'%';
+		$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 1",$KATACARI,$KATACARI,$KATACARI);
+		$items = array();
+		while ($data = db_fetch_object($result)) {
+			$diskon = 0;
+			if ($data->idproduct) {
+				$idpelanggan = 0;
+				if (isset($_GET["idpelanggan"])){
+					$idpelanggan = $_GET["idpelanggan"];
+				}
+				$result2 = db_query(
+					"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+					$idpelanggan,
+					$data->idkategori
+				);
+				$datadiskon = db_fetch_object($result2);
+				if ($datadiskon->besardiskon >= 0) {
+					$diskon = $datadiskon->besardiskon;
+				}
+			}
+			$items[] = array(
+				'value' => $data->namaproduct,
+				'barcode'   => $data->barcode,
+				'alt_code'  => $data->alt_code,
+				'hargajual' => $data->hargajual,
+				'hargapokok' => $data->hargapokok,
+				'diskon' => $diskon,
+				'id' => $data->idproduct,
+			);
+		}
+	}
+	return $items;
+}
+function serverSideDetailPenjualan($request){
+	global $baseDirectory;
+	$pageStart = $_GET['start'];
+	$pageLength = $_GET['length'];
+	$searchArray = $_REQUEST['search'];
+	$idPenjualan = $_REQUEST['idpenjualan'];
+	$searchQuery = $searchArray['value'];
+	$arrayColumn = array(
+		1 => 'product.barcode',
+		2 => 'product.namaproduct',
+		3 => 'detail.jumlah',
+		4 => 'detail.hargajual',
+		5 => 'detail.hargapokok',
+		6 => '(detail.jumlah*detail.hargajual)',
+		7 => '(detail.jumlah*detail.hargapokok)',
+		8 => '(detail.jumlah*(detail.hargajual - detail.hargapokok))',
+	);
+	$orderColumnArray = isset($_REQUEST['order']) && !empty($_REQUEST['order']) ? $_REQUEST['order'] : array( 0 => array('column' => 1, 'dir' => 'ASC'));
+	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
+	if (is_null($pageStart)){
+		$pageStart = 0;
+	}
+	if (is_null($pageLength) || $pageLength == -1){
+		$pageLength = 25;
+	}
+	$firstRecord = $pageStart;
+	$lastRecord = $pageStart + $pageLength;
+	$strSQL = 'SELECT detail.iddetail,product.barcode, product.namaproduct, detail.jumlah,';
+	$strSQL .= 'detail.hargapokok,detail.hargajual,(detail.hargajual*detail.jumlah) AS subtotal,';
+	$strSQL .= '(detail.hargapokok*detail.jumlah) AS modal,';
+	$strSQL .= '((detail.hargajual-detail.hargapokok)*detail.jumlah) AS laba ';
+	$strSQL .= 'FROM detailpenjualan detail LEFT JOIN product product ';
+	$strSQL .= 'ON detail.idproduct=product.idproduct ';
+	$strSQL .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+	$strSQL .= 'WHERE detail.idpenjualan=%d ';
+	$strSQLFilteredTotal = 'SELECT COUNT(detail.iddetail) FROM ';
+	$strSQLFilteredTotal .= 'detailpenjualan detail LEFT JOIN product product ';
+	$strSQLFilteredTotal .= 'ON detail.idproduct=product.idproduct ';
+	$strSQLFilteredTotal .= 'LEFT JOIN supplier supp ON product.idsupplier=supp.idsupplier ';
+	$strSQLFilteredTotal .= 'WHERE detail.idpenjualan=%d ';
+	$strCriteria = "";
+	if (!empty($searchQuery)){
+		$strCriteria .= "AND (product.barcode LIKE '%%%s%%' OR ";
+		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
+		$strCriteria .= ")";
+	}
+	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	$strSQLFilteredTotal .= $strCriteria;
+	if (!empty($searchQuery)) {
+		$result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+		$recordsFiltered = db_result(
+			db_query($strSQLFilteredTotal, $idPenjualan, $searchQuery, $searchQuery)
+		);
+	}else{
+		$result = db_query($strSQL,$idPenjualan,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idPenjualan));
+	}
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$rowData = array();
+		$deletebutton = '<img title="Klik untuk menghapus detail penjualan" onclick="hapus_detail('.$data->iddetail.',\''.$data->namaproduct.'\');" src="'.$baseDirectory.'/misc/media/images/del.ico" width="22">';
+		$rowData[] = $deletebutton;
+		$rowData[] = $data->barcode;
+		$rowData[] = $data->namaproduct;
+		$rowData[] = $data->jumlah;
+		$rowData[] = number_format($data->hargajual,0,',','.');
+		$rowData[] = number_format($data->hargapokok,0,',','.');
+		$rowData[] = number_format($data->subtotal,0,',','.');
+		$rowData[] = number_format($data->modal,0,',','.');
+		$rowData[] = number_format($data->laba,0,',','.');
+		$rowData[] = $data->iddetail;
+		$output[] = $rowData;
+	}
+	$recordsTotal = db_result(db_query("SELECT COUNT(iddetail) FROM detailpenjualan"));
+	return array(
+		"draw"            => isset ( $request['draw'] ) ?
+			intval( $request['draw'] ) :
+			0,
+		"recordsTotal"    => intval( $recordsTotal ),
+		"recordsFiltered" => intval( $recordsFiltered ),
+		"data"            => $output
+	);
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -986,6 +1141,12 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = pemasukan($_GET);
 }else if($_GET['request_data'] == 'customerorder'){
 	$returnArray = serverSideCustomerOrder($_GET);
+}else if($_GET['request_data'] == 'getproduct'){
+	$returnArray = serverSideGetProduct($_GET);
+}else if($_GET['request_data'] == 'getproductbarcode'){
+	$returnArray = serverSideGetOneProduct($_GET);
+}else if($_GET['request_data'] == 'detailpenjualan'){
+	$returnArray = serverSideDetailPenjualan($_GET);
 }
 echo json_encode($returnArray);
 ?>

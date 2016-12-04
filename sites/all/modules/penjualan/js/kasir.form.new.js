@@ -82,7 +82,7 @@ function tambahproduk(qtyAdd){
 
 					$("#lastharga").val(pecahdata[2]);
 					$("#lastdiskon").val(pecahdata[3]);
-					$("#last_id").val(pecahdata[0]);
+					$("#last_id").val(pecahdata[0].trim());
 					$("#lastqty").val(qtyAdd);
 					checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" />";
 					var row = "<tr id=\""+ index_cek_box +"\"><td>"+ icondelete +"</td><td>"+ iconubah +"</td><td>"+ pecahdata[1] +"</td><td class=\"angka\">"+ pecahdata[2] +"</td><td class=\"angka\">"+ pecahdata[3] +"</td><td class=\"angka\">"+ qtyAdd +"</td><td class=\"angka\">"+ subtotal +" "+ checkboxnilai +"</td></tr>";

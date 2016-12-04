@@ -262,6 +262,33 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.customerorder.inc'
 	);
+	$items['penjualan/updatedetailpenjualan'] = array(
+		'title' => t('Update Detail Penjualan'),
+		'description' => 'Update detail penjualan',
+		'page callback' => 'update_detail_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
+	$items['penjualan/deletedetailpenjualan'] = array(
+		'title' => t('Delete Detail Penjualan'),
+		'description' => 'Delete detail penjualan',
+		'page callback' => 'delete_detail_penjualan_ajax',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.delete.inc'
+	);
+	$items['penjualan/simpandetailpenjualan'] = array(
+		'title' => t('Insert Detail Penjualan'),
+		'description' => 'Insert detail penjualan',
+		'page callback' => 'insert_detail_penjualan',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'penjualan.update.inc'
+	);
 	return $items;
 } // end hook menu
 
