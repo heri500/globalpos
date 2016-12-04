@@ -283,9 +283,9 @@ function printOutPenjualan(){
 		$tablePrint = '<table style="width: 240px;border-collapse: collapse;" >';
 		$tablePrint .= '<tbody>';
 		if ($printHeader){
-			$tablePrint .= '<tr><td rowspan="3" style="border-bottom: 1px solid #000;border-top: 1px solid #000;width:50px;text-align: center;"><img height="48" src="'.$pathLogo.'" /></td><td colspan="2" style="font-size: 14px;font-weight: bold;text-align: center;border-bottom: 1px solid #000;border-top: 1px solid #000;">IKHWAN MART</td></tr>';
-			$tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;">PLAZA VICTORIA,BLOK G No.3&nbsp;&nbsp;</td></tr>';
-			$tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">SENTUL CITY - BOGOR&nbsp;&nbsp;</td></tr>';
+			$tablePrint .= '<tr><td rowspan="3" style="border-bottom: 1px solid #000;border-top: 1px solid #000;width:50px;text-align: center;"><img height="48" src="'.$pathLogo.'" /></td><td colspan="2" style="font-size: 14px;font-weight: bold;text-align: center;border-bottom: 1px solid #000;border-top: 1px solid #000;">GALERI IKHWAN</td></tr>';
+			$tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;">CIBINONG CITY MALL,lt. UG No. C3A&nbsp;&nbsp;</td></tr>';
+			$tablePrint .= '<tr><td colspan="2" style="font-size: 11px;text-align: center;border-bottom: 1px solid #000;">CIBINONG - BOGOR&nbsp;&nbsp;</td></tr>';
 		}
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 14px;text-align: center;"><span style="float: left">No.</span><span style="float: right">'.$dataPenjualan['info']->nonota.'&nbsp;&nbsp;</span></td></tr>';
 		if (!empty($dataPenjualan['info']->namapelanggan)){
@@ -325,7 +325,7 @@ function printOutPenjualan(){
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">SILAHKAN DATANG KEMBALI</td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px solid #000;">KRITIK/SARAN DAN PESAN ANTAR HUBUNGI</td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;font-weight: bold;"><span style="float: left"><img src="'.base_path().'misc/media/images/bbm.png" width="12" style="vertical-align:middle;">&nbsp;5FA325FA</span><span style="float: right"><img src="'.base_path().'misc/media/images/whatsapp.png" width="11" style="vertical-align:middle;">&nbsp;+6287873134847&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;font-weight: bold;"><span style="float: left"><img src="'.base_path().'misc/media/images/bbm.png" width="12" style="vertical-align:middle;">&nbsp;335B75B5</span><span style="float: right"><img src="'.base_path().'misc/media/images/whatsapp.png" width="11" style="vertical-align:middle;">&nbsp;+6281280046437&nbsp;&nbsp;</span></td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;text-align: center;border-bottom: 1px solid #000;">"ISLAM ITU INDAH"</td></tr>';
 		$tablePrint .= '</tbody>';
 		$tablePrint .= '</table>';
