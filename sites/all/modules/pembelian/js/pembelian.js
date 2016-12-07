@@ -50,7 +50,12 @@ function tambahproduk(){
 	}else{
 		var katacari = $("#barcode").val();
 	}
-	alamatcariproduk = pathutama +'pembelian/cariproduk?idsupplier='+ $('#idsupplier').val();
+	request.katacari = katacari;
+	if ($('#idsupplier').val() != ''){
+		alamatcariproduk = pathutama +'pembelian/cariproduk?idsupplier='+ $('#idsupplier').val();
+	}else{
+		alamatcariproduk = pathutama +'pembelian/cariproduk';
+	}
 	$.ajax({
 		type: 'POST',
 		url: alamatcariproduk,
