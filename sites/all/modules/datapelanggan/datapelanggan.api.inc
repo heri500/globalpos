@@ -12,7 +12,7 @@ function getTotalHutangLatest($idPelanggan = null, $realData = false, $periode =
 		if ($realData){
 			$strSqlTotalHutang = "SELECT SUM(besarhutang) AS total_hutang FROM detailpiutang piutang ";
 			$strSqlTotalHutang .= "LEFT JOIN penjualan penj ON piutang.idpenjualan=penj.idpenjualan ";
-			$strSqlTotalHutang .= "WHERE idpelanggan=%d ";
+			$strSqlTotalHutang .= "WHERE piutang.idpelanggan=%d ";
 			if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])){
 				$strSqlTotalHutang = "AND (penj.tglpenjualan BETWEEN '%s' AND '%s')";
 			}
