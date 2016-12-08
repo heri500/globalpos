@@ -148,7 +148,7 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 }
 
 function detail_penjualan(){
-	if ($_POST["idpenjualan"]){
+	if (isset($_POST["idpenjualan"])){
 		$tabelpenjualan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_penjualan">';
 		$tabelpenjualan .= '<thead>';
 		$tabelpenjualan .= '<tr>';
