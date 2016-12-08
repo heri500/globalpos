@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 function JAM_KERJA_LAUNDRY(){
 	return array(
 		'normal' => array(
@@ -671,13 +671,13 @@ function getPremisInformation(){
 		$dataPremis = get_data_premis();
 	}else{
 		$dataPremis = new stdClass();
-		$dataPremis->nama = 'LAUNDRY IKHWAN';
-		$dataPremis->bbm = '5AB041B8';
-		$dataPremis->telepon = '+628982485685';
-		$dataPremis->whatsapp = '+628982485685';
-		$dataPremis->alamat = 'Jl. Babakan Madang, Ruko Victoria';
+		$dataPremis->nama = 'IKHWAN MART';
+		$dataPremis->bbm = '5FA325FA';
+		$dataPremis->telepon = '+6287873134847';
+		$dataPremis->whatsapp = '+6287873134847';
+		$dataPremis->alamat = 'PLAZA VICTORIA,BLOK G No.3';
 		$dataPremis->alamat .= "\n";
-		$dataPremis->alamat .= 'Blok C No.22, Sentul City - Bogor';
+		$dataPremis->alamat .= 'SENTUL CITY - BOGOR 16810';
 		$dataPremis->email = 'ikhwanmart@gmail.com';
 		$dataPremis->website = 'ikhwanmart.ikhwanit.com';
 	}
