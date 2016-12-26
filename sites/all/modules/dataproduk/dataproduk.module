@@ -312,3 +312,16 @@ function calculateTotalNilaiBarang($statusstok = null, $statusProduct = 1){
 	$totalNilaiBarang = db_result(db_query($strSQL,$statusProduct));
 	return $totalNilaiBarang;
 }
+function get_updated_product(){
+	$strSQL = 'SELECT idproduct, idsupplier, idkategori, idsubkategori, barcode, ';
+	$strSQL .= 'alt_code, namaproduct, type_product, hargapokok, hargajual, margin, minstok, ';
+	$strSQL .= 'maxstok, stok, satuan, berat, keterangan, lead_time, aturan_jam_kerja, ';
+	$strSQL .= 'berlaku_sebelum_zuhur, status_product, uploaded, changed ';
+	$strSQL .= 'FROM product WHERE uploaded=0';
+	$result = db_query($strSQL);
+	$dataProduct = array();
+	while ($data = db_fetch_array($result)){
+		$dataProduct[] = $data;
+	}
+	return $dataProduct;
+}
