@@ -128,10 +128,12 @@ function data_produk(){
 	$pilihanstatus .= '<img onclick="view_status(\'all\')" title="Klik untuk melihat seluruh produk" src="'.base_path().'misc/media/images/alldata.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'nonaktif\')" title="Klik untuk melihat seluruh produk non aktif" src="'.base_path().'misc/media/images/nonaktifdata.png">';
 	$pilihanstatus .= '<span class="float-right">';
+	//$pilihanstatus .= '<input type="checkbox" id="print-stok" name="print-stok" value="1">&nbsp;Print Sejumlah Stok&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="nonaktifkan">Non Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
-	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode Biasa</button>&nbsp;&nbsp;';
-	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Dengan Logo</button>';
+	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Logo</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-tanpa-harga">Print Barcode Tanpa Harga</button>';
 	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
 	$statusProduct = 1;
@@ -196,6 +198,9 @@ function data_produk(){
 	$viewtabelproduk .= '</form>';
 	$viewtabelproduk .= '<div><button id="tambahsatuan" onclick="simpansatuan();">Tambah Satuan</button></div>';
 	$viewtabelproduk .= '</div>';
+	$viewtabelproduk .= '<form id="form-print" method="post" action="'.base_path().'print/6" target="_blank" style="display:none;">';
+	$viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
+	$viewtabelproduk .= '</form>';
 	return $viewtabelproduk;
 }
 function cek_kode_alt($kodealt = null){
@@ -255,6 +260,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
@@ -264,6 +270,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';

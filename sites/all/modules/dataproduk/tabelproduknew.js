@@ -24,7 +24,8 @@ function tampilkantabelproduk(){
         'aoColumns': [
             { 'bSortable': false },null,null,{ 'bVisible': false },null,null,null,null,
             null,{ 'bVisible': false },{ 'bVisible': false },
-            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,{ 'bSortable': false }
+            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,
+            { 'bSortable': false },{ 'bSortable': false }
         ],
         'aLengthMenu': [[100, 200, 300, 500], [100, 200, 300,500]],
         'iDisplayLength': 100,
@@ -623,6 +624,26 @@ $(document).ready(function() {
         });
         if (selected_product != ''){
             window.open(pathutama + 'print/6?idproductlogo='+ selected_product);
+        }
+    });
+    $('#print-barcode-tanpa-harga').on('click', function(){
+        var selected_product = '';
+        var counterData = 0;
+        $('.barcode-select').each(function(){
+            if ($(this).is(':checked')){
+                var strID = $(this).val();
+                if (counterData > 0){
+                    selected_product += '||'+ $(this).val() +'__'+ $('#print-'+ strID).val();
+                }else{
+                    selected_product = $(this).val() +'__'+ $('#print-'+ strID).val();
+                }
+                counterData++;
+            }
+
+        });
+        if (selected_product != ''){
+            $('#selected-product-print').val(selected_product);
+            $('#form-print').submit();
         }
     });
     $('#nonaktifkan').on('click', function(){
