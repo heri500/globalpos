@@ -353,7 +353,7 @@ function simpan_produk(){
 				barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',
 				margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1  WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
 				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
 				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
