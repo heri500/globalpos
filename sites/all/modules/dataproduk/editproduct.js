@@ -241,6 +241,9 @@ function simpanproduk(){
 		});
 	}else{
 		$("#formproduk").validationEngine("validate");
+		if ($("#hargapokok").val() <= 0 || $("#hargajual").val() <= 0){
+			alert('Mohon harga jual atau harga pokok diisi dengan angka lebih besar dari 0');
+		}
 	}
 }
 function batal(){
