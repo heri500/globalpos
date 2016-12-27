@@ -6,7 +6,7 @@ function update_penjualan(){
 			$idpenjualan = explode('-', $_POST['id']);
 			$jampenjualan = $_POST['jampenjualan'];
 			$tgljualbaru = date('Y-m-d',strtotime($_POST['tanggaljual'])).' '.$jampenjualan;
-			db_query("UPDATE penjualan SET tglpenjualan='%s' WHERE idpenjualan=%d", $tgljualbaru, $idpenjualan[1]);
+			db_query("UPDATE penjualan SET tglpenjualan='%s',uploaded=0, changed=1  WHERE idpenjualan=%d", $tgljualbaru, $idpenjualan[1]);
 			if ($_POST['ubah'] == 'tanggal'){
 				print $_POST['tanggaljual'];
 			}else{
@@ -124,7 +124,7 @@ function update_detail_penjualan(){
 			$totalOrder = db_result(db_query($strSQL,$idPenjualan));
 			$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 			$totalModal = db_result(db_query($strSQL,$idPenjualan));
-			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\' WHERE idpenjualan=%d';
+			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d';
 			db_query($strSQL,$totalOrder,$totalModal,$idPenjualan);
 			/* End Update Penjualan */
 			/* Update Stok Product */
@@ -132,7 +132,7 @@ function update_detail_penjualan(){
 			$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
 			$stoksekarang = $stockproduct + $selisih;
 			if (!empty($idproduct)){
-				db_query("UPDATE product SET stok = stok + '%f' WHERE idproduct='%d'",$selisih,$idproduct);
+				db_query("UPDATE product SET stok = stok + '%f',uploaded=0, changed=1  WHERE idproduct='%d'",$selisih,$idproduct);
 				$keterangan = 'Revisi Penjualan';
 				db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPenjualan,$stokproduct,$selisih,$stoksekarang,$keterangan);
@@ -152,7 +152,7 @@ function update_detail_penjualan(){
 			}
 			/* End Update Hutang Penjualan */
 			$kembali = $bayar - $totalOrder;
-			db_query('UPDATE penjualan SET kembali=\'%f\' WHERE idpenjualan=%d',$kembali,$idPenjualan);
+			db_query('UPDATE penjualan SET kembali=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d',$kembali,$idPenjualan);
 			print $_POST['qty'];
 		}
 	}
@@ -187,12 +187,12 @@ function insert_detail_penjualan(){
 			$totalOrder = db_result(db_query($strSQL,$_POST['idpenjualan']));
 			$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 			$totalModal = db_result(db_query($strSQL,$_POST['idpenjualan']));
-			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\' WHERE idpenjualan=%d';
+			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d';
 			db_query($strSQL,$totalOrder,$totalModal,$_POST['idpenjualan']);
 			$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$_POST['idproduk']));
 			$stoksekarang = $stockproduct - $_POST['qty'];
 			if (!empty($idproduct)){
-				db_query("UPDATE product SET stok = stok - '%f' WHERE idproduct='%d'",$_POST['qty'],$_POST['idproduk']);
+				db_query("UPDATE product SET stok = stok - '%f',uploaded=0, changed=1  WHERE idproduct='%d'",$_POST['qty'],$_POST['idproduk']);
 				$keterangan = 'Revisi Penjualan - Tambah Detail Penjualan';
 				db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$_POST['idproduk'],$_POST['idpenjualan'],
@@ -213,7 +213,7 @@ function insert_detail_penjualan(){
 			}
 			/* End Update Hutang Penjualan */
 			$kembali = $bayar - $totalOrder;
-			db_query('UPDATE penjualan SET kembali=\'%f\' WHERE idpenjualan=%d',$kembali,$_POST['idpenjualan']);
+			db_query('UPDATE penjualan SET kembali=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d',$kembali,$_POST['idpenjualan']);
 		}
 		print json_encode($executedSQL);
 	}

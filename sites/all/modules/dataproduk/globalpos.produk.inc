@@ -353,7 +353,7 @@ function simpan_produk(){
 				barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',
 				margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1  WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
 				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
 				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
@@ -371,7 +371,7 @@ function simpan_produk(){
 				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',
 				minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1  WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["barcode"],
 				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],
 				$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
@@ -671,13 +671,13 @@ function update_data_produk(){
 	$hargaJual = $data->hargajual;
 	$nilaiRet = $nilai;
 	if ($kolom == "3"){
-		$sql_update = "UPDATE product SET barcode='%s' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET barcode='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "4"){
-		$sql_update = "UPDATE product SET alt_code='%s' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET alt_code='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "5"){
-		$sql_update = "UPDATE product SET namaproduct='%s' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET namaproduct='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "6"){
-		$sql_update = "UPDATE product SET hargapokok='%f' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET hargapokok='%f',uploaded=0, changed=1  WHERE idproduct='%d'";
 		$nilaiRet = number_format($nilai,0,",",".");
 		if ($nilai <> $hargaPokok){
 			global $user;
@@ -693,7 +693,7 @@ function update_data_produk(){
 			$hargaJual,$nilai,$user->uid);
 		}
 	}else if ($kolom == "8"){
-		$sql_update = "UPDATE product SET stok='%f' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET stok='%f',uploaded=0, changed=1  WHERE idproduct='%d'";
 		$nilaiRet = number_format($nilai,0,",",".");
 		$selisihStok = ($nilai*1)-$stokSebelum;
 		if ($selisihStok < 0){
@@ -717,7 +717,7 @@ function ubah_status_product(){
         $selectedProduct = $_REQUEST['selectedproduct'];
         for ($i = 0;$i < count($selectedProduct);$i++){
             $idProduct = $selectedProduct[$i];
-            db_query('UPDATE product SET status_product=%d WHERE idproduct=%d', $_POST['statusproduct'],$idProduct);
+            db_query('UPDATE product SET status_product=%d,uploaded=0, changed=1  WHERE idproduct=%d', $_POST['statusproduct'],$idProduct);
         }
     }
     exit();
