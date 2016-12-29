@@ -22,14 +22,14 @@ function datapremis_menu() {
         'description' => 'Upload data premis',
         'page callback' => 'do_upload_premisdata',
         'access callback' => 'user_access',
-        'access arguments' => array('Admin Data Premis'),
+        'access arguments' => array('Upload Data Premis'),
         'type' => MENU_CALLBACK,
     );
     return $items;
 } // end hook menu
 
 function datapremis_perm() {
-    return array('Access Data Premis','Admin Data Premis');
+    return array('Access Data Premis','Admin Data Premis','Upload Data Premis');
 }
 function array_zone_gisb(){
     return array(
