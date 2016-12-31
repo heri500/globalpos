@@ -671,15 +671,15 @@ function getPremisInformation(){
 		$dataPremis = get_data_premis();
 	}else{
 		$dataPremis = new stdClass();
-		$dataPremis->nama = 'LAUNDRY IKHWAN';
-		$dataPremis->bbm = '5AB041B8';
-		$dataPremis->telepon = '+628982485685';
-		$dataPremis->whatsapp = '+628982485685';
-		$dataPremis->alamat = 'Jl. Babakan Madang, Ruko Victoria';
+		$dataPremis->nama = 'GALERI IKHWAN';
+		$dataPremis->bbm = '335B75B5';
+		$dataPremis->telepon = '+6281280046437';
+		$dataPremis->whatsapp = '+6281280046437';
+		$dataPremis->alamat = 'CIBINONG CITY MALL,lt. UG No. C3A';
 		$dataPremis->alamat .= "\n";
-		$dataPremis->alamat .= 'Blok C No.22, Sentul City - Bogor';
-		$dataPremis->email = 'ikhwanmart@gmail.com';
-		$dataPremis->website = 'ikhwanmart.ikhwanit.com';
+		$dataPremis->alamat .= 'CIBINONG - BOGOR';
+		$dataPremis->email = 'galeriikhwan@gmail.com';
+		$dataPremis->website = 'galeriikhwan.ikhwanit.com';
 	}
 	return $dataPremis;
 }
