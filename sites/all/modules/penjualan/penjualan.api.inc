@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 function JAM_KERJA_LAUNDRY(){
 	return array(
 		'normal' => array(
@@ -671,6 +671,7 @@ function getPremisInformation(){
 		$dataPremis = get_data_premis();
 	}else{
 		$dataPremis = new stdClass();
+		
 		$dataPremis->nama = 'GALERI IKHWAN';
 		$dataPremis->bbm = '335B75B5';
 		$dataPremis->telepon = '+6281280046437';
@@ -680,6 +681,17 @@ function getPremisInformation(){
 		$dataPremis->alamat .= 'CIBINONG - BOGOR';
 		$dataPremis->email = 'galeriikhwan@gmail.com';
 		$dataPremis->website = 'galeriikhwan.ikhwanit.com';
+		/* untuk Ikhwan Mart 
+		$dataPremis->nama = 'IKHWAN MART';
+		$dataPremis->bbm = '5FA325FA';
+		$dataPremis->telepon = '+6287873134847';
+		$dataPremis->whatsapp = '+6287873134847';
+		$dataPremis->alamat = 'PLAZA VICTORIA,BLOK G No.3';
+		$dataPremis->alamat .= "\n";
+		$dataPremis->alamat .= 'SENTUL CITY - BOGOR 16810';
+		$dataPremis->email = 'ikhwanmart@gmail.com';
+		$dataPremis->website = 'ikhwanmart.ikhwanit.com';
+		*/	
 	}
 	return $dataPremis;
 }

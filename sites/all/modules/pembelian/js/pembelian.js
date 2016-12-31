@@ -57,8 +57,8 @@ function tambahproduk(){
 			pecahdata = data.split(';');
 			if (pecahdata[0].trim() != 'error'){
 				subtotal = number_format(parseInt(pecahdata[2]),0,',','.');
-				nilaikirim = pecahdata[0] +'___1___'+ pecahdata[2];
-				index_cek_box = pecahdata[0];
+				nilaikirim = pecahdata[0].trim() +'___1___'+ pecahdata[2];
+				index_cek_box = pecahdata[0].trim();
 				namacekbox = 'cekbox_'+ index_cek_box;
 				if($('#'+ namacekbox).val()){
 					var nilaicekbox = $('#'+ namacekbox).val();
@@ -71,7 +71,7 @@ function tambahproduk(){
 					var nTr = $('#'+ namacekbox).parent().parent().get(0);
 					var posisibaris = oTable.fnGetPosition(nTr);
 					oTable.fnUpdate(qtybaru, posisibaris, 4 );
-					nilaikirim = pecahnilai[0] +'___'+ qtybaru +'___'+ pecahnilai[2];
+					nilaikirim = pecahnilai[0].trim() +'___'+ qtybaru +'___'+ pecahnilai[2];
 					checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
 					oTable.fnUpdate(number_format(subtotal,0,',','.') +' '+ checkboxnilai, posisibaris, 5 );
 					posisiakhir = totalproduk-1;
