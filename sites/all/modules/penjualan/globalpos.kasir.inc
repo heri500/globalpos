@@ -360,6 +360,11 @@ function simpan_penjualan(){
 			db_query($strSQL, $statusOrder, $_POST['idcustomerorder']);
 		}
 		db_query("UPDATE penjualan SET totalmodal='%f' WHERE idpenjualan='%d'",$totalmodal,$next_id);
+		if (function_exists('is_connected') && is_connected()){
+			if (function_exists('do_upload_premisdata')){
+				do_upload_premisdata();
+			}
+		}
 	}else{
 		print 'error';	
 	}
