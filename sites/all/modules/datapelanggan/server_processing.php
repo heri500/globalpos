@@ -1307,6 +1307,40 @@ function serverSideDetailPenjualan($request){
         "data"            => $output
     );
 }
+function serverSideGetCategoryProduct($request){
+	$result = db_query("SELECT idkategori, kodekategori, kategori, keterangan FROM kategori");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$items[] = $data;
+	}
+	return $items;
+}
+function serverSideGetProductByCategory($request){
+	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$diskon = 0;
+		if ($data->idproduct) {
+			$idpelanggan = 0;
+			if (isset($request["idpelanggan"])){
+				$idpelanggan = $request["idpelanggan"];
+			}
+			$result2 = db_query(
+				"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+				$idpelanggan,
+				$data->idkategori
+			);
+			$datadiskon = db_fetch_object($result2);
+			if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+				$data->diskon = $datadiskon->besardiskon;
+			}
+		}
+		if (!empty($data->idkategori)){
+			$items[$data->idkategori] = $data;
+		}
+	}
+	return $items;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1335,6 +1369,10 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetOneProduct($_GET);
 }else if($_GET['request_data'] == 'detailpenjualan'){
     $returnArray = serverSideDetailPenjualan($_GET);
+}else if($_GET['request_data'] == 'kategoriproduct'){
+	$returnArray = serverSideGetCategoryProduct($_GET);
+}else if($_GET['request_data'] == 'productbykategori'){
+	$returnArray = serverSideGetProductByCategory($_GET);
 }
 echo json_encode($returnArray);
 ?>
