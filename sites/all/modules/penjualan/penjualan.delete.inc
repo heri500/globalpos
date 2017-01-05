@@ -141,7 +141,7 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$idproduct));
 		$stoksekarang = $stockproduct + $qtyJual;
 		if (!empty($idproduct)){
-			db_query("UPDATE product SET stok = stok + '%f' WHERE idproduct='%d'",$qtyJual,$idproduct);
+			db_query("UPDATE product SET stok = stok + '%f', uploaded=0, changed=1 WHERE idproduct='%d'",$qtyJual,$idproduct);
 			$keterangan = 'Revisi Penjualan - Hapus Detail Penjualan';
 			db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 				('%d', '%d', '%f', '%f', '%f', '%s')",$idproduct,$idPenjualan,$stokproduct,$qtyJual,$stoksekarang,$keterangan);
@@ -156,7 +156,7 @@ function delete_detail_penjualan($iddetail = null, $idPenjualan = null){
 		$totalOrder = db_result(db_query($strSQL,$idPenjualan));
 		$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 		$totalModal = db_result(db_query($strSQL,$idPenjualan));
-		$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\' WHERE idpenjualan=%d';
+		$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', uploaded=0, changed=1 WHERE idpenjualan=%d';
 		db_query($strSQL,$totalOrder,$totalModal,$idPenjualan);
 		/* End Update Penjualan */
 		/* Update Hutang Penjualan Jika Ada */
