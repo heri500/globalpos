@@ -403,7 +403,7 @@ function do_upload_premisdata(){
             db_query("UPDATE penjualan SET uploaded = 1 WHERE idpenjualan='%d'",$penj_id);
             $noNota = $arrayPenjualanUploaded[$k]->nonota;
             $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
-            $resultview .= '<li>ID : '.$penj_id.', No. Nota : '.$noNota.', Tgl Penjualan : '.$tglPenjualan.', Proses : '.$proses.'</li>';
+            $resultview .= '<li>ID report : '.$arrayPenjualanUploaded[$k]->id.', ID : '.$penj_id.', No. Nota : '.$noNota.', Tgl Penjualan : '.$tglPenjualan.', Proses : '.$proses.'</li>';
         }
         $resultview .= '</ul></p>';
         curl_close($ch);
