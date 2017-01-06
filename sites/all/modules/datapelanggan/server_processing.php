@@ -1311,11 +1311,12 @@ function serverSideGetCategoryProduct($request){
 	$result = db_query("SELECT idkategori, kodekategori, kategori, keterangan FROM kategori");
 	$items = array();
 	while ($data = db_fetch_object($result)) {
-		$items[] = $data;
+		$items[$data->idkategori] = $data;
 	}
 	return $items;
 }
 function serverSideGetProductByCategory($request){
+	$dataCategory = serverSideGetCategoryProduct();
 	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
 	$items = array();
 	while ($data = db_fetch_object($result)) {
@@ -1336,8 +1337,32 @@ function serverSideGetProductByCategory($request){
 			}
 		}
 		if (!empty($data->idkategori)){
-			$items[$data->idkategori] = $data;
+			$items[$dataCategory[$data->idkategori]->kategori][] = $data;
 		}
+	}
+	return $items;
+}
+function serverSideGetAllProduct($request){
+	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$diskon = 0;
+		if ($data->idproduct) {
+			$idpelanggan = 0;
+			if (isset($request["idpelanggan"])){
+				$idpelanggan = $request["idpelanggan"];
+			}
+			$result2 = db_query(
+				"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+				$idpelanggan,
+				$data->idkategori
+			);
+			$datadiskon = db_fetch_object($result2);
+			if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+				$data->diskon = $datadiskon->besardiskon;
+			}
+		}
+		$items[] = $data;
 	}
 	return $items;
 }
@@ -1373,6 +1398,9 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetCategoryProduct($_GET);
 }else if($_GET['request_data'] == 'productbykategori'){
 	$returnArray = serverSideGetProductByCategory($_GET);
+}else if($_GET['request_data'] == 'allproduct'){
+	$returnArray = serverSideGetAllProduct($_GET);
 }
+header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);
 ?>
