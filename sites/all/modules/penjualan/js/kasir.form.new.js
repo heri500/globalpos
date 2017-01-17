@@ -209,7 +209,7 @@ function akhiri_belanja(cetak){
 					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
 						window.location = pathutama + 'penjualan/' + alamatasal;
 					}else{
-						window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual;
+						window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual +'&afterinsert=1';
 					}
 
 				}else{
@@ -619,4 +619,15 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattombolkasir').css('height','330px');
+	if (Drupal.settings.upload_data){
+		alamat = pathutama + 'datapremis/uploaddata';
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function (data) {
+				
+			}
+		});
+	}
 })
