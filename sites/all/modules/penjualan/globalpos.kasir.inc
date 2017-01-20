@@ -60,6 +60,10 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			}
 		}
 	}
+	$uploadData = false;
+	if (isset($_GET['afterinsert']) && $_GET['afterinsert']){
+		$uploadData = true;
+	}
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
 	drupal_add_js(
@@ -67,6 +71,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			'tglsekarang' => $tglsekarang,
 			'tgltampil' => $tgltampil,
 			'logo' => $logoPath,
+			'upload_data' => $uploadData,
 		), 
 	'setting');
 	$js_path = drupal_get_path('module','penjualan').'/js/kasir.form.new.js';
@@ -360,11 +365,11 @@ function simpan_penjualan(){
 			db_query($strSQL, $statusOrder, $_POST['idcustomerorder']);
 		}
 		db_query("UPDATE penjualan SET totalmodal='%f' WHERE idpenjualan='%d'",$totalmodal,$next_id);
-		if (function_exists('is_connected') && is_connected()){
+		/*if (function_exists('is_connected') && is_connected()){
 			if (function_exists('do_upload_premisdata')){
 				do_upload_premisdata();
 			}
-		}
+		}*/
 	}else{
 		print 'error';	
 	}
