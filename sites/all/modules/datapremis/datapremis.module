@@ -1,0 +1,287 @@
+<?php
+
+function datapremis_menu() {
+    $items['datapremis'] = array(
+        'title' => t('Informasi Premis'),
+        'description' => 'Manajemen data premis',
+        'page callback' => 'data_premis',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['datapremis/generatepremisid'] = array(
+        'title' => t('Generate ID Premis'),
+        'description' => 'Generate ID Premis',
+        'page callback' => 'generate_premis_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Admin Data Premis'),
+        'type' => MENU_CALLBACK,
+    );
+    return $items;
+} // end hook menu
+
+function datapremis_perm() {
+    return array('Access Data Premis','Admin Data Premis');
+}
+function array_zone_gisb(){
+    return array(
+        '001' => 'Utara',
+        '002' => 'Kedah',
+        '003' => 'PKBM',
+        '004' => 'Penang',
+        '005' => 'Perak',
+        '006' => 'Barat',
+        '007' => 'Pusat',
+        '008' => 'Tengah',
+        '009' => 'Utama',
+        '010' => 'Eksekutif',
+        '011' => 'Yayasan',
+        '012' => 'Negeri Sembilan',
+        '013' => 'Melaka',
+        '014' => 'Johor 1',
+        '015' => 'Johor 2',
+        '016' => 'Pahang',
+        '017' => 'Trengganu',
+        '018' => 'Kelantan',
+        '019' => 'Sabah 1/3',
+        '020' => 'Sabah 2/4',
+        '021' => 'Sarawak 1',
+        '022' => 'Sarawak 2',
+        '023' => 'Labuan',
+        '024' => 'Thailand 1',
+        '025' => 'Thailand 2',
+        '026' => 'Thailand 3',
+        '027' => 'Pendidikan Insaniah',
+        '028' => 'Pendidikan Vokasional',
+        '029' => 'Australia T',
+        '030' => 'Australia B',
+        '031' => 'Sumatera 1',
+        '032' => 'Sumatera 2',
+        '033' => 'Sumatera 3',
+        '034' => 'Jawa  1/2',
+        '035' => 'Jawa  3/4',
+        '036' => 'Makassar',
+        '037' => 'Papua',
+        '038' => 'Syam',
+        '039' => 'Afrika Utara',
+        '040' => 'Haramain',
+        '041' => 'Mesir',
+    );
+}
+function data_premis(){
+    _addCustomCSS();
+    drupal_add_js('misc/media/datatables.1.10/media/js/jquery.js');
+    $js_path = drupal_get_path('module','datapremis').'/js/datapremis.js';
+    drupal_add_js($js_path);
+    $formPremis = drupal_get_form('datapremis_input_form');
+    return $formPremis;
+}
+function datapremis_input_form(&$form_state){
+    $dataPremis = get_data_premis();
+    if (!count($dataPremis)){
+        $idPremis = createEAN13PemisCode();
+        $zonePremis = 0;
+        $namaPremis = '';
+        $alamatPremis = '';
+        $telepon = '';
+        $whatsapp = '';
+        $bbm = '';
+        $telegram = '';
+        $email = '';
+        $website = '';
+    }else{
+        $idPremis = $dataPremis->id;
+        $zonePremis = $dataPremis->zone;
+        $namaPremis = $dataPremis->nama;
+        $alamatPremis = $dataPremis->alamat;
+        $telepon = $dataPremis->telepon;
+        $whatsapp = $dataPremis->whatsapp;
+        $bbm = $dataPremis->bbm;
+        $telegram = $dataPremis->telegram;
+        $email = $dataPremis->email;
+        $website = $dataPremis->website;
+    }
+    $form['#attributes'] = array('class' => 'form-item-lined-up');
+    $form['zone'] = array(
+        '#type' => 'select',
+        '#title' => t('Zone Premis'),
+        '#options' => array_zone_gisb(),
+        '#description' => t('Pilih zone premis.'),
+        '#default_value' => $zonePremis,
+    );
+    $form['id'] = array(
+        '#title' => t('id'),
+        '#type' => 'textfield',
+        '#description' => t('auto generated berdasarkan zone'),
+        '#default_value' => $idPremis,
+    );
+    $form['nama'] = array(
+        '#title' => t('Nama Premis'),
+        '#type' => 'textfield',
+        '#description' => t('Isi nama premis'),
+        '#default_value' => $namaPremis,
+    );
+    $form['alamat'] = array(
+        '#title' => t('Alamat Premis'),
+        '#type' => 'textarea',
+        '#cols' => 40,
+        '#rows' => 3,
+        '#default_value' => $alamatPremis,
+        '#description' => t('Input alamat premis disini.'),
+    );
+    $form['telepon'] = array(
+        '#title' => t('No. Telepon'),
+        '#type' => 'textfield',
+        '#default_value' => $telepon,
+        '#description' => t('Isi nomer telepon premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['whatsapp'] = array(
+        '#title' => t('No. Whatsapp'),
+        '#type' => 'textfield',
+        '#default_value' => $whatsapp,
+        '#description' => t('Isi nomer whatsapp premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['bbm'] = array(
+        '#title' => t('Pin BBM'),
+        '#type' => 'textfield',
+        '#default_value' => $bbm,
+        '#description' => t('Isi pin bbm premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['telegram'] = array(
+        '#title' => t('No. Telegram'),
+        '#type' => 'textfield',
+        '#default_value' => $telegram,
+        '#description' => t('Isi nomer telegram premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['email'] = array(
+        '#title' => t('Email'),
+        '#type' => 'textfield',
+        '#default_value' => $email,
+        '#description' => t('Isi email premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['website'] = array(
+        '#title' => t('Website'),
+        '#type' => 'textfield',
+        '#default_value' => $website,
+        '#description' => t('Isi website premis, pisahkan dengan ; jika lebih dari 1'),
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Simpan')
+    );
+    return $form;
+}
+function datapremis_input_form_validate($form, &$form_state) {
+    if ($form_state['values']['zone'] == '') {
+        form_set_error('', t('Harus memilih zone terlebih dulu.'));
+    }
+}
+function datapremis_input_form_submit($form, &$form_state) {
+    global $user;
+    $formValues = $form_state['values'];
+    if (cek_data_premis_exists()){
+        $formValues['uid'] = $user->uid;
+        $formValues['changed'] = time();
+        $premisSchema = drupal_get_schema('datapremis');
+        $fieldArray = $premisSchema['fields'];
+        $fieldList = '';
+        $fieldValue = '';
+        foreach($fieldArray as $fieldName => $fieldData){
+            if ($fieldName != 'created'){
+                if (empty($fieldList)){
+                    $fieldList = "$fieldName = '".$formValues[$fieldName]."'";
+                }else{
+                    $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+                }
+            }
+        }
+        db_query("UPDATE {datapremis} SET $fieldList");
+        drupal_set_message(t('Data premis berhasil diupdate.'));
+    }else{
+        $formValues['uid'] = $user->uid;
+        $formValues['created'] = time();
+        $formValues['changed'] = null;
+        $premisSchema = drupal_get_schema('datapremis');
+        $fieldArray = $premisSchema['fields'];
+        $fieldList = '';
+        $fieldValue = '';
+        foreach($fieldArray as $fieldName => $fieldData){
+            if (empty($fieldList)){
+                $fieldList = $fieldName;
+            }else{
+                $fieldList .= ','.$fieldName;
+            }
+            if (empty($fieldValue)){
+                $fieldValue = "'".$formValues[$fieldName]."'";
+            }else{
+                $fieldValue .= ",'".$formValues[$fieldName]."'";
+            }
+        }
+        db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
+        drupal_set_message(t('Data premis berhasil dibuat.'));
+    }
+}
+function cek_data_premis_exists(){
+    global $db_prefix;
+    $dataPremisExists = false;
+    $countDataPremis = db_result(db_query("SELECT COUNT(*) FROM {datapremis}"));
+    if ($countDataPremis > 0){
+        $dataPremisExists = true;
+    }
+    return $dataPremisExists;
+}
+function get_data_premis(){
+    global $db_prefix;
+    $arrayData = array();
+    $premisSchema = drupal_get_schema('datapremis');
+    $fieldArray = $premisSchema['fields'];
+    $fieldList = '';
+    foreach($fieldArray as $fieldName => $fieldData){
+        if (empty($fieldList)){
+            $fieldList = $fieldName;
+        }else{
+            $fieldList .= ','.$fieldName;
+        }
+    }
+    if (cek_data_premis_exists()){
+        $strSQL = 'SELECT '.$fieldList.' FROM '.$db_prefix.'datapremis LIMIT 1';
+        $result = db_query($strSQL);
+        $arrayData = db_fetch_object($result);
+    }
+    return $arrayData;
+}
+function createRandomCode($length=13)
+{
+    $key = '';
+    $keys = array_merge(range(0, 9));
+    for ($i = 0; $i < $length; $i++) {
+        mt_srand((double)microtime() * 10000000);
+        $key .= $keys[array_rand($keys)];
+    }
+    return $key;
+}
+function createEAN13PemisCode($premisCode = null, $number = null){
+    if (empty($premisCode)) $premisCode = '001';
+    if (empty($number)) $number = createRandomCode(6);
+    $code = '899' . $premisCode. str_pad($number, 9, '0');
+    $weightflag = true;
+    $sum = 0;
+    // Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+    // loop backwards to make the loop length-agnostic. The same basic functionality
+    // will work for codes of different lengths.
+    for ($i = strlen($code) - 1; $i >= 0; $i--)
+    {
+        $sum += (int)$code[$i] * ($weightflag?3:1);
+        $weightflag = !$weightflag;
+    }
+    $code .= (10 - ($sum % 10)) % 10;
+    return $code;
+}
+function generate_premis_ajax(){
+    $jsonPremis = null;
+    if (isset($_POST['zone']) && !empty($_POST['zone'])){
+        $jsonPremis[] = createEAN13PemisCode($_POST['zone']);
+    }
+    print json_encode($jsonPremis);
+    exit();
+}
