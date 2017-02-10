@@ -97,6 +97,7 @@ function datapremis_input_form(&$form_state){
         $telegram = '';
         $email = '';
         $website = '';
+        $ppn = 0;
     }else{
         $idPremis = $dataPremis->id;
         $zonePremis = $dataPremis->zone;
@@ -108,6 +109,7 @@ function datapremis_input_form(&$form_state){
         $telegram = $dataPremis->telegram;
         $email = $dataPremis->email;
         $website = $dataPremis->website;
+        $ppn = $dataPremis->ppn_value;
     }
     $form['#attributes'] = array('class' => 'form-item-lined-up');
     $form['zone'] = array(
@@ -173,6 +175,12 @@ function datapremis_input_form(&$form_state){
         '#default_value' => $website,
         '#description' => t('Isi website premis, pisahkan dengan ; jika lebih dari 1'),
     );
+    $form['ppn_value'] = array(
+        '#title' => t('PPN'),
+        '#type' => 'textfield',
+        '#default_value' => $ppn,
+        '#description' => t('Isi dengan ppn, jika tidak menggunakan ppn isi dengan 0 saja..!!'),
+    );
     $form['submit'] = array(
         '#type' => 'submit',
         '#value' => t('Simpan')
@@ -203,6 +211,8 @@ function datapremis_input_form_submit($form, &$form_state) {
                 }
             }
         }
+        $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         db_query("UPDATE {datapremis} SET $fieldList");
         drupal_set_message(t('Data premis berhasil diupdate.'));
     }else{
@@ -225,6 +235,8 @@ function datapremis_input_form_submit($form, &$form_state) {
                 $fieldValue .= ",'".$formValues[$fieldName]."'";
             }
         }
+        $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
         drupal_set_message(t('Data premis berhasil dibuat.'));
     }
@@ -251,6 +263,7 @@ function get_data_premis(){
             $fieldList .= ','.$fieldName;
         }
     }
+    $fieldList .= ',ppn_value';
     if (cek_data_premis_exists()){
         $strSQL = 'SELECT '.$fieldList.' FROM '.$db_prefix.'datapremis LIMIT 1';
         $result = db_query($strSQL);

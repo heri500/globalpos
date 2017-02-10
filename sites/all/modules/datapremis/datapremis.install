@@ -17,3 +17,12 @@ function datapremis_schema(){
 function datapremis_uninstall() {
     drupal_uninstall_schema('datapremis');
 }
+function datapremis_update_1() {
+    $ppn_value = array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => 'PPN untuk penjualan, default 0.',
+    );
+    db_add_field($return, 'datapremis', 'ppn_value', $ppn_value);
+    return $return;
+}
