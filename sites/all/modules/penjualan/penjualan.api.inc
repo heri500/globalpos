@@ -228,8 +228,10 @@ function printOutPenjualan(){
 		$totalPpn = $dataPenjualan['info']->ppn_value;
 		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN('.$besarPpn.'%)</span><span style="float: right">'.number_format($totalPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">'.number_format($totalPlusPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		if ($besarPpn > 0) {
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+		}
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
 		if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
 			$totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
@@ -845,8 +847,10 @@ function printOutPenjualanGHC(){
 		$totalPpn = $dataPenjualan['info']->ppn_value;
 		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN('.$besarPpn.'%)</span><span style="float: right">'.number_format($totalPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">'.number_format($totalPlusPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		if ($besarPpn > 0) {
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+		}
         $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
         if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
             $totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
