@@ -54,7 +54,7 @@ function getDataPenjualan($nidpenjualan = null){
 		$dataPenjualan = array();
 		$strSQL = "SELECT idpenjualan, name, nonota, tglpenjualan, idpemakai, a.idpelanggan, total,
 		totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date,idtitipanlaundry,
-		perlakuankembalian,namapelanggan FROM penjualan a LEFT JOIN cms_users b ON a.idpemakai = b.uid
+		perlakuankembalian,namapelanggan,ppn, (total*(ppn/100)) AS ppn_value, total_plus_ppn FROM penjualan a LEFT JOIN cms_users b ON a.idpemakai = b.uid
 		LEFT JOIN pelanggan c ON a.idpelanggan = c.idpelanggan WHERE idpenjualan=%d";
 		$result = db_query($strSQL,$nidpenjualan);
 		$dataPenjualan['info'] = db_fetch_object($result);
@@ -224,7 +224,12 @@ function printOutPenjualan(){
 			$tablePrint .= '</tr>';
 			$totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
 		}
+		$besarPpn = $dataPenjualan['info']->ppn;
+		$totalPpn = $dataPenjualan['info']->ppn_value;
+		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN('.$besarPpn.'%)</span><span style="float: right">'.number_format($totalPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">'.number_format($totalPlusPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
 		if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
 			$totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
@@ -836,7 +841,12 @@ function printOutPenjualanGHC(){
             $tablePrint .= '</tr>';
             $totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
         }
-        $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$besarPpn = $dataPenjualan['info']->ppn;
+		$totalPpn = $dataPenjualan['info']->ppn_value;
+		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN('.$besarPpn.'%)</span><span style="float: right">'.number_format($totalPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">'.number_format($totalPlusPpn,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
         if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
             $totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);

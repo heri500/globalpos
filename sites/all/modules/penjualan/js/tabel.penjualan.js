@@ -50,12 +50,14 @@ function tampiltabeljual(){
 				$('td', row).eq(4).addClass('angka');
 				$('td', row).eq(5).addClass('angka');
 				$('td', row).eq(6).addClass('angka');
-				$('td', row).eq(7).addClass('center');
+				$('td', row).eq(7).addClass('angka');
 				$('td', row).eq(8).addClass('angka');
-				$('td', row).eq(9).addClass('angka');
-				$('td', row).eq(10).addClass('center');
-				$('td', row).eq(11).addClass('center');
+				$('td', row).eq(9).addClass('center');
+				$('td', row).eq(10).addClass('angka');
+				$('td', row).eq(11).addClass('angka');
 				$('td', row).eq(12).addClass('center');
+				$('td', row).eq(13).addClass('center');
+				$('td', row).eq(14).addClass('center');
 			},
             'aoColumnDefs': [
                 { 'bSortable': false, 'aTargets': [ 0,3,12 ] }
@@ -101,6 +103,16 @@ function tampiltabeljual(){
 					'Rp. '+ addCommas(total)
 				).addClass('angka');
 				total = api
+					.column( 7 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 7 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
 					.column( 8 )
 					.data()
 					.reduce( function (a, b) {
@@ -111,13 +123,23 @@ function tampiltabeljual(){
 					'Rp. '+ addCommas(total)
 				).addClass('angka');
 				total = api
-					.column( 9 )
+					.column( 10 )
 					.data()
 					.reduce( function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
-				$( api.column( 9 ).footer() ).html(
+				$( api.column( 10 ).footer() ).html(
+					'Rp. '+ addCommas(total)
+				).addClass('angka');
+				total = api
+					.column( 11 )
+					.data()
+					.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+					}, 0 );
+				// Update footer
+				$( api.column( 11 ).footer() ).html(
 					'Rp. '+ addCommas(total)
 				).addClass('angka');
 			},

@@ -190,6 +190,9 @@ function akhiri_belanja(cetak){
 	$("#idpelanggan").removeAttr("disabled");
 	request.idpelanggan = $("#idpelanggan").val();
 	request.totalbelanja = totalbelanja;
+	request.ppn = $("#ppn_value").val();
+	var totalbelanjappn = (totalbelanja * ($("#ppn_value").val()/100)) + totalbelanja;
+	request.totalbelanjappn = totalbelanjappn;
 	request.carabayar = $("#carabayar").val();
 	request.bayar = $("#nilaibayar").val();
 	var kembalian = request.bayar - totalbelanja;
@@ -381,26 +384,30 @@ $(document).ready(function(){
 		autoOpen: false,
 		open: function(event, ui) {
 			$("#totalbelanjauser").val("Rp. "+ number_format(totalbelanja,0,",","."));
-			if (totalbelanja > 0 && totalbelanja <= 10000){
+			var total_ppn_value = totalbelanja * (parseInt($('#ppn_value').val())/100);
+			$("#total_ppn").val("Rp. "+ number_format(total_ppn_value,0,",","."));
+			var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+			$("#total_plus_ppn").val("Rp. "+ number_format(total_plus_ppn,0,",","."));
+			if (total_plus_ppn > 0 && total_plus_ppn <= 10000){
 				$("#nilaibayar").val("10000");
-			}else if(totalbelanja > 10000 && totalbelanja <= 20000){
+			}else if(total_plus_ppn > 10000 && total_plus_ppn <= 20000){
 				$("#nilaibayar").val("20000");
-			}else if(totalbelanja > 20000 && totalbelanja <= 50000){
+			}else if(total_plus_ppn > 20000 && total_plus_ppn <= 50000){
 				$("#nilaibayar").val("50000");
-			}else if(totalbelanja > 50000 && totalbelanja <= 100000){
+			}else if(total_plus_ppn > 50000 && total_plus_ppn <= 100000){
 				$("#nilaibayar").val("100000");
-			}else if(totalbelanja > 100000 && totalbelanja <= 110000){
+			}else if(total_plus_ppn > 100000 && total_plus_ppn <= 110000){
 				$("#nilaibayar").val("110000");
-			}else if(totalbelanja > 110000 && totalbelanja <= 120000){
+			}else if(total_plus_ppn > 110000 && total_plus_ppn <= 120000){
 				$("#nilaibayar").val("120000");
-			}else if(totalbelanja > 120000 && totalbelanja <= 150000){
+			}else if(total_plus_ppn > 120000 && total_plus_ppn <= 150000){
 				$("#nilaibayar").val("150000");
-			}else if(totalbelanja > 150000 && totalbelanja <= 200000){
+			}else if(total_plus_ppn > 150000 && total_plus_ppn <= 200000){
 				$("#nilaibayar").val("200000");
 			}else{
-				$("#nilaibayar").val(totalbelanja);
+				$("#nilaibayar").val(total_plus_ppn);
 			}
-			kembali = $("#nilaibayar").val()-totalbelanja;
+			kembali = $("#nilaibayar").val() - total_plus_ppn;
 			$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 			$("#nilaibayar").keyup();
 			$("#nilaibayar").select();
@@ -544,7 +551,8 @@ $(document).ready(function(){
 		}
 	});
 	$("#nilaibayar,#nomerkartu").keyup(function(e){
-		kembali = $("#nilaibayar").val() - totalbelanja;
+        var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+		kembali = $("#nilaibayar").val() - total_plus_ppn;
 		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
 		if (kembali > 0){
 			$("#field_kembalian").show();
@@ -593,13 +601,15 @@ $(document).ready(function(){
 		if ($(this).val() == 'DEBIT' || $(this).val() == 'GIRO'){
 			$("#field_no_kartu").show();
 			$("#field_bayar").show();
-			$("#nilaibayar").val(totalbelanja).attr('readonly','readonly').removeAttr('disabled'); 
+            var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+			$("#nilaibayar").val(total_plus_ppn).attr('readonly','readonly').removeAttr('disabled');
 			$("#nomerkartu").select();
 			$("#nilaibayar").keyup();
 		}else if($(this).val() == 'DEPOSIT'){
 			$("#field_bayar").show();
 			$("#field_no_kartu").hide();
-			$("#nilaibayar").val(totalbelanja).attr('readonly','readonly').removeAttr('disabled'); 
+            var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+			$("#nilaibayar").val(total_plus_ppn).attr('readonly','readonly').removeAttr('disabled');
 			$("#nilaibayar").keyup();
 			$("#nilaibayar").focus();
 		}else{

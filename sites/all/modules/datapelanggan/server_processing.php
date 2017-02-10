@@ -235,7 +235,7 @@ function serverSidePenjualan($request){
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
 		'penj.idpenjualan','penj.nonota','penj.tglpenjualan','penj.tglpenjualan',
-		'penj.total','penj.totalmodal','(penj.total - penj.totalmodal)','penj.carabayar',
+		'penj.total','penj.ppn_value','penj.total_plus_ppn','penj.totalmodal','(penj.total - penj.totalmodal)','penj.carabayar',
 		'penj.bayar','penj.kembali','user.name','plg.namapelanggan'
 	);
 	$orderColumnArray = $_REQUEST['order'];
@@ -251,6 +251,7 @@ function serverSidePenjualan($request){
 	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
 	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
+	$strSQL .= "(penj.total * (penj.ppn/100)) AS ppn_value, penj.total_plus_ppn, ";
 	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, ";
     $strSQL .= "penj.idpelanggan, plg.namapelanggan ";
 	$strSQL .= "FROM penjualan AS penj ";
@@ -355,6 +356,8 @@ function serverSidePenjualan($request){
 		$rowData[] = $data->tanggal;
 		$rowData[] = $data->waktu;
 		$rowData[] = number_format($data->total,0,",",".");
+		$rowData[] = number_format($data->ppn_value,0,",",".");
+		$rowData[] = number_format($data->total_plus_ppn,0,",",".");
 		$rowData[] = number_format($data->totalmodal,0,",",".");
 		$rowData[] = number_format($data->laba,0,",",".");
 		$rowData[] = $data->carabayar;

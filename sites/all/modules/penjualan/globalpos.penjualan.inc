@@ -126,6 +126,8 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th class="tanggal">TGL</th>';
 	$tabelpenjualan .= '<th class="tanggal">JAM</th>';
 	$tabelpenjualan .= '<th>TOTAL</th>';
+	$tabelpenjualan .= '<th>PPN</th>';
+	$tabelpenjualan .= '<th>TOTAL+PPN</th>';
 	$tabelpenjualan .= '<th>MODAL</th>';
 	$tabelpenjualan .= '<th>LABA</th>';
 	$tabelpenjualan .= '<th>CARA BAYAR</th>';
@@ -146,10 +148,14 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$totallaba = $totaljual - $totalmodal;
 	$totalbayar = getTotalPenjualan('bayar',$tgl1,$tgl2,0,$idPelanggan);
 	$totalkembali = getTotalPenjualan('kembali',$tgl1,$tgl2,0,$idPelanggan);
+	$totalppn = 0;
+	$totalplusppn = 0;
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalppn,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalplusppn,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totallaba,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelpenjualan .= '<th></th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';

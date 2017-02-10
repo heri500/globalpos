@@ -1,6 +1,7 @@
 <?php
 
 function penjualan($idtitipanlaundry = null, $alamatasal = null){
+	$dataPremis = get_data_premis();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
 	$logoPath = base_path().file_directory_path().'/cti_flex_logo.png';
@@ -205,6 +206,11 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Total Belanja</label>'.$totalbelanja.'</div>';
+	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
+	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
+	$penjualan .= '<div class="barisbayar"><label>PPN ('.$dataPremis->ppn_value.'%)</label>'.$totalppn.'</div>';
+	$totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
+	$penjualan .= '<div class="barisbayar"><label>TOTAL + PPN</label>'.$totalplusppn.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
 	$penjualan .= '<div class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
@@ -217,7 +223,9 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 
 function simpan_penjualan(){
 	//nonota, idpemakai, total, bayar, kembali
-	if ($_POST["detail_produk"] AND $_POST["bayar"] >= 0 AND $_POST["totalbelanja"]){
+	if (isset($_POST["detail_produk"]) AND isset($_POST["bayar"]) >= 0 AND
+        isset($_POST["totalbelanja"]) AND isset($_POST['totalbelanjappn'])
+    ){
 		global $user;
 		//date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
@@ -232,16 +240,18 @@ function simpan_penjualan(){
 			$next_id = 1;
 		}
 		$no_nota = buat_nota($next_id);
-		$kembali = $_POST["bayar"] - $_POST["totalbelanja"];
+		$kembali = $_POST["bayar"] - $_POST["totalbelanjappn"];
 		$perkuankembalian = isset($_POST["perlakuankembalian"]) ? $_POST["perlakuankembalian"] : 0;
 		$idtitipanlaundry = 0;
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
 			$idtitipanlaundry = $_POST['idtitipanlaundry'];
 		}
-		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, carabayar, idtitipanlaundry, perlakuankembalian) 
-		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d')",
+		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
+        carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn) 
+		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f')",
 		$no_nota, $user->uid, $_POST["totalbelanja"], $_POST["bayar"], $kembali, $waktujual,
-		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian);
+		$_POST["idpelanggan"],$_POST["carabayar"], $idtitipanlaundry,$perkuankembalian,
+        $_POST["ppn"],$_POST["totalbelanjappn"]);
 		$next_id = db_last_insert_id('penjualan', 'idpenjualan');
 		print $next_id;
 		if ($kembali > 0 && $perkuankembalian == 2){
@@ -403,7 +413,7 @@ function hitung_omset($tgl = null){
 			$tglomset = $tgl;
 		}
 	}
-	$result = db_query("SELECT SUM(total) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
+	$result = db_query("SELECT SUM(total_plus_ppn) AS totalbelanja FROM penjualan WHERE SUBSTR(tglpenjualan,1,10)='%s'",$tglomset);
 	$data = db_fetch_object($result);
 	if ($_POST["tglpost"]){
 		print $data->totalbelanja;
