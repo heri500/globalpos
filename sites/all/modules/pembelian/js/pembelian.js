@@ -58,7 +58,7 @@ function tambahproduk(){
 			if (pecahdata[0].trim() != 'error'){
 				subtotal = number_format(parseInt(pecahdata[2]),0,',','.');
 				nilaikirim = pecahdata[0] +'___1___'+ pecahdata[2];
-				index_cek_box = pecahdata[0];
+				index_cek_box = pecahdata[0].trim();
 				namacekbox = 'cekbox_'+ index_cek_box;
 				if($('#'+ namacekbox).val()){
 					var nilaicekbox = $('#'+ namacekbox).val();
@@ -79,8 +79,8 @@ function tambahproduk(){
 						$('#lastqty').val(qtybaru);
 					}
 				}else{
-					var icondelete = '<img onclick="hapus_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0] +'\')" title="Klik untuk menghapus" src="'+ pathutama +'misc/media/images/close.ico" width="24">';
-					var iconubah = '<img onclick="ubah_qty_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0] +'\')" title="Klik untuk mengubah qty produk ini" src="'+ pathutama +'misc/media/images/edit.ico" width="24">';
+					var icondelete = '<img onclick="hapus_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0].trim() +'\')" title="Klik untuk menghapus" src="'+ pathutama +'misc/media/images/close.ico" width="24">';
+					var iconubah = '<img onclick="ubah_qty_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0].trim() +'\')" title="Klik untuk mengubah qty produk ini" src="'+ pathutama +'misc/media/images/edit.ico" width="24">';
 
 					$('#lastharga').val(pecahdata[2]);
 					$('#last_id').val(pecahdata[0]);

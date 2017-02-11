@@ -110,7 +110,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '</div>';
 	$penjualan .= '<div id="tempatkosong">';
 	$penjualan .= '<div id="tempatsupplier"><label>PELANGGAN</label></div>';
-	$penjualan .= '<div id="tempatsupplier2">'.createPelangganSelection($_GET['idpelanggan']).'</div>';
+	$penjualan .= '<div id="tempatsupplier2">'.createPelangganSelection($idPelanggan).'</div>';
 	if (!empty($idtitipanlaundry)){
 		$penjualan .= '<div id="tempatsupplier"><label>TGL '.$labelTgl.'</label><input readonly="readonly" type="text" id="tglmasuk" name="tglmasuk" value="'.$tglTampilLaundry.'">';
 		$penjualan .= '</div>';
