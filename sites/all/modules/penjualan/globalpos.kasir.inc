@@ -208,7 +208,8 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '<div class="barisbayar"><label>Total Belanja</label>'.$totalbelanja.'</div>';
 	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
-	$penjualan .= '<div class="barisbayar"><label>PPN ('.$dataPremis->ppn_value.'%)</label>'.$totalppn.'</div>';
+	$ceklistPpn = '<input type="checkbox" id="use-ppn" name="use-ppn" value="1" checked="checked" class="checkbox-ppn">';
+	$penjualan .= '<div class="barisbayar"><label>PPN ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
 	$totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
 	$penjualan .= '<div class="barisbayar"><label>TOTAL + PPN</label>'.$totalplusppn.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';

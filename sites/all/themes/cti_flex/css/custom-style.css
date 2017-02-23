@@ -915,3 +915,8 @@ form.form-item-lined-up, .form-item-lined-up{
 .form-item-lined-up .resizable-textarea{
 	width: 100% !important;
 }
+.checkbox-ppn{
+	-moz-transform: scale(2.3);
+	float: right;
+	margin: 9px 8px 0 0;
+}

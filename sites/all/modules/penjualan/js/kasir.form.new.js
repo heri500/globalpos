@@ -8,6 +8,7 @@ var tglsekarang = '';
 var tgltampil = '';
 var cetakstruk = 0;
 var alamatasal = '';
+var ppnValue = 0;
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
 		"bJQueryUI": true,
@@ -639,4 +640,18 @@ $(document).ready(function(){
 			}
 		});
 	}
+	$('#use-ppn').click(function(){
+		if ($('#ppn_value').val() > 0){
+			ppnValue = $('#ppn_value').val();
+		}
+		var ppnChecked = $('#use-ppn:checkbox:checked').length;
+		if (!ppnChecked){
+			$('#ppn_value').val(0);
+		}else{
+			$('#ppn_value').val(ppnValue);
+		}
+		$("#dialogbayar").dialog('close');
+		$("#dialogbayar").dialog('open');
+	});
+
 })
