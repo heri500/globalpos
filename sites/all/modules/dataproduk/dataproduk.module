@@ -339,12 +339,21 @@ function export_stok_to_xls(){
 	drupal_add_js($js_path);
 	$dataStok = get_data_product();
 	$exportedData = array();
+	$totalNilaiBarang = 0;
 	for ($i = 0; $i < count($dataStok); $i++) {
 		$exportedData[] = array(
 			($i + 1), $dataStok[$i]->kategori, $dataStok[$i]->subkategori,
-			$dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok
+			$dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok,
+			$dataStok[$i]->hargajual, $dataStok[$i]->stok * $dataStok[$i]->hargajual
 		);
+		$totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
 	}
+	$exportedData[] = array(
+		'', '', '',
+		'', '', '',
+		'TOTAL', $totalNilaiBarang
+	);
+	$totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
 	module_load_include('inc', 'phpexcel','phpexcel.api');
 	// Prepare the file path. The PHPExcel library doesn't handle PHP stream
 	// wrappers, so we need the real path.
@@ -355,7 +364,7 @@ function export_stok_to_xls(){
 	$filename = 'stok-product--download-' . time() . '.xls';
 	$filepath = $wrapper . '/' . $filename;
 	// Export, and store to file.
-	$result = phpexcel_export(array('No.', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok'), $exportedData, $filepath);
+	$result = phpexcel_export(array('No.', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok', 'Harga', 'Sub Total'), $exportedData, $filepath);
 	if ($result) {
 		// Exported successfully. Let's register the file with Drupal. We simply
 		// tell Drupal to copy the file over the existing one, by passing in
