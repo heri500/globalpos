@@ -18,6 +18,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+	_addChosenJqueryPlugins();
 	$idPelanggan = 0;
 	if (!empty($idtitipanlaundry)){
 		if (empty($alamatasal)){
@@ -92,6 +93,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$tombolprint = '<a class="buttonprint" onclick="kirim_data(0)">F6:BAYAR</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
 	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
+	$tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
 	$penjualan .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS KASIR ['.$tanggal.']">';
 	$penjualan .= '<div id="info-kasir-waktu">';
@@ -146,6 +148,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
+	$penjualan .= $tombollihatpelanggan;
 	$penjualan .= '</div>';
     $penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Transaksi : Rp. 0</div></div>';
 	$penjualan .= '</div>';
