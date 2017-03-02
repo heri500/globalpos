@@ -249,6 +249,9 @@ function inisialulang(){
 		$("#barcode").select();
 	}
 }
+function pilih_pelanggan(){
+	$('#idpelanggan').trigger('chosen:activate');
+}
 function ubahharga(){
 	if (totalproduk > 0){
 		$("#dialogubahharga").dialog("open");
@@ -262,6 +265,9 @@ $(document).ready(function(){
 	tglsekarang = Drupal.settings.tglsekarang;
 	tgltampil = Drupal.settings.tgltampil;
 	alamatasal = Drupal.settings.alamatasal;
+	$('#idpelanggan').chosen().change(function(){
+		$('#barcode').focus();
+	});
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined') {
 		$("#dialogkasir").dialog({
 			modal: true,
@@ -444,7 +450,6 @@ $(document).ready(function(){
 	$(".ui-dialog-titlebar").css("font-size","14px");
 	$("button").button();
 	$("#barcode").keypress(function(e) {
-		console.log(e.keyCode);
 		if (e.keyCode == 114){
 			$("#tombolubahqty").click();
 		}else if (e.keyCode == 13){
@@ -469,6 +474,8 @@ $(document).ready(function(){
 				$("#pesantext").text("Perubahan harga hanya untuk pelanggan UMUM...!!!");
 				$("#dialogwarning").dialog("open");
 			}
+		}else if (e.keyCode == 120){
+			$('#idpelanggan').trigger('chosen:activate');
 		}
 	});
 	$("#barcode").autocomplete({

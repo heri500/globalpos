@@ -418,6 +418,17 @@ function save_produk(){
         simpanproduk("tanpafile");
     }
 }
+function export_to_xls(){
+    alamatsimpan = pathutama +'dataproduk/exportxls';
+    $.ajax({
+        type: 'POST',
+        url: alamatsimpan,
+        cache: false,
+        success: function (data) {
+            window.open(pathutama + data.trim());
+        }
+    })
+}
 $(document).ready(function() {
     pathutama = Drupal.settings.basePath;
     pathfile = Drupal.settings.filePath;

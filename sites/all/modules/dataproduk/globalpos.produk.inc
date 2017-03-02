@@ -128,6 +128,7 @@ function data_produk(){
 	$pilihanstatus .= '<img onclick="view_status(\'all\')" title="Klik untuk melihat seluruh produk" src="'.base_path().'misc/media/images/alldata.png">';
 	$pilihanstatus .= '<img onclick="view_status(\'nonaktif\')" title="Klik untuk melihat seluruh produk non aktif" src="'.base_path().'misc/media/images/nonaktifdata.png">';
 	$pilihanstatus .= '<span class="float-right">';
+	$pilihanstatus .= '<button id="export-xls" onclick="export_to_xls();">Export XLS</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="nonaktifkan">Non Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode Biasa</button>&nbsp;&nbsp;';
