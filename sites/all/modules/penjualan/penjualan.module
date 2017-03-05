@@ -325,6 +325,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'penjualan.update.inc'
 	);
+	$items['penjualan/getpelanggandiskon'] = array(
+		'title' => t('Get Diskon Pelanggan'),
+		'description' => 'Fungsi untuk mendapatkan diskon pelanggan',
+		'page callback' => 'get_pelanggan_diskon',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.kasir.inc'
+	);
 	return $items;
 } // end hook menu
 

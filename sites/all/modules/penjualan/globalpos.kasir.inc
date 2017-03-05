@@ -130,6 +130,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
 	$penjualan .= '<input type="hidden" id="lastharga" name="lastharga">';
 	$penjualan .= '<input type="hidden" id="lastdiskon" name="lastdiskon">';
+	$penjualan .= '<input type="hidden" id="lastbarcode" name="lastbarcode">';
 	$penjualan .= '<input type="hidden" id="nilaikirim" name="nilaikirim">';
 	//$penjualan .= '<div id="tempattombolkasir">';
 	if ($nomerRak != ''){
@@ -517,4 +518,21 @@ function view_kasir($idtitipanlaundry = null, $alamatasal = null){
 	$kasirtabel .= '</tbody>';
 	$kasirtabel .= '</table>';
 	return $kasirtabel;
+}
+function get_pelanggan_diskon(){
+	$besarDiskon = array();
+	if (isset($_POST['idpelanggan']) && isset($_REQUEST['idproduk'])){
+		$idProduct = $_REQUEST['idproduk'];
+		if (count($idProduct)){
+			for ($i = 0;$i < count($idProduct);$i++) {
+				$idKategori = db_result(db_query('SELECT idkategori FROM product WHERE idproduct = %d', $idProduct[$i]));
+				if ($idKategori) {
+					$besarDiskon[$idProduct[$i]] = db_result(db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'", $_POST["idpelanggan"], $idKategori));
+				}
+			}
+		}
+	}
+	$returnData = array($besarDiskon);
+	print json_encode($returnData);
+	exit();
 }
