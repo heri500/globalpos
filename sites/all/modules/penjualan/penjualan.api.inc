@@ -70,7 +70,8 @@ function getDetailPenjualan($nidpenjualan = null){
 	if (!empty($nidpenjualan)){
 		$detailPenjualan = array();
 		$strSQL = "SELECT iddetail, idpenjualan, a.idproduct, jumlah, a.hargapokok, a.hargajual, 
-		a.diskon, b.namaproduct, b.satuan FROM detailpenjualan a LEFT JOIN product b
+		a.diskon, b.namaproduct, b.satuan, (a.hargajual - (a.hargajual * a.diskon/100)) AS harga_diskon 
+		FROM detailpenjualan a LEFT JOIN product b
 		ON a.idproduct = b.idproduct WHERE a.idpenjualan=%d";
 		$result = db_query($strSQL,$nidpenjualan);
 		while ($data = db_fetch_object($result)){
@@ -837,11 +838,11 @@ function printOutPenjualanGHC(){
             $tablePrint .= '<td colspan="3" style="font-size: 13px;font-weight: bold;">'.$dataDetail->namaproduct.'</td>';
             $tablePrint .= '</tr>';
             $tablePrint .= '<tr>';
-            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual,0,",",".").'</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon,0,",",".").'</td>';
             $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,0,",",".").'</td>';
-            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
             $tablePrint .= '</tr>';
-            $totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
+            $totalPenjualan = $totalPenjualan + ($dataDetail->harga_diskon*$dataDetail->jumlah);
         }
 		$besarPpn = $dataPenjualan['info']->ppn;
 		$totalPpn = $dataPenjualan['info']->ppn_value;

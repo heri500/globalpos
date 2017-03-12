@@ -668,7 +668,7 @@ $(document).ready(function(){
 		}
 	});
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined'){
-		$("#idpelanggan").attr("disabled","disabled");
+		//$("#idpelanggan").attr("disabled","disabled");
 	}
 	$("#kembalian").change(function(){
 		$("#nilaibayar").select();
