@@ -24,7 +24,7 @@ function tampilkantabelproduk(){
         'aoColumns': [
             { 'bSortable': false },null,null,{ 'bVisible': false },null,null,null,null,
             null,{ 'bVisible': false },{ 'bVisible': false },
-            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,
+            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,null,
             { 'bSortable': false },{ 'bSortable': false }
         ],
         'aLengthMenu': [[100, 200, 300, 500], [100, 200, 300,500]],
@@ -38,7 +38,34 @@ function tampilkantabelproduk(){
         ],
         'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
         'createdRow': function ( row, data, index ) {
+            console.log(row.id);
             row.id = data[(data.length - 1)];
+            var alamatKategori = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=kategori&idproduk='+ row.id;
+            $('td', row).eq(1).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 1 };
+                },
+                'loadurl' : alamatKategori,
+                'width': '140px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
+            var alamatSubKategori = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=subkategori&idproduk='+ row.id;
+            $('td', row).eq(2).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 2 };
+                },
+                'loadurl' : alamatSubKategori,
+                'width': '140px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
             $('td', row).eq(3).addClass('center').editable(alamatupdate, {
                 'submitdata': function ( value, settings ) {
                     return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 3 };
@@ -119,11 +146,28 @@ function tampilkantabelproduk(){
                 'select': true,
                 'indicator': 'Menyimpan...',
                 'tooltip': 'Klik untuk mengubah...'
-            });;
+            });
             $('td', row).eq(9).addClass('center');
             $('td', row).eq(10).addClass('center');
             $('td', row).eq(11).addClass('angka');
-            $('td', row).eq(12).addClass('center');
+            $('td', row).eq(12).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 9 };
+                },
+                'data': function (value, settings) {
+                    var newValue = value.replace('.','');
+                    newValue = newValue.replace(',','.');
+                    return newValue;
+                },
+                'width': '60px',
+                'height': '20px',
+                'submit': 'Ok',
+                'select': true,
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
+            $('td', row).eq(13).addClass('center');
+            $('td', row).eq(14).addClass('center');
         },
         'drawCallback': function( settings ) {
             $('.barcode-select').click(function(){
@@ -347,6 +391,7 @@ function simpanproduk(namafile){
         request.idsubkategori = $('#idsubkategori').val();
         request.idsupplier = $('#idsupplier').val();
         request.namaproduk = $('#namaproduk').val();
+        request.ukuran = $('#ukuran').val();
         request.hargapokok = $('#hargapokok').val();
         request.hargajual = $('#hargajual').val();
         request.margin = $('#margin').val();
@@ -418,6 +463,17 @@ function save_produk(){
     }else{
         simpanproduk("tanpafile");
     }
+}
+function export_to_xls(){
+    alamatsimpan = pathutama +'dataproduk/exportxls';
+    $.ajax({
+        type: 'POST',
+        url: alamatsimpan,
+        cache: false,
+        success: function (data) {
+            window.open(pathutama + data.trim());
+        }
+    })
 }
 $(document).ready(function() {
     pathutama = Drupal.settings.basePath;

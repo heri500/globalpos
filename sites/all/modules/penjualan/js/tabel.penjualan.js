@@ -57,7 +57,7 @@ function tampiltabeljual(){
 				$('td', row).eq(12).addClass('center');
 			},
             'aoColumnDefs': [
-                { 'bSortable': false, 'aTargets': [ 0,3,12 ] }
+                { 'bSortable': false, 'aTargets': [ 0,3,12,13 ] }
             ],
 			'footerCallback': function ( row, data, start, end, display ) {
 				var api = this.api(), data;
@@ -266,17 +266,20 @@ function tampiltabeljualdetail(){
 	oTable2 = $("#tabel_detail_penjualan").dataTable( {
 		'bJQueryUI': true,
 		'bAutoWidth': false,
-		'bPaginate': false,
-		'bLengthChange': false,
-		'bInfo': false,
+		'sPaginationType': 'full_numbers',
+		'bInfo': true,
+		'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+		'iDisplayLength': -1,
+		'bInfo': true,
 		'aaSorting': [[1, 'asc']],
-		'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
+		'scrollY': '330px',
+		'scrollCollapse': true,
 		'aoColumnDefs': [
 			{ 'bSortable': false, 'aTargets': [ 0 ] }
 		],
 		'processing': true,
 		'serverSide': true,
-		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + selectedPenjualan,
+		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + selectedPenjualan + '&length=-1',
 		'createdRow': function ( row, data, index ) {
 			row.id = data[(data.length - 1)];
 			$('td', row).eq(1).addClass('center');
@@ -361,10 +364,25 @@ function view_detail(idpenjualan,nonota,idpelanggan){
 		}
 	});
 }
+function print_faktur(idpenjualan,nonota){
+	var konfirmasi = confirm('Yakin ingin export faktur ke xls untuk penjualan dengan no nota : '+ nonota +' ini...??!!');
+	if (konfirmasi){
+		alamat = pathutama + 'penjualan/exportfaktur/'+ idpenjualan;
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function(data){
+				var xlsFilename = data.trim();
+				window.location = Drupal.settings.basePath +"sites/default/files/"+ xlsFilename;
+			}
+		});
+	}
+}
 function print_penjualan(idpenjualan,nonota){
 	var konfirmasi = confirm('Yakin ingin mencetak nota penjualan dengan no nota : '+ nonota +' ini...??!!');
 	if (konfirmasi){
-		window.open(pathutama + 'print/6?idpenjualangh='+ idpenjualan);
+		window.open(pathutama + 'print/6?idpenjualan='+ idpenjualan);
 	}
 }
 function hapus_detail(id, namaproduct){

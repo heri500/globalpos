@@ -325,6 +325,15 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'penjualan.update.inc'
 	);
+	$items['penjualan/exportfaktur/%'] = array(
+		'title' => t('Export faktur ke xls'),
+		'description' => 'Export faktur ke xls',
+		'page callback' => 'create_faktur_in_excel',
+		'page arguments' => array(2),
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Penjualan Produk'),
+		'type' => MENU_CALLBACK,
+	);
 	return $items;
 } // end hook menu
 
@@ -337,5 +346,191 @@ require_once 'penjualan.api.inc';
 
 function getRandomStringAjax(){
 	print createEAN13Code(getRandomString(9));
+	exit();
+}
+function get_updated_penjualan(){
+	$strSQL = 'SELECT idpenjualan, nonota, idtitipanlaundry, idcustomerorder, tglpenjualan, idpemakai, ';
+	$strSQL .= 'idpelanggan, total, totalmodal, carabayar, bayar, kembali, perlakuankembalian, ';
+	$strSQL .= 'nokartu, keterangan, insert_date ';
+	$strSQL .= 'FROM penjualan WHERE uploaded=0';
+	$result = db_query($strSQL);
+	$dataPenjualan = array();
+	while ($data = db_fetch_array($result)){
+		$dataPenjualan[] = $data;
+	}
+	return $dataPenjualan;
+}
+function create_faktur_in_excel($idpenjualan = 0){
+	$namafile = '';
+	if (!empty($idpenjualan)){
+		if (function_exists('arrayBulan')){
+			$bulan = arrayBulan();
+		}else{
+			$bulan = array(
+				1 => 'Januari',
+				2 => 'Februari',
+				3 => 'Maret',
+				4 => 'April',
+				5 => 'Mei',
+				6 => 'Juni',
+				7 => 'Juli',
+				8 => 'Agustus',
+				9 => 'September',
+				10 => 'Oktober',
+				11 => 'November',
+				12 => 'Desember',
+			);
+		}
+		$dataPremis = getPremisInformation();
+		$dataPenjualan = getDataPenjualan($idpenjualan);
+		if (!file_check_location('sites/all/libraries/PHPExcel/PHPExcel.php', 'sites/all/libraries/PHPExcel')) {
+			watchdog('phpexcel', "Couldn't find the PHPExcel library! ", array(), WATCHDOG_ERROR);
+			return FALSE;
+		}
+		require_once 'sites/all/libraries/PHPExcel/PHPExcel.php';
+		$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+		$objPHPExcel = $objReader->load("sites/default/files/templates/template-faktur.xlsx");
+		/*
+		 * A2: Alamat Premis A3: Telepon Premis
+		 * B5 : Nomer Nota, B6: Nama Pelanggan, B7 : Alamat Pelanggan, I5: Tanggal (format 01 Januari 2017), I6: Cara pembayaran
+		*/
+
+		/* Set Style */
+		$BStyle = array(
+			'borders' => array(
+				'outline' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+				)
+			)
+		);
+		$alignmentStyle = array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+			)
+		);
+		$alignmentStyle2 = array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+				'vertical' => PHPExcel_Style_Alignment::VERTICAL_TOP,
+			)
+		);
+		$alignmentLeft = array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+			)
+		);
+		$styleBg1 = array(
+			'fill' => array(
+				'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				'color' => array('rgb' => 'FFC7CE')
+			)
+		);
+		$styleBg2 = array(
+			'fill' => array(
+				'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				'color' => array('rgb' => 'C6EFCE')
+			)
+		);
+		$styleBg3 = array(
+			'fill' => array(
+				'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				'color' => array('rgb' => 'FFEB9C')
+			)
+		);
+
+		/* Select Sheet 1 */
+		$objPHPExcel->setActiveSheetIndex(0);
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+		$objPHPExcel->getActiveSheet()->setCellValue('A1', strtoupper($dataPremis->nama));
+		$objPHPExcel->getActiveSheet()->setCellValue('A2','Alamat :');
+		$objPHPExcel->getActiveSheet()->mergeCells('B2:D2');
+		$objPHPExcel->getActiveSheet()->setCellValue('B2',$dataPremis->alamat);
+		$objPHPExcel->getActiveSheet()->getStyle('A1:D2')->applyFromArray($alignmentStyle2);
+		$objPHPExcel->getActiveSheet()->getStyle('B2:D2')->getAlignment()->setWrapText(true);
+		$objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(45);
+		$objPHPExcel->getActiveSheet()->setCellValue('A3','Telepon : '.$dataPremis->telepon);
+		$objPHPExcel->getActiveSheet()->setCellValue('B5',':  '.$dataPenjualan['info']->nonota);
+		$objPHPExcel->getActiveSheet()->setCellValue('B6',':  '.strtoupper($dataPenjualan['info']->namapelanggan));
+		$objPHPExcel->getActiveSheet()->setCellValue('B7',':  '.strtoupper($dataPenjualan['info']->alamat));
+		$explodeTgl = explode(' ',$dataPenjualan['info']->tglpenjualan);
+		$explodeTglJual = explode('-',$explodeTgl[0]);
+		$tglJual = $explodeTglJual[2].' '.$bulan[(int)$explodeTglJual[1]].' '.$explodeTglJual[0];
+		$objPHPExcel->getActiveSheet()->setCellValue('I5',':  '.$tglJual);
+		$objPHPExcel->getActiveSheet()->setCellValue('I6',':  '.$dataPenjualan['info']->carabayar);
+		$alphas = range('A', 'Z');
+		$rownumber = 10;
+		/*
+ 		* A10: Nomer, B10: Nama Barang, C10: Barcode, D10: Qty, E10: Satuan, F10: Harga, G10: Diskon,  H10: Subtotal
+		*/
+		$jumlahTotal = 0;
+		for ($i = 0; $i < count($dataPenjualan['detail']);$i++){
+			$detailPenjualan = $dataPenjualan['detail'][$i];
+			$colnumber = 0;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, ($i + 1));
+			$colnumber++;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan->kategori)));
+			$colnumber++;
+			$ukuran = !empty($detailPenjualan->ukuran) ? $detailPenjualan->ukuran : '-';
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $ukuran);
+			$colnumber++;
+			$barcode = !empty($detailPenjualan->barcode) ? $detailPenjualan->barcode : '-';
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan->subkategori)));
+			$colnumber++;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->jumlah);
+			$colnumber++;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, strtoupper($detailPenjualan->satuan));
+			$colnumber++;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->hargajual);
+			$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
+			$colnumber++;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->diskon.'%');
+			$colnumber++;
+			$subTotal = ($detailPenjualan->hargajual - ($detailPenjualan->hargajual*$detailPenjualan->diskon/100))*$detailPenjualan->jumlah;
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $subTotal);
+			$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
+			$rownumber++;
+			$jumlahTotal = $jumlahTotal + $subTotal;
+		}
+		$styleArray = array(
+			'borders' => array(
+				'allborders' => array(
+					'style' => PHPExcel_Style_Border::BORDER_THIN
+				)
+			)
+		);
+		$objPHPExcel->getActiveSheet()->getStyle('A10:I'.($rownumber - 1))->applyFromArray($styleArray);
+		unset($styleArray);
+		$objPHPExcel->getActiveSheet()->mergeCells('A'.$rownumber.':B'.($rownumber + 1));
+		$objPHPExcel->getActiveSheet()->setCellValue('A'.$rownumber, strtoupper($dataPremis->nama));
+		$objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 1))->applyFromArray($alignmentStyle);
+		$objPHPExcel->getActiveSheet()->mergeCells('A'.($rownumber + 4).':B'.($rownumber + 4));
+		$objPHPExcel->getActiveSheet()->setCellValue('A'.($rownumber + 4), '.....................................');
+		$objPHPExcel->getActiveSheet()->getStyle('A'.($rownumber + 4).':B'.($rownumber + 4))->applyFromArray($alignmentStyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->mergeCells('C'.$rownumber.':G'.($rownumber + 4));
+		$objPHPExcel->getActiveSheet()->setCellValue('C'.$rownumber, 'KETERANGAN : ');
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':G'.($rownumber + 4))->applyFromArray($alignmentStyle2);
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':G'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->setCellValue('H'.$rownumber, 'TOTAL');
+		$objPHPExcel->getActiveSheet()->setCellValue('I'.$rownumber, $jumlahTotal);
+		$objPHPExcel->getActiveSheet()->getStyle('I'.$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
+		$objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':I'.$rownumber)->applyFromArray($styleBg1);
+		$objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 1), 'ONGKIR');
+		$objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 1).':I'.($rownumber + 1))->applyFromArray($styleBg2);
+		$objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 2), 'JUMLAH');
+		$objPHPExcel->getActiveSheet()->mergeCells('H'.($rownumber + 3).':I'.($rownumber + 4));
+		$objPHPExcel->getActiveSheet()->setCellValue('H'.($rownumber + 3), $jumlahTotal);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
+		$objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':H'.($rownumber + 2))->applyFromArray($alignmentLeft);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber.':I'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getFont()->setSize(16);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 3))->getFont()->setBold(true);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.($rownumber + 2).':I'.($rownumber + 3))->applyFromArray($styleBg3);
+		$waktu = time();
+		$namafile = 'penjualan-'.$dataPenjualan['info']->nonota.'-'.$waktu.'.xlsx';
+		$objWriter->save('sites/default/files/'.$namafile);
+	}
+	print $namafile;
 	exit();
 }

@@ -54,7 +54,7 @@ function getDataPenjualan($nidpenjualan = null){
 		$dataPenjualan = array();
 		$strSQL = "SELECT idpenjualan, name, nonota, tglpenjualan, idpemakai, a.idpelanggan, total,
 		totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date,idtitipanlaundry,
-		perlakuankembalian,namapelanggan FROM penjualan a LEFT JOIN cms_users b ON a.idpemakai = b.uid
+		perlakuankembalian,namapelanggan,alamat FROM penjualan a LEFT JOIN cms_users b ON a.idpemakai = b.uid
 		LEFT JOIN pelanggan c ON a.idpelanggan = c.idpelanggan WHERE idpenjualan=%d";
 		$result = db_query($strSQL,$nidpenjualan);
 		$dataPenjualan['info'] = db_fetch_object($result);
@@ -70,8 +70,10 @@ function getDetailPenjualan($nidpenjualan = null){
 	if (!empty($nidpenjualan)){
 		$detailPenjualan = array();
 		$strSQL = "SELECT iddetail, idpenjualan, a.idproduct, jumlah, a.hargapokok, a.hargajual, 
-		a.diskon, b.namaproduct, b.satuan FROM detailpenjualan a LEFT JOIN product b
-		ON a.idproduct = b.idproduct WHERE a.idpenjualan=%d";
+		a.diskon, b.namaproduct, b.satuan, b.barcode, b.ukuran, c.kategori, d.subkategori 
+		FROM detailpenjualan a LEFT JOIN product b ON a.idproduct = b.idproduct 
+		LEFT JOIN kategori c ON b.idkategori=c.idkategori 
+		LEFT JOIN subkategori d ON b.idsubkategori=d.idsubkategori WHERE a.idpenjualan=%d";
 		$result = db_query($strSQL,$nidpenjualan);
 		while ($data = db_fetch_object($result)){
 			$detailPenjualan[] = $data;

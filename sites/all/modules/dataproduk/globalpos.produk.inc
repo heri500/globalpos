@@ -95,6 +95,7 @@ function data_produk(){
 	$viewtabelproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
 	$viewtabelproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
 	$viewtabelproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk">';
+	$viewtabelproduk .= '<label>UKURAN</label><input type="text" id="ukuran" name="ukuran">';
 	$viewtabelproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')">';
 	$viewtabelproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')">';
 	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')">';
@@ -129,6 +130,7 @@ function data_produk(){
 	$pilihanstatus .= '<img onclick="view_status(\'nonaktif\')" title="Klik untuk melihat seluruh produk non aktif" src="'.base_path().'misc/media/images/nonaktifdata.png">';
 	$pilihanstatus .= '<span class="float-right">';
 	//$pilihanstatus .= '<input type="checkbox" id="print-stok" name="print-stok" value="1">&nbsp;Print Sejumlah Stok&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="export-xls" onclick="export_to_xls();">Export XLS</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="nonaktifkan">Non Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode</button>&nbsp;&nbsp;';
@@ -201,7 +203,8 @@ function data_produk(){
 	$viewtabelproduk .= '<form id="form-print" method="post" action="'.base_path().'print/6" target="_blank" style="display:none;">';
 	$viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
 	$viewtabelproduk .= '</form>';
-	return $viewtabelproduk;
+	$totalSongkok = '<div><h4>TOTAL SONGKOK : '.number_format(count_total_songkok(),0,',','.').' PCS</h4></div>';
+	return $totalSongkok.$viewtabelproduk;
 }
 function cek_kode_alt($kodealt = null){
 	if ($_POST["kodealternatif"] OR !(is_null($kodealt))){
@@ -259,6 +262,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>SATUAN</th>';
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
+	$tabelproduk .= '<th>UKURAN</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
@@ -270,6 +274,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
+	$tabelproduk .= '<th>&nbsp;</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
@@ -360,12 +365,12 @@ function simpan_produk(){
 				barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',
 				margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d', ukuran='%f' WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
 				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
 				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
 				$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
-				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],
+				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["ukuran"],
 				$_POST["idproduk"]);
 				//print $sql;
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
@@ -378,12 +383,12 @@ function simpan_produk(){
 				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',
 				minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',ukuran='%f' WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["barcode"],
 				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],
 				$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
 				$_POST["satuan"],$_POST["keterangan"],$_POST["idkategori"],$_POST["type_product"],
-				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],
+				$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["ukuran"],
 				$_POST["idproduk"]);
 				if ($_POST["hargapokok"] <> $HARGAPOKOK){
 					global $user;
@@ -424,15 +429,15 @@ function simpan_produk(){
 		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
 			db_query("INSERT INTO product(idsupplier,idkategori,idsubkategori,barcode,
 			alt_code,namaproduct,hargapokok,hargajual,margin,minstok,maxstok,stok,satuan,
-			keterangan,type_product,lead_time, aturan_jam_kerja,berlaku_sebelum_zuhur)
+			keterangan,type_product,lead_time, aturan_jam_kerja,berlaku_sebelum_zuhur,ukuran)
 			VALUES(
 			'%d','%d','%d','%s','%s',
-			'%s','%f','%f','%f','%d','%d','%d','%s','%s','%d','%d','%d','%d')",
+			'%s','%f','%f','%f','%d','%d','%d','%s','%s','%d','%d','%d','%d','%f')",
 			$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
 			$_POST["barcode"],$altCode,$_POST["namaproduk"],$_POST["hargapokok"],
 			$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
 			$_POST["stok"],$_POST["satuan"],$_POST["keterangan"],$_POST["type_product"],
-			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"]);
+			$_POST["lead_time"],$_POST["jam_kerja"],$_POST["sebelum_zuhur"],$_POST["ukuran"]);
 			$result = db_query("SELECT idproduct FROM product WHERE alt_code='%s'",$_POST["alt_code"]);
 			$data = db_fetch_object($result);
 			$IDPRODUK = $data->idproduct;
@@ -474,7 +479,6 @@ function simpan_produk(){
 				$file_obj->timestamp = time();
 				$file_obj->list = 1;
 				$file_obj->new = true;
-				dpm($file_obj);
 				// Save file to files table
 				drupal_write_record('files', $file_obj);
 				file_set_status($file_obj,1);
@@ -529,7 +533,7 @@ function edit_data_produk(){
 		$IDPRODUK = $_GET["idproduk"];
 		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode, 
 		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan,
-		keterangan, type_product, lead_time,aturan_jam_kerja,berlaku_sebelum_zuhur FROM product
+		keterangan, type_product, lead_time,aturan_jam_kerja,berlaku_sebelum_zuhur,ukuran FROM product
 		WHERE idproduct='%d'",$IDPRODUK);
 		$dataproduk = db_fetch_object($resultproduk);
         $path = drupal_get_path('theme', 'cti_flex');
@@ -610,6 +614,7 @@ function edit_data_produk(){
 		$editproduk .= '<label>SUBKATEGORI</label>'.$pilihansubkategori.$buttonadd2;
 		$editproduk .= '<label>SUPPLIER</label>'.$pilihansupplier.$buttonadd3;
 		$editproduk .= '<label>NAMA PRODUK</label><input type="text" class="validate[required]" id="namaproduk" name="namaproduk" value="'.$dataproduk->namaproduct.'">';
+		$editproduk .= '<label>UKURAN</label><input type="text" id="ukuran" name="ukuran" value="'.$dataproduk->ukuran.'">';
 		$editproduk .= '<label>HARGA POKOK</label><input type="text" class="validate[required]" id="hargapokok" name="hargapokok" onkeyup="hitungmargin(\'hargapokok\')" value="'.$dataproduk->hargapokok.'">';
 		$editproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')" value="'.$dataproduk->hargajual.'">';
 		$editproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')" value="'.$dataproduk->margin.'">';
@@ -677,7 +682,13 @@ function update_data_produk(){
 	$hargaPokok = $data->hargapokok;
 	$hargaJual = $data->hargajual;
 	$nilaiRet = $nilai;
-	if ($kolom == "3"){
+	if ($kolom == "1") {
+		$sql_update = "UPDATE product SET idkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT kategori FROM kategori WHERE idkategori=%d', $nilai));
+	}else if ($kolom == "2") {
+		$sql_update = "UPDATE product SET idsubkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT subkategori FROM subkategori WHERE idsubkategori=%d',$nilai));
+	}else if ($kolom == "3"){
 		$sql_update = "UPDATE product SET barcode='%s' WHERE idproduct='%d'";
 	}else if ($kolom == "4"){
 		$sql_update = "UPDATE product SET alt_code='%s' WHERE idproduct='%d'";
@@ -714,6 +725,9 @@ function update_data_produk(){
 			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
 			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$nilai,$keterangan);
 		}
+	}else if ($kolom == "9"){
+		$sql_update = "UPDATE product SET ukuran='%f' WHERE idproduct='%d'";
+		$nilaiRet = number_format($nilai,2,",",".");
 	}
 	db_query($sql_update,$nilai,$productId);
 	echo $nilaiRet;
@@ -728,4 +742,9 @@ function ubah_status_product(){
         }
     }
     exit();
+}
+function count_total_songkok(){
+	$strSQL = 'SELECT SUM(stok) AS total_stok FROM product WHERE stok > 0 AND idkategori NOT IN (2,7)';
+	$totalSongkok = db_result(db_query($strSQL));
+	return $totalSongkok;
 }

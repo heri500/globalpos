@@ -215,14 +215,15 @@ function tampiltabelcustomerorderdetail(selectedId){
 	oTable2 = $("#tabel_detail_customerorder").dataTable( {
 		'bJQueryUI': true,
 		'bAutoWidth': false,
-		'bPaginate': false,
-		'bLengthChange': false,
-		'bInfo': false,
+		'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+		'iDisplayLength': -1,
+		'bInfo': true,
 		'aaSorting': [[1, 'asc']],
-		'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
 		'aoColumnDefs': [
 			{ 'bSortable': false, 'aTargets': [ 0 ] }
 		],
+		'scrollY': '330px',
+		'scrollCollapse': true,
 		'processing': true,
 		'serverSide': true,
 		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailcustomerorder&idcustomerorder=' + selectedId,
@@ -245,8 +246,9 @@ function tampiltabelcustomerorderdetail(selectedId){
 			$('td', row).eq(5).addClass('angka');
 			$('td', row).eq(6).addClass('angka');
 			$('td', row).eq(7).addClass('angka');
-			$('td', row).eq(8).addClass('center');
+			$('td', row).eq(8).addClass('angka');
 			$('td', row).eq(9).addClass('center');
+			$('td', row).eq(10).addClass('center');
 		},
 		'footerCallback': function ( row, data, start, end, display ) {
 			var api = this.api(), data;
@@ -259,13 +261,13 @@ function tampiltabelcustomerorderdetail(selectedId){
 			};
 			// Total over all pages
 			total = api
-				.column( 7 )
+				.column( 8 )
 				.data()
 				.reduce( function (a, b) {
 					return intVal(a) + intVal(b);
 				}, 0 );
 			// Update footer
-			$( api.column( 7 ).footer() ).html(
+			$( api.column( 8 ).footer() ).html(
 				'Rp. '+ addCommas(total)
 			).addClass('angka');
 		},

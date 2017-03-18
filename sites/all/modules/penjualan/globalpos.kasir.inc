@@ -60,6 +60,10 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			}
 		}
 	}
+	$uploadData = false;
+	if (isset($_GET['afterinsert']) && $_GET['afterinsert']){
+		$uploadData = true;
+	}
 	$tglsekarang = date("Y-m-d");
 	$tgltampil = date("d-m-Y");
 	drupal_add_js(
@@ -67,8 +71,16 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 			'tglsekarang' => $tglsekarang,
 			'tgltampil' => $tgltampil,
 			'logo' => $logoPath,
-		), 
-	'setting');
+			'upload_data' => $uploadData,
+		),
+		'setting');
+	if (!empty($titipanlaundry)){
+		drupal_add_js(
+			array(
+				'idpelanggan' => $idPelanggan,
+			),
+			'setting');
+	}
 	$js_path = drupal_get_path('module','penjualan').'/js/kasir.form.new.js';
 	drupal_add_js($js_path);
 	if (isset($_GET['tanggal'])){
@@ -297,11 +309,7 @@ function simpan_penjualan(){
 		foreach ($pecahdetail as $parameter){
 			$pecahparameter = explode("=",$parameter);
 			$pecahnilai = explode("___",$pecahparameter[1]);
-			if (is_string($pecahnilai[0])){
-				$IDPRODUK =	substr($pecahnilai[0],3);
-			}else if(is_integer($pecahnilai[0])){
-				$IDPRODUK =	$pecahnilai[0];
-			}
+			$IDPRODUK =	$pecahnilai[0];
 			$QTY = $pecahnilai[1];
 			$HARGAJUAL = $pecahnilai[2];
 			$DISKON = $pecahnilai[3];
@@ -418,8 +426,9 @@ function cari_produk(){
 			$result2 = db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
 			$_POST["idpelanggan"],$data->idkategori);
 			$datadiskon = db_fetch_object($result2);
+			$DISKON = 0;
 			if ($datadiskon->besardiskon >=0 ){
-				$DISKON = $datadiskon->besardiskon;
+				$DISKON = empty($datadiskon->besardiskon) ? 0 : $datadiskon->besardiskon;
 			}else{
 				$DISKON = 0;
 			}

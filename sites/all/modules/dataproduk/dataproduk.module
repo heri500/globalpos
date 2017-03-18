@@ -182,6 +182,14 @@ function dataproduk_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.meja.inc'
 	);
+	$items['dataproduk/exportxls'] = array(
+		'title' => t('Export to xls'),
+		'description' => 'Export data product to xls',
+		'page callback' => 'export_stok_to_xls',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Produk'),
+		'type' => MENU_CALLBACK,
+	);
 	return $items;
 } // end hook menu
 
@@ -338,4 +346,109 @@ function calculateTotalNilaiBarang($statusstok = null, $statusProduct = 1){
 	$strSQL .= $strCriteria;
 	$totalNilaiBarang = db_result(db_query($strSQL,$statusProduct));
 	return $totalNilaiBarang;
+}
+
+function get_updated_product(){
+	$strSQL = 'SELECT idproduct, idsupplier, idkategori, idsubkategori, barcode, ';
+	$strSQL .= 'alt_code, namaproduct, type_product, hargapokok, hargajual, margin, minstok, ';
+	$strSQL .= 'maxstok, stok, satuan, berat, keterangan, lead_time, aturan_jam_kerja, ';
+	$strSQL .= 'berlaku_sebelum_zuhur, status_product, uploaded, changed ';
+	$strSQL .= 'FROM product WHERE uploaded=0';
+	$result = db_query($strSQL);
+	$dataProduct = array();
+	while ($data = db_fetch_array($result)){
+		$dataProduct[] = $data;
+	}
+	return $dataProduct;
+}
+
+function export_stok_to_xls(){
+	$js_path = drupal_get_path('module','dataproduk').'/filedownload.js';
+	drupal_add_js($js_path);
+	$dataStok = get_data_product();
+	$exportedData = array();
+	$totalNilaiBarang = 0;
+	for ($i = 0; $i < count($dataStok); $i++) {
+		$exportedData[] = array(
+			($i + 1), $dataStok[$i]->kategori, $dataStok[$i]->subkategori,
+			$dataStok[$i]->barcode, $dataStok[$i]->namaproduct, $dataStok[$i]->stok,
+			$dataStok[$i]->hargajual, $dataStok[$i]->stok * $dataStok[$i]->hargajual
+		);
+		$totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
+	}
+	$exportedData[] = array(
+		'', '', '',
+		'', '', '',
+		'TOTAL', $totalNilaiBarang
+	);
+	$totalNilaiBarang = $totalNilaiBarang + ($dataStok[$i]->stok * $dataStok[$i]->hargajual);
+	module_load_include('inc', 'phpexcel','phpexcel.api');
+	// Prepare the file path. The PHPExcel library doesn't handle PHP stream
+	// wrappers, so we need the real path.
+	$wrapper = file_directory_temp();
+	// Generate a file name. If it's unique, it's less likely to conflict with an
+	// existing file. You could also put up some more checks on this, if it's likely
+	// to conflict (like, when you have many export/download requests).
+	$filename = 'stok-product--download-' . time() . '.xls';
+	$filepath = $wrapper . '/' . $filename;
+	// Export, and store to file.
+	$result = phpexcel_export(array('No.', 'Kategori', 'Sub Kategori', 'Barcode', 'Nama Product', 'Stok', 'Harga', 'Sub Total'), $exportedData, $filepath);
+	if ($result) {
+		// Exported successfully. Let's register the file with Drupal. We simply
+		// tell Drupal to copy the file over the existing one, by passing in
+		// temporary://$filename.
+		$file = file_save_data(
+			file_get_contents($filepath),
+			$filename,
+			FILE_EXISTS_REPLACE
+		);
+
+		// By default, the file is stored as a permanent file. Let's make it
+		// temporary, so Drupal will remove it (in 6 hours, if your cron is set up
+		// correctly).
+		//$file->status = 0;
+		file_save_upload($file);
+		// Start downloading. This requires a hook_file_download() implementation!
+		print $file;
+		exit();
+		//file_transfer($file, $headers);
+
+	} else {
+		// Error.
+		drupal_set_message('Error export ke excel...!!','error');
+	}
+}
+/**
+ * @param $uri
+ * @return array
+ */
+function dataproduct_file_download($uri) {
+	if (preg_match('/stok-product--download-(.+?)\.xls$/', $uri)) {
+		return array(
+			'Content-type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			'Content-Disposition' => 'attachment; filename="songkok-ikhwan-'.time().'.xls"',
+		);
+	}
+}
+
+/**
+ * @return array
+ */
+function get_data_product(){
+	$strSQL = 'SELECT prod.idproduct, prod.idsupplier, prod.idkategori, prod.idsubkategori, ';
+	$strSQL .= 'prod.barcode, prod.alt_code, prod.namaproduct, prod.type_product, prod.hargapokok, ';
+	$strSQL .= 'prod.hargajual, prod.margin, prod.minstok, prod.maxstok, prod.stok, prod.satuan, prod.berat, ';
+	$strSQL .= 'prod.keterangan, prod.lead_time, prod.aturan_jam_kerja, ';
+	$strSQL .= 'prod.berlaku_sebelum_zuhur, prod.status_product,';
+	$strSQL .= 'kat.kategori, subkat.subkategori ';
+	$strSQL .= 'FROM product prod LEFT JOIN kategori kat ON prod.idkategori = kat.idkategori ';
+	$strSQL .= 'LEFT JOIN subkategori subkat ON prod.idsubkategori = subkat.idsubkategori ';
+	$strSQL .= 'WHERE prod.status_product = 1 ';
+	$strSQL .= 'ORDER BY prod.idkategori, prod.idsubkategori,prod.namaproduct';
+	$dataSongkok = db_query($strSQL);
+	$arrayData = array();
+	while ($data = db_fetch_object($dataSongkok)){
+		$arrayData[] = $data;
+	}
+	return $arrayData;
 }

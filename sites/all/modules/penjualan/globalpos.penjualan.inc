@@ -133,7 +133,8 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th>KEMBALI</th>';
 	$tabelpenjualan .= '<th>KASIR</th>';
 	$tabelpenjualan .= '<th>PELANGGAN</th>';
-	$tabelpenjualan .= '<th class="tablebutton"></th>';
+	$tabelpenjualan .= '<th class="tablebutton">SLIP</th>';
+	$tabelpenjualan .= '<th class="tablebutton">FAKTUR</th>';
 	$tabelpenjualan .= '</tr>';
 	$tabelpenjualan .= '</thead>';
 	$tabelpenjualan .= '<tbody>';
@@ -152,6 +153,7 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th></th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';

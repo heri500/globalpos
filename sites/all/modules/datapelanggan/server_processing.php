@@ -114,7 +114,8 @@ function serverSideProduk($request){
 	$arrayColumn = array(
 		'prod.idproduct','kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
-		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual'
+		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan',
+		'prod.stok*prod.hargajual','prod.ukuran'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -128,7 +129,7 @@ function serverSideProduk($request){
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT prod.idproduct,prod.idsupplier,prod.idkategori,prod.idsubkategori,prod.barcode,prod.alt_code,";
 	$strSQL .= "prod.namaproduct,prod.hargapokok,prod.hargajual,prod.margin,prod.minstok,prod.maxstok,";
-	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan ,";
+	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan,prod.ukuran,";
 	$strSQLFilteredTotal = "SELECT COUNT(prod.idproduct) ";
 	$strSQL .= "kat.kategori, subkat.subkategori, supp.namasupplier, prod.stok*prod.hargajual AS total_nilai  ";
 	$strSQL .= "FROM product AS prod ";
@@ -207,6 +208,7 @@ function serverSideProduk($request){
 		$rowData[] = $data->satuan;
 		$rowData[] = $data->keterangan;
 		$rowData[] = number_format($data->total_nilai,0,",",".");
+		$rowData[] = $data->ukuran;
 		$rowData[] = '<input type="text" id="print-'.$data->idproduct.'" name="print-'.$data->idproduct.'" class="total-print" value="'.$data->stok.'" size="2">';
 		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
 		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
@@ -295,6 +297,8 @@ function serverSidePenjualan($request){
 		$rowData[] = $data->namapelanggan;
 		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
 		$rowData[] = $tombolprint;
+		$tombolprint2 = "<img title=\"Klik untuk mencetak faktur penjualan\" onclick=\"print_faktur(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/printer2.png\" width=\"22\">";
+		$rowData[] = $tombolprint2;
 		$rowData[] = $data->idpenjualan;
 		$output[] = $rowData;
 	}
@@ -957,7 +961,7 @@ function serverSideDetailCustomerOrder($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength) || $pageLength == -1){
+	if (is_null($pageLength) || $pageLength != -1){
 		$pageLength = 25;
 	}
 	$firstRecord = $pageStart;
@@ -981,7 +985,11 @@ function serverSideDetailCustomerOrder($request){
 		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if ($pageLength != -1) {
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)) {
 		$result = db_query($strSQL, $idCustomerOrder, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
@@ -1113,7 +1121,7 @@ function serverSideDetailPenjualan($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength) || $pageLength == -1){
+	if (is_null($pageLength) || $pageLength != -1){
 		$pageLength = 25;
 	}
 	$firstRecord = $pageStart;
@@ -1137,7 +1145,12 @@ function serverSideDetailPenjualan($request){
 		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if ($pageLength != -1){
+		$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria." ORDER BY $orderColumn";
+	}
+
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)) {
 		$result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
@@ -1174,6 +1187,33 @@ function serverSideDetailPenjualan($request){
 		"data"            => $output
 	);
 }
+
+function serverSideArrayKategori($request){
+	$strSQL = 'SELECT idkategori, kodekategori, kategori FROM kategori';
+	$result = db_query($strSQL);
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$output[$data->idkategori] = $data->kodekategori.' => '.$data->kategori;
+	}
+	$strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+	$idKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$output['selected'] =  $idKategori;
+	return $output;
+}
+function serverSideArraySubKategori($request){
+	$strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+	$idKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$strSQL = 'SELECT idsubkategori, kodesubkategori, subkategori FROM subkategori WHERE idkategori=%d';
+	$result = db_query($strSQL,$idKategori);
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$output[$data->idsubkategori] = $data->kodesubkategori.' => '.$data->subkategori;
+	}
+	$strSQL = 'SELECT idsubkategori FROM product WHERE idproduct=%d';
+	$idSubKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$output['selected'] =  $idSubKategori;
+	return $output;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1204,6 +1244,10 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverGetNotaProduksi($_GET);
 }else if($_GET['request_data'] == 'detailpenjualan'){
 	$returnArray = serverSideDetailPenjualan($_GET);
+}else if($_GET['request_data'] == 'kategori'){
+	$returnArray = serverSideArrayKategori($_GET);
+}else if($_GET['request_data'] == 'subkategori'){
+	$returnArray = serverSideArraySubKategori($_GET);
 }
 echo json_encode($returnArray);
 ?>

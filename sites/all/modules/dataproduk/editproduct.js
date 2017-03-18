@@ -217,6 +217,7 @@ function simpanproduk(){
 		request.idsubkategori = $("#idsubkategori").val();
 		request.idsupplier = $("#idsupplier").val();
 		request.namaproduk = $("#namaproduk").val();
+		request.ukuran = $("#ukuran").val();
 		request.hargapokok = $("#hargapokok").val();
 		request.hargajual = $("#hargajual").val();
 		request.margin = $("#margin").val();

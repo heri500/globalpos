@@ -53,9 +53,10 @@ function tambahproduk(qtyAdd){
 			var pecahdata = new Array();
 			pecahdata = data.split(";");
             if (pecahdata[0].trim() != "error"){
+				console.log(pecahdata);
 				nilaisubtotal = (pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100)) * qtyAdd;
 				subtotal = number_format(nilaisubtotal,0,",",".");
-				nilaikirim = pecahdata[0] +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3];
+				nilaikirim = pecahdata[0].trim() +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3];
 				index_cek_box = pecahdata[0].trim();
 				namacekbox = "cekbox_"+ index_cek_box;
 				if($("#"+ namacekbox).val()){
@@ -204,12 +205,12 @@ function akhiri_belanja(cetak){
 				var returndata = data.trim();
 				if (returndata != "error"){
 					if (cetak == 1){
-						window.open(pathutama + "print/6?idpenjualangh="+ returndata);
+						window.open(pathutama + "print/6?idpenjualan="+ returndata);
 					}
 					if (typeof Drupal.settings.idtitipanlaundry != 'undefined' && Drupal.settings.idtitipanlaundry > 0){
 						window.location = pathutama + 'penjualan/' + alamatasal;
 					}else{
-						window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual;
+						window.location = pathutama + "penjualan/kasir?tanggal="+ request.tgljual +'&afterinsert=1';
 					}
 
 				}else{
@@ -603,7 +604,7 @@ $(document).ready(function(){
 		}
 	});
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined'){
-		$("#idpelanggan").attr("disabled","disabled");
+		//$("#idpelanggan").attr("disabled","disabled");
 	}
 	$("#kembalian").change(function(){
 		$("#nilaibayar").select();
@@ -611,4 +612,15 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattombolkasir').css('height','330px');
+	/*if (Drupal.settings.upload_data){
+		alamat = pathutama + 'datapremis/uploaddata';
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function (data) {
+
+			}
+		});
+	}*/
 })
