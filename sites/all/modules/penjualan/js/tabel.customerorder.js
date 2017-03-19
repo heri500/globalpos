@@ -526,4 +526,23 @@ $(document).ready(function(){
     $('#print-slip').on('click', function(){
         print_customerorder(selectedOrder,selectedNota);
     });
+	var timeOutId = 0;
+	var ajaxFn = function () {
+		alamat = pathutama + 'penjualan/getnewandroidorderandroid';
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function (data) {
+				var idOrder = parseInt(data.trim());
+				if (idOrder > 0) {
+					$('select[name=tabel_customerorder_length]').val(200);
+					$('select[name=tabel_customerorder_length]').trigger('change');
+					window.open(pathutama + 'print/6?idghorder='+ idOrder);
+				}
+				timeOutId = setTimeout(ajaxFn, 5000);
+			}
+		});
+	}
+	ajaxFn();
 })

@@ -733,6 +733,7 @@ function printGHCOrder(){
         $tablePrint .= printKasirOrder($dataOrder);
         $tablePrint .= printOrderByCategory($dataOrder['detailbykategori'],$dataOrder['info']);
     }
+	db_query('UPDATE customer_order SET printed=1 WHERE id=%d', $idGhOrder);
     return $tablePrint;
 }
 //Print customer order only GHC

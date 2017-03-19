@@ -406,3 +406,9 @@ function cari_meja(){
 	}
 	exit();
 }
+function cari_nota_order_android(){
+	$strSQL = 'SELECT id FROM customer_order WHERE android_order=1 AND printed=0 ORDER BY id LIMIT 1';
+	$idOrder = db_result(db_query($strSQL));
+	print $idOrder;
+	exit();
+}

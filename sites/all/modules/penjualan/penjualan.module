@@ -334,11 +334,34 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.kasir.inc'
 	);
+	$items['penjualan/customerorderpostdata'] = array(
+		'title' => t('Simpan Customer Order'),
+		'description' => 'Simpan customer order from android',
+		'page callback' => 'simpan_customerorder_android',
+		'access callback' => 'user_access',
+		'access arguments' => array('Rest Insert Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.rest.customerorder.inc'
+	);
+	//$items['penjualan/
+	$items['penjualan/getnewandroidorderandroid'] = array(
+		'title' => t('Nota Order Android Terbaru'),
+		'description' => 'Pencarian Nota Order Android Terbaru',
+		'page callback' => 'cari_nota_order_android',
+		'access callback' => 'user_access',
+		'access arguments' => array('Input Customer Order'),
+		'type' => MENU_CALLBACK,
+		'file' => 'globalpos.customerorder.inc'
+	);
 	return $items;
 } // end hook menu
 
 function penjualan_perm() {
-	return array('Admin Penjualan Produk','Admin Data Penjualan Produk','Input Laundry','Input Customer Order','Admin Data Customer Order','Access Data Customer Order');
+	return array(
+		'Admin Penjualan Produk','Admin Data Penjualan Produk',
+		'Input Laundry','Input Customer Order','Admin Data Customer Order',
+		'Access Data Customer Order','Rest Insert Customer Order'
+	);
 }
 
 require_once 'attachplugins.inc';

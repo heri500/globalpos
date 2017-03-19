@@ -1345,6 +1345,14 @@ function serverSideGetProductByCategory($request){
 	}
 	return $items;
 }
+function serverSideGetDataMeja($request){
+	$result = db_query("SELECT id,barcodemeja, kodemeja, meja, keterangan FROM meja");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$items[] = $data;
+	}
+	return $items;
+}
 function serverSideGetAllProduct($request){
 	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
 	$items = array();
@@ -1368,6 +1376,105 @@ function serverSideGetAllProduct($request){
 		$items[] = $data;
 	}
 	return $items;
+}
+function serverSidePostOrder($request){
+	header('Access-Control-Allow-Origin: *');
+	$postData = $request;
+	$savedData = array();
+	if (count($postData)){
+		$newData = array();
+		foreach ($postData as $key => $dataVal){
+			if ($key != 'request_data'){
+				$splitKey = explode('__', $key);
+				$newData[$splitKey[1]][$splitKey[0]] = $dataVal;
+			}
+		}
+		$savedData = saveCustomerOrderAndroid($newData);
+	}
+	return $savedData;
+}
+
+function saveCustomerOrderAndroid($postData = null){
+	if (!empty($postData) && count($postData)){
+		$savedData = array();
+		$totalBelanja = 0;
+		$totalModal = 0;
+		for ($i = 0;$i < count($postData);$i++){
+			$totalBelanja = $totalBelanja + ($postData[$i]['hargajual'] * $postData[$i]['jumlah']);
+			$totalModal = $totalModal + ($postData[$i]['hargamodal'] * $postData[$i]['jumlah']);
+			$idMeja = $postData[$i]['idmeja'];
+		}
+		$no_nota = createEAN13CodeServerSide(getRandomStringServerSide(9));
+		$carabayar = 'KEMUDIAN';
+		$nokartu = '';
+		//date_default_timezone_set('Asia/Jakarta');
+		$waktujual = date("Y-m-d H:i:s");
+		$splitTanggal = explode('-', date('Y-m-d'));
+		$splitJam = explode(':',date("H:i:s"));
+		$intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+		$savedData['penjualan']['nonota'] = $no_nota;
+		$savedData['penjualan']['idpemakai'] = 4;
+		$savedData['penjualan']['total'] = $totalBelanja;
+		$savedData['penjualan']['carabayar'] = $carabayar;
+		$savedData['penjualan']['bayar'] = 0;
+		$savedData['penjualan']['nokartu'] = $nokartu;
+		$savedData['penjualan']['tglorder'] = $waktujual;
+		$savedData['penjualan']['idpelanggan'] = 0;
+		$savedData['penjualan']['idmeja'] = $idMeja;
+		$savedData['penjualan']['totalmodal'] = $totalModals;
+		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, 
+		tglorder, idpelanggan, keterangan, idmeja, totalmodal, android_order)
+		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d','%f','%d')",
+			$no_nota, 4, $totalBelanja, $carabayar, 0, $nokartu, $waktujual,0,'Android Order',$idMeja,$totalModals,1);
+		$idOrder = db_result(db_query("SELECT id FROM customer_order WHERE nonota='%s'", $no_nota));
+		for ($i = 0;$i < count($postData);$i++){
+			$detailData = array();
+			$IDPRODUK =	$postData[$i]['idproduct'];
+			$detailData['idproduk'] = $IDPRODUK;
+			$QTY = $postData[$i]['jumlah'];
+			$detailData['qty'] = $QTY;
+			$HARGAJUAL = $postData[$i]['hargajual'];
+			$detailData['hargajual'] = $HARGAJUAL;
+			$DISKON = 0;
+			$detailData['diskon'] = $DISKON;
+			$HARGAPOKOK = $postData[$i]['hargamodal'];
+			$detailData['hargapokok'] = $HARGAPOKOK;
+			$detailbarcode = createEAN13CodeServerSide(getRandomStringServerSide(9));
+			$detailData['detailbarcode'] = $detailbarcode;
+			db_query("INSERT INTO detailcustomerorder(idcustomerorder, idproduct, jumlah,
+			hargapokok, hargajual, diskon, sisa, masuk, perkiraan_ambil, detailbarcode,
+			outstanding) VALUES ('%d', '%d', '%f', '%f', '%f', '%f', '%f','%d','%d','%s','%d')",
+				$idOrder,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL,$DISKON,$QTY,$intTanggal,$intTanggal,
+				$detailbarcode,$QTY);
+			$savedData['detailpenjualan'][] = $detailData;
+		}
+	}
+	return $savedData;
+}
+function createEAN13CodeServerSide($number){
+	$code = '899' . str_pad($number, 9, '0');
+	$weightflag = true;
+	$sum = 0;
+	// Weight for a digit in the checksum is 3, 1, 3.. starting from the last digit.
+	// loop backwards to make the loop length-agnostic. The same basic functionality
+	// will work for codes of different lengths.
+	for ($i = strlen($code) - 1; $i >= 0; $i--)
+	{
+		$sum += (int)$code[$i] * ($weightflag?3:1);
+		$weightflag = !$weightflag;
+	}
+	$code .= (10 - ($sum % 10)) % 10;
+	return $code;
+}
+function getRandomStringServerSide($length=22)
+{
+	$key = '';
+	$keys = array_merge(range(0, 9));
+	for ($i = 0; $i < $length; $i++) {
+		mt_srand((double)microtime() * 10000000);
+		$key .= $keys[array_rand($keys)];
+	}
+	return $key;
 }
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
@@ -1403,6 +1510,11 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetProductByCategory($_GET);
 }else if($_GET['request_data'] == 'allproduct'){
 	$returnArray = serverSideGetAllProduct($_GET);
+}else if ($_GET['request_data'] == 'getdatameja'){
+	$returnArray = serverSideGetDataMeja($_GET);
+}else if ($_GET['request_data'] == 'postorder'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSidePostOrder($_GET);
 }
 header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);
