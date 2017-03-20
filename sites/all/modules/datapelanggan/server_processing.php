@@ -1507,7 +1507,7 @@ if ($_GET['request_data'] == 'pelanggan'){
 }else if($_GET['request_data'] == 'kategoriproduct'){
 	$returnArray = serverSideGetCategoryProduct($_GET);
 }else if($_GET['request_data'] == 'productbykategori'){
-	$returnArray = serverSideGetProductByCategory();
+	$returnArray = serverSideGetProductByCategory($_GET);
 }else if($_GET['request_data'] == 'allproduct'){
 	$returnArray = serverSideGetAllProduct($_GET);
 }else if ($_GET['request_data'] == 'getdatameja'){
