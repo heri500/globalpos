@@ -1310,7 +1310,7 @@ function serverSideDetailPenjualan($request){
         "data"            => $output
     );
 }
-function serverSideGetCategoryProduct($request){
+function serverSideGetCategoryProduct(){
 	$result = db_query("SELECT idkategori, kodekategori, kategori, keterangan FROM kategori");
 	$items = array();
 	while ($data = db_fetch_object($result)) {
@@ -1507,7 +1507,7 @@ if ($_GET['request_data'] == 'pelanggan'){
 }else if($_GET['request_data'] == 'kategoriproduct'){
 	$returnArray = serverSideGetCategoryProduct($_GET);
 }else if($_GET['request_data'] == 'productbykategori'){
-	$returnArray = serverSideGetProductByCategory($_GET);
+	$returnArray = serverSideGetProductByCategory();
 }else if($_GET['request_data'] == 'allproduct'){
 	$returnArray = serverSideGetAllProduct($_GET);
 }else if ($_GET['request_data'] == 'getdatameja'){
