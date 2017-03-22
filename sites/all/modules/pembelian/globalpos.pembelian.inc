@@ -1,6 +1,8 @@
 <?php
 
 function pembelian(){
+	//set_default_time_zone();
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
@@ -74,7 +76,7 @@ function pembelian(){
 	$pembelian .= $tombolselesai;
 	$pembelian .= $tombolprint;
 	$pembelian .= '</div>';
-    $pembelian .= '<div id="tempattotal"><div id="totalbelanja">Total Belanja : Rp. 0</div></div>';
+    $pembelian .= '<div id="tempattotal"><div id="totalbelanja">Total Belanja : '.$currencySym.' 0</div></div>';
 	$pembelian .= '</div>';
 	$pembelian .= '<div title="Informasi" id="dialogwarning">';
 	$pembelian .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -250,6 +252,7 @@ function view_kasir_pembelian(){
 	return $kasirtabel;
 }
 function view_tabel_pembelian(){
+    get_number_format($currencySym, $thousandSep, $decimalSep);
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -306,6 +309,7 @@ function view_tabel_pembelian(){
 }
 
 function tabel_pembelian($tgl1,$tgl2){
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
 	//nonota, tglpembelian, idpemakai, idlangganan, total, 
 	//totalmodal, carabayar, bayar, kembali
 	$tgl1 = date('Y-m-d', strtotime($tgl1));
@@ -357,9 +361,9 @@ function tabel_pembelian($tgl1,$tgl2){
 		$tabelpembelian .= '<td id="tglpembelian-'.$idpembelian.'" class="center edit-tanggal">'.date('d-m-Y', strtotime($data->tanggal)).'</td>';
 		$tabelpembelian .= '<td id="jampembelian-'.$idpembelian.'" class="center edit-jam">'.$data->waktu.'</td>';
 		if (cekUserRoles()){
-			$tabelpembelian .= '<td class="angka">'.number_format($data->total,0,",",".").'</td>';
-			$tabelpembelian .= '<td class="angka">'.number_format($data->bayar,0,",",".").'</td>';
-			$tabelpembelian .= '<td class="angka">'.number_format($data->kembali,0,",",".").'</td>';
+			$tabelpembelian .= '<td class="angka">'.number_format($data->total,2,$decimalSep,$thousandSep).'</td>';
+			$tabelpembelian .= '<td class="angka">'.number_format($data->bayar,2,$decimalSep,$thousandSep).'</td>';
+			$tabelpembelian .= '<td class="angka">'.number_format($data->kembali,2,$decimalSep,$thousandSep).'</td>';
 			$tabelpembelian .= '<td class="center">'.$data->name.'</td>';
 		}
 		$tabelpembelian .= '</tr>';
@@ -372,9 +376,9 @@ function tabel_pembelian($tgl1,$tgl2){
 		$tabelpembelian .= '<tfoot>';
 		$tabelpembelian .= '<tr>';
 		$tabelpembelian .= '<th style="text-align:right" colspan="6">Total:&nbsp;&nbsp;</th>';
-		$tabelpembelian .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
-		$tabelpembelian .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
-		$tabelpembelian .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
+		$tabelpembelian .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelpembelian .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalbayar,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelpembelian .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalkembali,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelpembelian .= '<th></th>';
 		$tabelpembelian .= '</tr>';
 		$tabelpembelian .= '</tfoot>';
@@ -385,6 +389,7 @@ function tabel_pembelian($tgl1,$tgl2){
 
 function detail_pembelian(){
 	if ($_POST["idpembelian"]){
+        get_number_format($currencySym, $thousandSep, $decimalSep, false);
 		$tabelpembelian ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_pembelian">';
 		$tabelpembelian .= '<thead>';
 		$tabelpembelian .= '<tr>';
@@ -398,7 +403,7 @@ function detail_pembelian(){
 		$tabelpembelian .= '</tr>';
 		$tabelpembelian .= '</thead>';
 		$tabelpembelian .= '<tbody>';
-		$result = db_query("SELECT c.barcode, c.namaproduct, b.jumlah, b.hargapokok, (b.hargapokok*b.jumlah) AS subtotal FROM 
+		$result = db_query("SELECT c.barcode, c.namaproduct, b.jumlah, b.hargapokok FROM 
 		detailpembelian b, product c WHERE b.idproduct=c.idproduct AND b.idpembelian='%d'",$_POST["idpembelian"]);
 		while($data = db_fetch_object($result)){
 			$tabelpembelian .= '<tr>';
@@ -406,8 +411,9 @@ function detail_pembelian(){
 			$tabelpembelian .= '<td>'.$data->namaproduct.'</td>';
 			$tabelpembelian .= '<td class="angka">'.$data->jumlah.'</td>';
 			if (cekUserRoles()){
-				$tabelpembelian .= '<td class="angka">'.$data->hargapokok.'</td>';
-				$tabelpembelian .= '<td class="angka">'.$data->subtotal.'</td>';
+                $subtotal = $data->hargapokok * $data->jumlah;
+				$tabelpembelian .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+				$tabelpembelian .= '<td class="angka">'.number_format($subtotal,2,$decimalSep,$thousandSep).'</td>';
 			}
 			$tabelpembelian .= '</tr>';
 		}
@@ -418,6 +424,7 @@ function detail_pembelian(){
 	exit();	
 }
 function pembelian_produk($tgl1,$tgl2){
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
 	$tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
 	$tgl2 = date('Y-m-d', strtotime($tgl2)).' 23:59';
 	$tabelpembelian ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_pembelian">';
@@ -435,7 +442,7 @@ function pembelian_produk($tgl1,$tgl2){
 	$tabelpembelian .= '</thead>';
 	$tabelpembelian .= '<tbody>';
 	$result = db_query("SELECT d.namasupplier, a.tglpembelian, c.barcode, c.namaproduct, SUM(b.jumlah) AS totalqty,
-	c.hargapokok, SUM(b.hargapokok*b.jumlah) AS subtotal FROM
+	c.hargapokok FROM
 	pembelian a LEFT JOIN detailpembelian b ON a.idpembelian=b.idpembelian
 	LEFT JOIN product c ON b.idproduct=c.idproduct
 	LEFT JOIN supplier d ON c.idsupplier=d.idsupplier
@@ -447,19 +454,22 @@ function pembelian_produk($tgl1,$tgl2){
 		$tabelpembelian .= '<td>'.$data->namaproduct.'</td>';
 		$tabelpembelian .= '<td>'.$data->namasupplier.'</td>';
 		$tabelpembelian .= '<td class="angka">'.$data->totalqty.'</td>';
+        $subtotal = 0;
 		if (cekUserRoles()){
-			$tabelpembelian .= '<td class="angka">'.$data->hargapokok.'</td>';
-			$tabelpembelian .= '<td class="angka">'.$data->subtotal.'</td>';
+            $subtotal = $data->hargapokok * $data->totalqty;
+			$tabelpembelian .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+			$tabelpembelian .= '<td class="angka">'.number_format($subtotal,2,$decimalSep,$thousandSep).'</td>';
 		}
 		$tabelpembelian .= '</tr>';
-		$totalmodal = $totalmodal + $data->subtotal;
+		$totalmodal = $totalmodal + $subtotal;
 	}
 	$tabelpembelian .= '</tbody>';
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
 	if (cekUserRoles()){
 		$tabelpembelian .= '<tfoot>';
 		$tabelpembelian .= '<tr>';
 		$tabelpembelian .= '<th style="text-align:right" colspan="5">Total:&nbsp;&nbsp;</th>';
-		$tabelpembelian .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
+		$tabelpembelian .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelpembelian .= '</tr>';
 		$tabelpembelian .= '</tfoot>';
 	}

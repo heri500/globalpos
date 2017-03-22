@@ -9,6 +9,22 @@ var tgltampil = '';
 var cetakstruk = 0;
 var alamatasal = '';
 var ppnValue = 0;
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+
+function addCommas(nStr){
+	nStr += "";
+	x = nStr.split(".");
+	x1 = x[0];
+	x2 = x.length > 1 ? dSep + x[1] : "";
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, "$1" + tSep + "$2");
+	}
+	return x1 + x2;
+}
+
 function tampilkantabelkasir(){
 	oTable = $("#tabel_kasir").dataTable( {
 		"bJQueryUI": true,
@@ -59,7 +75,7 @@ function tambahproduk(qtyAdd){
 			pecahdata = data.split(";");
             if (pecahdata[0].trim() != "error"){
 				nilaisubtotal = (pecahdata[2] - ((pecahdata[2]*pecahdata[3])/100)) * qtyAdd;
-				subtotal = number_format(nilaisubtotal,0,",",".");
+				subtotal = addCommas(nilaisubtotal);
 				nilaikirim = pecahdata[0].trim() +"___"+ qtyAdd +"___"+ pecahdata[2] +"___"+ pecahdata[3] +"___"+ pecahdata[6] ;
 				index_cek_box = pecahdata[0].trim();
 				namacekbox = "cekbox_"+ index_cek_box;
@@ -70,13 +86,15 @@ function tambahproduk(qtyAdd){
 					var subtotallama = pecahnilai[1] * (pecahnilai[2] - (pecahnilai[2]*pecahnilai[3]/100));
 					var subtotal = qtybaru * (pecahnilai[2] - (pecahnilai[2]*pecahnilai[3]/100));
 					totalbelanja = totalbelanja - subtotallama + subtotal;
-					$("#totalbelanja").html("Total Transaksi : Rp. "+ number_format(totalbelanja,0,",","."));
+                    totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+					$("#totalbelanja").html("Total Transaksi : "+ currSym +" "+ addCommas(totalbelanjaView));
 					var nTr = $("#"+ namacekbox).parent().parent().get(0);
 					var posisibaris = oTable.fnGetPosition(nTr);
 					oTable.fnUpdate(qtybaru, posisibaris, 5 );
 					nilaikirim = pecahnilai[0] +"___"+ qtybaru +"___"+ pecahnilai[2] +"___"+ pecahnilai[3] +"___"+ pecahdata[6] ;
 					checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" class=\"checkbox-produk\" />";
-					oTable.fnUpdate(number_format(subtotal,0,",",".") +" "+ checkboxnilai, posisibaris, 6 );
+                    subtotalView = parseFloat(Math.abs(subtotal)).toFixed(2);
+					oTable.fnUpdate(addCommas(subtotalView) +" "+ checkboxnilai, posisibaris, 6 );
 					posisiakhir = totalproduk-1;
 					if (posisibaris == posisiakhir){
 						$("#lastqty").val(qtybaru);
@@ -99,7 +117,8 @@ function tambahproduk(qtyAdd){
 					giCount++;
 					totalproduk++;
 					totalbelanja = totalbelanja + nilaisubtotal;
-					$("#totalbelanja").html("Total Transaksi : Rp. "+ number_format(totalbelanja,0,",","."));
+                    totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+					$("#totalbelanja").html("Total Transaksi : "+ currSym +" "+ addCommas(totalbelanjaView));
 				}
 				$('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
 				$("#barcode").autocomplete("close");
@@ -128,7 +147,8 @@ function tutupwarning(){
 function hapus_latest_produk(){
 	if (totalproduk > 0){
         totalbelanja = totalbelanja - ($("#lastharga").val()-($("#lastharga").val()*$("#lastdiskon").val()/100))*$("#lastqty").val();
-        $("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+        totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+        $("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 		oTable.fnDeleteRow(totalproduk-1);
 		totalproduk--;
 		if (totalproduk > 0){
@@ -161,11 +181,14 @@ function hapus_produk(posisi,nTr,idproduk){
 	var nilaidata = $("#cekbox_"+ idproduk).val();
 	var pecahnilai = nilaidata.split("___");
 	totalbelanja = totalbelanja - (pecahnilai[1]*(pecahnilai[2]-(pecahnilai[2]*pecahnilai[3]/100)));
-	$("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+    totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+	$("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 	oTable.fnDeleteRow(posisibaris,focusbarcode);
 	totalproduk--;
 	if (totalproduk > 0){
-		var nilaidataakhir = $("#cekbox_"+ totalproduk).val();
+        var nTr = oTable.fnGetNodes(totalproduk-1);
+        idproduknya = nTr.getAttribute("id");
+		var nilaidataakhir = $("#cekbox_"+ idproduknya).val();
 		var pecahnilaiakhir = nilaidataakhir.split("___");
 		$("#lastdiskon").val(pecahnilaiakhir[3]);
 		$("#lastharga").val(pecahnilaiakhir[2]);
@@ -247,8 +270,8 @@ function hitung_omset(){
 		data: request,
 		cache: false,
 		success: function(data){
-			var omsetsekarang = number_format(data,0,",",".");
-			$("#pesantext").text("OMSET HARI INI ["+ tgltampil +"] : Rp. "+ omsetsekarang);
+            var omsetsekarang = parseFloat(data).toFixed(2);
+			$("#pesantext").text("OMSET/JUALAN HARI INI ["+ tgltampil +"] : "+ currSym +" "+ omsetsekarang);
 			$("#dialogwarning").dialog("open");
 		}
 	});
@@ -291,7 +314,8 @@ function inisialulang(){
 					oTable.fnUpdate(diskonProduk, baris_int, 4 );
 					nilaisubtotal = (pecahnilai[2]-(pecahnilai[2]*diskonProduk/100))*splitNilai[1];
 					totalbelanja += parseFloat(nilaisubtotal);
-					subtotalbaru = number_format(nilaisubtotal,0,",",".");
+                    var subtotalView = parseFloat(nilaisubtotal).toFixed(2);
+                    var subtotalbaru = addCommas(subtotalView);
 					var namacekbox = "cekbox_"+ idproduknya;
 					var nilaikirim = idproduknya +"___"+ splitNilai[1] +"___"+ pecahnilai[2] +"___"+ diskonProduk +"___"+ pecahnilai[4];
 					var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" class=\"checkbox-produk\" />";
@@ -300,7 +324,8 @@ function inisialulang(){
 						$("#lastdiskon").val(diskonProduk);
 					}
 				}
-				$("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+                var totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+				$("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 			}
 		});
 	}else{
@@ -320,6 +345,14 @@ $(document).ready(function(){
 	tglsekarang = Drupal.settings.tglsekarang;
 	tgltampil = Drupal.settings.tgltampil;
 	alamatasal = Drupal.settings.alamatasal;
+
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+
+	$('#idpelanggan').chosen().change(function(){
+		$('#barcode').focus();
+	});
 	if (typeof Drupal.settings.idtitipanlaundry != 'undefined') {
 		$("#dialogkasir").dialog({
 			modal: true,
@@ -431,62 +464,67 @@ $(document).ready(function(){
 		resizable: false,
 		autoOpen: false,
 		open: function(event, ui) {
-			$("#totalbelanjauser").val("Rp. "+ number_format(totalbelanja,0,",","."));
+            var totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$("#totalbelanjauser").val(currSym +" "+ addCommas(totalbelanjaView));
 			var total_ppn_value = totalbelanja * (parseInt($('#ppn_value').val())/100);
-			$("#total_ppn").val("Rp. "+ number_format(total_ppn_value,0,",","."));
+            var total_ppn_valueView = parseFloat(total_ppn_value).toFixed(2);
+			$("#total_ppn").val(currSym +" "+ addCommas(total_ppn_valueView));
 			var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
-			$("#total_plus_ppn").val("Rp. "+ number_format(total_plus_ppn,0,",","."));
-			if (total_plus_ppn > 0 && total_plus_ppn <= 10000){
-				$("#nilaibayar").val("10000");
-			}else if(total_plus_ppn > 10000 && total_plus_ppn <= 20000){
-				$("#nilaibayar").val("20000");
-			}else if(total_plus_ppn > 20000 && total_plus_ppn <= 50000){
-				$("#nilaibayar").val("50000");
-			}else if(total_plus_ppn > 50000 && total_plus_ppn <= 100000){
-				$("#nilaibayar").val("100000");
-			}else if(total_plus_ppn > 100000 && total_plus_ppn <= 110000){
-				$("#nilaibayar").val("110000");
-			}else if(total_plus_ppn > 110000 && total_plus_ppn <= 120000){
-				$("#nilaibayar").val("120000");
-			}else if(total_plus_ppn > 120000 && total_plus_ppn <= 150000){
-				$("#nilaibayar").val("150000");
-			}else if(total_plus_ppn > 150000 && total_plus_ppn <= 200000){
-				$("#nilaibayar").val("200000");
+            var total_plus_ppnView = parseFloat(total_plus_ppn).toFixed(2);
+			$("#total_plus_ppn").val(currSym +" "+ addCommas(total_plus_ppnView));
+			if (total_plus_ppn > 0 && total_plus_ppn <= 10){
+				$("#nilaibayar").val("10");
+			}else if(total_plus_ppn > 10 && total_plus_ppn <= 50){
+				$("#nilaibayar").val("50");
+			}else if(total_plus_ppn > 50 && total_plus_ppn <= 100){
+				$("#nilaibayar").val("100");
 			}else{
-				$("#nilaibayar").val(total_plus_ppn);
+				$("#nilaibayar").val(total_plus_ppnView);
 			}
 			kembali = $("#nilaibayar").val() - total_plus_ppn;
-			$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
+            var kembaliView = parseFloat(kembali).toFixed(2);
+			$("#kembali").val(currSym +" "+ addCommas(kembaliView));
 			$("#nilaibayar").keyup();
 			$("#nilaibayar").select();
 			$("#idpelanggan").removeAttr("disabled");
-			alamat = pathutama + "datapelanggan/gettotalhutang/"+ $("#idpelanggan").val();
-			$.ajax({
-				type: "POST",
-				url: alamat,
-				cache: false,
-				success: function(data){
-					var returnData = eval(data);
-					var totalHutang = returnData[0];
-					if (totalHutang < 0){
-						$('#label-deposit').html('Deposit');
-						$("#carabayar option").each(function(){
-							if ($(this).attr('value') == 'DEPOSIT'){
-								$(this).removeAttr('disabled');
-							}
-						});
-					}else{
-						$('#label-deposit').html('Hutang');
-						$("#carabayar option").each(function(){
-							if ($(this).attr('value') == 'DEPOSIT'){
-								$(this).attr('disabled', 'disabled');
-							}
-						});
-					}
-					$('#depositpelanggan').val("Rp. "+ number_format(Math.abs(totalHutang),0,",","."));
-					$("#idpelanggan").attr("disabled","disabled");
-				}
-			});
+            if ($("#idpelanggan").val() > 0) {
+                $("#baris-deposit").show();
+                alamat = pathutama + "datapelanggan/gettotalhutang/" + $("#idpelanggan").val();
+                $.ajax({
+                    type: "POST",
+                    url: alamat,
+                    cache: false,
+                    success: function (data) {
+                        var returnData = eval(data);
+                        var totalHutang = returnData[0];
+                        if (totalHutang < 0) {
+                            $('#label-deposit').html('Deposit');
+                            $("#carabayar option").each(function () {
+                                if ($(this).attr('value') == 'DEPOSIT') {
+                                    $(this).removeAttr('disabled');
+                                }
+                            });
+                        } else {
+                            $('#label-deposit').html('Hutang');
+                            $("#carabayar option").each(function () {
+                                if ($(this).attr('value') == 'DEPOSIT') {
+                                    $(this).attr('disabled', 'disabled');
+                                }
+                            });
+                        }
+                        var totalHutangView = parseFloat(totalHutang).toFixed(2);
+                        $('#depositpelanggan').val(currSym + " " + addCommas(Math.abs(totalHutangView)));
+                        $("#idpelanggan").attr("disabled", "disabled");
+                    }
+                });
+            }else{
+                $("#carabayar option").each(function(){
+                    if ($(this).attr('value') == 'DEPOSIT' || $(this).attr('value') == 'HUTANG'){
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+                $("#baris-deposit").hide();
+            }
 		},
 		close: function(){
 			$("#barcode").select();
@@ -522,6 +560,8 @@ $(document).ready(function(){
 				$("#pesantext").text("Perubahan harga hanya untuk pelanggan UMUM...!!!");
 				$("#dialogwarning").dialog("open");
 			}
+		}else if (e.keyCode == 120){
+			$('#idpelanggan').trigger('chosen:activate');
 		}
 	});
 	$("#barcode").autocomplete({
@@ -545,14 +585,16 @@ $(document).ready(function(){
 			var nilaiubah = $("#newharga").val();
 			oTable.fnUpdate(nilaiubah, baris_int, 3 );
 			nilaisubtotal = (nilaiubah-(nilaiubah*$("#lastdiskon").val()/100))*$("#lastqty").val();
-			subtotalbaru = number_format(nilaisubtotal,0,",",".");
+            var nilaisubtotalView = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(nilaisubtotalView);
 			var namacekbox = "cekbox_"+ $("#last_id").val();
 			var nilaikirim = $("#last_id").val() +"___"+ $("#lastqty").val() +"___"+ nilaiubah +"___"+ $("#lastdiskon").val() +"___"+ $("#lastbarcode").val();
 			var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" class=\"checkbox-produk\" />";
 			oTable.fnUpdate(subtotalbaru +" "+ checkboxnilai, baris_int, 6 );
 			$("#lastharga").val(nilaiubah);
 			totalbelanja = totalbelanja + nilaisubtotal;
-			$("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+            var totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 			$("#dialogubahharga").dialog("close");
 		}
 	});
@@ -563,14 +605,16 @@ $(document).ready(function(){
 			var nilaiubah = $("#newqty").val();
 			oTable.fnUpdate(nilaiubah, baris_int, 5 );
 			nilaisubtotal = ($("#lastharga").val()-($("#lastharga").val()*$("#lastdiskon").val()/100))*nilaiubah;
-			subtotalbaru = number_format(nilaisubtotal,0,",",".");
+            var nilaisubtotalView = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(nilaisubtotalView);
 			var namacekbox = "cekbox_"+ $("#last_id").val();
 			var nilaikirim = $("#last_id").val() +"___"+ nilaiubah +"___"+ $("#lastharga").val() +"___"+ $("#lastdiskon").val() +"___"+ $("#lastbarcode").val();
 			var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" class=\"checkbox-produk\" />";
 			oTable.fnUpdate(subtotalbaru +" "+ checkboxnilai, baris_int, 6 );
 			$("#lastqty").val(nilaiubah);
 			totalbelanja = totalbelanja + nilaisubtotal;
-			$("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+            var totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 			$("#dialogubahqty").dialog("close");
 		}
 	});
@@ -584,7 +628,8 @@ $(document).ready(function(){
 			var nilaiubah = $("#newqty2").val();
 			oTable.fnUpdate(nilaiubah, baris_int, 5 );
 			nilaisubtotal = (pecahnilai[2]-(pecahnilai[2]*pecahnilai[3]/100))*nilaiubah;
-			subtotalbaru = number_format(nilaisubtotal,0,",",".");
+            var nilaisubtotalView = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(nilaisubtotalView);
 			var namacekbox = "cekbox_"+ idproduknya;
 			var nilaikirim = idproduknya +"___"+ nilaiubah +"___"+ pecahnilai[2] +"___"+ pecahnilai[3] +"___"+ pecahnilai[4];
 			var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" class=\"checkbox-produk\" />";
@@ -594,14 +639,16 @@ $(document).ready(function(){
 			if (baris_int == posisiakhir){
 				$("#lastqty").val(nilaiubah);
 			}
-			$("#totalbelanja").html("Total Belanja : Rp. "+ number_format(totalbelanja,0,",","."));
+            var totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$("#totalbelanja").html("Total Belanja : "+ currSym +" "+ addCommas(totalbelanjaView));
 			$("#dialogubahqty2").dialog("close");
 		}
 	});
 	$("#nilaibayar,#nomerkartu").keyup(function(e){
         var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
 		kembali = $("#nilaibayar").val() - total_plus_ppn;
-		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));
+        var kembaliView = parseFloat(kembali).toFixed(2);
+		$("#kembali").val(currSym +" "+ addCommas(kembaliView));
 		if (kembali > 0){
 			$("#field_kembalian").show();
 		}else{
@@ -676,7 +723,7 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattombolkasir').css('height','330px');
-	if (Drupal.settings.upload_data){
+	/*if (Drupal.settings.upload_data){
 		alamat = pathutama + 'datapremis/uploaddata';
 		$.ajax({
 			type: 'POST',
@@ -686,7 +733,7 @@ $(document).ready(function(){
 
 			}
 		});
-	}
+	}*/
 	$('#use-ppn').click(function(){
 		if ($('#ppn_value').val() > 0){
 			ppnValue = $('#ppn_value').val();

@@ -3,17 +3,23 @@ var pathutama = '';
 var urutan = '';
 var alamatupdatetanggalreturn = '';
 var urutanSort = new Array;
+
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+
 function addCommas(nStr){
 	nStr += "";
-	x = nStr.split(",");
+	x = nStr.split(".");
 	x1 = x[0];
-	x2 = x.length > 1 ? "," + x[1] : "";
+	x2 = x.length > 1 ? dSep + x[1] : "";
 	var rgx = /(\d+)(\d{3})/;
 	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, "$1" + "." + "$2");
+		x1 = x1.replace(rgx, "$1" + tSep + "$2");
 	}
 	return x1 + x2;
 }
+
 function tampiltabelreturn(){
 	oTable = $("#tabel_returnsupplier").dataTable( {
 		"bJQueryUI": true,
@@ -64,12 +70,17 @@ function view_detail(idreturnsupplier,nonota){
 function delete_returnsupplier(idreturnsupplier,nonota){
 	var konfirmasi = confirm('Yakin ingin menghapus return supplier dengan no nota : '+ nonota +' ini...??!!');	
 	if (konfirmasi){
-		window.location = pathutama + 'pembelian/deletereturnsupplier/'+ idreturnsupplier +'?destination=pembelian/viewreturnsupplier';	
+		window.location = pathutama + 'pembelian/deletereturn/'+ idreturnsupplier +'?destination=pembelian/viewreturnsupplier';
 	}
 }
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatetanggalreturn = pathutama + 'pembelian/updatereturnsupplier';
+
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+
 	urutan = Drupal.settings.urutan;
 	if (urutan == 2){
 		urutanSort = [ 0,1,3 ];

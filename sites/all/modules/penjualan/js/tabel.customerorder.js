@@ -6,14 +6,18 @@ var alamatupdatedetailorder = '';
 var selectedOrder = 0;
 var selectedNota = '';
 var selectedPelanggan = 0;
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+
 function addCommas(nStr){
 	nStr += "";
-	x = nStr.split(",");
+	x = nStr.split(".");
 	x1 = x[0];
-	x2 = x.length > 1 ? "," + x[1] : "";
+	x2 = x.length > 1 ? dSep + x[1] : "";
 	var rgx = /(\d+)(\d{3})/;
 	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, "$1" + "." + "$2");
+		x1 = x1.replace(rgx, "$1" + tSep + "$2");
 	}
 	return x1 + x2;
 }
@@ -78,7 +82,7 @@ function tampiltabelcustomerorder(){
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
 					return typeof i === 'string' ?
-					i.replace(/[\$.]/g, '')*1 :
+					i.replace(/[\$'+ tSep +']/g, '')*1 :
 						typeof i === 'number' ?
 							i : 0;
 				};
@@ -90,8 +94,9 @@ function tampiltabelcustomerorder(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+                total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 10 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 12 )
@@ -100,8 +105,9 @@ function tampiltabelcustomerorder(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 12 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 13 )
@@ -110,8 +116,9 @@ function tampiltabelcustomerorder(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 13 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},
 		});
@@ -185,7 +192,7 @@ function tampiltabelcustomerorder(){
 					}, 0 );
 				// Update footer
 				$( api.column( 10 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 12 )
@@ -195,7 +202,7 @@ function tampiltabelcustomerorder(){
 					}, 0 );
 				// Update footer
 				$( api.column( 12 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 13 )
@@ -205,7 +212,7 @@ function tampiltabelcustomerorder(){
 					}, 0 );
 				// Update footer
 				$( api.column( 13 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},*/
 		});
@@ -254,7 +261,7 @@ function tampiltabelcustomerorderdetail(selectedId){
 			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
-				i.replace(/[\$.]/g, '')*1 :
+				i.replace(/[\$'+ tSep +']/g, '')*1 :
 					typeof i === 'number' ?
 						i : 0;
 			};
@@ -266,8 +273,9 @@ function tampiltabelcustomerorderdetail(selectedId){
 					return intVal(a) + intVal(b);
 				}, 0 );
 			// Update footer
+			total = parseFloat(Math.abs(total)).toFixed(2);
 			$( api.column( 7 ).footer() ).html(
-				'Rp. '+ addCommas(total)
+				currSym +' '+ addCommas(total)
 			).addClass('angka');
 		},
 	});
@@ -337,6 +345,11 @@ $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatetanggaljual = pathutama + 'penjualan/updatecustomerorder';
 	alamatupdatedetailorder = pathutama + 'penjualan/updatedetailcustomerorder';
+
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+
 	urutan = Drupal.settings.urutan;
 	$('#dialogdetail').dialog({
 		modal: true,
@@ -443,17 +456,17 @@ $(document).ready(function(){
 				diskonview = '('+ ui.item.diskon +'%)';
 			}
 			$('#diskon').val(ui.item.diskon);
-			$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
+			$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
 			$('#hargajual').val(hargajual);
 			$('#hargapokok').val(ui.item.hargapokok);
-			$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
+			$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
 			$('#qty-new').val('1');
 			$('#qty-new').select();
 		}
 	});
 	$('#qty-new').on('keyup',function(){
 		var subTotal = $(this).val() * $('#hargajual').val();
-		$('#subtotal-view').val('Rp. '+ addCommas(subTotal));
+		$('#subtotal-view').val(currSym +' '+ addCommas(subTotal));
 	});
 	$('#qty-new').on('keypress',function(e){
 		if (e.keyCode == 13) {
@@ -486,8 +499,8 @@ $(document).ready(function(){
 						$('#diskon').val(returnData[0].diskon);
 						$('#hargajual').val(hargajual);
 						$('#hargapokok').val(returnData[0].hargapokok);
-						$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
-						$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
+						$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
+						$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
 						$('#qty-new').val('1');
 						$('#qty-new').select();
 					}

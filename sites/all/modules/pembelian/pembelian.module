@@ -109,11 +109,20 @@ function pembelian_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.tabelreturn.inc'
 	);
+	$items['pembelian/deletereturn'] = array(
+		'title' => t('Delete Return'),
+		'description' => t('Delete Return'),
+		'page callback' => 'delete_return_supplier',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Return Produk'),
+		'type' => MENU_CALLBACK,
+		'file' => 'pembelian.delete.inc'
+	);
 	return $items;
 } // end hook menu
 
 function pembelian_perm() {
-	return array('Admin Pembelian Produk','Admin Data Pembelian Produk');
+	return array('Admin Pembelian Produk','Admin Data Pembelian Produk','Admin Return Produk');
 }
 
 

@@ -98,6 +98,11 @@ function datapremis_input_form(&$form_state){
         $email = '';
         $website = '';
         $ppn = 0;
+        $currency_code = 'IDR';
+        $currency_symbol = 'Rp';
+        $thousand_separator = '.';
+        $decimal_separator = ',';
+        $ppn_symbol = 'PPN';
     }else{
         $idPremis = $dataPremis->id;
         $zonePremis = $dataPremis->zone;
@@ -110,6 +115,11 @@ function datapremis_input_form(&$form_state){
         $email = $dataPremis->email;
         $website = $dataPremis->website;
         $ppn = $dataPremis->ppn_value;
+        $currency_code = $dataPremis->currency_code;
+        $currency_symbol = $dataPremis->currency_symbol;
+        $thousand_separator = $dataPremis->thousand_separator;
+        $decimal_separator = $dataPremis->decimal_separator;
+        $ppn_symbol = $dataPremis->ppn_symbol;
     }
     $form['#attributes'] = array('class' => 'form-item-lined-up');
     $form['zone'] = array(
@@ -176,10 +186,40 @@ function datapremis_input_form(&$form_state){
         '#description' => t('Isi website premis, pisahkan dengan ; jika lebih dari 1'),
     );
     $form['ppn_value'] = array(
-        '#title' => t('PPN'),
+        '#title' => t('PPN/GST'),
         '#type' => 'textfield',
         '#default_value' => $ppn,
-        '#description' => t('Isi dengan ppn, jika tidak menggunakan ppn isi dengan 0 saja..!!'),
+        '#description' => t('Isi dengan PPN/GST, jika tidak menggunakan PPN/GST isi dengan 0 saja..!!'),
+    );
+    $form['currency_code'] = array(
+        '#title' => t('Currency Code'),
+        '#type' => 'textfield',
+        '#default_value' => $currency_code,
+        '#description' => t('Isi dengan kode currency yang digunakan, contoh: IDR untuk Indonesia, MYR untuk malaysia'),
+    );
+    $form['currency_symbol'] = array(
+        '#title' => t('Currency Symbol'),
+        '#type' => 'textfield',
+        '#default_value' => $currency_symbol,
+        '#description' => t('Isi dengan simbol currency yang digunakan, contoh: Rp untuk Indonesia, RM untuk malaysia'),
+    );
+    $form['thousand_separator'] = array(
+        '#title' => t('Thousand Separator'),
+        '#type' => 'textfield',
+        '#default_value' => $thousand_separator,
+        '#description' => t('Isi dengan karakter pemisah ribuan, contoh: .(titik) untuk Indonesia, ,(koma) untuk malaysia'),
+    );
+    $form['decimal_separator'] = array(
+        '#title' => t('Decimal Separator'),
+        '#type' => 'textfield',
+        '#default_value' => $decimal_separator,
+        '#description' => t('Isi dengan karakter pemisah decimal, contoh: ,(koma) untuk Indonesia, .(titik) untuk malaysia'),
+    );
+    $form['ppn_symbol'] = array(
+        '#title' => t('PPN/GST Title'),
+        '#type' => 'textfield',
+        '#default_value' => $ppn_symbol,
+        '#description' => t('Isi dengan judul PPN/GST, Indonesia sebut PPN, Malaysia sebut GST'),
     );
     $form['submit'] = array(
         '#type' => 'submit',
@@ -201,7 +241,6 @@ function datapremis_input_form_submit($form, &$form_state) {
         $premisSchema = drupal_get_schema('datapremis');
         $fieldArray = $premisSchema['fields'];
         $fieldList = '';
-        $fieldValue = '';
         foreach($fieldArray as $fieldName => $fieldData){
             if ($fieldName != 'created'){
                 if (empty($fieldList)){
@@ -212,6 +251,16 @@ function datapremis_input_form_submit($form, &$form_state) {
             }
         }
         $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_code';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_symbol';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'thousand_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'ppn_symbol';
         $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         db_query("UPDATE {datapremis} SET $fieldList");
         drupal_set_message(t('Data premis berhasil diupdate.'));
@@ -236,6 +285,16 @@ function datapremis_input_form_submit($form, &$form_state) {
             }
         }
         $fieldName = 'ppn_value';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_code';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'currency_symbol';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'thousand_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_separator';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'ppn_symbol';
         $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
         drupal_set_message(t('Data premis berhasil dibuat.'));
@@ -263,7 +322,7 @@ function get_data_premis(){
             $fieldList .= ','.$fieldName;
         }
     }
-    $fieldList .= ',ppn_value';
+    $fieldList .= ',ppn_value,currency_code,currency_symbol,thousand_separator,decimal_separator,ppn_symbol';
     if (cek_data_premis_exists()){
         $strSQL = 'SELECT '.$fieldList.' FROM '.$db_prefix.'datapremis LIMIT 1';
         $result = db_query($strSQL);
@@ -439,4 +498,43 @@ function is_connected(){
     }
     return $is_conn;
 
+}
+function get_number_format(&$currencySym, &$thousandSep, &$decimalSep, $addJs = true){
+    $dataPremis = get_data_premis();
+    if (!empty($dataPremis)){
+        $currencySym = $dataPremis->currency_symbol;
+        $thousandSep = $dataPremis->thousand_separator;
+        $decimalSep = $dataPremis->decimal_separator;
+    }else{
+        $currencySym = 'Rp.';
+        $thousandSep = '.';
+        $decimalSep = ',';
+    }
+    if ($addJs){
+        drupal_add_js(
+            array(
+                'currSym' => $currencySym,
+                'tSep' => $thousandSep,
+                'dSep' => $decimalSep,
+            ),
+            'setting');
+    }
+    return $dataPremis;
+}
+function get_gst_symbols()
+{
+    $dataPremis = get_data_premis();
+    if (!empty($dataPremis)) {
+        $gstSym = $dataPremis->ppn_symbol;
+    } else {
+        $gstSym = 'PPN';
+    }
+    return $gstSym;
+}
+
+function set_default_time_zone(){
+    $defaultTimeZone = date_default_timezone_get();
+    if ($defaultTimeZone != 'Asia/Jakarta'){
+        date_default_timezone_set('Asia/Jakarta');
+    }
 }

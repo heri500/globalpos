@@ -34,3 +34,35 @@ function delete_pembelian($idpembelian){
 	}
 	header('Location: '.base_path().$_GET['destination']);
 }
+function delete_return_supplier($idreturn = 0){
+	if ($idreturn > 0){
+		$no_nota = db_result(db_query("SELECT nonota FROM returnsupplier WHERE idreturn=%d",$idreturn));
+		$tglreturn = db_result(db_query("SELECT tglreturn FROM returnsupplier WHERE idreturn=%d",$idreturn));
+		$detailreturn_rs = db_query("SELECT idproduct, jumlah FROM detailreturn WHERE idreturn=%d",$idreturn);
+		while($detailreturn_dt = db_fetch_object($detailreturn_rs)){
+			$idproduk = $detailreturn_dt->idproduct;
+			$jumlah = $detailreturn_dt->jumlah;
+			$stoksebelum = db_result(db_query("SELECT stok FROM product WHERE idproduct=%d",$idproduk));
+			$stoksesudah = $stoksebelum - $jumlah;
+			$keterangan = 'Menghapus return '.$no_nota.' tanggal: '.$tglreturn;
+			db_query("UPDATE product SET stok=stok+%d WHERE idproduct=%d",$jumlah,$idproduk);
+			db_query("INSERT INTO transaksistock (idproduk, idpembelian, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+			('%d', '%d', '%f', '%f', '%f', '%s')",$idproduk,$idpembelian,$stoksebelum,$jumlah,$stoksesudah,$keterangan);
+		}
+		db_query("DELETE FROM detailreturn WHERE idreturn='%d'", $idreturn);
+		$nilaihutang = db_result(db_query("SELECT total FROM returnsupplier WHERE idreturn='%d'",$idreturn));
+		if ($nilaihutang > 0){
+			$idsupplier = db_result(db_query("SELECT idsupplier FROM returnsupplier WHERE idreturn=%d", $idreturn));
+			$besarhutangterakhir = db_result(db_query("SELECT SUM(besarhutang) FROM hutang WHERE idsupplier=%d GROUP BY idsupplier", $idsupplier));
+			$variables['idsupplier'] = $idsupplier;
+			$variables['pembayaran'] = -1*$nilaihutang;
+			$variables['hutang'] = $besarhutangterakhir;
+			$variables['tglbayar'] = date('Y-m-d');
+			$variables['keterangan'] = 'Data return nota: '.$no_nota.' tanggal: '.$tglpembelian.' dihapus';
+			$variables['simpanpembayaran'] = false;
+			$newvariables = do_pembayaran_hutang($variables);
+		}
+		db_query("DELETE FROM returnsupplier WHERE idreturn='%d'", $idreturn);
+	}
+	header('Location: '.base_path().$_GET['destination']);
+}

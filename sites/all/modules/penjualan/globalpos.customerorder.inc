@@ -1,6 +1,7 @@
 <?php
 
 function customerorder(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
 	$form_style = $path.'/css/custom-style.css';
@@ -44,7 +45,8 @@ function customerorder(){
 	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(0)">F5:SIMPAN</a>';
 	$tombolprint = '<a class="buttonprint" onclick="kirim_data(1)">F6:SIMPAN&PRINT</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
-	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
+	$tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
+	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:TOTAL</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
 	$penjualan .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS CUSTOMER ORDER ['.$tanggal.']">';
 	$penjualan .= '<div id="info-kasir-waktu">';
@@ -99,8 +101,9 @@ function customerorder(){
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
+	$penjualan .= $tombollihatpelanggan;
 	$penjualan .= '</div>';
-	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Order : Rp. 0</div></div>';
+	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Order : '.$currencySym.' 0</div></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="Informasi" id="dialogwarning">';
 	$penjualan .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';

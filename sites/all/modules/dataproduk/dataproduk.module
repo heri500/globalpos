@@ -352,3 +352,13 @@ function get_updated_product(){
 	}
 	return $dataProduct;
 }
+function generate_barcode_product(){
+	$strSQL = "SELECT idproduct FROM product WHERE barcode=''";
+	$result = db_query($strSQL);
+	$dataProduct = array();
+	while ($data = db_fetch_object($result)){
+		$barcode = createEAN13Code(getRandomString(9));
+		db_query("UPDATE product SET barcode='%s' WHERE idproduct=%d", $barcode, $data->idproduct);
+	}
+	return $dataProduct;
+}

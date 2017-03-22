@@ -1,6 +1,7 @@
 <?php
 
 function view_tabel_reproduksi(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -35,108 +36,18 @@ function view_tabel_reproduksi(){
 	drupal_add_js('misc/media/datatables/js/ColVis.min.js');
 	drupal_add_js('misc/media/datatables/ZeroClipboard/ZeroClipboard.js');
 	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
-	drupal_add_js('
-		var oTable;
-		var oTable2;
-		var oTable3;
-		var pathutama = "'.base_path().'";
-		var urutan = "'.$urutan.'";
-		function tampiltabeljual(){
-			oTable = $("#tabel_reproduksi").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"sPaginationType": "full_numbers",
-				"bInfo": false,
-				"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-				"iDisplayLength": 100,
-				"aaSorting": [[urutan, "desc"]],
-				"sDom": \'<"space"T><C><"clear"><"H"lfr>t<"F"ip>\',
-					"oColVis": {
-						"activate": "mouseover"
-					}
-			});
-		}
-		function tampiltabeldetailrepro(){
-			oTable2 = $("#tabel_detail_reproduksi").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bInfo": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar">fr>t<"F"ip>\'
-			});
-		}
-		function tampiltabeldetailhasilrepro(){
-			oTable3 = $("#tabel_detail_hasilreproduksi").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bInfo": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar">fr>t<"F"ip>\'
-			});
-		}
-		function view_detail(idreproduksi,nonota){
-			var request = new Object();
-			request.idreproduksi = idreproduksi;
-			alamat = pathutama + "reproduksi/detailreproduksi";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#divdetailrepro").html(data);
-					tampiltabeldetailrepro();
-					$("div.toolbar").html("No. Nota : "+ nonota);
-					var request2 = new Object();
-					request2.idreproduksi = idreproduksi;
-					alamat = pathutama + "hasilreproduksi/detailhasilreproduksi";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data){
-							$("#divdetailhasilrepro").html(data);
-							tampiltabeldetailhasilrepro();
-							$("#dialogdetail").dialog("open");
-						}
-					});
-				}
-			});
-		}
-		function add_hasil_pack(idreproduksi, nonota){
-			if (idreproduksi > 0){
-				window.location = pathutama + "hasilreproduksi/kasir?idreproduksi="+ idreproduksi +"&nonota="+ nonota;
-			}
-		}
-		$(document).ready(function(){
-			$("#dialogdetail").dialog({
-				modal: true,
-				width: 850,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"]
-			});
-			$("button").button();
-			TableToolsInit.sSwfPath = pathutama +"misc/media/datatables/swf/ZeroClipboard.swf";
-			tampiltabeljual();
-			$("#tgl1").datepicker({
-				changeMonth: true,
-				changeYear: true,
-				dateFormat: "yy-mm-dd"
-			});
-			$("#tgl2").datepicker({
-				changeMonth: true,
-				changeYear: true,
-				dateFormat: "yy-mm-dd"
-			});
-		})
-	','inline');
-	
+	drupal_add_js(
+		array(
+			'urutan' => $urutan,
+			'tampilData' => $tampilData,
+			'tglAwal' => $tgl1,
+			'tglAkhir' => $tgl2,
+			'filterId' => $filterId,
+		),
+		'setting');
+	$modulePath = drupal_get_path('module','reproduksi');
+	$jsPath = $modulePath.'/js/tabel.reproduksi.js';
+	drupal_add_js($jsPath);
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';
@@ -151,6 +62,7 @@ function view_tabel_reproduksi(){
 function tabel_reproduksi($tgl1,$tgl2){
 	//nonota, tglreproduksi, idpemakai, idlangganan, total, 
 	//totalmodal, carabayar, bayar, kembali
+	get_number_format($currencySym, $thousandSep, $decimalSep, false);
 	$tgl2 = DateAdd(1,$tgl2,"Y-m-d");
 	$tabelreproduksi ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_reproduksi">';
 	$tabelreproduksi .= '<thead>';
@@ -189,11 +101,11 @@ function tabel_reproduksi($tgl1,$tgl2){
 		$labarepro = $hasilrepro - $modalrepro;
 		$tabelreproduksi .= '<tr>';
 		$tomboldetail = '<img title="Klik untuk melihat detail packing ulang" onclick="view_detail(\''.$data->idreproduksi.'\',\''.$data->nonota.'\');" src="'.base_path().'misc/media/images/forward_enabled.ico">';
-		if ($hasilrepro > 0){
-			$tombolhasil = '<img title="Hasil packing ulang sudah diisi" src="'.base_path().'misc/media/images/del.ico" width="24">';
-		}else{
-			$tombolhasil = '<img title="Klik untuk mengisi hasil packing ulang" onclick="add_hasil_pack(\''.$data->idreproduksi.'\',\''.$data->nonota.'\');" src="'.base_path().'misc/media/images/add-small.ico">';	
-		}
+		//if ($hasilrepro > 0){
+		//	$tombolhasil = '<img title="Hasil packing ulang sudah diisi" src="'.base_path().'misc/media/images/del.ico" width="24">';
+		//}else{
+		$tombolhasil = '<img title="Klik untuk mengisi hasil packing ulang" onclick="add_hasil_pack(\''.$data->idreproduksi.'\',\''.$data->nonota.'\');" src="'.base_path().'misc/media/images/add-small.ico">';
+		//}
 		$tabelreproduksi .= '<td class="center">'.$tomboldetail.'</td>';
 		$tabelreproduksi .= '<td class="center">'.$tombolhasil.'</td>';
 		$tabelreproduksi .= '<td class="center">'.$data->nonota.'</td>';
@@ -202,12 +114,12 @@ function tabel_reproduksi($tgl1,$tgl2){
 		$totaljualhasil = $totaljualhasil + $hasilrepro;
 		$totalmodalhasil = $totalmodalhasil + $modalrepro;
 		$totallabahasil = $totallabahasil + $labarepro;
-		$tabelreproduksi .= '<td class="angka">'.number_format($data->total,0,",",".").'</td>';
-		$tabelreproduksi .= '<td class="angka">'.number_format($data->totalmodal,0,",",".").'</td>';
-		$tabelreproduksi .= '<td class="angka">'.number_format($data->laba,0,",",".").'</td>';
-		$tabelreproduksi .= '<td class="angka">'.number_format($hasilrepro,0,",",".").'</td>';
-		$tabelreproduksi .= '<td class="angka">'.number_format($modalrepro,0,",",".").'</td>';
-		$tabelreproduksi .= '<td class="angka">'.number_format($labarepro,0,",",".").'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->total,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->totalmodal,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->laba,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($hasilrepro,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($modalrepro,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($labarepro,2,$decimalSep,$thousandSep).'</td>';
 		$tabelreproduksi .= '<td class="center">'.$data->name.'</td>';
 		$tabelreproduksi .= '</tr>';
 		$totaljual = $totaljual + $data->total;
@@ -218,12 +130,12 @@ function tabel_reproduksi($tgl1,$tgl2){
 	$tabelreproduksi .= '<tfoot>';
 	$tabelreproduksi .= '<tr>';
 	$tabelreproduksi .= '<th style="text-align:right" colspan="5">Total:&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totallaba,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totaljualhasil,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totalmodalhasil,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totallabahasil,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totaljual,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totallaba,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totaljualhasil,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodalhasil,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totallabahasil,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelreproduksi .= '<th></th>';
 	$tabelreproduksi .= '</tr>';
 	$tabelreproduksi .= '</tfoot>';
@@ -233,6 +145,7 @@ function tabel_reproduksi($tgl1,$tgl2){
 
 function detail_reproduksi(){
 	if ($_POST["idreproduksi"]){
+		get_number_format($currencySym, $thousandSep, $decimalSep,false);
 		$tabelreproduksi = '<div class="titletable">BAHAN PACKING ULANG</div>';
 		$tabelreproduksi .='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_reproduksi">';
 		$tabelreproduksi .= '<thead>';
@@ -259,11 +172,11 @@ function detail_reproduksi(){
 			$tabelreproduksi .= '<td>'.$data->barcode.'</td>';
 			$tabelreproduksi .= '<td>'.$data->namaproduct.'</td>';
 			$tabelreproduksi .= '<td class="angka">'.$data->jumlah.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->hargajual.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->hargapokok.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->subtotal.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->totalmodal.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->laba.'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->hargajual,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->subtotal,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->totalmodal,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->laba,2,$decimalSep,$thousandSep).'</td>';
 			$tabelreproduksi .= '</tr>';
 		}
 		$tabelreproduksi .= '</tbody>';
@@ -274,6 +187,7 @@ function detail_reproduksi(){
 }
 function detail_hasilreproduksi(){
 	if ($_POST["idreproduksi"]){
+		get_number_format($currencySym, $thousandSep, $decimalSep,false);
 		$tabelreproduksi = '<div class="titletable">HASIL PACKING ULANG</div>';
 		$tabelreproduksi .='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_hasilreproduksi">';
 		$tabelreproduksi .= '<thead>';
@@ -300,11 +214,11 @@ function detail_hasilreproduksi(){
 			$tabelreproduksi .= '<td>'.$data->barcode.'</td>';
 			$tabelreproduksi .= '<td>'.$data->namaproduct.'</td>';
 			$tabelreproduksi .= '<td class="angka">'.$data->jumlah.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->hargajual.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->hargapokok.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->subtotal.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->totalmodal.'</td>';
-			$tabelreproduksi .= '<td class="angka">'.$data->laba.'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->hargajual,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->subtotal,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->totalmodal,2,$decimalSep,$thousandSep).'</td>';
+			$tabelreproduksi .= '<td class="angka">'.number_format($data->laba,2,$decimalSep,$thousandSep).'</td>';
 			$tabelreproduksi .= '</tr>';
 		}
 		$tabelreproduksi .= '</tbody>';
@@ -314,6 +228,7 @@ function detail_hasilreproduksi(){
 	exit();	
 }
 function reproduksi_produk($tgl1,$tgl2){
+	get_number_format($currencySym, $thousandSep, $decimalSep, false);
 	$tgl2 = DateAdd(1,$tgl2,"Y-m-d");
 	$tabelreproduksi ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_reproduksi">';
 	$tabelreproduksi .= '<thead>';
@@ -345,11 +260,11 @@ function reproduksi_produk($tgl1,$tgl2){
 		$tabelreproduksi .= '<td>'.$data->namaproduct.'</td>';
 		$tabelreproduksi .= '<td>'.$data->namasupplier.'</td>';
 		$tabelreproduksi .= '<td class="angka">'.$data->totalqty.'</td>';
-		$tabelreproduksi .= '<td class="angka">'.$data->hargajual.'</td>';
-		$tabelreproduksi .= '<td class="angka">'.$data->hargapokok.'</td>';
-		$tabelreproduksi .= '<td class="angka">'.$data->subtotal.'</td>';
-		$tabelreproduksi .= '<td class="angka">'.$data->totalmodal.'</td>';
-		$tabelreproduksi .= '<td class="angka">'.$data->laba.'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->hargajual,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->subtotal,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->totalmodal,2,$decimalSep,$thousandSep).'</td>';
+		$tabelreproduksi .= '<td class="angka">'.number_format($data->laba,2,$decimalSep,$thousandSep).'</td>';
 		$tabelreproduksi .= '</tr>';
 		$totaljual = $totaljual + $data->subtotal;
 		$totalmodal = $totalmodal + $data->totalmodal;
@@ -359,9 +274,9 @@ function reproduksi_produk($tgl1,$tgl2){
 	$tabelreproduksi .= '<tfoot>';
 	$tabelreproduksi .= '<tr>';
 	$tabelreproduksi .= '<th style="text-align:right" colspan="6">Total:&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelreproduksi .= '<th style="text-align: right">Rp. '.number_format($totallaba,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totaljual,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+	$tabelreproduksi .= '<th style="text-align: right">'.$currencySym.' '.number_format($totallaba,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelreproduksi .= '</tr>';
 	$tabelreproduksi .= '</tfoot>';
 	$tabelreproduksi .= '</table>';

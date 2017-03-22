@@ -184,6 +184,7 @@ function printOutLaundry(){
 	return $tablePrint;
 }
 function printOutPenjualan(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$dataPremis = getPremisInformation();
 	$perlakuanKembalian = PERLAKUAN_KEMBALIAN();
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
@@ -219,31 +220,31 @@ function printOutPenjualan(){
 			$tablePrint .= '<td colspan="3" style="font-size: 13px;font-weight: bold;">'.$dataDetail->namaproduct.'</td>';
 			$tablePrint .= '</tr>';
 			$tablePrint .= '<tr>';
-			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual,0,",",".").'</td>';
-			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,0,",",".").'</td>';
-			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
+			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual,2,$decimalSep,$thousandSep).'</td>';
+			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,2,$decimalSep,$thousandSep).'</td>';
+			$tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->hargajual*$dataDetail->jumlah,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</td>';
 			$tablePrint .= '</tr>';
 			$totalPenjualan = $totalPenjualan + ($dataDetail->hargajual*$dataDetail->jumlah);
 		}
 		$besarPpn = $dataPenjualan['info']->ppn;
 		$totalPpn = $dataPenjualan['info']->ppn_value;
 		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
 		if ($besarPpn > 0) {
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn,2,$decimalSep,$thousandSep) . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn,2,$decimalSep,$thousandSep) . '&nbsp;&nbsp;</span></td></tr>';
 		}
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
 		if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
 			$totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL HUTANG</span><span style="float: right">'.number_format($totalHutang,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL HUTANG</span><span style="float: right">'.number_format($totalHutang,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
 		}
 		$viewperlakuankembalian = '';
 		if ($dataPenjualan['info']->perlakuankembalian != 0){
 			$viewperlakuankembalian = '<span style="font-size: 13px;font-weight: bold;">'.$perlakuanKembalian[$dataPenjualan['info']->perlakuankembalian].'</span>';
 		}
 		if ($dataPenjualan['info']->kembali >= 0){
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
 		}
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
 		$tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">SILAHKAN DATANG KEMBALI</td></tr>';
@@ -485,6 +486,7 @@ function createEAN13Code($number){
 	return $code;
 }
 function printCustomerOrderBarcode(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
 	_addBarcodePlugins();
@@ -507,6 +509,7 @@ function printCustomerOrderBarcode(){
 	return $tablePrint;
 }
 function printProductBarcode(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
 	_addBarcodePlugins();
@@ -534,7 +537,7 @@ function printProductBarcode(){
 				$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">'.$dataProduct['info']->barcode.'</div>';
 				$tablePrint .= '</td></tr>';
 				$tablePrint .= '<tr class="standard-font"><td style="text-align: center;">'.$dataProduct['info']->namaproduct.'</td></tr>';
-				$tablePrint .= '<tr class="small-font"><td style="text-align: center;"><span style="float: left;">&nbsp;&nbsp;&nbsp;'.$dataProduct['info']->alt_code.'</span><span style="float: right;">Rp. '.number_format($dataProduct['info']->hargajual,0,',','.').',-&nbsp;&nbsp;&nbsp;</span></td></tr>';
+				$tablePrint .= '<tr class="small-font"><td style="text-align: center;"><span style="float: left;">&nbsp;&nbsp;&nbsp;'.$dataProduct['info']->alt_code.'</span><span style="float: right;">'.$currencySym.' '.number_format($dataProduct['info']->hargajual,2,$decimalSep,$thousandSep).',-&nbsp;&nbsp;&nbsp;</span></td></tr>';
 				$tablePrint .= '</tbody>';
 				$tablePrint .= '</table>';
 				$tablePrint .= '</div>';
@@ -544,6 +547,7 @@ function printProductBarcode(){
 	return $tablePrint;
 }
 function printProductBarcodeWithLogo(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
 	_addBarcodePlugins();
@@ -576,11 +580,11 @@ function printProductBarcodeWithLogo(){
 				$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataProduct['info']->barcode . '</div>';
 				$tablePrint .= '</td></tr>';
 				$tablePrint .= '<tr class="standard-font"><td align="center">' . $dataProduct['info']->namaproduct . '</td></tr>';
-				$tablePrint .= '<tr class="small-font"><td align="center"><span>Rp. ' . number_format(
+				$tablePrint .= '<tr class="small-font"><td align="center"><span>'.$currencySym.' ' . number_format(
 						$dataProduct['info']->hargajual,
-						0,
-						',',
-						'.'
+						2,
+						$decimalSep,
+						$thousandSep
 					) . '</span></td></tr>';
 				$tablePrint .= '</tbody>';
 				$tablePrint .= '</table>';
@@ -753,6 +757,7 @@ function printGHCOrderOnly(){
 	return $tablePrint;
 }
 function printKasirOrder($dataOrder = null){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
     if (count($dataOrder)){
 		$dataPremis = getPremisInformation();
         $printHeader = true;
@@ -779,11 +784,11 @@ function printKasirOrder($dataOrder = null){
                 $dataDetail = $orderDetail[$i];
                 $tablePrint .= '<tr>';
                 $tablePrint .= '<td colspan="2" style="font-size: 13px;">'.strtoupper($dataDetail['namaproduct']).'</td>';
-                $tablePrint .= '<td style="font-size: 12px;text-align: right;width: 100px;">'.number_format($dataDetail['hargajual'],0,',','.').' x '.$dataDetail['jumlah'].'</td>';
+                $tablePrint .= '<td style="font-size: 12px;text-align: right;width: 100px;">'.number_format($dataDetail['hargajual'],2,$decimalSep,$thousandSep).' x '.$dataDetail['jumlah'].'</td>';
                 $tablePrint .= '</tr>';
 				$totalOrder = $totalOrder + ($dataDetail['hargajual']*$dataDetail['jumlah']);
             }
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalOrder,0,",",".").'</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalOrder,2,$decimalSep,$thousandSep).'</span></td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">INGAT MAKAN INGAT TUHAN</td></tr>';
             $tablePrint .= '<tr><td colspan="3" style="font-size: 11px;text-align: center;border-top: 1px solid #000;">KRITIK/SARAN DAN PESAN ANTAR HUBUNGI</td></tr>';
@@ -801,6 +806,7 @@ function printKasirOrder($dataOrder = null){
 //End function print customer order GHC
 //function printout penjualan ghc
 function printOutPenjualanGHC(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$dataPremis = getPremisInformation();
     $perlakuanKembalian = PERLAKUAN_KEMBALIAN();
     drupal_add_js('misc/media/jquery-1.4.4.min.js');
@@ -839,31 +845,31 @@ function printOutPenjualanGHC(){
             $tablePrint .= '<td colspan="3" style="font-size: 13px;font-weight: bold;">'.$dataDetail->namaproduct.'</td>';
             $tablePrint .= '</tr>';
             $tablePrint .= '<tr>';
-            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon,0,",",".").'</td>';
-            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,0,",",".").'</td>';
-            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon*$dataDetail->jumlah,0,",",".").'&nbsp;&nbsp;</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon,2,$decimalSep,$thousandSep).'</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">x '.number_format($dataDetail->jumlah,2,$decimalSep,$thousandSep).'</td>';
+            $tablePrint .= '<td style="font-size: 13px;font-weight: bold;text-align: right;">'.number_format($dataDetail->harga_diskon*$dataDetail->jumlah,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</td>';
             $tablePrint .= '</tr>';
             $totalPenjualan = $totalPenjualan + ($dataDetail->harga_diskon*$dataDetail->jumlah);
         }
 		$besarPpn = $dataPenjualan['info']->ppn;
 		$totalPpn = $dataPenjualan['info']->ppn_value;
 		$totalPlusPpn = $dataPenjualan['info']->total_plus_ppn;
-		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+		$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;border-top: 1px solid #000;"><span style="float: left">TOTAL</span><span style="float: right">'.number_format($totalPenjualan,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
 		if ($besarPpn > 0) {
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
-			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn, 0, ",", ".") . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">PPN(' . $besarPpn . '%)</span><span style="float: right">' . number_format($totalPpn, 2,$decimalSep,$thousandSep) . '&nbsp;&nbsp;</span></td></tr>';
+			$tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL+PPN</span><span style="float: right">' . number_format($totalPlusPpn,2,$decimalSep,$thousandSep) . '&nbsp;&nbsp;</span></td></tr>';
 		}
-        $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+        $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">'.strtoupper($dataPenjualan['info']->carabayar).'</span><span style="float: right">'.number_format($dataPenjualan['info']->bayar,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
         if (($dataPenjualan['info']->carabayar == 'HUTANG' || $dataPenjualan['info']->kembali < 0) && !empty($dataPenjualan['info']->idpelanggan)){
             $totalHutang = getTotalHutangLatest($dataPenjualan['info']->idpelanggan);
-            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL HUTANG</span><span style="float: right">'.number_format($totalHutang,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">TOTAL HUTANG</span><span style="float: right">'.number_format($totalHutang,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
         }
         $viewperlakuankembalian = '';
         if ($dataPenjualan['info']->perlakuankembalian != 0){
             $viewperlakuankembalian = '<span style="font-size: 13px;font-weight: bold;">'.$perlakuanKembalian[$dataPenjualan['info']->perlakuankembalian].'</span>';
         }
         if ($dataPenjualan['info']->kembali >= 0){
-            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,0,",",".").'&nbsp;&nbsp;</span></td></tr>';
+            $tablePrint .= '<tr><td colspan="3" style="font-size: 13px;font-weight: bold;text-align: center;"><span style="float: left">KEMBALI '.$viewperlakuankembalian.'</span><span style="float: right">'.number_format($dataPenjualan['info']->kembali,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</span></td></tr>';
         }
         $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;border-top: 1px solid #000;">TERIMAKASIH</td></tr>';
         $tablePrint .= '<tr><td colspan="3" style="font-size: 12px;text-align: center;">INGAT MAKAN INGAT TUHAN</td></tr>';

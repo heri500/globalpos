@@ -234,6 +234,7 @@ function filter_kategori(){
 }
 
 function tabel_produk($statusstok = null, $statusProduct = 1){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$tabelproduk = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_produk">';
 	$tabelproduk .= '<thead>';
 	$tabelproduk .= '<tr>';
@@ -253,7 +254,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>STATUS</th>';
 	$tabelproduk .= '<th>SATUAN</th>';
 	$tabelproduk .= '<th>KETERANGAN</th>';
-	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
+	$tabelproduk .= '<th>TOTAL('.trim($currencySym).')</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
@@ -263,7 +264,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tfoot>';
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
-	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
+	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
@@ -332,7 +333,7 @@ function simpan_produk(){
 	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
 		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
-			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
+			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok,alt_code FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
 			$data = db_fetch_object($result);
 			$STOKSEBELUM = $data->stok;
 			$HARGAPOKOK = $data->hargapokok;
@@ -341,11 +342,15 @@ function simpan_produk(){
 				$datakategori = db_fetch_object($resultkategori);
 				$resultsubkategori = db_query("SELECT kodesubkategori FROM subkategori WHERE idsubkategori='%d'",$_POST["idsubkategori"]);
 				$datasubkategori = db_fetch_object($resultsubkategori);
-				$kodealt = $datakategori->kodekategori."-".$datasubkategori->kodesubkategori;
-				if (isset($_POST["alt_code"])){
-					$kodealternatif = $altCode;
+				if (empty($data->alt_code)){
+					$kodealt = $datakategori->kodekategori."-".$datasubkategori->kodesubkategori;
+					if (isset($_POST["alt_code"])){
+						$kodealternatif = $altCode;
+					}else{
+						$kodealternatif = $kodealt.cek_kode_alt(remove_utf8_bom($kodealt));
+					}
 				}else{
-					$kodealternatif = $kodealt.cek_kode_alt(remove_utf8_bom($kodealt));
+					$kodealternatif = $data->alt_code;
 				}
 				//$sql = "UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'";
 				//$nilai = $_POST["idsupplier"].'-'.$_POST["idkategori"].'-'.$_POST["idsubkategori"].'-'.$_POST["barcode"].'-'.$kodealternatif.'-'.$_POST["namaproduk"].'-'.$_POST["hargapokok"].'-'.$_POST["hargajual"].'-'.$_POST["margin"].'-'.$_POST["minstok"].'-'.$_POST["maxstok"].'-'.$_POST["stok"].'-'.$_POST["satuan"].'-'.$_POST["keterangan"].'-'.$_POST["idproduk"];

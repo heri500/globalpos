@@ -1,6 +1,13 @@
 <?php
 
+/**
+ * @param null $idtitipanlaundry
+ * @param null $alamatasal
+ * @return string
+ */
 function penjualan($idtitipanlaundry = null, $alamatasal = null){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
+    $gstSym = get_gst_symbols();
 	$dataPremis = get_data_premis();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
@@ -19,6 +26,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	drupal_add_js('misc/media/datatables/js/dataTables.addtr.js');
 	drupal_add_js('misc/media/datatables/js/number.format.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
+    _addChosenJqueryPlugins();
 	$idPelanggan = 0;
 	if (!empty($idtitipanlaundry)){
 		if (empty($alamatasal)){
@@ -92,7 +100,8 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(1)">F5:BAYAR&PRINT</a>';
 	$tombolprint = '<a class="buttonprint" onclick="kirim_data(0)">F6:BAYAR</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
-	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
+	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:TOTAL</a>';
+    $tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
 	$penjualan .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS KASIR ['.$tanggal.']">';
 	$penjualan .= '<div id="info-kasir-waktu">';
@@ -148,8 +157,9 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
+    $penjualan .= $tombollihatpelanggan;
 	$penjualan .= '</div>';
-    $penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Transaksi : Rp. 0</div></div>';
+    $penjualan .= '<div id="tempattotal"><div id="totalbelanja">TOTAL : '.$currencySym.' 0</div></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="Informasi" id="dialogwarning">';
 	$penjualan .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -210,12 +220,12 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
 	$ceklistPpn = '<input type="checkbox" id="use-ppn" name="use-ppn" value="1" checked="checked" class="checkbox-ppn">';
-	$penjualan .= '<div class="barisbayar"><label>PPN ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
+	$penjualan .= '<div class="barisbayar"><label>'.$gstSym.' ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
 	$totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
-	$penjualan .= '<div class="barisbayar"><label>TOTAL + PPN</label>'.$totalplusppn.'</div>';
+	$penjualan .= '<div class="barisbayar"><label>TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
-	$penjualan .= '<div class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
+	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
 	$penjualan .= '<div id="field_kembali" class="barisbayar"><label>Kembali</label>'.$kembali.'</div>';
 	$penjualan .= '<div id="field_kembalian" class="barisbayar" style="display: none;"><label>Kembalian</label>'.$perlakuankembalian.'</div>';
@@ -454,12 +464,13 @@ function cari_produk(){
 }
 function cari_barang(){
 	if ($_GET["term"]){
+        get_number_format($currencySym, $thousandSep, $decimalSep, false);
 		$KATACARI = '%'.$_GET["term"].'%';
 		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
 			$items[] = array(
-				'value' => $data->namaproduct . '--->[Rp. ' . number_format($data->hargajual,0,',','.') . '][' . $data->stok . ']',
+				'value' => $data->namaproduct . '--->['.$currencySym.' ' . number_format($data->hargajual,2,$decimalSep,$thousandSep) . '][' . $data->stok . ']',
 				'barcode'   => $data->barcode,
 				'alt_code'  => $data->alt_code,
 				'hargajual' => $data->hargajual,

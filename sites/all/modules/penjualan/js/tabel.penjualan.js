@@ -11,17 +11,22 @@ var selectedPenjualan = 0;
 var selectedNota = '';
 var selectedPelanggan = 0;
 var alamatupdatepenjualan = '';
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+
 function addCommas(nStr){
 	nStr += "";
-	x = nStr.split(",");
+	x = nStr.split(".");
 	x1 = x[0];
-	x2 = x.length > 1 ? "," + x[1] : "";
+	x2 = x.length > 1 ? dSep + x[1] : "";
 	var rgx = /(\d+)(\d{3})/;
 	while (rgx.test(x1)) {
-		x1 = x1.replace(rgx, "$1" + "." + "$2");
+		x1 = x1.replace(rgx, "$1" + tSep + "$2");
 	}
 	return x1 + x2;
 }
+
 function tampiltabeljual(){
 	if (tampilData == 0){
 		oTable = $('#tabel_penjualan').dataTable( {
@@ -67,7 +72,7 @@ function tampiltabeljual(){
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
 					return typeof i === 'string' ?
-					i.replace(/[\$.]/g, '')*1 :
+					i.replace(/[\$'+ tSep +']/g, '')*1 :
 						typeof i === 'number' ?
 							i : 0;
 				};
@@ -79,8 +84,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 4 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 5 )
@@ -89,8 +95,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 5 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 6 )
@@ -99,8 +106,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 6 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 7 )
@@ -109,8 +117,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 7 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 8 )
@@ -119,8 +128,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 8 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 10 )
@@ -129,8 +139,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 10 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 11 )
@@ -139,8 +150,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 11 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},
 		});
@@ -179,7 +191,7 @@ function tampiltabeljual(){
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
 					return typeof i === 'string' ?
-					i.replace(/[\$.]/g, '')*1 :
+					i.replace(/[\$'+ tSep +']/g, '')*1 :
 						typeof i === 'number' ?
 							i : 0;
 				};
@@ -191,8 +203,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 8 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 9 )
@@ -201,8 +214,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 9 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 10 )
@@ -211,8 +225,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 10 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},
 		});
@@ -246,7 +261,7 @@ function tampiltabeljual(){
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
 					return typeof i === 'string' ?
-					i.replace(/[\$.]/g, '')*1 :
+					i.replace(/[\$'+ tSep +']/g, '')*1 :
 						typeof i === 'number' ?
 							i : 0;
 				};
@@ -258,8 +273,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 2 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 3 )
@@ -268,8 +284,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 3 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
 					.column( 4 )
@@ -278,8 +295,9 @@ function tampiltabeljual(){
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
+				total = parseFloat(Math.abs(total)).toFixed(2);
 				$( api.column( 4 ).footer() ).html(
-					'Rp. '+ addCommas(total)
+					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},
 		});
@@ -326,7 +344,7 @@ function tampiltabeljualdetail(){
 			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
-				i.replace(/[\$.]/g, '')*1 :
+				i.replace(/[\$'+ tSep +']/g, '')*1 :
 					typeof i === 'number' ?
 						i : 0;
 			};
@@ -338,8 +356,9 @@ function tampiltabeljualdetail(){
 					return intVal(a) + intVal(b);
 				}, 0 );
 			// Update footer
+			total = parseFloat(Math.abs(total)).toFixed(2);
 			$( api.column( 6 ).footer() ).html(
-				'Rp. '+ addCommas(total)
+				currSym +' '+ addCommas(total)
 			).addClass('angka');
 			total = api
 				.column( 7 )
@@ -348,8 +367,9 @@ function tampiltabeljualdetail(){
 					return intVal(a) + intVal(b);
 				}, 0 );
 			// Update footer
+			total = parseFloat(Math.abs(total)).toFixed(2);
 			$( api.column( 7 ).footer() ).html(
-				'Rp. '+ addCommas(total)
+				currSym +' '+ addCommas(total)
 			).addClass('angka');
 			total = api
 				.column( 8 )
@@ -358,8 +378,9 @@ function tampiltabeljualdetail(){
 					return intVal(a) + intVal(b);
 				}, 0 );
 			// Update footer
+			total = parseFloat(Math.abs(total)).toFixed(2);
 			$( api.column( 8 ).footer() ).html(
-				'Rp. '+ addCommas(total)
+				currSym +' '+ addCommas(total)
 			).addClass('angka');
 		},
 	});
@@ -414,6 +435,11 @@ $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatepenjualan = pathutama + 'penjualan/updatedetailpenjualan';
 	urutan = Drupal.settings.urutan;
+
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+
 	tampilData = Drupal.settings.tampilData;
     tglAwal = Drupal.settings.tglAwal;
     tglAkhir = Drupal.settings.tglAkhir;
@@ -458,17 +484,17 @@ $(document).ready(function(){
 				diskonview = '('+ ui.item.diskon +'%)';
 			}
 			$('#diskon').val(ui.item.diskon);
-			$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
+			$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
 			$('#hargajual').val(hargajual);
 			$('#hargapokok').val(ui.item.hargapokok);
-			$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
+			$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
 			$('#qty-new').val('1');
 			$('#qty-new').select();
 		}
 	});
 	$('#qty-new').on('keyup',function(){
 		var subTotal = $(this).val() * $('#hargajual').val();
-		$('#subtotal-view').val('Rp. '+ addCommas(subTotal));
+		$('#subtotal-view').val(currSym +' '+ addCommas(subTotal));
 	});
 	$('#qty-new').on('keypress',function(e){
 		if (e.keyCode == 13) {
@@ -501,8 +527,8 @@ $(document).ready(function(){
 						$('#diskon').val(returnData[0].diskon);
 						$('#hargajual').val(hargajual);
 						$('#hargapokok').val(returnData[0].hargapokok);
-						$('#harga-view').val('Rp. '+ addCommas(hargajual) +' '+ diskonview);
-						$('#subtotal-view').val('Rp. '+ addCommas(hargajual));
+						$('#harga-view').val(currSym +' '+ addCommas(hargajual) +' '+ diskonview);
+						$('#subtotal-view').val(currSym +' '+ addCommas(hargajual));
 						$('#qty-new').val('1');
 						$('#qty-new').select();
 					}

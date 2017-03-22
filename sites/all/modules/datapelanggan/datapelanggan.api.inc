@@ -55,7 +55,7 @@ function getTotalHutang($idpelanggan = null){
 	if (!empty($idpelanggan)){
 		$result = db_result(db_query("SELECT SUM(a.besarhutang) FROM 
 		detailpiutang a, penjualan b WHERE a.idpenjualan = b.idpenjualan AND a.idpelanggan='%d'",
-		$idpelanggan));
+			$idpelanggan));
 		$totalhutang = $result;
 	}
 	return $totalhutang;
@@ -167,7 +167,4 @@ function createPelangganSelection($defaultValue = null, $emptyText = 'UMUM', $in
 	}
 	$pilihpelanggan .= '</select>';
 	return $pilihpelanggan;
-}
-function getTotalPembayaranHutang(){
-
 }

@@ -1,6 +1,8 @@
 <?php
 
 function view_tabel_returnsupplier(){
+    //set_default_time_zone();
+    get_number_format($currencySym, $thousandSep, $decimalSep);
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -59,6 +61,8 @@ function view_tabel_returnsupplier(){
 function tabel_returnsupplier($tgl1,$tgl2){
     //nonota, tglreturn, idpemakai, idlangganan, total,
     //totalmodal, carabayar, bayar, kembali
+    //set_default_time_zone();
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
     $tgl1 = date('Y-m-d', strtotime($tgl1));
     $tgl2 = date('Y-m-d', strtotime($tgl2));
     $tabelreturnsupplier ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_returnsupplier">';
@@ -112,8 +116,8 @@ function tabel_returnsupplier($tgl1,$tgl2){
         $tabelreturnsupplier .= '<td id="tglreturn-'.$idreturn.'" class="center edit-tanggal">'.date('d-m-Y', strtotime($data->tanggal)).'</td>';
         $tabelreturnsupplier .= '<td id="jamreturnsupplier-'.$idreturn.'" class="center edit-jam">'.$data->waktu.'</td>';
         if (cekUserRoles()){
-            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->total,0,",",".").'</td>';
-            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->uang_dikembalikan,0,",",".").'</td>';
+            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->total,2,$decimalSep,$thousandSep).'</td>';
+            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->uang_dikembalikan,2,$decimalSep,$thousandSep).'</td>';
             $tabelreturnsupplier .= '<td class="center">'.$data->name.'</td>';
         }
         $tabelreturnsupplier .= '<td class="center">'.$data->carareturn.'</td>';
@@ -128,9 +132,9 @@ function tabel_returnsupplier($tgl1,$tgl2){
         $tabelreturnsupplier .= '<tfoot>';
         $tabelreturnsupplier .= '<tr>';
         $tabelreturnsupplier .= '<th style="text-align:right" colspan="6">Total:&nbsp;&nbsp;</th>';
-        $tabelreturnsupplier .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
-        $tabelreturnsupplier .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
-        $tabelreturnsupplier .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
+        $tabelreturnsupplier .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+        $tabelreturnsupplier .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalbayar,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+        $tabelreturnsupplier .= '<th>&nbsp;</th>';
         $tabelreturnsupplier .= '<th>&nbsp;</th>';
         $tabelreturnsupplier .= '<th>&nbsp;</th>';
         $tabelreturnsupplier .= '</tr>';
@@ -142,6 +146,7 @@ function tabel_returnsupplier($tgl1,$tgl2){
 
 function detail_returnsupplier(){
     if ($_POST["idreturn"]){
+        get_number_format($currencySym, $thousandSep, $decimalSep, false);
         $tabelreturnsupplier ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_returnsupplier">';
         $tabelreturnsupplier .= '<thead>';
         $tabelreturnsupplier .= '<tr>';
@@ -163,8 +168,8 @@ function detail_returnsupplier(){
             $tabelreturnsupplier .= '<td>'.$data->namaproduct.'</td>';
             $tabelreturnsupplier .= '<td class="angka">'.$data->jumlah.'</td>';
             if (cekUserRoles()){
-                $tabelreturnsupplier .= '<td class="angka">'.$data->hargapokok.'</td>';
-                $tabelreturnsupplier .= '<td class="angka">'.$data->subtotal.'</td>';
+                $tabelreturnsupplier .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+                $tabelreturnsupplier .= '<td class="angka">'.number_format($data->subtotal,2,$decimalSep,$thousandSep).'</td>';
             }
             $tabelreturnsupplier .= '</tr>';
         }
@@ -175,6 +180,7 @@ function detail_returnsupplier(){
     exit();
 }
 function returnsupplier_produk($tgl1,$tgl2){
+    get_number_format($currencySym, $thousandSep, $decimalSep, false);
     $tgl1 = date('Y-m-d', strtotime($tgl1)).' 00:00';
     $tgl2 = date('Y-m-d', strtotime($tgl2)).' 23:59';
     $tabelreturnsupplier ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_returnsupplier">';
@@ -205,8 +211,8 @@ function returnsupplier_produk($tgl1,$tgl2){
         $tabelreturnsupplier .= '<td>'.$data->namasupplier.'</td>';
         $tabelreturnsupplier .= '<td class="angka">'.$data->totalqty.'</td>';
         if (cekUserRoles()){
-            $tabelreturnsupplier .= '<td class="angka">'.$data->hargapokok.'</td>';
-            $tabelreturnsupplier .= '<td class="angka">'.$data->subtotal.'</td>';
+            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->hargapokok,2,$decimalSep,$thousandSep).'</td>';
+            $tabelreturnsupplier .= '<td class="angka">'.number_format($data->subtotal,2,$decimalSep,$thousandSep).'</td>';
         }
         $tabelreturnsupplier .= '</tr>';
         $totalmodal = $totalmodal + $data->subtotal;
@@ -216,7 +222,7 @@ function returnsupplier_produk($tgl1,$tgl2){
         $tabelreturnsupplier .= '<tfoot>';
         $tabelreturnsupplier .= '<tr>';
         $tabelreturnsupplier .= '<th style="text-align:right" colspan="5">Total:&nbsp;&nbsp;</th>';
-        $tabelreturnsupplier .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
+        $tabelreturnsupplier .= '<th style="text-align: right">'.$currencySym.' '.number_format($totalmodal,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
         $tabelreturnsupplier .= '</tr>';
         $tabelreturnsupplier .= '</tfoot>';
     }

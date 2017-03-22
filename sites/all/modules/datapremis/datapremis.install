@@ -26,3 +26,63 @@ function datapremis_update_1() {
     db_add_field($return, 'datapremis', 'ppn_value', $ppn_value);
     return $return;
 }
+
+function datapremis_update_2() {
+    $currency_code = array(
+        'type' => 'varchar',
+        'length' => 3,
+        'not null' => TRUE,
+        'default' => 'IDR',
+        'description' => t('Currency code.'),
+    );
+    db_add_field($return, 'datapremis', 'currency_code', $currency_code);
+    return $return;
+}
+
+function datapremis_update_3() {
+    $currency_symbol = array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'Rp.',
+        'description' => t('Currency symbol.'),
+    );
+    db_add_field($return, 'datapremis', 'currency_symbol', $currency_symbol);
+    return $return;
+}
+
+function datapremis_update_4() {
+    $thousand_separator = array(
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => TRUE,
+        'default' => '.',
+        'description' => t('Thousand separator character.'),
+    );
+    db_add_field($return, 'datapremis', 'thousand_separator', $thousand_separator);
+    return $return;
+}
+
+function datapremis_update_5() {
+    $decimal_separator = array(
+        'type' => 'varchar',
+        'length' => 1,
+        'not null' => TRUE,
+        'default' => ',',
+        'description' => t('Decimal separator character.'),
+    );
+    db_add_field($return, 'datapremis', 'decimal_separator', $decimal_separator);
+    return $return;
+}
+
+function datapremis_update_6() {
+    $gstSymbol = array(
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'PPN',
+        'description' => t('PPN/GST Symbols.'),
+    );
+    db_add_field($return, 'datapremis', 'ppn_symbol', $gstSymbol);
+    return $return;
+}

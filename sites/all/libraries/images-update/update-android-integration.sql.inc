@@ -1,0 +1,1 @@
+ALTER TABLE `customer_order`  ADD `android_order` TINYINT NOT NULL DEFAULT '0'  AFTER `idmeja`,  ADD `printed` TINYINT NOT NULL DEFAULT '0'  AFTER `android_order`;

@@ -1,6 +1,7 @@
 <?php
 
 function view_tabel_customerorder(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -108,10 +109,10 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th class="center">HARI</th>';
 	$tabelcustomerorder .= '<th class="tanggal">TGL</th>';
 	$tabelcustomerorder .= '<th class="tanggal">JAM</th>';
-	$tabelcustomerorder .= '<th>TOTAL</th>';
-	$tabelcustomerorder .= '<th>CARA BAYAR</th>';
-	$tabelcustomerorder .= '<th>BAYAR</th>';
-	$tabelcustomerorder .= '<th>SISA</th>';
+	$tabelcustomerorder .= '<th class="col_angka">TOTAL</th>';
+	$tabelcustomerorder .= '<th class="col_angka">CARA BAYAR</th>';
+	$tabelcustomerorder .= '<th class="col_angka">BAYAR</th>';
+	$tabelcustomerorder .= '<th class="col_angka">SISA</th>';
 	$tabelcustomerorder .= '<th>KASIR</th>';
 	$tabelcustomerorder .= '<th>PELANGGAN</th>';
 	$tabelcustomerorder .= '<th>STATUS</th>';
@@ -129,9 +130,9 @@ function tabel_customerorder($tgl1,$tgl2){
 	}else{
 		$tabelcustomerorder .= '<th style="text-align:right" colspan="9">Total:&nbsp;&nbsp;</th>';
 	}
-    $totaljual = getTotalCustomerOrder('total',$tgl1, $tgl2);
+    /*$totaljual = getTotalCustomerOrder('total',$tgl1, $tgl2);
     $totalbayar = getTotalCustomerOrder('bayar',$tgl1, $tgl2);
-    $totalSisa = getTotalCustomerOrder('total-bayar',$tgl1, $tgl2);
+    $totalSisa = getTotalCustomerOrder('total-bayar',$tgl1, $tgl2);*/
 	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';

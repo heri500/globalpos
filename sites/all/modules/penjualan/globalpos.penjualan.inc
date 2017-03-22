@@ -1,6 +1,7 @@
 <?php
 
 function view_tabel_penjualan(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);

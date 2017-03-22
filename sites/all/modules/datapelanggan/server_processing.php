@@ -107,6 +107,7 @@ function serverSidePelanggan($request){
 }
 function serverSideProduk($request){
 	global $baseDirectory;
+	get_number_format_server_side($currencySym, $thousandSep, $decimalSep);
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
@@ -189,12 +190,12 @@ function serverSideProduk($request){
 		$rowData[] = $data->barcode;
 		$rowData[] = $data->alt_code;
 		$rowData[] = $data->namaproduct;
-		$rowData[] = number_format($data->hargapokok,0,",",".");
-		$rowData[] = number_format($data->hargajual,0,",",".");
-		$rowData[] = number_format($data->margin,0,",",".");
+		$rowData[] = number_format($data->hargapokok,2,$decimalSep,$thousandSep);
+		$rowData[] = number_format($data->hargajual,2,$decimalSep,$thousandSep);
+		$rowData[] = number_format($data->margin,2,$decimalSep,$thousandSep);
 		$rowData[] = $data->minstok;
     $rowData[] = $data->maxstok;
-    $rowData[] = number_format($data->stok,0,",",".");
+    $rowData[] = number_format($data->stok,2,$decimalSep,$thousandSep);
     if ($data->stok < $data->minstok){
 			$rowData[] = "<img title=\"Stok dibawah minimum\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
 		}elseif ($data->stok > $data->maxstok){
@@ -206,7 +207,7 @@ function serverSideProduk($request){
 		}
 		$rowData[] = $data->satuan;
 		$rowData[] = $data->keterangan;
-		$rowData[] = number_format($data->total_nilai,0,",",".");
+		$rowData[] = number_format($data->total_nilai,2,$decimalSep,$thousandSep);
 		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
 		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
 		$rowData[] = $data->idproduct;
@@ -225,6 +226,7 @@ function serverSideProduk($request){
 }
 
 function serverSidePenjualan($request){
+	get_number_format_server_side($currSym,$tSep,$dSep);
 	global $baseDirectory;
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
@@ -355,14 +357,14 @@ function serverSidePenjualan($request){
 		$rowData[] = $data->nonota;
 		$rowData[] = $data->tanggal;
 		$rowData[] = $data->waktu;
-		$rowData[] = number_format($data->total,0,",",".");
-		$rowData[] = number_format($data->ppn_value,0,",",".");
-		$rowData[] = number_format($data->total_plus_ppn,0,",",".");
-		$rowData[] = number_format($data->totalmodal,0,",",".");
-		$rowData[] = number_format($data->laba,0,",",".");
+		$rowData[] = number_format($data->total,2,$dSep,$tSep);
+		$rowData[] = number_format($data->ppn_value,2,$dSep,$tSep);
+		$rowData[] = number_format($data->total_plus_ppn,2,$dSep,$tSep);
+		$rowData[] = number_format($data->totalmodal,2,$dSep,$tSep);
+		$rowData[] = number_format($data->laba,2,$dSep,$tSep);
 		$rowData[] = $data->carabayar;
-		$rowData[] = number_format($data->bayar,0,",",".");
-		$rowData[] = number_format($data->kembali,0,",",".");
+		$rowData[] = number_format($data->bayar,2,$dSep,$tSep);
+		$rowData[] = number_format($data->kembali,2,$dSep,$tSep);
 		$rowData[] = $data->name;
 		$rowData[] = $data->namapelanggan;
 		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
@@ -402,6 +404,7 @@ function serverSidePenjualan($request){
 }
 
 function serverSidePenjualan2($request){
+	get_number_format_server_side($currSym,$tSep,$dSep);
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
@@ -503,14 +506,14 @@ function serverSidePenjualan2($request){
 		$rowData[] = $data->barcode;
 		$rowData[] = $data->namaproduct;
 		$rowData[] = $data->namasupplier;
-		$rowData[] = number_format($data->totalqty,0,",",".");
-		$rowData[] = number_format($data->minhargapokok,0,",",".");
-		$rowData[] = number_format($data->maxhargapokok,0,",",".");
-		$rowData[] = number_format($data->minhargajual,0,",",".");
-		$rowData[] = number_format($data->maxhargajual,0,",",".");
-		$rowData[] = number_format($data->subtotal,0,",",".");
-		$rowData[] = number_format($data->totalmodal,0,",",".");
-		$rowData[] = number_format($data->laba,0,",",".");
+		$rowData[] = number_format($data->totalqty,2,$dSep,$tSep);
+		$rowData[] = number_format($data->minhargapokok,2,$dSep,$tSep);
+		$rowData[] = number_format($data->maxhargapokok,2,$dSep,$tSep);
+		$rowData[] = number_format($data->minhargajual,2,$dSep,$tSep);
+		$rowData[] = number_format($data->maxhargajual,2,$dSep,$tSep);
+		$rowData[] = number_format($data->subtotal,2,$dSep,$tSep);
+		$rowData[] = number_format($data->totalmodal,2,$dSep,$tSep);
+		$rowData[] = number_format($data->laba,2,$dSep,$tSep);
 		$rowData[] = $data->idproduct;
 		$output[] = $rowData;
 	}
@@ -526,6 +529,7 @@ function serverSidePenjualan2($request){
 }
 
 function serverSidePenjualan3($request){
+	get_number_format_server_side($currSym,$tSep,$dSep);
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
@@ -590,9 +594,9 @@ function serverSidePenjualan3($request){
 		$rowData = array();
 		$rowData[] = $data->kodekategori;
 		$rowData[] = $data->kategori;
-		$rowData[] = number_format($data->totaljual,0,",",".");
-		$rowData[] = number_format($data->totalmodal,0,",",".");
-		$rowData[] = number_format(($data->totallaba),0,",",".");
+		$rowData[] = number_format($data->totaljual,2,$dSep,$tSep);
+		$rowData[] = number_format($data->totalmodal,2,$dSep,$tSep);
+		$rowData[] = number_format(($data->totallaba),2,$dSep,$tSep);
 		$rowData[] = $data->idkategori;
 		$output[] = $rowData;
 	}
@@ -1069,6 +1073,7 @@ function pemasukan($request){
 	);
 }
 function serverSideDetailCustomerOrder($request){
+	get_number_format_server_side($currSym,$tSep,$dSep);
 	global $baseDirectory;
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
@@ -1134,8 +1139,8 @@ function serverSideDetailCustomerOrder($request){
 		$rowData[] = $data->jumlah;
 		$rowData[] = $data->jumlah - $data->sisa;
 		$rowData[] = $data->sisa;
-		$rowData[] = number_format($data->hargajual,0,',','.');
-		$rowData[] = number_format($data->subtotal,0,',','.');
+		$rowData[] = number_format($data->hargajual,2,$dSep,$tSep);
+		$rowData[] = number_format($data->subtotal,2,$dSep,$tSep);
 		$rowData[] = date('d M H:i',$data->perkiraan_ambil);
 		if (!empty($data->diambil)){
 			$rowData[] = date('d M H:i',$data->diambil);
@@ -1228,6 +1233,7 @@ function serverSideGetOneProduct($request){
 	return $items;
 }
 function serverSideDetailPenjualan($request){
+	get_number_format_server_side($currSym,$tSep,$dSep);
     global $baseDirectory;
     $pageStart = $_GET['start'];
     $pageLength = $_GET['length'];
@@ -1292,11 +1298,11 @@ function serverSideDetailPenjualan($request){
         $rowData[] = $data->barcode;
         $rowData[] = $data->namaproduct;
         $rowData[] = $data->jumlah;
-        $rowData[] = number_format($data->hargajual,0,',','.');
-        $rowData[] = number_format($data->hargapokok,0,',','.');
-        $rowData[] = number_format($data->subtotal,0,',','.');
-        $rowData[] = number_format($data->modal,0,',','.');
-        $rowData[] = number_format($data->laba,0,',','.');
+        $rowData[] = number_format($data->hargajual,2,$dSep,$tSep);
+        $rowData[] = number_format($data->hargapokok,2,$dSep,$tSep);
+        $rowData[] = number_format($data->subtotal,2,$dSep,$tSep);
+        $rowData[] = number_format($data->modal,2,$dSep,$tSep);
+        $rowData[] = number_format($data->laba,2,$dSep,$tSep);
         $rowData[] = $data->iddetail;
         $output[] = $rowData;
     }
@@ -1476,6 +1482,36 @@ function getRandomStringServerSide($length=22)
 	}
 	return $key;
 }
+
+function get_data_premis_server_side(){
+	$strSQL = 'SELECT id, zone, nama, alamat, telepon, whatsapp, bbm, telegram, ';
+	$strSQL .= 'email, website, created, changed, uid, ppn_value, currency_code, ';
+	$strSQL .= 'currency_symbol, thousand_separator, decimal_separator FROM cms_datapremis LIMIT 1';
+	$result = db_query($strSQL);
+	$arrayData = db_fetch_object($result);
+	return $arrayData;
+}
+
+function get_number_format_server_side(&$currencySym, &$thousandSep, &$decimalSep){
+	$dataPremis = get_data_premis_server_side();
+	if (!empty($dataPremis)){
+		$currencySym = $dataPremis->currency_symbol;
+		$thousandSep = $dataPremis->thousand_separator;
+		$decimalSep = $dataPremis->decimal_separator;
+	}else{
+		$currencySym = 'Rp.';
+		$thousandSep = '.';
+		$decimalSep = ',';
+	}
+	return $dataPremis;
+}
+function set_default_time_zone_server_side(){
+	$defaultTimeZone = date_default_timezone_get();
+	if ($defaultTimeZone != 'Asia/Jakarta'){
+		date_default_timezone_set('Asia/Jakarta');
+	}
+}
+
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){

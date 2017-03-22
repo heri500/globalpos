@@ -6,14 +6,18 @@ var oTable5;
 var pathutama = '';
 var pathfile = '';
 var alamatupdate = '';
+var currency_symbol = '';
+var thousan_sep = '.';
+var decimal_sep = ',';
+
 function addCommas(nStr){
     nStr += "";
-    x = nStr.split(",");
+    x = nStr.split(".");
     x1 = x[0];
-    x2 = x.length > 1 ? "," + x[1] : "";
+    x2 = x.length > 1 ? decimal_sep + x[1] : "";
     var rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, "$1" + "." + "$2");
+        x1 = x1.replace(rgx, "$1" + thousan_sep + "$2");
     }
     return x1 + x2;
 }
@@ -109,7 +113,7 @@ function tampiltabelhutangdetail(){
     });
 }
 function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
-    var tampilhutang = 'HUTANG SAAT INI : Rp. '+ addCommas(besarhutang);
+    var tampilhutang = 'HUTANG SAAT INI : '+ currency_symbol +' '+ addCommas(besarhutang);
     $('#tempatnilaihutang').html(tampilhutang);
     var request = new Object();
     request.idpelanggan = idpelanggan;
@@ -194,7 +198,7 @@ function view_detail(idpenjualan,nonota){
     });
 }
 function pembayaran(idpelanggan,namapelanggan,besarhutang,nilaihutang){
-    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : Rp. '+ besarhutang;
+    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : '+ currency_symbol +' '+ besarhutang;
     $('#nilaipembayaran').val(parseInt(nilaihutang));
     $('#tothutang').val(parseInt(nilaihutang));
     $('#idpelangganbayar').val(idpelanggan);
@@ -310,6 +314,9 @@ $(document).ready(function() {
     pathutama = Drupal.settings.basePath;
     pathfile = pathutama + Drupal.settings.filepath;
     alamatupdate = pathutama + 'datapelanggan/updatepelanggan';
+    currency_symbol = Drupal.settings.datapremis.currency_symbol;
+    thousan_sep = Drupal.settings.datapremis.thousand_separator;
+    decimal_sep = Drupal.settings.datapremis.decimal_separator;
     $('#tabel_pelanggan tbody .editable').editable(alamatupdate, {
         'callback': function( sValue, y ) {
             var aPos = oTable.fnGetPosition( this );
