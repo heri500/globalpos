@@ -71,10 +71,15 @@ function tampiltabeljual(){
 				var api = this.api(), data;
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
-					return typeof i === 'string' ?
-					i.replace(/[\$'+ tSep +']/g, '')*1 :
-						typeof i === 'number' ?
-							i : 0;
+					if (typeof i === 'string') {
+						i = i.split(tSep).join('');
+						i = i.split(dSep).join('.');
+					}else if (typeof i === 'number'){
+						i = i;
+					}else{
+						i = 0;
+					}
+					return parseFloat(i);
 				};
 				// Total over all pages
 				total = api
@@ -190,10 +195,15 @@ function tampiltabeljual(){
 				var api = this.api(), data;
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
-					return typeof i === 'string' ?
-					i.replace(/[\$'+ tSep +']/g, '')*1 :
-						typeof i === 'number' ?
-							i : 0;
+					if (typeof i === 'string') {
+						i = i.split(tSep).join('');
+						i = i.split(dSep).join('.');
+					}else if (typeof i === 'number'){
+						i = i;
+					}else{
+						i = 0;
+					}
+					return parseFloat(i);
 				};
 				// Total over all pages
 				total = api
@@ -260,10 +270,15 @@ function tampiltabeljual(){
 				var api = this.api(), data;
 				// Remove the formatting to get integer data for summation
 				var intVal = function ( i ) {
-					return typeof i === 'string' ?
-					i.replace(/[\$'+ tSep +']/g, '')*1 :
-						typeof i === 'number' ?
-							i : 0;
+					if (typeof i === 'string') {
+						i = i.split(tSep).join('');
+						i = i.split(dSep).join('.');
+					}else if (typeof i === 'number'){
+						i = i;
+					}else{
+						i = 0;
+					}
+					return parseFloat(i);
 				};
 				// Total over all pages
 				total = api
@@ -343,10 +358,15 @@ function tampiltabeljualdetail(){
 			var api = this.api(), data;
 			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
-				return typeof i === 'string' ?
-				i.replace(/[\$'+ tSep +']/g, '')*1 :
-					typeof i === 'number' ?
-						i : 0;
+				if (typeof i === 'string') {
+					i = i.split(tSep).join('');
+					i = i.split(dSep).join('.');
+				}else if (typeof i === 'number'){
+					i = i;
+				}else{
+					i = 0;
+				}
+				return parseFloat(i);
 			};
 			// Total over all pages
 			total = api

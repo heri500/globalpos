@@ -245,7 +245,7 @@ function serverSidePenjualan($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
+	if (is_null($pageLength) || $pageLength != -1){
 		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
@@ -280,7 +280,11 @@ function serverSidePenjualan($request){
 		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR penj.carabayar LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if ($pageLength != -1) {
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+	}else{
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		if (empty($idpelanggan)) {
@@ -422,17 +426,18 @@ function serverSidePenjualan2($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
-		$pageLength = 100;
-	}
+    if (is_null($pageLength) || $pageLength != -1){
+        $pageLength = 100;
+    }
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT detail.idproduct,prod.barcode,prod.namaproduct,";
 	$strSQL .= "supp.namasupplier, SUM(detail.jumlah) AS totalqty,";
 	$strSQL .= "MIN(detail.hargapokok) AS minhargapokok,MAX(detail.hargapokok) AS maxhargapokok,";
 	$strSQL .= "MIN(detail.hargajual) AS minhargajual, MAX(detail.hargajual) AS maxhargajual, ";
-	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, SUM(detail.hargajual*detail.jumlah) AS subtotal,";
-	$strSQL .= "SUM((detail.hargajual-detail.hargapokok)*detail.jumlah) AS laba ";
+	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
+    $strSQL .= "SUM((detail.hargajual - (detail.hargajual*detail.diskon/100))*detail.jumlah) AS subtotal,";
+	$strSQL .= "SUM(((detail.hargajual - (detail.hargajual*detail.diskon/100)) - detail.hargapokok)*detail.jumlah) AS laba ";
 	$strSQLFilteredTotal = "SELECT COUNT(detail.idproduct) ";
 	$strSQL .= "FROM detailpenjualan AS detail ";
 	$strSQLFilteredTotal .= "FROM detailpenjualan AS detail ";
@@ -458,7 +463,11 @@ function serverSidePenjualan2($request){
 		$strCriteria .= "OR supp.namasupplier LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " GROUP BY detail.idproduct ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria." GROUP BY detail.idproduct";
 	if (!empty($searchQuery)){
 		if (!empty($idSupplier)){
@@ -545,15 +554,15 @@ function serverSidePenjualan3($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
+    if (is_null($pageLength) || $pageLength != -1){
 		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = "SELECT kateg.idkategori,kateg.kodekategori,kateg.kategori,";
-	$strSQL .= "SUM(detail.hargajual*detail.jumlah) AS totaljual,";
+	$strSQL .= "SUM((detail.hargajual - (detail.hargajual*detail.diskon/100))*detail.jumlah) AS totaljual,";
 	$strSQL .= "SUM(detail.hargapokok*detail.jumlah) AS totalmodal, ";
-	$strSQL .= "SUM((detail.hargajual - detail.hargapokok) * detail.jumlah) AS totallaba ";
+	$strSQL .= "SUM(((detail.hargajual - (detail.hargajual * detail.diskon/100)) - detail.hargapokok) * detail.jumlah) AS totallaba ";
 	$strSQL .= "FROM detailpenjualan AS detail ";
 	$strSQL .= "LEFT JOIN penjualan AS penj ON detail.idpenjualan = penj.idpenjualan ";
 	$strSQL .= "LEFT JOIN product AS prod ON detail.idproduct = prod.idproduct ";
@@ -570,7 +579,11 @@ function serverSidePenjualan3($request){
 		$strCriteria .= "AND (kateg.kodekategori LIKE '%%%s%%' OR ";
 		$strCriteria .= "kateg.kategori LIKE '%%%s%%' ) ";
 	}
-	$strSQL .= $strCriteria." GROUP BY kateg.idkategori ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " GROUP BY kateg.idkategori ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " GROUP BY kateg.idkategori ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria." GROUP BY kateg.idkategori";
 	if (!empty($searchQuery)){
 		$result = db_query(
@@ -749,7 +762,7 @@ function serverSideCustomerOrder($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
+    if (is_null($pageLength) || $pageLength != -1){
 		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
@@ -780,7 +793,11 @@ function serverSideCustomerOrder($request){
 		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR customerorder.carabayar LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$tglAwal,$tglAkhir,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -863,8 +880,8 @@ function kategoriPengeluaran($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
-		$pageLength = 25;
+    if (is_null($pageLength) || $pageLength != -1){
+		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
@@ -878,7 +895,11 @@ function kategoriPengeluaran($request){
 	if (!empty($searchQuery)){
 		$strCriteria .= "AND (kategori LIKE '%%%s%%' OR keterangan LIKE '%%%s%%' )";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -927,8 +948,8 @@ function pengeluaran($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
-		$pageLength = 25;
+    if (is_null($pageLength) || $pageLength != -1){
+		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
@@ -954,7 +975,11 @@ function pengeluaran($request){
 		$strCriteria .= "pengeluaran.nilai LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -1008,8 +1033,8 @@ function pemasukan($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength)){
-		$pageLength = 25;
+    if (is_null($pageLength) || $pageLength != -1){
+		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
@@ -1035,7 +1060,11 @@ function pemasukan($request){
 		$strCriteria .= "pemasukan.nilai LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
@@ -1097,7 +1126,7 @@ function serverSideDetailCustomerOrder($request){
 		$pageStart = 0;
 	}
 	if (is_null($pageLength) || $pageLength == -1){
-		$pageLength = 25;
+		$pageLength = 100;
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
@@ -1119,7 +1148,11 @@ function serverSideDetailCustomerOrder($request){
 		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)) {
 		$result = db_query($strSQL, $idCustomerOrder, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
@@ -1279,7 +1312,11 @@ function serverSideDetailPenjualan($request){
         $strCriteria .= "product.namaproduct LIKE '%%%s%%'";
         $strCriteria .= ")";
     }
-    $strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+    if ($pageLength != -1) {
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+    }else{
+        $strSQL .= $strCriteria . " ORDER BY $orderColumn";
+    }
     $strSQLFilteredTotal .= $strCriteria;
     if (!empty($searchQuery)) {
         $result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
