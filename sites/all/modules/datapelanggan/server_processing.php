@@ -113,9 +113,10 @@ function serverSideProduk($request){
 	$searchArray = $_REQUEST['search'];
 	$searchQuery = $searchArray['value'];
 	$arrayColumn = array(
-		'prod.idproduct','kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
+		'prod.idproduct', 'kat.kategori','subkat.subkategori','supp.namasupplier', 'prod.barcode',
 		'prod.alt_code','prod.namaproduct','prod.hargapokok','prod.hargajual','prod.margin'
-		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual'
+		,'prod.minstok','prod.maxstok','prod.stok','prod.stok','prod.satuan','prod.keterangan','prod.stok*prod.hargajual',
+        'gmenu.nama_grup'
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -127,7 +128,7 @@ function serverSideProduk($request){
 	}
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
-	$strSQL = "SELECT prod.idproduct,prod.idsupplier,prod.idkategori,prod.idsubkategori,prod.barcode,prod.alt_code,";
+	$strSQL = "SELECT prod.idproduct,gmenu.nama_grup,prod.idsupplier,prod.idkategori,prod.idsubkategori,prod.barcode,prod.alt_code,";
 	$strSQL .= "prod.namaproduct,prod.hargapokok,prod.hargajual,prod.margin,prod.minstok,prod.maxstok,";
 	$strSQL .= "prod.stok,prod.satuan,prod.berat,prod.keterangan ,";
 	$strSQLFilteredTotal = "SELECT COUNT(prod.idproduct) ";
@@ -136,6 +137,7 @@ function serverSideProduk($request){
 	$strSQLFilteredTotal .= "FROM product AS prod ";
 	$strSQL .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
 	$strSQL .= "LEFT JOIN subkategori AS subkat ON subkat.idsubkategori = prod.idsubkategori ";
+    $strSQL .= "LEFT JOIN grup_menu AS gmenu ON prod.id_grup_menu = gmenu.id ";
 	$strSQL .= "LEFT JOIN supplier AS supp ON supp.idsupplier = prod.idsupplier ";
 	$strSQL .= "WHERE 1=1 ";
 	$strSQLFilteredTotal .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
@@ -148,7 +150,7 @@ function serverSideProduk($request){
 		$strCriteria .= "OR prod.namaproduct LIKE '%%%s%%' OR kat.kategori LIKE '%%%s%%' ";
 		$strCriteria .= "OR kat.kodekategori LIKE '%%%s%%' OR subkat.subkategori LIKE '%%%s%%' ";
 		$strCriteria .= "OR subkat.kodesubkategori LIKE '%%%s%%' OR supp.namasupplier LIKE '%%%s%%' ";
-		$strCriteria .= "OR supp.kodesupplier LIKE '%%%s%%' ";
+		$strCriteria .= "OR supp.kodesupplier LIKE '%%%s%%' OR gmenu.nama_grup LIKE '%%%s%%' ";
 		$strCriteria .= ") ";
 	}
 	if (isset($_REQUEST['statusstok']) && $_REQUEST['statusstok'] != '0'){
@@ -172,8 +174,8 @@ function serverSideProduk($request){
 	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
-		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
-		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
+		$result = db_query($strSQL,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$firstRecord,$lastRecord);
+		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery,$searchQuery));
 	}else{
 		$result = db_query($strSQL,$firstRecord,$lastRecord);
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal));
@@ -208,6 +210,7 @@ function serverSideProduk($request){
 		$rowData[] = $data->satuan;
 		$rowData[] = $data->keterangan;
 		$rowData[] = number_format($data->total_nilai,2,$decimalSep,$thousandSep);
+        $rowData[] = $data->nama_grup;
 		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
 		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
 		$rowData[] = $data->idproduct;
@@ -1548,7 +1551,44 @@ function set_default_time_zone_server_side(){
 		date_default_timezone_set('Asia/Jakarta');
 	}
 }
-
+function serverSideArrayKategori($request){
+    $strSQL = 'SELECT idkategori, kodekategori, kategori FROM kategori';
+    $result = db_query($strSQL);
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $output[$data->idkategori] = $data->kodekategori.' => '.$data->kategori;
+    }
+    $strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+    $idKategori = db_result(db_query($strSQL, $request['idproduk']));
+    $output['selected'] =  $idKategori;
+    return $output;
+}
+function serverSideArraySubKategori($request){
+    $strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+    $idKategori = db_result(db_query($strSQL, $request['idproduk']));
+    $strSQL = 'SELECT idsubkategori, kodesubkategori, subkategori FROM subkategori WHERE idkategori=%d';
+    $result = db_query($strSQL,$idKategori);
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $output[$data->idsubkategori] = $data->kodesubkategori.' => '.$data->subkategori;
+    }
+    $strSQL = 'SELECT idsubkategori FROM product WHERE idproduct=%d';
+    $idSubKategori = db_result(db_query($strSQL, $request['idproduk']));
+    $output['selected'] =  $idSubKategori;
+    return $output;
+}
+function serverSideArrayGrupMenu($request){
+    $strSQL = 'SELECT id, kode_grup, nama_grup, keterangan, weight FROM grup_menu';
+    $result = db_query($strSQL);
+    $output = array();
+    while($data = db_fetch_object($result)){
+        $output[$data->id] = $data->kode_grup.' => '.$data->nama_grup;
+    }
+    $strSQL = 'SELECT id_grup_menu FROM product WHERE idproduct=%d';
+    $idGrup = db_result(db_query($strSQL, $request['idproduk']));
+    $output['selected'] =  $idGrup;
+    return $output;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1588,6 +1628,12 @@ if ($_GET['request_data'] == 'pelanggan'){
 }else if ($_GET['request_data'] == 'postorder'){
 	header('Access-Control-Allow-Origin: *');
 	$returnArray = serverSidePostOrder($_GET);
+}else if($_GET['request_data'] == 'kategori'){
+    $returnArray = serverSideArrayKategori($_GET);
+}else if($_GET['request_data'] == 'subkategori'){
+    $returnArray = serverSideArraySubKategori($_GET);
+}else if($_GET['request_data'] == 'grupmenu'){
+    $returnArray = serverSideArrayGrupMenu($_GET);
 }
 header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);
