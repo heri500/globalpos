@@ -143,6 +143,7 @@ function serverSideProduk($request){
 	$strSQLFilteredTotal .= "LEFT JOIN kategori AS kat ON kat.idkategori = prod.idkategori ";
 	$strSQLFilteredTotal .= "LEFT JOIN subkategori AS subkat ON subkat.idsubkategori = prod.idsubkategori ";
 	$strSQLFilteredTotal .= "LEFT JOIN supplier AS supp ON supp.idsupplier = prod.idsupplier ";
+	$strSQLFilteredTotal .= "LEFT JOIN grup_menu AS gmenu ON prod.id_grup_menu = gmenu.id ";
 	$strSQLFilteredTotal .= "WHERE 1=1 ";
 	$strCriteria = "";
 	if (!empty($searchQuery)){
