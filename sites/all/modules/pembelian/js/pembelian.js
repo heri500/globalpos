@@ -97,7 +97,7 @@ function tambahproduk(){
 					var nTr = $('#'+ namacekbox).parent().parent().get(0);
 					var posisibaris = oTable.fnGetPosition(nTr);
 					oTable.fnUpdate(qtybaru, posisibaris, 4 );
-					nilaikirim = pecahnilai[0] +'___'+ qtybaru +'___'+ pecahnilai[2];
+					nilaikirim = pecahnilai[0].trim() +'___'+ qtybaru +'___'+ pecahnilai[2];
 					checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
                     subtotalView = parseFloat(subtotal).toFixed(2);
 					oTable.fnUpdate(addCommas(subtotalView) +' '+ checkboxnilai, posisibaris, 5 );
@@ -193,7 +193,7 @@ function hapus_produk(posisi,nTr,idproduk){
 		var pecahnilaiakhir = nilaidataakhir.split('___');
 		$('#lastharga').val(pecahnilaiakhir[2]);
 		$('#lastqty').val(pecahnilaiakhir[1]);
-		$('#last_id').val(pecahnilaiakhir[0]);
+		$('#last_id').val(pecahnilaiakhir[0].trim());
 	}else{
 		$('#lastharga').val('');
 		$('#lastqty').val('');

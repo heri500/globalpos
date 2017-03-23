@@ -339,8 +339,9 @@ $(document).ready(function() {
 		nospace: true
 	});
 	$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-		format: "numeric",
-		nospace: true
+		format: 'custom',
+		nospace: true,
+		pattern: '[^0-9\.]'
 	});
 	$("#main h2").css("width","100%");
 	$("#main h2").css("float","left");

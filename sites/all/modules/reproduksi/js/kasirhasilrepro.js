@@ -69,7 +69,7 @@ function tambahproduk(){
                     var nTr = $('#'+ namacekbox).parent().parent().get(0);
                     var posisibaris = oTable.fnGetPosition(nTr);
                     oTable.fnUpdate(qtybaru, posisibaris, 4 );
-                    nilaikirim = pecahnilai[0] +'___'+ qtybaru +'___'+ pecahnilai[2] +'___'+ pecahnilai[3];
+                    nilaikirim = pecahnilai[0].trim() +'___'+ qtybaru +'___'+ pecahnilai[2] +'___'+ pecahnilai[3];
                     checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
                     oTable.fnUpdate(number_format(subtotal,2,dSep,tSep) +' '+ checkboxnilai, posisibaris, 5 );
                     posisiakhir = totalproduk-1;
@@ -82,7 +82,7 @@ function tambahproduk(){
 
                     $('#lastharga').val(pecahdata[2]);
                     $('#lastdiskon').val(pecahdata[3]);
-                    $('#last_id').val(pecahdata[0]);
+                    $('#last_id').val(pecahdata[0].trim());
                     $('#lastqty').val('1');
                     checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
                     var row = '<tr id="'+ index_cek_box +'"><td>'+ icondelete +'</td><td>'+ iconubah +'</td><td>'+ pecahdata[1] +'</td><td class="angka">'+ pecahdata[2] +'</td><td class="angka">1</td><td class="angka">'+ subtotal +' '+ checkboxnilai +'</td></tr>';
@@ -153,7 +153,9 @@ function hapus_produk(posisi,nTr,idproduk){
     oTable.fnDeleteRow(posisibaris,focusbarcode);
     totalproduk--;
     if (totalproduk > 0){
-        var nilaidataakhir = $('#cekbox_'+ totalproduk).val();
+        var nTr = oTable.fnGetNodes(totalproduk-1);
+        idproduknya = nTr.getAttribute('id');
+        var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
         var pecahnilaiakhir = nilaidataakhir.split('___');
         $('#lastdiskon').val(pecahnilaiakhir[3]);
         $('#lastharga').val(pecahnilaiakhir[2]);
@@ -311,8 +313,8 @@ $(document).ready(function(){
             oTable.fnUpdate(nilaiubah, baris_int, 4 );
             nilaisubtotal = ($('#lastharga').val()-($('#lastharga').val()*$('#lastdiskon').val()/100))*nilaiubah;
             subtotalbaru = number_format(nilaisubtotal,2,dSep,tSep);
-            var namacekbox = 'cekbox_'+ $('#last_id').val();
-            var nilaikirim = $('#last_id').val() +'___'+ nilaiubah +'___'+ $('#lastharga').val() +'___'+ $('#lastdiskon').val();
+            var namacekbox = 'cekbox_'+ $('#last_id').val().trim();
+            var nilaikirim = $('#last_id').val().trim() +'___'+ nilaiubah +'___'+ $('#lastharga').val() +'___'+ $('#lastdiskon').val();
             var checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
             oTable.fnUpdate(subtotalbaru +' '+ checkboxnilai, baris_int, 5 );
             $('#lastqty').val(nilaiubah);
@@ -324,7 +326,7 @@ $(document).ready(function(){
     $('#newqty2').keypress(function(e) {
         if (e.keyCode == 13){
             var baris_int = oTable.fnGetPosition(barisrubah);
-            var idproduknya = barisrubah.getAttribute('id');
+            var idproduknya = barisrubah.getAttribute('id').trim();
             var nilaidata = $('#cekbox_'+ idproduknya).val();
             var pecahnilai = nilaidata.split('___');
             totalbelanja = totalbelanja - (pecahnilai[1]*(pecahnilai[2]-(pecahnilai[2]*pecahnilai[3]/100)));

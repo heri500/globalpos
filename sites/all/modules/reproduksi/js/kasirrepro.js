@@ -83,7 +83,7 @@ function tambahproduk(){
                     var nTr = $('#'+ namacekbox).parent().parent().get(0);
                     var posisibaris = oTable.fnGetPosition(nTr);
                     oTable.fnUpdate(qtybaru, posisibaris, 4 );
-                    nilaikirim = pecahnilai[0] +'___'+ qtybaru +'___'+ pecahnilai[2] +'___'+ pecahnilai[3];
+                    nilaikirim = pecahnilai[0].trim() +'___'+ qtybaru +'___'+ pecahnilai[2] +'___'+ pecahnilai[3];
                     checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
                     var subtotalView = parseFloat(subtotal).toFixed(2);
                     oTable.fnUpdate(addCommas(subtotalView) +' '+ checkboxnilai, posisibaris, 5 );
@@ -97,7 +97,7 @@ function tambahproduk(){
 
                     $('#lastharga').val(pecahdata[2]);
                     $('#lastdiskon').val(pecahdata[3]);
-                    $('#last_id').val(pecahdata[0]);
+                    $('#last_id').val(pecahdata[0].trim());
                     $('#lastqty').val('1');
                     checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
                     var subtotalView = parseFloat(pecahdata[2]).toFixed(2);
@@ -342,7 +342,7 @@ $(document).ready(function(){
             nilaisubtotal = ($('#lastharga').val()-($('#lastharga').val()*$('#lastdiskon').val()/100))*nilaiubah;
             var subtotalbaru = parseFloat(nilaisubtotal).toFixed(2);
             subtotalbaru = addCommas(subtotalbaru);
-            var namacekbox = 'cekbox_'+ $('#last_id').val();
+            var namacekbox = 'cekbox_'+ $('#last_id').val().trim();
             var nilaikirim = $('#last_id').val() +'___'+ nilaiubah +'___'+ $('#lastharga').val() +'___'+ $('#lastdiskon').val();
             var checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
             oTable.fnUpdate(subtotalbaru +' '+ checkboxnilai, baris_int, 5 );
@@ -356,7 +356,7 @@ $(document).ready(function(){
     $('#newqty2').keypress(function(e) {
         if (e.keyCode == 13){
             var baris_int = oTable.fnGetPosition(barisrubah);
-            var idproduknya = barisrubah.getAttribute('id');
+            var idproduknya = barisrubah.getAttribute('id').trim();
             var nilaidata = $('#cekbox_'+ idproduknya).val();
             var pecahnilai = nilaidata.split('___');
             totalbelanja = totalbelanja - (pecahnilai[1]*(pecahnilai[2]-(pecahnilai[2]*pecahnilai[3]/100)));

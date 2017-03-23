@@ -235,7 +235,7 @@ function akhiri_belanja(cetak){
 			var returndata = data.trim();
 			if (returndata != "error"){
                                 if (cetak == 1){
-					window.open(pathutama + "print/6?idghorder="+ returndata);
+					window.open(pathutama + "print/6?idghorderonly="+ returndata);
 				}
 				window.location = pathutama + "penjualan/customerorder?tanggal="+ request.tgljual;
 			}else{
@@ -475,8 +475,8 @@ $(document).ready(function(){
 			nilaisubtotal = (nilaiubah-(nilaiubah*$("#lastdiskon").val()/100))*$("#lastqty").val();
             var subtotalbaru = parseFloat(Math.abs(nilaisubtotal)).toFixed(2);
 			subtotalbaru = addCommas(subtotalbaru);
-			var namacekbox = "cekbox_"+ $("#last_id").val();
-			var nilaikirim = $("#last_id").val() +"___"+ $("#lastqty").val() +"___"+ nilaiubah +"___"+ $("#lastdiskon").val() +"___"+ $("#lastperkiraan").val();
+			var namacekbox = "cekbox_"+ $("#last_id").val().trim();
+			var nilaikirim = $("#last_id").val().trim() +"___"+ $("#lastqty").val() +"___"+ nilaiubah +"___"+ $("#lastdiskon").val() +"___"+ $("#lastperkiraan").val();
 			var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" />";
 			oTable.fnUpdate(subtotalbaru +" "+ checkboxnilai, baris_int, 6 );
 			$("#lastharga").val(nilaiubah);
@@ -495,7 +495,7 @@ $(document).ready(function(){
 			nilaisubtotal = ($("#lastharga").val()-($("#lastharga").val()*$("#lastdiskon").val()/100))*nilaiubah;
             var subtotalbaru = parseFloat(nilaisubtotal).toFixed(2);
 			subtotalbaru = addCommas(subtotalbaru);
-			var namacekbox = "cekbox_"+ $("#last_id").val();
+			var namacekbox = "cekbox_"+ $("#last_id").val().trim();
 			var nilaikirim = $("#last_id").val().trim() +"___"+ nilaiubah +"___"+ $("#lastharga").val() +"___"+ $("#lastdiskon").val() +"___"+ $("#lastperkiraan").val();
 			var checkboxnilai = "<input checked=\"checked\" style=\"display: none;\" id=\""+ namacekbox +"\" name=\""+ namacekbox +"\" type=\"checkbox\" value=\""+ nilaikirim +"\" />";
 			oTable.fnUpdate(subtotalbaru +" "+ checkboxnilai, baris_int, 6 );
