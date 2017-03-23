@@ -649,5 +649,15 @@ $(document).ready(function(){
 				$("#pesantext").text("Mohon isi nomer meja...!!!");
 				$("#dialogwarning").dialog("open");
 			}
-		}	});
+		}
+	});
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })

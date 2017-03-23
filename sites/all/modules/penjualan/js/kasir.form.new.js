@@ -723,7 +723,7 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattombolkasir').css('height','330px');
-	/*if (Drupal.settings.upload_data){
+	if (Drupal.settings.upload_data){
 		alamat = pathutama + 'datapremis/uploaddata';
 		$.ajax({
 			type: 'POST',
@@ -733,7 +733,7 @@ $(document).ready(function(){
 
 			}
 		});
-	}*/
+	}
 	$('#use-ppn').click(function(){
 		if ($('#ppn_value').val() > 0){
 			ppnValue = $('#ppn_value').val();

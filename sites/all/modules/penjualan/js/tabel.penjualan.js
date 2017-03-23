@@ -587,4 +587,13 @@ $(document).ready(function(){
 	$('#print-slip').on('click', function(){
 		print_penjualan(selectedPenjualan,selectedNota);
 	});
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })

@@ -568,4 +568,13 @@ $(document).ready(function(){
 		});
 	}
 	ajaxFn();
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })
