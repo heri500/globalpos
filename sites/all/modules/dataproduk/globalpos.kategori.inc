@@ -98,7 +98,7 @@ function tabel_kategori(){
 function simpan_kategori(){
 	if ($_POST["kodekategori"] AND $_POST["kategori"]){
 		db_query("INSERT INTO kategori(kodekategori,kategori,keterangan) VALUES('%s','%s','%s')",
-		strtoupper($_POST["kodekategori"]),$_POST["kategori"],$_POST["keterangan"]);
+		strtoupper(trim($_POST["kodekategori"])),trim($_POST["kategori"]),trim($_POST["keterangan"]));
 		if ($_POST["asal"]){
 			$result = db_query("SELECT idkategori FROM kategori WHERE kodekategori='%s' AND kategori='%s'",
 			strtoupper($_POST["kodekategori"]),$_POST["kategori"]);
@@ -112,7 +112,7 @@ function simpan_kategori(){
 }
 
 function update_kategori(){
-	$NILAI = $_POST['value'];
+	$NILAI = trim($_POST['value']);
 	$KOLOM = $_POST['kol_id'];
 	$KATEGORI_ID = $_POST['row_id'];
 	if ($KOLOM == "0"){
