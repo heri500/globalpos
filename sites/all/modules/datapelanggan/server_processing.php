@@ -36,6 +36,7 @@ if (!file_exists('/misc/media/images/forward_enabled.ico')){
 
 function serverSidePelanggan($request){
 	global $baseDirectory;
+	get_number_format_server_side($currencySym, $thousandSep, $decimalSep);
 	$pageStart = $_GET['start'];
 	$pageLength = $_GET['length'];
 	$searchArray = $_REQUEST['search'];
@@ -89,8 +90,8 @@ function serverSidePelanggan($request){
 		$rowData[] = $data->telp;
 		$rowData[] = $data->alamat;
 		$rowData[] = $data->email;
-		$rowData[] = number_format($data->besarhutang,0,",",".");
-		$rowData[] = number_format($data->pembayaranterakhir,0,",",".");
+		$rowData[] = number_format($data->besarhutang,2,$decimalSep,$thousandSep);
+		$rowData[] = number_format($data->pembayaranterakhir,2,$decimalSep,$thousandSep);
 		$rowData[] = $data->bayarterakhir;
         $rowData[] = $data->idpelanggan;
 		$output[] = $rowData;

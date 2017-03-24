@@ -143,16 +143,81 @@ function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
         }
     });
 }
-function tampiltabeljualdetail(){
+function tampiltabeljualdetail(idpenjualan){
     oTable3 = $('#tabel_detail_penjualan').dataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
-        'bPaginate': false,
-        'bLengthChange': false,
-        'bInfo': false,
-        'aaSorting': [[0, 'asc']],
-        'sDom': '<"H"<"toolbar">fr>t<"F"ip>'
-});
+        'sPaginationType': 'full_numbers',
+        'bInfo': true,
+        'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+        'iDisplayLength': -1,
+        'bInfo': true,
+        'aaSorting': [[1, 'asc']],
+        'scrollY': '330px',
+        'scrollCollapse': true,
+        'aoColumnDefs': [
+            { 'bSortable': false, 'aTargets': [ 0 ] }
+        ],
+        'processing': true,
+        'serverSide': true,
+        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + idpenjualan + '&length=-1',
+        'createdRow': function ( row, data, index ) {
+            row.id = data[(data.length - 1)];
+            $('td', row).eq(1).addClass('center');
+            $('td', row).eq(3).addClass('angka');
+            $('td', row).eq(4).addClass('angka');
+            $('td', row).eq(5).addClass('angka');
+            $('td', row).eq(6).addClass('angka');
+            $('td', row).eq(7).addClass('angka');
+            $('td', row).eq(8).addClass('angka');
+        },
+        'footerCallback': function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                if (typeof i === 'string') {
+                    i = i.split(thousan_sep).join('');
+                    i = i.split(decimal_sep).join('.');
+                }else if (typeof i === 'number'){
+                    i = i;
+                }else{
+                    i = 0;
+                }
+                return parseFloat(i);
+            };
+            // Total over all pages
+            total = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 6 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+            total = api
+                .column( 8 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 8 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+        },
+    });
 }
 function tampiltabelpembayaran(){
     oTable4 = $('#history_pembayaran').dataTable( {
@@ -191,7 +256,7 @@ function view_detail(idpenjualan,nonota){
         cache: false,
         success: function(data){
             $('#dialogdetail').html(data);
-            tampiltabeljualdetail();
+            tampiltabeljualdetail(idpenjualan);
             $('div.toolbar').html('No. Nota : '+ nonota);
             $('#dialogdetail').dialog('open');
         }
@@ -199,8 +264,8 @@ function view_detail(idpenjualan,nonota){
 }
 function pembayaran(idpelanggan,namapelanggan,besarhutang,nilaihutang){
     var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : '+ currency_symbol +' '+ besarhutang;
-    $('#nilaipembayaran').val(parseInt(nilaihutang));
-    $('#tothutang').val(parseInt(nilaihutang));
+    $('#nilaipembayaran').val(parseFloat(nilaihutang));
+    $('#tothutang').val(parseFloat(nilaihutang));
     $('#idpelangganbayar').val(idpelanggan);
     $('#totalhutangpelanggan').html(tampilhutang);
     $('#dialogpembayaran').dialog('open');
