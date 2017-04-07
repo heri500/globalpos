@@ -403,6 +403,9 @@ function dataproduct_file_download($uri) {
 	}
 }
 
+/**
+ * @return array
+ */
 function get_data_product(){
 	$strSQL = 'SELECT prod.idproduct, prod.idsupplier, prod.idkategori, prod.idsubkategori, ';
 	$strSQL .= 'prod.barcode, prod.alt_code, prod.namaproduct, prod.type_product, prod.hargapokok, ';
