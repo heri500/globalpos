@@ -35,7 +35,7 @@ function tampiltabelpengeluaran(){
 		'bAutoWidth': false,
 		'sPaginationType': 'full_numbers',
 		'bInfo': true,
-		'aaSorting': [[3, 'asc']],
+		'aaSorting': [[3, 'desc']],
 		"aoColumnDefs": [
 			{ "bSortable": false, "aTargets": [ 0,1,2 ] },
 			{ "bVisible": false, "aTargets": [ 7 ] }
@@ -57,7 +57,7 @@ function tampiltabelpemasukan(){
 		'bAutoWidth': false,
 		'sPaginationType': 'full_numbers',
 		'bInfo': true,
-		'aaSorting': [[3, 'asc']],
+		'aaSorting': [[3, 'desc']],
 		"aoColumnDefs": [
 			{ "bSortable": false, "aTargets": [ 0,1,2 ] },
 			{ "bVisible": false, "aTargets": [ 7 ] }
@@ -86,10 +86,11 @@ function edit_kategori(nid, nTr){
 function edit_pemasukan(nid, nTr){
 	var aPos = oTablePemasukan.fnGetPosition( nTr );
 	var aData = oTablePemasukan.fnGetData( aPos );
+	var tglsplit = aData[3].split('-');
+	var tgledit = tglsplit[2] +'-'+ tglsplit[1] +'-'+ tglsplit[0];
 	$('#edit-idkategori').val(aData[7]);
-	$('#edit-tanggal').val(aData[3]);
-	var splitDate = aData[3].split('-');
-	var tglkirim = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+	$('#edit-tanggal').val(tgledit);
+	var tglkirim = aData[3];
 	$('#edit-tglkirim').val(tglkirim);
 	$('#edit-keteranganpemasukan').val(aData[5]);
 	console.log(aData[6]);
@@ -106,9 +107,10 @@ function edit_pengeluaran(nid, nTr){
 	var aPos = oTablePengeluaran.fnGetPosition( nTr );
 	var aData = oTablePengeluaran.fnGetData( aPos );
 	$('#edit-idkategori-1').val(aData[7]);
-	$('#edit-tanggal-1').val(aData[3]);
-	var splitDate = aData[3].split('-');
-	var tglkirim = splitDate[2]+'-'+splitDate[1]+'-'+splitDate[0];
+	var tglsplit = aData[3].split('-');
+	var tgledit = tglsplit[2] +'-'+ tglsplit[1] +'-'+ tglsplit[0];
+	$('#edit-tanggal-1').val(tgledit);
+	var tglkirim = aData[3];
 	$('#edit-tglkirim-1').val(tglkirim);
 	$('#edit-keteranganpengeluaran').val(aData[5]);
 	console.log(aData[6]);
@@ -170,67 +172,69 @@ jQuery(function ($) {
 	});
 
 	$('#edit-submitpemasukan').on('click', function(e){
-		e.preventDefault();
-		$('#form-input-pemasukan').block({ message: '<p style="color: 808080;padding: .2em;font-size: 18px;">Simpan pemasukan...<img src="/misc/media/images/loading.gif"></p>',css: { border: "3px solid #a00" } });
-		var request = new Object();
-		request.idkategori = $('#edit-idkategori').val();
-		request.jumlah = $('#edit-jumlah').val();
-		request.tanggal = $('#edit-tglkirim').val();
-		request.keterangan = $('#edit-keteranganpemasukan').val();
-		alamat = Drupal.settings.basePath + 'keuangan/insertPemasukan/1';
-		if (parseInt($('#edit-idpemasukan').val()) > 0){
-			request.id = $('#edit-idpemasukan').val();
-			alamat = Drupal.settings.basePath + 'keuangan/updatePemasukan/1';
-		}
-		$.ajax({
-			type: 'POST',
-			url: alamat,
-			data: request,
-			cache: false,
-			success: function(data){
-				$('#edit-idkategori').val('');
-				$('#edit-keteranganpemasukan').val('');
-				$('#edit-jumlah').val('');
-				$('#edit-tanggal').val('');
-				$('#edit-idpemasukan').val('');
-				$('#edit-tglkirim').val('');
-				oTablePemasukan.fnDraw();
-				$('#form-input-pemasukan').unblock();
-				$('#edit-jumlah').focus();
+		if ($('#edit-idkategori').val() != '' && $('#edit-jumlah').val() != 0 && $('#edit-tglkirim').val() != ''){
+			e.preventDefault();
+			$('#form-input-pemasukan').block({ message: '<p style="color: 808080;padding: .2em;font-size: 18px;">Simpan pemasukan...<img src="/misc/media/images/loading.gif"></p>',css: { border: "3px solid #a00" } });
+			var request = new Object();
+			request.idkategori = $('#edit-idkategori').val();
+			request.jumlah = $('#edit-jumlah').val();
+			request.tanggal = $('#edit-tglkirim').val();
+			request.keterangan = $('#edit-keteranganpemasukan').val();
+			alamat = Drupal.settings.basePath + 'keuangan/insertPemasukan/1';
+			if (parseInt($('#edit-idpemasukan').val()) > 0){
+				request.id = $('#edit-idpemasukan').val();
+				alamat = Drupal.settings.basePath + 'keuangan/updatePemasukan/1';
 			}
-		});
+			$.ajax({
+				type: 'POST',
+				url: alamat,
+				data: request,
+				cache: false,
+				success: function(data){
+					$('#edit-keteranganpemasukan').val('');
+					$('#edit-jumlah').val('');
+					$('#edit-idpemasukan').val('');
+					oTablePemasukan.fnDraw();
+					$('#form-input-pemasukan').unblock();
+					$('#edit-jumlah').focus();
+				}
+			});
+		}else{
+			alert('Mohon pilih kategori pemasukan/isi jumlah pemasukan...!!?');
+		}
 	});
 
 	$('#edit-submitpengeluaran').on('click', function(e){
 		e.preventDefault();
-		$('#form-input-pengeluaran').block({ message: '<p style="color: 808080;padding: .2em;font-size: 18px;">Simpan pengeluaran...<img src="/misc/media/images/loading.gif"></p>',css: { border: "3px solid #a00" } });
-		var request = new Object();
-		request.idkategori = $('#edit-idkategori-1').val();
-		request.jumlah = $('#edit-jumlah-1').val();
-		request.tanggal = $('#edit-tglkirim-1').val();
-		request.keterangan = $('#edit-keteranganpengeluaran').val();
-		alamat = Drupal.settings.basePath + 'keuangan/insertPengeluaran/1';
-		if (parseInt($('#edit-idpengeluaran').val()) > 0){
-			request.id = $('#edit-idpengeluaran').val();
-			alamat = Drupal.settings.basePath + 'keuangan/updatePengeluaran/1';
-		}
-		$.ajax({
-			type: 'POST',
-			url: alamat,
-			data: request,
-			cache: false,
-			success: function(data){
-				$('#edit-idkategori-1').val('');
-				$('#edit-keteranganpengeluaran').val('');
-				$('#edit-jumlah-1').val('');
-				$('#edit-tanggal').val('');
-				$('#edit-idpengeluaran').val('');
-				$('#edit-tglkirim-1').val('');
-				oTablePengeluaran.fnDraw();
-				$('#form-input-pengeluaran').unblock();
-				$('#edit-jumlah-1').focus();
+		if ($('#edit-idkategori-1').val() != '' && $('#edit-jumlah-1').val() != 0 && $('#edit-tglkirim-1').val() != ''){
+			$('#form-input-pengeluaran').block({ message: '<p style="color: 808080;padding: .2em;font-size: 18px;">Simpan pengeluaran...<img src="/misc/media/images/loading.gif"></p>',css: { border: "3px solid #a00" } });
+			var request = new Object();
+			request.idkategori = $('#edit-idkategori-1').val();
+			request.jumlah = $('#edit-jumlah-1').val();
+			request.tanggal = $('#edit-tglkirim-1').val();
+			request.keterangan = $('#edit-keteranganpengeluaran').val();
+			alamat = Drupal.settings.basePath + 'keuangan/insertPengeluaran/1';
+			if (parseInt($('#edit-idpengeluaran').val()) > 0){
+				request.id = $('#edit-idpengeluaran').val();
+				alamat = Drupal.settings.basePath + 'keuangan/updatePengeluaran/1';
 			}
-		});
+			$.ajax({
+				type: 'POST',
+				url: alamat,
+				data: request,
+				cache: false,
+				success: function(data){
+					$('#edit-keteranganpengeluaran').val('');
+					$('#edit-jumlah-1').val('');
+					$('#edit-idpengeluaran').val('');
+					oTablePengeluaran.fnDraw();
+					$('#form-input-pengeluaran').unblock();
+					$('#edit-jumlah-1').focus();
+				}
+			});
+		}else{
+			alert('Mohon pilih kategori pengeluaran/isi jumlah pengeluaran...!!?');
+		}
 	});
 
 	$('#edit-submit').on('click', function(e){

@@ -173,6 +173,9 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$penjualan .= '<div title="UBAH HARGA" id="dialogubahharga">';
 	$penjualan .= '<label>Harga Baru : </label><input type="text" id="newharga" name="newharga" value="1">';
 	$penjualan .= '</div>';
+	$penjualan .= '<div title="UBAH HARGA" id="dialogubahharga2">';
+	$penjualan .= '<label>Harga Baru : </label><input type="text" id="newharga2" name="newharga2" value="1">';
+	$penjualan .= '</div>';
 	$penjualan .= '<div title="UBAH QTY" id="dialogubahqty">';
 	$penjualan .= '<label>Qty Baru : </label><input type="text" id="newqty" name="newqty" value="1">';
 	$penjualan .= '</div>';
@@ -472,6 +475,7 @@ function view_kasir($idtitipanlaundry = null, $alamatasal = null){
 	$kasirtabel .= '<th class="diskon2">%</th>';
 	$kasirtabel .= '<th class="diskon2">QTY</th>';
 	$kasirtabel .= '<th class="subtotal">SUBTOTAL</th>';
+	$kasirtabel .= '<th class="tablebutton"></th>';
 	$kasirtabel .= '</tr>';
 	$kasirtabel .= '</thead>';
 	$kasirtabel .= '<tbody>';
