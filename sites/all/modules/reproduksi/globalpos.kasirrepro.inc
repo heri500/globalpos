@@ -121,7 +121,7 @@ function simpan_reproduksi(){
 			$next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL);
 			$STOKSEKARANG = $STOKSEBELUM - $QTY;
 			db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$STOKSEKARANG,$IDPRODUK);
-			$KETERANGAN = 'Packing Ulang';
+			$KETERANGAN = 'Keperluan Produksi';
 			db_query("INSERT INTO transaksistock (idproduk, idreproduksi, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
 			('%d', '%d', '%f', '%f', '%f', '%s')",$IDPRODUK,$next_id,$STOKSEBELUM,$QTY,$STOKSEKARANG,$KETERANGAN);
 		}

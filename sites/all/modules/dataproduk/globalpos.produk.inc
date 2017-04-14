@@ -204,7 +204,7 @@ function data_produk(){
 	$viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
 	$viewtabelproduk .= '</form>';
 	$totalSongkok = '<div><h4>TOTAL SONGKOK : '.number_format(count_total_songkok(),0,',','.').' PCS</h4></div>';
-	return $totalSongkok.$viewtabelproduk;
+	return $viewtabelproduk;
 }
 function cek_kode_alt($kodealt = null){
 	if ($_POST["kodealternatif"] OR !(is_null($kodealt))){
