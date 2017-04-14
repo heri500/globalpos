@@ -224,7 +224,7 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 
 function simpan_penjualan(){
 	//nonota, idpemakai, total, bayar, kembali
-	if ($_POST["detail_produk"] AND $_POST["bayar"] >= 0 AND $_POST["totalbelanja"]){
+	if ($_POST["detail_produk"] AND $_POST["bayar"] >= 0 AND $_POST["totalbelanja"] >= 0){
 		global $user;
 		//date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");

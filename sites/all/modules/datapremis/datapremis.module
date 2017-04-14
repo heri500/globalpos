@@ -313,6 +313,7 @@ function generate_premis_ajax(){
     print json_encode($jsonPremis);
     exit();
 }
+
 function do_upload_premisdata(){
     $resultview = '';
     if (is_connected()) {
@@ -415,6 +416,7 @@ function do_upload_premisdata(){
     }
     return $resultview;
 }
+
 function is_connected(){
     $connected = @fsockopen("report.ikhwanit.com", 80);
     //website, port  (try 80 or 443)
