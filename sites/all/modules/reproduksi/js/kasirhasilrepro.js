@@ -119,7 +119,7 @@ function hapus_latest_produk(){
             totalbelanja = totalbelanja - ($('#lastharga').val()-($('#lastharga').val()*$('#lastdiskon').val()/100))*$('#lastqty').val();
             $('#totalbelanja').html('Total Hasil Packing Ulang : Rp. '+ number_format(totalbelanja,0,',','.'));
             var nTr = oTable.fnGetNodes(totalproduk-1);
-            idproduknya = nTr.getAttribute('id');
+            idproduknya = nTr.getAttribute('id').trim();
             var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
             var pecahnilaiakhir = nilaidataakhir.split('___');
             $('#lastdiskon').val(pecahnilaiakhir[3]);
@@ -149,7 +149,9 @@ function hapus_produk(posisi,nTr,idproduk){
     oTable.fnDeleteRow(posisibaris,focusbarcode);
     totalproduk--;
     if (totalproduk > 0){
-        var nilaidataakhir = $('#cekbox_'+ totalproduk).val();
+        var nTr = oTable.fnGetNodes(totalproduk-1);
+        idproduknya = nTr.getAttribute('id').trim();
+        var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
         var pecahnilaiakhir = nilaidataakhir.split('___');
         $('#lastdiskon').val(pecahnilaiakhir[3]);
         $('#lastharga').val(pecahnilaiakhir[2]);
