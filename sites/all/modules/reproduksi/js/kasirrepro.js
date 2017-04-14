@@ -99,12 +99,12 @@ function tambahproduk(){
     });
 }
 function kirim_data(){
-    if (totalproduk > 0){
+    if (totalproduk > 0 && $('#idpekerja').val() != 0){
         var sData = $('input', oTable.fnGetNodes()).serialize();
         $('#nilaikirim').val(sData);
         akhiri_belanja();
     }else{
-        $('#pesantext').text('Mohon pilih produk terlebih dahulu...!!!');
+        $('#pesantext').text('Mohon pilih produk dan pekerja terlebih dahulu...!!!');
         $('#dialogwarning').dialog('open');
     }
 }
@@ -119,7 +119,7 @@ function hapus_latest_produk(){
             totalbelanja = totalbelanja - ($('#lastharga').val()-($('#lastharga').val()*$('#lastdiskon').val()/100))*$('#lastqty').val();
             $('#totalbelanja').html('Total Packing Ulang : Rp. '+ number_format(totalbelanja,0,',','.'));
             var nTr = oTable.fnGetNodes(totalproduk-1);
-            idproduknya = nTr.getAttribute('id');
+            idproduknya = nTr.getAttribute('id').trim();
             var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
             var pecahnilaiakhir = nilaidataakhir.split('___');
             $('#lastdiskon').val(pecahnilaiakhir[3]);
@@ -149,7 +149,9 @@ function hapus_produk(posisi,nTr,idproduk){
     oTable.fnDeleteRow(posisibaris,focusbarcode);
     totalproduk--;
     if (totalproduk > 0){
-        var nilaidataakhir = $('#cekbox_'+ totalproduk).val();
+        var nTr = oTable.fnGetNodes(totalproduk-1);
+        idproduknya = nTr.getAttribute('id').trim();
+        var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
         var pecahnilaiakhir = nilaidataakhir.split('___');
         $('#lastdiskon').val(pecahnilaiakhir[3]);
         $('#lastharga').val(pecahnilaiakhir[2]);
@@ -167,7 +169,7 @@ function hapus_produk(posisi,nTr,idproduk){
 function akhiri_belanja(){
     var request = new Object();
     request.detail_produk = $('#nilaikirim').val();
-    request.idpelanggan = 0;
+    request.idpekerja = $('#idpekerja').val();
     request.totalbelanja = totalbelanja;
     request.tglreproduksi = $('#tglreproduksikirim').val();
     alamat = pathutama + 'reproduksi/simpanreproduksi';
@@ -364,4 +366,7 @@ $(document).ready(function(){
     });
     $('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
     $('#info-kasir-waktu').css('background-size','75px 75px');
+    $('#idpekerja').change(function(){
+        $('#barcode').select();
+    })
 })

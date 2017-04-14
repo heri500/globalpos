@@ -510,4 +510,13 @@ $(document).ready(function(){
     $('#print-slip').on('click', function(){
         print_customerorder(selectedOrder,selectedNota);
     });
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })

@@ -456,12 +456,7 @@ $(document).ready(function(){
 		}else if (e.keyCode == 119){
 			hitung_omset();
 		}else if (e.keyCode == 113){
-			if ($("#idpelanggan").val() == 0){
-				$("#tombolubahharga").click();
-			}else{
-				$("#pesantext").text("Perubahan harga hanya untuk pelanggan UMUM...!!!");
-				$("#dialogwarning").dialog("open");
-			}
+			$("#tombolubahharga").click();
 		}
 	});
 	$("#barcode").autocomplete({
@@ -612,15 +607,13 @@ $(document).ready(function(){
 	$('#info-kasir-waktu').css('background','url('+ Drupal.settings.logo +') 99% 50% no-repeat');
 	$('#info-kasir-waktu').css('background-size','75px 75px');
 	$('#tempattombolkasir').css('height','330px');
-	/*if (Drupal.settings.upload_data){
-		alamat = pathutama + 'datapremis/uploaddata';
-		$.ajax({
-			type: 'POST',
-			url: alamat,
-			cache: false,
-			success: function (data) {
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
 
-			}
-		});
-	}*/
+		}
+	});
 })
