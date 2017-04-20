@@ -1,6 +1,7 @@
 <?php
 
 function view_tabel_penjualan(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
     $path = drupal_get_path('theme', 'cti_flex');
     $form_style = $path.'/css/custom-style.css';
     drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -13,6 +14,9 @@ function view_tabel_penjualan(){
 	}
 	$addedFilter = '';
 	$filterId = 0;
+	$nota = '';
+	$produk = '';
+	$kategoriproduk = '';
 	if ($_POST["pilihantampil"] == 'NOTA'){
 		$nota = 'selected="selected"';
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
@@ -23,16 +27,26 @@ function view_tabel_penjualan(){
 		if(isset($_POST['idpelanggan'])){
 			$filterId = $_POST['idpelanggan'];
 		}
-	}elseif ($_POST["pilihantampil"] == 'PRODUK'){
+	}elseif ($_POST["pilihantampil"] == 'PRODUK') {
 		$produk = 'selected="selected"';
 		$idSupplier = isset($_POST['idsupplier']) ? $_POST['idsupplier'] : 0;
-		$tabeltampil = penjualan_produk($tgl1,$tgl2,$idSupplier);
+		$tabeltampil = penjualan_produk($tgl1, $tgl2, $idSupplier);
 		$urutan = 3;
 		$tampilData = 1;
-		$addedFilter = createSupplierSelection($idSupplier,'ALL',false).'<input type="hidden" id="idpelanggan" name="idpelanggan" value="0">';
-		if (isset($_POST['idsupplier'])){
+		$addedFilter = createSupplierSelection(
+				$idSupplier,
+				'ALL',
+				false
+			) . '<input type="hidden" id="idpelanggan" name="idpelanggan" value="0">';
+		if (isset($_POST['idsupplier'])) {
 			$filterId = $_POST['idsupplier'];
 		}
+	}else if($_POST['pilihantampil'] == 'KATEGORI PRODUK'){
+		$kategoriproduk = 'selected="selected"';
+		$addedFilter = '<input type="hidden" id="idsupplier" name="idsupplier" value="0"><input type="hidden" id="idsupplier" name="idsupplier" value="0">';
+		$urutan = 0;
+		$tampilData = 2;
+		$tabeltampil = tabel_penjualan_kategori($tgl1,$tgl2);
 	}else{
 		$idPelanggan = isset($_POST['idpelanggan']) ? $_POST['idpelanggan'] : 0;
 		$tabeltampil = tabel_penjualan($tgl1,$tgl2,$idPelanggan);
@@ -52,6 +66,8 @@ function view_tabel_penjualan(){
 	drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine-en.js');
 	drupal_add_js('misc/media/jqueryValidate/js/jquery.validationEngine.js');
 	drupal_add_js('misc/media/datatables.1.10/jquery/jquery-ui.js');
+	_addJeditablePlugins();
+	_addAutotabPlugins();
 	drupal_add_js('misc/media/datatables.1.10/media/js/jquery.dataTables.js');
 	drupal_add_js('misc/media/datatables.1.10/media/js/dataTables.jqueryui.js');
   	drupal_add_js('misc/media/datatables.1.10/extensions/Buttons/js/dataTables.buttons.js');
@@ -74,11 +90,28 @@ function view_tabel_penjualan(){
 	$pilihantampil = '<select id="pilihantampil" name="pilihantampil">';
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';
+	$pilihantampil .= '<option '.$kategoriproduk.'>KATEGORI PRODUK</option>';
 	$pilihantampil .= '</select>';
 	$pilihperiode = '<form action="'.base_path().'penjualan/viewpenjualan" method="post"><div id="pilihanperiode"><label>PILIH PERIODE PENJUALAN </label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.$tgl1.'">';
 	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.$tgl2.'">'.$pilihantampil.'&nbsp;'.$addedFilter.'<button>LIHAT PENJUALAN</button></div></form>';
 	$viewpenjualan = $pilihperiode.'<div id="viewpenjualan">'.$tabeltampil.'</div>';
-	$viewpenjualan .= '<div id="dialogdetail" title="DETAIL PENJUALAN"></div>';
+	$viewpenjualan .= '<div id="dialogdetail" title="DETAIL PENJUALAN">';
+	$viewpenjualan .= '<div id="table-detail-wrapper"></div>';
+	$viewpenjualan .= '<div id="add-new-item">';
+	$viewpenjualan .= '<h5 class="no-margin">ADD NEW ITEM</h5>';
+	$inputProduct = '<input type="text" id="new-product" name="new-product" size="35">';
+	$inputProduct .= '<input type="hidden" id="idproduct" name="idproduct">';
+	$viewpenjualan .= '<label>Product</label>'.$inputProduct;
+	$inputHarga = '<input type="text" id="harga-view" name="harga-view" size="10" readonly="readonly">';
+	$inputHarga .= '<input type="hidden" id="hargajual" name="hargajual">';
+	$inputHarga .= '<input type="hidden" id="hargapokok" name="hargapokok">';
+	$inputSubtotal = '<input type="text" id="subtotal-view" name="subtotal-view" size="14" readonly="readonly">';
+	$inputQty = '<input type="text" id="qty-new" name="qty-new" size="6">';
+	$viewpenjualan .= $inputHarga.'<label class="small-label">Qty</label>'.$inputQty.$inputSubtotal;
+	$buttonAddNew = '<button id="add-new-button">Add Item</button>';
+	$buttonPrintSlip = '<button id="print-slip">Print Slip</button>';
+	$viewpenjualan .= $buttonAddNew.'</div>'.$buttonPrintSlip;
+	$viewpenjualan .= '</div>';
 	return $viewpenjualan;
 }
 
@@ -94,6 +127,8 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th class="tanggal">TGL</th>';
 	$tabelpenjualan .= '<th class="tanggal">JAM</th>';
 	$tabelpenjualan .= '<th>TOTAL</th>';
+	$tabelpenjualan .= '<th>PPN</th>';
+	$tabelpenjualan .= '<th>TOTAL+PPN</th>';
 	$tabelpenjualan .= '<th>MODAL</th>';
 	$tabelpenjualan .= '<th>LABA</th>';
 	$tabelpenjualan .= '<th>CARA BAYAR</th>';
@@ -114,10 +149,14 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$totallaba = $totaljual - $totalmodal;
 	$totalbayar = getTotalPenjualan('bayar',$tgl1,$tgl2,0,$idPelanggan);
 	$totalkembali = getTotalPenjualan('kembali',$tgl1,$tgl2,0,$idPelanggan);
+	$totalppn = 0;
+	$totalplusppn = 0;
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totaljual,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalppn,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalplusppn,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalmodal,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totallaba,0,",",".").'&nbsp;&nbsp;</th>';
-	$tabelpenjualan .= '<th></th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
@@ -134,6 +173,7 @@ function detail_penjualan(){
 		$tabelpenjualan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_penjualan">';
 		$tabelpenjualan .= '<thead>';
 		$tabelpenjualan .= '<tr>';
+		$tabelpenjualan .= '<th class="center tablebutton">&nbsp;</th>';
 		$tabelpenjualan .= '<th>BARCODE</th>';
 		$tabelpenjualan .= '<th>PRODUK</th>';
 		$tabelpenjualan .= '<th class="qty">QTY</th>';
@@ -145,25 +185,16 @@ function detail_penjualan(){
 		$tabelpenjualan .= '</tr>';
 		$tabelpenjualan .= '</thead>';
 		$tabelpenjualan .= '<tbody>';
-		$result = db_query("SELECT c.barcode, c.namaproduct, b.jumlah, b.hargajual, b.hargapokok,
-	  	(b.hargajual-b.hargapokok)*b.jumlah AS laba,(b.hargajual*b.jumlah) AS subtotal,
-	  	(b.hargapokok*b.jumlah) AS totalmodal FROM detailpenjualan b LEFT JOIN product c
-	  	ON b.idproduct=c.idproduct LEFT JOIN supplier a
-	  	ON a.idsupplier=c.idsupplier WHERE b.idpenjualan='%d'",$_POST["idpenjualan"]);
-		while($data = db_fetch_object($result)){
-			$tabelpenjualan .= '<tr>';
-			$tabelpenjualan .= '<td>'.$data->barcode.'</td>';
-			$tabelpenjualan .= '<td>'.$data->namaproduct.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->jumlah.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->hargajual.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->hargapokok.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->subtotal.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->totalmodal.'</td>';
-			$tabelpenjualan .= '<td class="angka">'.$data->laba.'</td>';
-			$tabelpenjualan .= '</tr>';
-		}
 		$tabelpenjualan .= '</tbody>';
-		$tabelpenjualan .= '</table><br><br>';
+		$tabelpenjualan .= '<tfoot>';
+		$tabelpenjualan .= '<tr>';
+		$tabelpenjualan .= '<th class="right" colspan="6">TOTAL</th>';
+		$tabelpenjualan .= '<th>&nbsp;</th>';
+		$tabelpenjualan .= '<th>&nbsp;</th>';
+		$tabelpenjualan .= '<th>&nbsp;</th>';
+		$tabelpenjualan .= '</tr>';
+		$tabelpenjualan .= '</tfoot>';
+		$tabelpenjualan .= '</table>';
 		print $tabelpenjualan;
 	}
 	exit();	
@@ -201,6 +232,30 @@ function penjualan_produk($tgl1,$tgl2,$idSupplier){
 	$tabelpenjualan .= '</tfoot>';
 	$tabelpenjualan .= '</table>';
 	return $tabelpenjualan;	
+}
+
+function tabel_penjualan_kategori(){
+	$tabelpenjualan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_penjualan">';
+	$tabelpenjualan .= '<thead>';
+	$tabelpenjualan .= '<tr>';
+	$tabelpenjualan .= '<th>KODE</th>';
+	$tabelpenjualan .= '<th>KATEGORI</th>';
+	$tabelpenjualan .= '<th>SUBTOTAL</th>';
+	$tabelpenjualan .= '<th>MODAL</th>';
+	$tabelpenjualan .= '<th>LABA</th>';
+	$tabelpenjualan .= '</tr>';
+	$tabelpenjualan .= '</thead>';
+	$tabelpenjualan .= '<tbody>';
+	$tabelpenjualan .= '<tfoot>';
+	$tabelpenjualan .= '<tr>';
+	$tabelpenjualan .= '<th style="text-align:right" colspan="2">Total:&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th style="text-align: right">Rp. 0&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '</tr>';
+	$tabelpenjualan .= '</tfoot>';
+	$tabelpenjualan .= '</table>';
+	return $tabelpenjualan;
 }
 
 function DateAdd($v,$d=null , $f="m/d/Y"){ 

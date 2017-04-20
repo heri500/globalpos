@@ -19,203 +19,14 @@ function data_supplier(){
 	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
 	drupal_add_js('misc/media/jquery.jeditable.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
-	drupal_add_js('
-		var oTable;
-		var oTable2;
-		var oTable3;
-		var oTable4;
-		var pathutama = "'.base_path().'";
-		var pathfile = "'.base_path().file_directory_path().'/";
-		function tampilkantabelsupplier(){
-			oTable = $("#tabel_supplier").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"sPaginationType": "full_numbers",
-				"bInfo": false,
-				"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-				"iDisplayLength": 100,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"space"T><"clear"><"H"lfr>t<"F"ip>\'
-			});
-		}
-		function tampiltabelhutangdetail(){
-			oTable2 = $("#tabel_detail_hutang").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bFilter": false,
-				"bInfo": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar">fr>t<"F"ip>\'
-			});
-		}
-		function view_detail_hutang(idsupplier,namasupplier,besarhutang){
-			var tampilhutang = "HUTANG KE SUPPLIER SAAT INI : Rp. "+ besarhutang;
-			$("#tempatnilaihutang").html(tampilhutang);
-			var request = new Object();
-			request.idsupplier = idsupplier;
-			alamat = pathutama + "datasupplier/detailhutang";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#detailpiutang").html(data);
-					tampiltabelhutangdetail();
-					$("div.toolbar").html("SUPPLIER : "+ namasupplier);
-					alamat = pathutama + "datasupplier/detailpembayaran";
-					$.ajax({ 
-						type: "POST",
-						url: alamat,
-						data: request, 
-						cache: false, 
-						success: function(data2){
-							$("#detailpembayaran").html(data2);
-							tampiltabelpembayaran();
-							$("div.toolbar2").html("PEMBAYARAN");
-							$("#dialogdetailhutang").dialog("open");
-						}
-					});		
-				}
-			});
-		}
-		function tampiltabelbelidetail(){
-			oTable3 = $("#tabel_detail_pembelian").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bInfo": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar">fr>t<"F"ip>\'
-			});
-		}
-		function tampiltabelpembayaran(){
-			oTable4 = $("#history_pembayaran").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"bPaginate": false,
-				"bLengthChange": false,
-				"bInfo": false,
-				"bFilter": false,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"H"<"toolbar2">fr>t<"F"ip>\'
-			});
-		}
-		function view_detail(idpembelian,nonota){
-			var request = new Object();
-			request.idpembelian = idpembelian;
-			alamat = pathutama + "pembelian/detailpembelian";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(data){
-					$("#dialogdetail").html(data);
-					tampiltabelbelidetail();
-					$("div.toolbar").html("No. Nota : "+ nonota);
-					$("#dialogdetail").dialog("open");
-				}
-			});
-		}
-		function pembayaran(idsupplier,namasupplier,besarhutang,nilaihutang){
-			if (nilaihutang > 0){
-				var tampilhutang = "HUTANG KE SUPPLIER "+ namasupplier +" SAAT INI : Rp. "+ besarhutang;
-				$("#nilaipembayaran").val(parseInt(nilaihutang));
-				$("#tothutang").val(parseInt(nilaihutang));
-				$("#idsupplierbayar").val(idsupplier);
-				$("#totalhutangpelanggan").html(tampilhutang);
-				$("#dialogpembayaran").dialog("open");
-			}else{
-				alert("Tidak ada hutang ke supplier "+ namasupplier);
-			}
-		}
-		function do_pembayaran(){
-			/*idsupplier, nilaisebelumbayar, pembayaran, uid, tglbayar*/
-			var request = new Object();
-			request.idsupplier = $("#idsupplierbayar").val();
-			request.hutang = $("#tothutang").val();
-			request.pembayaran = $("#nilaipembayaran").val();
-			request.tglbayar = $("#tglbayarkirim").val();
-			alamat = pathutama + "datasupplier/pembayaran";
-			$.ajax({ 
-				type: "POST",
-				url: alamat,
-				data: request, 
-				cache: false, 
-				success: function(){
-					window.location = pathutama + "datasupplier/supplier";
-				}
-			});
-		}
-		$(document).ready(function() {
-			TableToolsInit.sSwfPath = pathutama +"misc/media/datatables/swf/ZeroClipboard.swf";
-			alamatupdate = pathutama + "datasupplier/updatesupplier";
-			$("#tabel_supplier tbody .editable").editable(alamatupdate, {
-				"callback": function( sValue, y ) {
-					var aPos = oTable.fnGetPosition( this );
-					oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-				},
-				"submitdata": function ( value, settings ) {
-					var aPos = oTable.fnGetPosition( this );
-				  return { "row_id": this.parentNode.getAttribute("id"), "kol_id": aPos[1] };
-				},
-				"height": "20px",
-				"submit": "Ok",
-				"cancel": "Batal",
-				"indicator": "Menyimpan...",
-				"tooltip": "Klik untuk mengubah..."
-			});
-			tampilkantabelsupplier();
-			$("#formsupplier").validationEngine();
-			$("button").button();
-			$("#kodesupplier").autotab_filter({
-				format: "alphanumeric",
-				uppercase: true,
-				nospace: true
-			});
-			$("#dialogdetailhutang").dialog({
-				modal: true,
-				width: 1100,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"]
-			});
-			$("#dialogdetail").dialog({
-				modal: true,
-				width: 850,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"]
-			});
-			$("#dialogpembayaran").dialog({
-				modal: true,
-				width: 450,
-				resizable: false,
-				autoOpen: false,
-				position: ["auto","auto"],
-				open: function(event, ui) {
-					$("#nilaipembayaran").focus();
-					$("#nilaipembayaran").select();
-				}
-			});
-			$("#tglbayar").datepicker({
-				changeMonth: true,
-				changeYear: true,
-				dateFormat: "dd-mm-yy",
-				altField: "#tglbayarkirim",
-				altFormat: "yy-mm-dd"
-			});
-			$("#nilaipembayaran").keypress(function(e) {
-				if (e.keyCode == 13){
-					$("#bayarhutang").click();
-				}
-			});
-		})
-	','inline');
+	drupal_add_js(
+		array(
+			'filePath' => file_directory_path(),
+		),
+		'setting');
+	$modulePath = drupal_get_path('module','datasupplier');
+	$jsPath = $modulePath.'/js/supplier.js';
+	drupal_add_js($jsPath);
 	$viewtabelsupplier = '<form id="formsupplier" action="'.base_path().'datasupplier/simpansupplier" method="post"><div id="formplace" class="supplier">';
 	$viewtabelsupplier .= '<label>KODE</label><input type="text" class=\"validate[required]\" id="kodesupplier" name="kodesupplier">';
 	$viewtabelsupplier .= '<label>SUPPLIER</label><input class=\"validate[required]\" type="text" id="namasupplier" name="namasupplier">';
@@ -238,6 +49,7 @@ function data_supplier(){
 }
 
 function tabel_supplier(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$tabelsupplier ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_supplier">';
 	$tabelsupplier .= '<thead>';
 	$tabelsupplier .= '<tr>';
@@ -262,7 +74,7 @@ function tabel_supplier(){
 		FROM hutang WHERE idsupplier='%d'",$data->idsupplier);
 		$datahutang = db_fetch_object($resulthutang);
 		$totalhutang = $totalhutang + $datahutang->besarhutang;
-		$tampilhutang = number_format($datahutang->besarhutang,0,",",".");
+		$tampilhutang = number_format($datahutang->besarhutang,0,$decimalSep,$thousandSep);
 		$lihathutang = '<img title="Klik untuk melihat detail hutang dan pembayaran ke Supplier '.$data->namasupplier.'" src="'.base_path().'misc/media/images/forward_enabled.ico" onclick="view_detail_hutang(\''.$data->idsupplier.'\',\''.$data->namasupplier.'\',\''.$tampilhutang.'\')">';
 		$bayarhutang = '<img title="Klik untuk mengisi form pembayaran hutang" src="'.base_path().'misc/media/images/money2_24.png" onclick="pembayaran(\''.$data->idsupplier.'\',\''.$data->namasupplier.'\',\''.number_format($datahutang->besarhutang,0,",",".").'\',\''.$datahutang->besarhutang.'\')">';
 		$tabelsupplier .= '<td class="center">'.$lihathutang.'</td>';
@@ -272,8 +84,8 @@ function tabel_supplier(){
 		$tabelsupplier .= '<td class="editable">'.$data->telp.'</td>';
 		$tabelsupplier .= '<td class="editable">'.$data->alamat.'</td>';
 		$tabelsupplier .= '<td class="editable">'.$data->email.'</td>';
-		$tabelsupplier .= '<td class="angka">'.number_format($datahutang->besarhutang,0,",",".").'</td>';
-		$tabelsupplier .= '<td class="angka">'.number_format($datahutang->pembayaranterakhir,0,",",".").'</td>';
+		$tabelsupplier .= '<td class="angka">'.number_format($datahutang->besarhutang,0,$decimalSep,$thousandSep).'</td>';
+		$tabelsupplier .= '<td class="angka">'.number_format($datahutang->pembayaranterakhir,0,$decimalSep,$thousandSep).'</td>';
 		$tabelsupplier .= '<td class="center">'.$datahutang->bayarterakhir.'</td>';
 		$tabelsupplier .= '</tr>';
 	}
@@ -281,7 +93,7 @@ function tabel_supplier(){
 	$tabelsupplier .= '<tfoot>';
 	$tabelsupplier .= '<tr>';
 	$tabelsupplier .= '<th style="text-align:right" colspan="7">Total:&nbsp;&nbsp;</th>';
-	$tabelsupplier .= '<th style="text-align: right" colspan="3">Rp. '.number_format($totalhutang,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelsupplier .= '<th style="text-align: right" colspan="3">'.$currencySym.' '.number_format($totalhutang,0,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 	$tabelsupplier .= '</tr>';
 	$tabelsupplier .= '</tfoot>';
 	$tabelsupplier .= '</table>';
@@ -339,6 +151,7 @@ function bayar_hutang_supplier(){
 }
 function detail_hutang(){
 	if ($_POST["idsupplier"]){
+		get_number_format($currencySym, $thousandSep, $decimalSep, false);
 		$tabelhutang ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_hutang">';
 		$tabelhutang .= '<thead>';
 		$tabelhutang .= '<tr>';
@@ -365,9 +178,9 @@ function detail_hutang(){
 			$totalbelanja = $totalbelanja + $data->total;
 			$totaldp = $totaldp + $data->bayar;
 			$totalhutang = $totalhutang + $data->besarhutang;
-			$tabelhutang .= '<td class="angka">'.number_format($data->total,0,",",".").'</td>';
-			$tabelhutang .= '<td class="angka">'.number_format($data->bayar,0,",",".").'</td>';
-			$tabelhutang .= '<td class="angka">'.number_format($data->besarhutang,0,",",".").'</td>';
+			$tabelhutang .= '<td class="angka">'.number_format($data->total,0,$decimalSep,$thousandSep).'</td>';
+			$tabelhutang .= '<td class="angka">'.number_format($data->bayar,0,$decimalSep,$thousandSep).'</td>';
+			$tabelhutang .= '<td class="angka">'.number_format($data->besarhutang,0,$decimalSep,$thousandSep).'</td>';
 			$tabelhutang .= '<td class="center">'.$data->tglbeli.'</td>';
 			$tabelhutang .= '</tr>';
 		}
@@ -375,9 +188,9 @@ function detail_hutang(){
 		$tabelhutang .= '<tfoot>';
 		$tabelhutang .= '<tr>';
 		$tabelhutang .= '<th style="text-align:right" colspan="2">Total:&nbsp;&nbsp;</th>';
-		$tabelhutang .= '<th style="text-align: right" >Rp. '.number_format($totalbelanja,0,",",".").'&nbsp;&nbsp;</th>';
-		$tabelhutang .= '<th style="text-align: right" >Rp. '.number_format($totaldp,0,",",".").'&nbsp;&nbsp;</th>';
-		$tabelhutang .= '<th style="text-align: right" >Rp. '.number_format($totalhutang,0,",",".").'&nbsp;&nbsp;</th>';
+		$tabelhutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totalbelanja,0,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelhutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totaldp,0,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelhutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totalhutang,0,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelhutang .= '<th></th>';
 		$tabelhutang .= '</tr>';
 		$tabelhutang .= '</tfoot>';
@@ -391,6 +204,7 @@ function detail_hutang(){
 function detail_pembayaran_hutang(){
 	//idlangganan, pembayaran, last_update
 	if ($_POST["idsupplier"]){
+		get_number_format($currencySym, $thousandSep, $decimalSep, false);
 		$tabelpembayaran ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="history_pembayaran">';
 		$tabelpembayaran .= '<thead>';
 		$tabelpembayaran .= '<tr>';
@@ -408,14 +222,14 @@ function detail_pembayaran_hutang(){
 			$tabelpembayaran .= '<td class="center">'.$data->tglbayar.'</td>';
 			$tabelpembayaran .= '<td>'.$data->keterangan.'</td>';
 			$totalbayar = $totalbayar + $data->pembayaran;
-			$tabelpembayaran .= '<td class="angka">'.number_format($data->pembayaran,0,",",".").'</td>';
+			$tabelpembayaran .= '<td class="angka">'.number_format($data->pembayaran,0,$decimalSep,$thousandSep).'</td>';
 			$tabelpembayaran .= '</tr>';
 		}
 		$tabelpembayaran .= '</tbody>';
 		$tabelpembayaran .= '<tfoot>';
 		$tabelpembayaran .= '<tr>';
 		$tabelpembayaran .= '<th style="text-align:right">Total:&nbsp;&nbsp;</th>';
-		$tabelpembayaran .= '<th colspan="3" style="text-align: right" >Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
+		$tabelpembayaran .= '<th colspan="3" style="text-align: right" >'.$currencySym.' '.number_format($totalbayar,0,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelpembayaran .= '</tr>';
 		$tabelpembayaran .= '</tfoot>';
 		$tabelpembayaran .= '</table>';

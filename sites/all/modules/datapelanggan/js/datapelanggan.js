@@ -6,14 +6,18 @@ var oTable5;
 var pathutama = '';
 var pathfile = '';
 var alamatupdate = '';
+var currency_symbol = '';
+var thousan_sep = '.';
+var decimal_sep = ',';
+
 function addCommas(nStr){
     nStr += "";
-    x = nStr.split(",");
+    x = nStr.split(".");
     x1 = x[0];
-    x2 = x.length > 1 ? "," + x[1] : "";
+    x2 = x.length > 1 ? decimal_sep + x[1] : "";
     var rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, "$1" + "." + "$2");
+        x1 = x1.replace(rgx, "$1" + thousan_sep + "$2");
     }
     return x1 + x2;
 }
@@ -109,7 +113,7 @@ function tampiltabelhutangdetail(){
     });
 }
 function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
-    var tampilhutang = 'HUTANG SAAT INI : Rp. '+ addCommas(besarhutang);
+    var tampilhutang = 'HUTANG SAAT INI : '+ currency_symbol +' '+ addCommas(besarhutang);
     $('#tempatnilaihutang').html(tampilhutang);
     var request = new Object();
     request.idpelanggan = idpelanggan;
@@ -139,16 +143,81 @@ function view_detail_hutang(idpelanggan,namapelanggan,besarhutang){
         }
     });
 }
-function tampiltabeljualdetail(){
+function tampiltabeljualdetail(idpenjualan){
     oTable3 = $('#tabel_detail_penjualan').dataTable( {
         'bJQueryUI': true,
         'bAutoWidth': false,
-        'bPaginate': false,
-        'bLengthChange': false,
-        'bInfo': false,
-        'aaSorting': [[0, 'asc']],
-        'sDom': '<"H"<"toolbar">fr>t<"F"ip>'
-});
+        'sPaginationType': 'full_numbers',
+        'bInfo': true,
+        'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
+        'iDisplayLength': -1,
+        'bInfo': true,
+        'aaSorting': [[1, 'asc']],
+        'scrollY': '330px',
+        'scrollCollapse': true,
+        'aoColumnDefs': [
+            { 'bSortable': false, 'aTargets': [ 0 ] }
+        ],
+        'processing': true,
+        'serverSide': true,
+        'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + idpenjualan + '&length=-1',
+        'createdRow': function ( row, data, index ) {
+            row.id = data[(data.length - 1)];
+            $('td', row).eq(1).addClass('center');
+            $('td', row).eq(3).addClass('angka');
+            $('td', row).eq(4).addClass('angka');
+            $('td', row).eq(5).addClass('angka');
+            $('td', row).eq(6).addClass('angka');
+            $('td', row).eq(7).addClass('angka');
+            $('td', row).eq(8).addClass('angka');
+        },
+        'footerCallback': function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                if (typeof i === 'string') {
+                    i = i.split(thousan_sep).join('');
+                    i = i.split(decimal_sep).join('.');
+                }else if (typeof i === 'number'){
+                    i = i;
+                }else{
+                    i = 0;
+                }
+                return parseFloat(i);
+            };
+            // Total over all pages
+            total = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 6 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+            total = api
+                .column( 8 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            // Update footer
+            $( api.column( 8 ).footer() ).html(
+                currency_symbol +' '+ addCommas(total)
+            ).addClass('angka');
+        },
+    });
 }
 function tampiltabelpembayaran(){
     oTable4 = $('#history_pembayaran').dataTable( {
@@ -187,16 +256,16 @@ function view_detail(idpenjualan,nonota){
         cache: false,
         success: function(data){
             $('#dialogdetail').html(data);
-            tampiltabeljualdetail();
+            tampiltabeljualdetail(idpenjualan);
             $('div.toolbar').html('No. Nota : '+ nonota);
             $('#dialogdetail').dialog('open');
         }
     });
 }
 function pembayaran(idpelanggan,namapelanggan,besarhutang,nilaihutang){
-    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : Rp. '+ besarhutang;
-    $('#nilaipembayaran').val(parseInt(nilaihutang));
-    $('#tothutang').val(parseInt(nilaihutang));
+    var tampilhutang = 'HUTANG '+ namapelanggan +' SAAT INI : '+ currency_symbol +' '+ besarhutang;
+    $('#nilaipembayaran').val(parseFloat(nilaihutang));
+    $('#tothutang').val(parseFloat(nilaihutang));
     $('#idpelangganbayar').val(idpelanggan);
     $('#totalhutangpelanggan').html(tampilhutang);
     $('#dialogpembayaran').dialog('open');
@@ -310,6 +379,9 @@ $(document).ready(function() {
     pathutama = Drupal.settings.basePath;
     pathfile = pathutama + Drupal.settings.filepath;
     alamatupdate = pathutama + 'datapelanggan/updatepelanggan';
+    currency_symbol = Drupal.settings.datapremis.currency_symbol;
+    thousan_sep = Drupal.settings.datapremis.thousand_separator;
+    decimal_sep = Drupal.settings.datapremis.decimal_separator;
     $('#tabel_pelanggan tbody .editable').editable(alamatupdate, {
         'callback': function( sValue, y ) {
             var aPos = oTable.fnGetPosition( this );

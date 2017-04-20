@@ -1,6 +1,7 @@
 <?php
 
 function reproduksi(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
@@ -67,7 +68,7 @@ function reproduksi(){
 	$reproduksi .= $tombolselesai;
 	$reproduksi .= $tombolprint;
 	$reproduksi .= '</div>';
-	$reproduksi .= '<div id="tempattotal"><div id="totalbelanja">Total Packing Ulang : Rp. 0</div></div>';
+	$reproduksi .= '<div id="tempattotal"><div id="totalbelanja">Total Packing Ulang : '.$currencySym.' 0</div></div>';
 	$reproduksi .= '</div>';
 	$reproduksi .= '<div title="Informasi" id="dialogwarning">';
 	$reproduksi .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';

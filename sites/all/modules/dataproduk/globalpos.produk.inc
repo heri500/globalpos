@@ -51,7 +51,7 @@ function data_produk(){
 	$pilihankategori .= '</select>';
 	$buttonadd = '<img id="addkategori" title="Tambah Kategori Baru" src="'.base_path().'misc/media/images/add-small.ico">';
 	//Pilihan Sub Kategori
-	$result = db_query("SELECT idsubkategori,kodesubkategori,subkategori FROM subkategori WHERE idkategori='%d' 
+	$result = db_query("SELECT idsubkategori,kodesubkategori,subkategori FROM subkategori WHERE idkategori='%d'
 	ORDER BY kodesubkategori,subkategori",$idkategoriawal);
 	$pilihansubkategori = '<select id="idsubkategori" name="idsubkategori" onkeyup="ubahkodebarang();" onchange="ubahkodebarang();">';
 	while ($data = db_fetch_object($result)){
@@ -99,21 +99,10 @@ function data_produk(){
 	$viewtabelproduk .= '<label>HARGA JUAL</label><input type="text" class="validate[required]" id="hargajual" name="hargajual" onkeyup="hitungmargin(\'hargajual\')">';
 	$viewtabelproduk .= '<label>MARGIN HARGA</label><input type="text" maxlength="2" id="margin" name="margin" onkeyup="hitungmargin(\'margin\')">';
 	$pilihantype = '<select id="type_product" name="type_product">';
-	$pilihantype .= '<option value="0">Produk</option>';
-	$pilihantype .= '<option value="1">Jasa</option>';
+	$pilihantype .= '<option value="0">NON GST</option>';
+	$pilihantype .= '<option value="1">GST</option>';
 	$pilihantype .= '</select>';
 	$viewtabelproduk .= '<label>TYPE ITEM</label>'.$pilihantype;
-	$viewtabelproduk .= '<label>LEAD TIME (MENIT)</label><input type="text" id="lead_time" name="lead_time">';
-	$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
-	$pilihanjamkerja .= '<option value="0">Tidak</option>';
-	$pilihanjamkerja .= '<option value="1">Ya</option>';
-	$pilihanjamkerja .= '</select>';
-	$viewtabelproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
-	$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
-	$pilihansebelumzuhur .= '<option value="0">Tidak</option>';
-	$pilihansebelumzuhur .= '<option value="1">Ya</option>';
-	$pilihansebelumzuhur .= '</select>';
-	$viewtabelproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
 	$viewtabelproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok">';
 	$viewtabelproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok">';
 	$viewtabelproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok">';
@@ -226,14 +215,15 @@ function filter_kategori(){
 		$_POST["idkategori"]);
 		$tambahanpilihan = '';
 		while($data = db_fetch_object($result)){
-			$tambahanpilihan .= '<option value="'.$data->idsubkategori.'">'.$data->kodesubkategori.'-'.$data->subkategori.'</option>';	
+			$tambahanpilihan .= '<option value="'.$data->idsubkategori.'">'.$data->kodesubkategori.'-'.$data->subkategori.'</option>';
 		}
 		print $tambahanpilihan;
 	}
-	exit();	
+	exit();
 }
 
 function tabel_produk($statusstok = null, $statusProduct = 1){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$tabelproduk = '<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_produk">';
 	$tabelproduk .= '<thead>';
 	$tabelproduk .= '<tr>';
@@ -253,7 +243,8 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>STATUS</th>';
 	$tabelproduk .= '<th>SATUAN</th>';
 	$tabelproduk .= '<th>KETERANGAN</th>';
-	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
+	$tabelproduk .= '<th>TOTAL('.trim($currencySym).')</th>';
+	$tabelproduk .= '<th>NON GST/GST</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
@@ -263,8 +254,8 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tfoot>';
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
-	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
-	$tabelproduk .= '<th class="tablebutton"></th>';
+	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">'.$currencySym.' '.number_format($totalNilaiBarang,2,$decimalSep,$thousandSep).'</div></strong></th>';
+	$tabelproduk .= '<th colspan="2"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';
@@ -291,21 +282,21 @@ function simpan_satuan(){
 			db_query("INSERT INTO satuan VALUES ('%s')",$_POST["namasatuan"]);
 			print $_POST["namasatuan"];
 		}else{
-			print "error";	
+			print "error";
 		}
 	}
-	exit();	
+	exit();
 }
 function cek_barcode(){
 	if ($_POST["barcode"]){
 		$result = db_query("SELECT COUNT(*) AS jumlahsama FROM product WHERE barcode='%s'",$_POST["barcode"]);
 		$data = db_fetch_object($result);
 		if ($data->jumlahsama > 0){
-			print "sama";	
+			print "sama";
 		}else{
 			print "taksama";
-		}	
-	}	
+		}
+	}
 	exit();
 }
 function cek_barcode2(){
@@ -316,10 +307,10 @@ function cek_barcode2(){
 		$result = db_query("SELECT COUNT(*) AS jumlahsama FROM product WHERE barcode='%s' AND idproduct<>'%d'",$_POST["barcode"],$_POST["idproduk"]);
 		$data = db_fetch_object($result);
 		if ($data->jumlahsama > 0){
-			print "sama";	
+			print "sama";
 		}else{
 			print "taksama";
-		}	
+		}
 	}
 	//print $_POST["idproduk"]." ".$_POST["barcode"];
 	exit();
@@ -332,7 +323,7 @@ function simpan_produk(){
 	if (isset($_POST["idproduk"])){
 		print $_POST["idproduk"];
 		if (isset($_POST["barcode"]) AND isset($_POST["namaproduk"])){
-			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
+			$result = db_query("SELECT idkategori,idsubkategori,stok,hargapokok,alt_code FROM product WHERE idproduct='%d'",$_POST["idproduk"]);
 			$data = db_fetch_object($result);
 			$STOKSEBELUM = $data->stok;
 			$HARGAPOKOK = $data->hargapokok;
@@ -341,11 +332,15 @@ function simpan_produk(){
 				$datakategori = db_fetch_object($resultkategori);
 				$resultsubkategori = db_query("SELECT kodesubkategori FROM subkategori WHERE idsubkategori='%d'",$_POST["idsubkategori"]);
 				$datasubkategori = db_fetch_object($resultsubkategori);
-				$kodealt = $datakategori->kodekategori."-".$datasubkategori->kodesubkategori;
-				if (isset($_POST["alt_code"])){
-					$kodealternatif = $altCode;
+				if (empty($data->alt_code)){
+					$kodealt = $datakategori->kodekategori."-".$datasubkategori->kodesubkategori;
+					if (isset($_POST["alt_code"])){
+						$kodealternatif = $altCode;
+					}else{
+						$kodealternatif = $kodealt.cek_kode_alt(remove_utf8_bom($kodealt));
+					}
 				}else{
-					$kodealternatif = $kodealt.cek_kode_alt(remove_utf8_bom($kodealt));
+					$kodealternatif = $data->alt_code;
 				}
 				//$sql = "UPDATE product SET idsupplier='%d',idkategori='%d',idsubkategori='%d',barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s' WHERE idproduct='%d'";
 				//$nilai = $_POST["idsupplier"].'-'.$_POST["idkategori"].'-'.$_POST["idsubkategori"].'-'.$_POST["barcode"].'-'.$kodealternatif.'-'.$_POST["namaproduk"].'-'.$_POST["hargapokok"].'-'.$_POST["hargajual"].'-'.$_POST["margin"].'-'.$_POST["minstok"].'-'.$_POST["maxstok"].'-'.$_POST["stok"].'-'.$_POST["satuan"].'-'.$_POST["keterangan"].'-'.$_POST["idproduk"];
@@ -353,7 +348,7 @@ function simpan_produk(){
 				barcode='%s',alt_code='%s',namaproduct='%s',hargapokok='%f',hargajual='%f',
 				margin='%f',minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				type_product='%d', lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1  WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["idkategori"],$_POST["idsubkategori"],
 				$_POST["barcode"],$kodealternatif,$_POST["namaproduk"],$_POST["hargapokok"],
 				$_POST["hargajual"],$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],
@@ -371,7 +366,7 @@ function simpan_produk(){
 				namaproduct='%s',hargapokok='%f',hargajual='%f',margin='%f',
 				minstok='%f',maxstok='%f',stok='%f',satuan='%s',keterangan='%s',
 				idkategori='%d', type_product='%d',lead_time='%d', aturan_jam_kerja='%d',
-				berlaku_sebelum_zuhur='%d' WHERE idproduct='%d'",
+				berlaku_sebelum_zuhur='%d',uploaded=0, changed=1  WHERE idproduct='%d'",
 				$_POST["idsupplier"],$_POST["barcode"],
 				$_POST["namaproduk"],$_POST["hargapokok"],$_POST["hargajual"],
 				$_POST["margin"],$_POST["minstok"],$_POST["maxstok"],$_POST["stok"],
@@ -491,7 +486,7 @@ function simpan_produk(){
 			}
 		}
 	}
-	exit();	
+	exit();
 }
 
 function update_subkategori(){
@@ -510,17 +505,17 @@ function update_subkategori(){
 		$sql_update = "UPDATE subkategori SET idkategori='%d' WHERE idsubkategori='%d'";
 		$result = db_query("SELECT kodekategori,kategori FROM kategori WHERE idkategori='%d'",$NILAI);
 		$data = db_fetch_object($result);
-		$NILAITAMPIL = $data->kodekategori."-".$data->kategori;	
+		$NILAITAMPIL = $data->kodekategori."-".$data->kategori;
 	}
 	db_query($sql_update,$NILAI,$SUBKATEGORI_ID);
 	echo $NILAITAMPIL;
-	exit();	
+	exit();
 }
 
 function edit_data_produk(){
 	if ($_GET["idproduk"]){
 		$IDPRODUK = $_GET["idproduk"];
-		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode, 
+		$resultproduk = db_query("SELECT idsupplier, idkategori, idsubkategori, barcode,
 		alt_code, namaproduct, hargapokok, hargajual, margin, minstok, maxstok, stok, satuan,
 		keterangan, type_product, lead_time,aturan_jam_kerja,berlaku_sebelum_zuhur FROM product
 		WHERE idproduct='%d'",$IDPRODUK);
@@ -609,21 +604,13 @@ function edit_data_produk(){
 		$editproduk .= '<label>MINIMUM STOK</label><input type="text" id="minstok" name="minstok" value="'.$dataproduk->minstok.'">';
 		$editproduk .= '<label>MAKSIMUM STOK</label><input type="text" id="maxstok" name="maxstok" value="'.$dataproduk->maxstok.'">';
 		$editproduk .= '<label>STOK SAAT INI</label><input type="text" id="stok" name="stok" value="'.$dataproduk->stok.'">';
-		$editproduk .= '<label>LEAD TIME (MENIT)</label><input type="text" id="lead_time" name="lead_time" value="'.$dataproduk->lead_time.'">';
-		$selected_no = ($dataproduk->aturan_jam_kerja == 0) ? 'selected' : '';
-		$selected_yes = ($dataproduk->aturan_jam_kerja == 1) ? 'selected' : '';
-		$pilihanjamkerja = '<select id="ikut_jam_kerja" name="ikut_jam_kerja">';
-		$pilihanjamkerja .= '<option value="0" '.$selected_no.'>Tidak</option>';
-		$pilihanjamkerja .= '<option value="1" '.$selected_yes.'>Ya</option>';
-		$pilihanjamkerja .= '</select>';
-		$editproduk .= '<label>IKUT JAM KERJA</label>'.$pilihanjamkerja;
 		$selected_no = ($dataproduk->berlaku_sebelum_zuhur == 0) ? 'selected' : '';
 		$selected_yes = ($dataproduk->berlaku_sebelum_zuhur == 1) ? 'selected' : '';
-		$pilihansebelumzuhur = '<select id="sebelum_zuhur" name="sebelum_zuhur">';
-		$pilihansebelumzuhur .= '<option value="0" '.$selected_no.'>Tidak</option>';
-		$pilihansebelumzuhur .= '<option value="1" '.$selected_yes.'>Ya</option>';
+		$pilihansebelumzuhur = '<select id="type_product" name="type_product">';
+		$pilihansebelumzuhur .= '<option value="0" '.$selected_no.'>NON GST</option>';
+		$pilihansebelumzuhur .= '<option value="1" '.$selected_yes.'>GST</option>';
 		$pilihansebelumzuhur .= '</select>';
-		$editproduk .= '<label>BERLAKU SEBELUM JAM 12</label>'.$pilihansebelumzuhur;
+		$editproduk .= '<label>TYPE PRODUCT</label>'.$pilihansebelumzuhur;
 		$editproduk .= '<label>SATUAN</label>'.$pilihansatuan.$buttonadd4;
 		$editproduk .= '<label>KETERANGAN</label><input type="text" id="keteranganproduk" name="keteranganproduk" value="'.$dataproduk->keterangan.'">';
 		$editproduk .= '<input type="hidden" id="idproduk" name="idproduk" value="'.$IDPRODUK.'"></form><div><button onclick="simpanproduk();" style="font-size:12px;border: 1px solid blue;">Update Produk</button><button onclick="batal();" style="font-size:12px;margin-left: 6px;border: 1px solid red;">Batal</button></div></div></div>';
@@ -670,14 +657,20 @@ function update_data_produk(){
 	$hargaPokok = $data->hargapokok;
 	$hargaJual = $data->hargajual;
 	$nilaiRet = $nilai;
-	if ($kolom == "3"){
-		$sql_update = "UPDATE product SET barcode='%s' WHERE idproduct='%d'";
+	if ($kolom == "1") {
+		$sql_update = "UPDATE product SET idkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT kategori FROM kategori WHERE idkategori=%d', $nilai));
+	}else if ($kolom == "2") {
+		$sql_update = "UPDATE product SET idsubkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT subkategori FROM subkategori WHERE idsubkategori=%d',$nilai));
+	}else if ($kolom == "3"){
+		$sql_update = "UPDATE product SET barcode='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "4"){
-		$sql_update = "UPDATE product SET alt_code='%s' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET alt_code='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "5"){
-		$sql_update = "UPDATE product SET namaproduct='%s' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET namaproduct='%s',uploaded=0, changed=1  WHERE idproduct='%d'";
 	}else if ($kolom == "6"){
-		$sql_update = "UPDATE product SET hargapokok='%f' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET hargapokok='%f',uploaded=0, changed=1  WHERE idproduct='%d'";
 		$nilaiRet = number_format($nilai,0,",",".");
 		if ($nilai <> $hargaPokok){
 			global $user;
@@ -693,31 +686,34 @@ function update_data_produk(){
 			$hargaJual,$nilai,$user->uid);
 		}
 	}else if ($kolom == "8"){
-		$sql_update = "UPDATE product SET stok='%f' WHERE idproduct='%d'";
+		$sql_update = "UPDATE product SET stok='%f',uploaded=0, changed=1  WHERE idproduct='%d'";
 		$nilaiRet = number_format($nilai,0,",",".");
 		$selisihStok = ($nilai*1)-$stokSebelum;
 		if ($selisihStok < 0){
 			$keluar = abs($selisihStok);
 			$keterangan = 'Perubahan Stock-Stok Berkurang';
-			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES
 			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$keluar,$nilai,$keterangan);
 		}else{
 			$masuk = $selisihStok;
 			$keterangan = 'Perubahan Stock-Stok Bertambah';
-			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES
 			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$nilai,$keterangan);
 		}
+	}else if ($kolom == "12") {
+		$sql_update = "UPDATE product SET type_product='%d' WHERE idproduct='%d'";
+    $nilaiRet = $nilai == 1?"Y":"N";
 	}
 	db_query($sql_update,$nilai,$productId);
 	echo $nilaiRet;
-	exit();	
+	exit();
 }
 function ubah_status_product(){
 	if (isset($_REQUEST['selectedproduct']) && isset($_POST['statusproduct'])){
         $selectedProduct = $_REQUEST['selectedproduct'];
         for ($i = 0;$i < count($selectedProduct);$i++){
             $idProduct = $selectedProduct[$i];
-            db_query('UPDATE product SET status_product=%d WHERE idproduct=%d', $_POST['statusproduct'],$idProduct);
+            db_query('UPDATE product SET status_product=%d,uploaded=0, changed=1  WHERE idproduct=%d', $_POST['statusproduct'],$idProduct);
         }
     }
     exit();

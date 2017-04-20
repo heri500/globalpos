@@ -17,12 +17,12 @@ function simpankategori(){
 			data: request,
 			cache: false,
 			success: function(data){
-				$("#idkategori").append("<option value=\""+ data +"\">"+ request.kodekategori +"-"+ request.kategori +"</option>");
+				$("#idkategori").append("<option value=\""+ data.trim() +"\">"+ request.kodekategori +"-"+ request.kategori +"</option>");
 				$("#kodekategori").val("");
 				$("#kategori").val("");
 				$("#keterangan").val("");
 				$("#dialogtambahkategori").dialog("close");
-				$("#idkategori").val(data);
+				$("#idkategori").val(data.trim());
 				filtersubkategori();
 			}
 		});
@@ -46,12 +46,12 @@ function simpansubkategori(){
 			data: request,
 			cache: false,
 			success: function(data){
-				$("#idsubkategori").append("<option value=\""+ data +"\">"+ request.kodesubkategori +"-"+ request.subkategori +"</option>");
+				$("#idsubkategori").append("<option value=\""+ data.trim() +"\">"+ request.kodesubkategori +"-"+ request.subkategori +"</option>");
 				$("#kodesubkategori").val("");
 				$("#subkategori").val("");
 				$("#keterangansub").val("");
 				$("#dialogtambahsubkategori").dialog("close");
-				$("#idsubkategori").val(data);
+				$("#idsubkategori").val(data.trim());
 				ubahkodebarang();
 			}
 		});
@@ -74,12 +74,12 @@ function simpansupplier(){
 			data: request,
 			cache: false,
 			success: function(data){
-				$("#idsupplier").append("<option value=\""+ data +"\">"+ request.kodesupplier +"-"+ request.namasupplier +"</option>");
+				$("#idsupplier").append("<option value=\""+ data.trim() +"\">"+ request.kodesupplier +"-"+ request.namasupplier +"</option>");
 				$("#kodesupplier").val("");
 				$("#supplier").val("");
 				$("#keterangan").val("");
 				$("#dialogtambahsupplier").dialog("close");
-				$("#idsupplier").val(data);
+				$("#idsupplier").val(data.trim());
 			}
 		});
 	}else{
@@ -101,7 +101,7 @@ function simpansatuan(){
 					$("#satuan").append("<option value=\""+ request.namasatuan +"\">"+ request.namasatuan +"</option>");
 					$("#namasatuan").val("");
 					$("#dialogtambahsatuan").dialog("close");
-					$("#satuan").val(data);
+					$("#satuan").val(data.trim());
 				}else{
 					alert("Satuan ini sudah ada..!!");
 				}
@@ -144,9 +144,9 @@ function ubahkodebarang(){
 		subkategori = $(this).text();
 	});
 	pecahsubkategori = subkategori.split("-");
-	kodebarang = pecahkategori[0] +"-"+ pecahsubkategori[0];
+	kodebarang = pecahkategori[0].trim() +"-"+ pecahsubkategori[0].trim();
 	var request = new Object();
-	request.kodealternatif = 	kodebarang;
+	request.kodealternatif = kodebarang;
 	var alamat = pathutama + "dataproduk/cekkodealternatif";
 	$.ajax({
 		type: "POST",
@@ -154,7 +154,7 @@ function ubahkodebarang(){
 		data: request,
 		cache: false,
 		success: function(data){
-			$("#kodepoduk").val(kodebarang +"-"+ data);
+			$("#kodepoduk").val(kodebarang +"-"+ data.trim());
 		}
 	});
 }
@@ -241,6 +241,9 @@ function simpanproduk(){
 		});
 	}else{
 		$("#formproduk").validationEngine("validate");
+		if ($("#hargapokok").val() <= 0 || $("#hargajual").val() <= 0){
+			alert('Mohon harga jual atau harga pokok diisi dengan angka lebih besar dari 0');
+		}
 	}
 }
 function batal(){
@@ -336,8 +339,9 @@ $(document).ready(function() {
 		nospace: true
 	});
 	$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-		format: "numeric",
-		nospace: true
+		format: 'custom',
+		nospace: true,
+		pattern: '[^0-9\.]'
 	});
 	$("#main h2").css("width","100%");
 	$("#main h2").css("float","left");

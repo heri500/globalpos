@@ -6,6 +6,22 @@ var totalproduk = 0;
 var barisrubah;
 var tglsekarang = '';
 var tgltampil = '';
+var currSym = '';
+var tSep = '.';
+var dSep = ',';
+
+function addCommas(nStr){
+	nStr += "";
+	x = nStr.split(".");
+	x1 = x[0];
+	x2 = x.length > 1 ? dSep + x[1] : "";
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {
+		x1 = x1.replace(rgx, "$1" + tSep + "$2");
+	}
+	return x1 + x2;
+}
+
 function tampilkantabelkasir(){
 	oTable = $('#tabel_kasir').dataTable( {
 		'bJQueryUI': true,
@@ -56,42 +72,45 @@ function tambahproduk(){
 			pecahdata = new Array();
 			pecahdata = data.split(';');
 			if (pecahdata[0] != 'error'){
-				subtotal = number_format(parseInt(pecahdata[2]),0,',','.');
-				nilaikirim = pecahdata[0] +'___1___'+ pecahdata[2];
-				index_cek_box = pecahdata[0];
+				subtotal = addCommas(parseFloat(pecahdata[2]).toFixed(2));
+				nilaikirim = pecahdata[0].trim() +'___1___'+ pecahdata[2];
+				index_cek_box = pecahdata[0].trim();
 				namacekbox = 'cekbox_'+ index_cek_box;
 				if($('#'+ namacekbox).val()){
 					var nilaicekbox = $('#'+ namacekbox).val();
 					var pecahnilai = nilaicekbox.split('___');
-					var qtybaru = parseInt(pecahnilai[1]) + 1;
-					var subtotallama = pecahnilai[1] * pecahnilai[2];
-					var subtotal = qtybaru * pecahnilai[2];
-					totalbelanja = totalbelanja - subtotallama + subtotal;
-					$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+					var qtybaru = parseFloat(pecahnilai[1]) + 1;
+					var subtotallama = parseFloat(pecahnilai[1]) * parseFloat(pecahnilai[2]);
+					var subtotal = qtybaru * parseFloat(pecahnilai[2]);
+					totalbelanja = parseFloat(totalbelanja) - parseFloat(subtotallama) + parseFloat(subtotal);
+					totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+					$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 					var nTr = $('#'+ namacekbox).parent().parent().get(0);
 					var posisibaris = oTable.fnGetPosition(nTr);
 					oTable.fnUpdate(qtybaru, posisibaris, 4 );
-					nilaikirim = pecahnilai[0] +'___'+ qtybaru +'___'+ pecahnilai[2];
+					nilaikirim = pecahnilai[0].trim() +'___'+ qtybaru +'___'+ pecahnilai[2];
 					checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
-					oTable.fnUpdate(number_format(subtotal,0,',','.') +' '+ checkboxnilai, posisibaris, 5 );
+					subtotalView = parseFloat(Math.abs(subtotal)).toFixed(2);
+					oTable.fnUpdate(addCommas(subtotalView) +' '+ checkboxnilai, posisibaris, 5 );
 					posisiakhir = totalproduk-1;
 					if (posisibaris == posisiakhir){
 						$('#lastqty').val(qtybaru);
 					}
 				}else{
-					var icondelete = '<img onclick="hapus_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0] +'\')" title="Klik untuk menghapus" src="'+ pathutama +'misc/media/images/close.ico" width="24">';
-					var iconubah = '<img onclick="ubah_qty_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0] +'\')" title="Klik untuk mengubah qty produk ini" src="'+ pathutama +'misc/media/images/edit.ico" width="24">';
+					var icondelete = '<img onclick="hapus_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0].trim() +'\')" title="Klik untuk menghapus" src="'+ pathutama +'misc/media/images/close.ico" width="24">';
+					var iconubah = '<img onclick="ubah_qty_produk(\''+ index_cek_box +'\',this.parentNode.parentNode,\''+ pecahdata[0].trim() +'\')" title="Klik untuk mengubah qty produk ini" src="'+ pathutama +'misc/media/images/edit.ico" width="24">';
 
 					$('#lastharga').val(pecahdata[2]);
-					$('#last_id').val(pecahdata[0]);
+					$('#last_id').val(pecahdata[0].trim());
 					$('#lastqty').val('1');
 					checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
 					var row = '<tr id="'+ index_cek_box +'"><td>'+ icondelete +'</td><td>'+ iconubah +'</td><td>'+ pecahdata[1] +'</td><td class="angka">'+ subtotal +'</td><td class="angka">1</td><td class="angka">'+ subtotal +' '+ checkboxnilai +'</td><td class="angka">'+ pecahdata[3] +'</td></tr>';
 					$('#tabel_kasir').dataTable().fnAddTr($(row)[0]);
 					giCount++;
 					totalproduk++;
-					totalbelanja = totalbelanja + parseInt(pecahdata[2]);
-					$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+					totalbelanja = parseFloat(totalbelanja) + parseFloat(pecahdata[2]);
+					totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+					$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 				}
 				$('.dataTables_scrollBody').scrollTop($('.dataTables_scrollBody')[0].scrollHeight);
 				$('#barcode').autocomplete('close');
@@ -118,8 +137,9 @@ function tutupwarning(){
 }
 function hapus_latest_produk(){
 	if (totalproduk > 0){
-        totalbelanja = totalbelanja - ($('#lastharga').val()*$('#lastqty').val());
-        $('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+        totalbelanja = parseFloat(totalbelanja) - (parseFloat($('#lastharga').val())*parseFloat($('#lastqty').val()));
+		totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+        $('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
         oTable.fnDeleteRow(totalproduk-1);
 		totalproduk--;
 		if (totalproduk >= 0){
@@ -148,12 +168,15 @@ function hapus_produk(posisi,nTr,idproduk){
 	var nilaidata = $('#cekbox_'+ idproduk).val();
     console.log(nilaidata);
 	var pecahnilai = nilaidata.split('___');
-	totalbelanja = totalbelanja - (pecahnilai[1]*pecahnilai[2]);
-	$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+	totalbelanja = parseFloat(totalbelanja) - (parseFloat(pecahnilai[1])*parseFloat(pecahnilai[2]));
+	totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+	$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 	oTable.fnDeleteRow(posisibaris,focusbarcode);
 	totalproduk--;
 	if (totalproduk > 0){
-		var nilaidataakhir = $('#cekbox_'+ totalproduk).val();
+		var nTr = oTable.fnGetNodes(totalproduk-1);
+		idproduknya = nTr.getAttribute('id');
+		var nilaidataakhir = $('#cekbox_'+ idproduknya).val();
 		var pecahnilaiakhir = nilaidataakhir.split('___');
 		$('#lastharga').val(pecahnilaiakhir[2]);
 		$('#lastqty').val(pecahnilaiakhir[1]);
@@ -215,6 +238,11 @@ $(document).ready(function(){
 	var tglsekarang = Drupal.settings.tglsekarang;
 	var tgltampil = Drupal.settings.tgltampil;
 	pathutama = Drupal.settings.basePath;
+
+	currSym = Drupal.settings.currSym;
+	tSep = Drupal.settings.tSep;
+	dSep = Drupal.settings.dSep;
+	
 	$('#dialogkasir').dialog({
 		modal: true,
 		width: 925,
@@ -300,7 +328,8 @@ $(document).ready(function(){
 		resizable: false,
 		autoOpen: false,
 		open: function(event, ui) {
-			$('#totalbelanjauser').val('Rp. '+ number_format(totalbelanja,0,',','.'));
+			totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
+			$('#totalbelanjauser').val(currSym +' '+ addCommas(totalbelanjaView));
 			$('#carabayar').change();
 		},
 		close: function(){
@@ -344,67 +373,74 @@ $(document).ready(function(){
 	$('#newqty').keypress(function(e) {
 		if (e.keyCode == 13){
 			var baris_int = totalproduk-1;
-			totalbelanja = totalbelanja - ($('#lastharga').val()*$('#lastqty').val());
+			totalbelanja = parseFloat(totalbelanja) - (parseFloat($('#lastharga').val())*parseFloat($('#lastqty').val()));
 			var nilaiubah = $('#newqty').val();
 			oTable.fnUpdate(nilaiubah, baris_int, 4 );
-			nilaisubtotal = $('#lastharga').val()*nilaiubah;
-			subtotalbaru = number_format(nilaisubtotal,0,',','.');
-			var namacekbox = 'cekbox_'+ $('#last_id').val();
-			var nilaikirim = $('#last_id').val() +'___'+ nilaiubah +'___'+ $('#lastharga').val();
+			nilaisubtotal = parseFloat($('#lastharga').val())*parseFloat(nilaiubah);
+			nilaisubtotalView = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(nilaisubtotalView);
+			var namacekbox = 'cekbox_'+ $('#last_id').val().trim();
+			var nilaikirim = $('#last_id').val().trim() +'___'+ nilaiubah +'___'+ $('#lastharga').val();
 			var checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
 			oTable.fnUpdate(subtotalbaru +' '+ checkboxnilai, baris_int, 5 );
 			$('#lastqty').val(nilaiubah);
-			totalbelanja = totalbelanja + ($('#lastharga').val()*$('#lastqty').val());
-			$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+			totalbelanja = parseFloat(totalbelanja) + (parseFloat($('#lastharga').val())*parseFloat($('#lastqty').val()));
+			totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 			$('#dialogubahqty').dialog('close');
 		}
 	});
 	$('#newharga').keypress(function(e) {
 		if (e.keyCode == 13){
 			var baris_int = totalproduk-1;
-			totalbelanja = totalbelanja - ($('#lastharga').val()*$('#lastqty').val());
+			totalbelanja = parseFloat(totalbelanja) - (parseFloat($('#lastharga').val())*parseFloat($('#lastqty').val()));
 			var nilaiubah = $('#newharga').val();
 			oTable.fnUpdate(nilaiubah, baris_int, 3 );
-			nilaisubtotal = $('#lastqty').val()*nilaiubah;
-			subtotalbaru = number_format(nilaisubtotal,0,',','.');
-			var namacekbox = 'cekbox_'+ $('#last_id').val();
-			var nilaikirim = $('#last_id').val() +'___'+ $('#lastqty').val() +'___'+ nilaiubah;
+			nilaisubtotal = parseFloat($('#lastqty').val())*parseFloat(nilaiubah);
+			subtotalbaru = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(subtotalbaru);
+			var namacekbox = 'cekbox_'+ $('#last_id').val().trim();
+			var nilaikirim = $('#last_id').val().trim() +'___'+ $('#lastqty').val() +'___'+ nilaiubah;
 			var checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
 			oTable.fnUpdate(subtotalbaru +' '+ checkboxnilai, baris_int, 5 );
 			$('#lastharga').val(nilaiubah);
-			totalbelanja = totalbelanja + ($('#lastharga').val()*$('#lastqty').val());
-			$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+			totalbelanja = parseFloat(totalbelanja) + (parseFloat($('#lastharga').val())*parseFloat($('#lastqty').val()));
+			totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 			$('#dialogubahharga').dialog('close');
 		}
 	});
 	$('#newqty2').keypress(function(e) {
 		if (e.keyCode == 13){
 			var baris_int = oTable.fnGetPosition(barisrubah);
-			var idproduknya = barisrubah.getAttribute('id');
+			var idproduknya = barisrubah.getAttribute('id').trim();
 			var nilaidata = $('#cekbox_'+ idproduknya).val();
 			var pecahnilai = nilaidata.split('___');
-			totalbelanja = totalbelanja - (pecahnilai[1]*pecahnilai[2]);
+			totalbelanja = parseFloat(totalbelanja) - (parseFloat(pecahnilai[1])*parseFloat(pecahnilai[2]));
 			var nilaiubah = $('#newqty2').val();
 			oTable.fnUpdate(nilaiubah, baris_int, 4 );
-			nilaisubtotal = pecahnilai[2]*nilaiubah;
-			subtotalbaru = number_format(nilaisubtotal,0,',','.');
+			nilaisubtotal = parseFloat(pecahnilai[2])*parseFloat(nilaiubah);
+			subtotalbaru = parseFloat(nilaisubtotal).toFixed(2);
+			subtotalbaru = addCommas(subtotalbaru);
 			var namacekbox = 'cekbox_'+ idproduknya;
 			var nilaikirim = idproduknya +'___'+ nilaiubah +'___'+ pecahnilai[2];
 			var checkboxnilai = '<input checked="checked" style="display: none;" id="'+ namacekbox +'" name="'+ namacekbox +'" type="checkbox" value="'+ nilaikirim +'" />';
 			oTable.fnUpdate(subtotalbaru +' '+ checkboxnilai, baris_int, 5 );
-			totalbelanja = totalbelanja + (pecahnilai[2]*nilaiubah);
+			totalbelanja = parseFloat(totalbelanja) + (parseFloat(pecahnilai[2])*parseFloat(nilaiubah));
 			posisiakhir = totalproduk-1;
 			if (baris_int == posisiakhir){
 				$('#lastqty').val(nilaiubah);
 			}
-			$('#totalbelanja').html('Total Return : Rp. '+ number_format(totalbelanja,0,',','.'));
+			totalbelanjaView = parseFloat(totalbelanja).toFixed(2);
+			$('#totalbelanja').html('Total Return : '+ currSym +' '+ addCommas(totalbelanjaView));
 			$('#dialogubahqty2').dialog('close');
 		}
 	});
-	$('#nilaibayar').keyup(function(e){
-		kembali = $('#nilaibayar').val()-totalbelanja;
-		$('#kembali').val('Rp. '+ number_format(kembali,0,',','.'));
-		if (e.keyCode == 13){
+	$('#nilaibayar').keyup(function(e) {
+		kembali = $('#nilaibayar').val() - totalbelanja;
+		kembaliView = parseFloat(kembali).toFixed(2);
+		$('#kembali').val(currSym + ' ' + addCommas(kembaliView));
+		if (e.keyCode == 13) {
 			akhiri_belanja();
 		}
 	});
@@ -424,7 +460,8 @@ $(document).ready(function(){
 			$('#nilaibayar').val(totalbelanja);
 			kembali = $('#nilaibayar').val()-totalbelanja;
 			$('#bariskembali').show();
-			$('#kembali').val('Rp. '+ number_format(kembali,0,',','.'));
+			kembaliView = parseFloat(kembali).toFixed(2);
+			$('#kembali').val(currSym +' '+ addCommas(kembaliView));
 			$('#nilaibayar').removeAttr('readonly','readonly');
 			$('#nilaibayar').select();
 		}else{

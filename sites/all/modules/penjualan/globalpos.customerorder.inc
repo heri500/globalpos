@@ -1,6 +1,7 @@
 <?php
 
 function customerorder(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
 	$form_style = $path.'/css/custom-style.css';
@@ -44,7 +45,8 @@ function customerorder(){
 	$tombolselesai = '<a class="buttonselesai" onclick="kirim_data(0)">F5:SIMPAN</a>';
 	$tombolprint = '<a class="buttonprint" onclick="kirim_data(1)">F6:SIMPAN&PRINT</a>';
 	//$tomboltutupkasir = '<a class="buttontutup">F7:TUTUP KASIR</a>';
-	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:OMSET</a>';
+	$tombollihatpelanggan = '<a class="buttonpelanggan" onclick="pilih_pelanggan();">F9:PELANGGAN</a>';
+	$tombollihatomset = '<a class="buttonomset" onclick="hitung_omset();">F8:TOTAL</a>';
 	$penjualan = '<button onclick="munculkankasir();" style="font-size:12px;border: 1px solid orangered;">Klik untuk memunculkan kasir</button>';
 	$penjualan .= '<div id="dialogkasir" style="font-size: 12px;" title="GLOBAL POS CUSTOMER ORDER ['.$tanggal.']">';
 	$penjualan .= '<div id="info-kasir-waktu">';
@@ -81,7 +83,7 @@ function customerorder(){
 	$penjualan .= '<div id="tempatsupplier2">'.$pilihpelanggan.' <img id="add-pelanggan" src="'.base_path().'misc/media/images/add-small.ico" style="margin: 4px;cursor:pointer;"></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '</div>';
-	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"></div>';
+	$penjualan .= '<div id="barcode_place">SCAN ATAU INPUT BARCODE, KODE ATAU NAMA PRODUK : <input type="text" id="barcode" name="barcode" class="barcodekasir"><input type="hidden" id="hiddenbarcode" name="hiddenbarcode"></div>';
 	$penjualan .= '<div id="tempattabelkasir">'.view_kasir_customerorder().'</div>';
 	$penjualan .= '<input type="hidden" id="last_id" name="last_id">';
 	$penjualan .= '<input type="hidden" id="lastqty" name="lastqty" value="1">';
@@ -99,8 +101,9 @@ function customerorder(){
 	//$penjualan .= $tombolprint;
 	//$penjualan .= $tomboltutupkasir;
 	$penjualan .= $tombollihatomset;
+	$penjualan .= $tombollihatpelanggan;
 	$penjualan .= '</div>';
-	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Order : Rp. 0</div></div>';
+	$penjualan .= '<div id="tempattotal"><div id="totalbelanja">Total Order : '.$currencySym.' 0</div></div>';
 	$penjualan .= '</div>';
 	$penjualan .= '<div title="Informasi" id="dialogwarning">';
 	$penjualan .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -404,5 +407,11 @@ function cari_meja(){
 		}
 		print json_encode($items);
 	}
+	exit();
+}
+function cari_nota_order_android(){
+	$strSQL = 'SELECT id FROM customer_order WHERE android_order=1 AND printed=0 ORDER BY id LIMIT 1';
+	$idOrder = db_result(db_query($strSQL));
+	print $idOrder;
 	exit();
 }

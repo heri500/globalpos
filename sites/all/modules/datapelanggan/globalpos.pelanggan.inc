@@ -3,10 +3,12 @@
  * @return string
  */
 function data_pelanggan(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
  	drupal_add_css($form_style, 'theme', 'all', FALSE);
  	$variables['styles'] = drupal_get_css();
+	$dataPremis = get_data_premis();
 	//drupal_add_css('misc/media/datatables.1.10/media/css/jquery.dataTables.min.css');
 	drupal_add_css('misc/media/datatables.1.10/jquery/jquery-ui.css');
 	drupal_add_css('misc/media/datatables.1.10/media/css/dataTables.jqueryui.css');
@@ -28,7 +30,8 @@ function data_pelanggan(){
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
 	drupal_add_js(
 		array(
-			'filepath' => file_directory_path()
+			'filepath' => file_directory_path(),
+			'datapremis' => $dataPremis,
 		),
 		'setting');
 	$modulePath = drupal_get_path('module','datapelanggan');
@@ -42,7 +45,7 @@ function data_pelanggan(){
 	$viewtabelpelanggan .= '<label>EMAIL</label><input type="text" id="email" name="email">';
 	$viewtabelpelanggan .= '<button style="font-size: 12px;">Tambah Pelanggan</button></div></form>';
 	$viewtabelpelanggan .= '<div class="button-sync"><button id="sync-hutang-pelanggan" style="font-size: 12px;">Sync Hutang Pelanggan</button></div>';
-	$viewtabelpelanggan .= '<div style="width: 80%;">'.tabel_pelanggan().'</div>';
+	$viewtabelpelanggan .= '<div style="width: 80%;">'.tabel_pelanggan($dataPremis).'</div>';
 	$viewtabelpelanggan .= '<div id="dialogdetailhutang" title="DETAIL HUTANG DAN PEMBAYARAN"><div id="tempatnilaihutang"></div><div id="detailpiutang"></div><div id="detailpembayaran">a</div></div>';
 	$viewtabelpelanggan .= '<div id="dialogdetail" title="DETAIL PENJUALAN"></div>';
 	$viewtabelpelanggan .= '<div id="dialogpembayaran" title="PEMBAYARAN HUTANG">';
@@ -164,7 +167,17 @@ function bayar_hutang(){
 /**
  * @return string
  */
-function tabel_pelanggan(){
+function tabel_pelanggan($dataPremis = null){
+    get_number_format($currencySym, $thousandSep, $decimalSep,false);
+	if (!empty($dataPremis)){
+		$currencySym = $dataPremis->currency_symbol;
+		$thousandSep = $dataPremis->thousand_separator;
+		$decimalSep = $dataPremis->decimal_separator;
+	}else{
+		$currencySym = 'Rp.';
+		$thousandSep = '.';
+		$decimalSep = ',';
+	}
 	$tabelPelanggan ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_pelanggan">';
 	$tabelPelanggan .= '<thead>';
 	$tabelPelanggan .= '<tr>';
@@ -185,7 +198,7 @@ function tabel_pelanggan(){
 	$tabelPelanggan .= '<tr>';
 	$tabelPelanggan .= '<th style="text-align:right;" colspan="8">Total:&nbsp;&nbsp;</th>';
 	$totalhutang = getTotalHutangPelanggan();
-	$tabelPelanggan .= '<th class="angka" colspan="3">Rp. '.number_format($totalhutang,0,',','.').'</th>';
+	$tabelPelanggan .= '<th class="angka" colspan="3">'.$currencySym.' '.number_format($totalhutang,2,$decimalSep,$thousandSep).'</th>';
 	$tabelPelanggan .= '</tr>';
 	$tabelPelanggan .= '</tfoot>';
 	$tabelPelanggan .= '</table>';
@@ -240,6 +253,7 @@ function update_pelanggan(){
  */
 function detail_piutang(){
 	if (isset($_POST['idpelanggan'])){
+        get_number_format($currencySym, $thousandSep, $decimalSep,false);
 		$tabelpiutang ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="tabel_detail_hutang">';
 		$tabelpiutang .= '<thead>';
 		$tabelpiutang .= '<tr>';
@@ -266,19 +280,29 @@ function detail_piutang(){
 			$totalbelanja = $totalbelanja + $data->total;
 			$totaldp = $totaldp + $data->bayar;
 			$totalhutang = $totalhutang + $data->besarhutang;
-			$tabelpiutang .= '<td class="angka">'.number_format($data->total,0,',','.').'</td>';
-			$tabelpiutang .= '<td class="angka">'.number_format($data->bayar,0,',','.').'</td>';
-			$tabelpiutang .= '<td class="angka">'.number_format($data->besarhutang,0,',','.').'</td>';
+			$tabelpiutang .= '<td class="angka">'.number_format($data->total,2,$decimalSep,$thousandSep).'</td>';
+			$tabelpiutang .= '<td class="angka">'.number_format($data->bayar,2,$decimalSep,$thousandSep).'</td>';
+			$tabelpiutang .= '<td class="angka">'.number_format($data->besarhutang,2,$decimalSep,$thousandSep).'</td>';
 			$tabelpiutang .= '<td class="center">'.$data->tgljual.'</td>';
 			$tabelpiutang .= '</tr>';
 		}
 		$tabelpiutang .= '</tbody>';
 		$tabelpiutang .= '<tfoot>';
 		$tabelpiutang .= '<tr>';
+		$dataPremis = get_data_premis();
+		if (!empty($dataPremis)){
+			$currencySym = $dataPremis->currency_symbol;
+			$thousandSep = $dataPremis->thousand_separator;
+			$decimalSep = $dataPremis->decimal_separator;
+		}else{
+			$currencySym = 'Rp.';
+			$thousandSep = '.';
+			$decimalSep = ',';
+		}
 		$tabelpiutang .= '<th style="text-align:right" colspan="2">Total:&nbsp;&nbsp;</th>';
-		$tabelpiutang .= '<th style="text-align: right" >Rp. '.number_format($totalbelanja,0,',','.').'&nbsp;&nbsp;</th>';
-		$tabelpiutang .= '<th style="text-align: right" >Rp. '.number_format($totaldp,0,',','.').'&nbsp;&nbsp;</th>';
-		$tabelpiutang .= '<th style="text-align: right" >Rp. '.number_format($totalhutang,0,',','.').'&nbsp;&nbsp;</th>';
+		$tabelpiutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totalbelanja,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelpiutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totaldp,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
+		$tabelpiutang .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totalhutang,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelpiutang .= '<th></th>';
 		$tabelpiutang .= '</tr>';
 		$tabelpiutang .= '</tfoot>';
@@ -295,6 +319,7 @@ function detail_piutang(){
 function detail_pembayaran(){
 	//idlangganan, pembayaran, last_update
 	if (isset($_POST['idpelanggan'])){
+        get_number_format($currencySym, $thousandSep, $decimalSep,false);
 		$tabelPembayaran ='<table cellpadding="0" cellspacing="0" border="0" class="display" id="history_pembayaran">';
 		$tabelPembayaran .= '<thead>';
 		$tabelPembayaran .= '<tr>';
@@ -312,7 +337,7 @@ function detail_pembayaran(){
 			$tabelPembayaran .= '<td class="center">'.$data->tglbayar.'</td>';
 			$totalbayar = $totalbayar + $data->pembayaran;
 			$tabelPembayaran .= '<td class="angka">'.$data->keterangan.'</td>';
-			$tabelPembayaran .= '<td class="angka">'.number_format($data->pembayaran,0,',','.').'</td>';
+			$tabelPembayaran .= '<td class="angka">'.number_format($data->pembayaran,2,$decimalSep,$thousandSep).'</td>';
 			$tabelPembayaran .= '</tr>';
 		}
 		$result = db_query("SELECT penggunaan, SUBSTR(last_update,1,10) AS tglbayar, keterangan FROM historypenggunaandeposit WHERE idpelanggan='%d' ORDER BY tglbayar",
@@ -322,23 +347,24 @@ function detail_pembayaran(){
 			$tabelPembayaran .= '<td class="center">'.$data->tglbayar.'</td>';
 			$totalbayar = $totalbayar - $data->penggunaan;
 			$tabelPembayaran .= '<td class="angka">'.$data->keterangan.'</td>';
-			$tabelPembayaran .= '<td class="angka">-'.number_format($data->penggunaan,0,',','.').'</td>';
+			$tabelPembayaran .= '<td class="angka">-'.number_format($data->penggunaan,2,$decimalSep,$thousandSep).'</td>';
 			$tabelPembayaran .= '</tr>';
 		}
 		$tabelPembayaran .= '</tbody>';
 		$tabelPembayaran .= '<tfoot>';
 		$tabelPembayaran .= '<tr>';
 		$tabelPembayaran .= '<th style="text-align:right" colspan="2">Total:&nbsp;&nbsp;</th>';
-		$tabelPembayaran .= '<th style="text-align: right" >Rp. '.number_format($totalbayar,0,',','.').'&nbsp;&nbsp;</th>';
+		get_number_format($currencySym, $thousandSep, $decimalSep);
+		$tabelPembayaran .= '<th style="text-align: right" >'.$currencySym.' '.number_format($totalbayar,2,$decimalSep,$thousandSep).'&nbsp;&nbsp;</th>';
 		$tabelPembayaran .= '</tr>';
 		$tabelPembayaran .= '</tfoot>';
 		$tabelPembayaran .= '</table>';
 		$tabelPembayaran .= '<br>';
 		$sisaHutangPelanggan = getTotalHutang($_POST["idpelanggan"]) - $totalbayar;
 		if ($sisaHutangPelanggan < 0){
-			$tabelPembayaran .= '<div style="font-size: 14px;"><strong>DEPOSIT PELANGGAN : <span style="color: blue;">Rp. '.number_format(abs($sisaHutangPelanggan),0,',','.').'</span>&nbsp;&nbsp;</div>';
+			$tabelPembayaran .= '<div style="font-size: 14px;"><strong>DEPOSIT PELANGGAN : <span style="color: blue;">'.$currencySym.' '.number_format(abs($sisaHutangPelanggan),0,$decimalSep,$thousandSep).'</span>&nbsp;&nbsp;</div>';
 		}else{
-			$tabelPembayaran .= '<div style="font-size: 14px;"><strong>HUTANG PELANGGAN : Rp. '.number_format($sisaHutangPelanggan,0,',','.').'</span>&nbsp;&nbsp;</div>';
+			$tabelPembayaran .= '<div style="font-size: 14px;"><strong>HUTANG PELANGGAN : '.$currencySym.' '.number_format($sisaHutangPelanggan,0,$decimalSep,$thousandSep).'</span>&nbsp;&nbsp;</div>';
 		}
 		print $tabelPembayaran;
 	}

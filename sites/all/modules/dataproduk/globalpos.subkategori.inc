@@ -192,7 +192,7 @@ function tabel_subkategori(){
 function simpan_subkategori(){
 	if ($_POST["idkategori"] AND $_POST["kodesubkategori"] AND $_POST["subkategori"]){
 		db_query("INSERT INTO subkategori(idkategori,kodesubkategori,subkategori,keterangan) VALUES('%d','%s','%s','%s')",
-		$_POST["idkategori"],strtoupper($_POST["kodesubkategori"]),$_POST["subkategori"],$_POST["keterangansub"]);
+		$_POST["idkategori"],strtoupper(trim($_POST["kodesubkategori"])),trim($_POST["subkategori"]),trim($_POST["keterangansub"]));
 		if ($_POST["asal"]){
 			$result = db_query("SELECT idsubkategori FROm subkategori WHERE idkategori='%d' AND kodesubkategori='%s' AND subkategori='%s'",
 			$_POST["idkategori"],strtoupper($_POST["kodesubkategori"]),$_POST["subkategori"]);
@@ -206,7 +206,7 @@ function simpan_subkategori(){
 }
 
 function update_subkategori(){
-	$NILAI = $_POST['value'];
+	$NILAI = trim($_POST['value']);
 	$KOLOM = $_POST['kol_id'];
 	$SUBKATEGORI_ID = $_POST['row_id'];
 	$NILAITAMPIL = $NILAI;

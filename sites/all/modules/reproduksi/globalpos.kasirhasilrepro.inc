@@ -1,6 +1,7 @@
 <?php
 
 function hasilreproduksi(){
+	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
@@ -69,7 +70,7 @@ function hasilreproduksi(){
 	$hasilreproduksi .= $tombolselesai;
 	$hasilreproduksi .= $tombolprint;
 	$hasilreproduksi .= '</div>';
-	$hasilreproduksi .= '<div id="tempattotal"><div id="totalbelanja">Total Hasil Packing Ulang : Rp. 0</div></div>';
+	$hasilreproduksi .= '<div id="tempattotal"><div id="totalbelanja">Total Hasil Packing Ulang : '.$currencySym.' 0</div></div>';
 	$hasilreproduksi .= '</div>';
 	$hasilreproduksi .= '<div title="Informasi" id="dialogwarning">';
 	$hasilreproduksi .= '<p id="pesantext">Produk yang dicari tidak ada, Silahkan masukkan Barcode/Kode Produk/Nama Produk yang lain...!!!</p>';
@@ -87,15 +88,15 @@ function hasilreproduksi(){
 function simpan_hasilreproduksi(){
 	//nonota, idpemakai, total, bayar, kembali
 	if ($_POST["detail_produk"] AND $_POST["totalbelanja"]){
-		$next_id = $_POST["idreproduksi"];
+        $idreproduksi = $_POST['idreproduksi'];
+		$next_id = db_result(db_query('SELECT COUNT(*) FROM hasilreproduksi')) + 1;
 		$no_nota = buat_nota($next_id);
-		$kembali = $_POST["bayar"] - $_POST["totalbelanja"];
 		date_default_timezone_set('Asia/Jakarta');
 		$waktujual = $_POST["tglhasilreproduksi"]." ".date("H:i:s");
 		global $user;
-		db_query("INSERT INTO hasilreproduksi (idreproduksi, nonota, idpemakai, total, tglhasilreproduksi) 
-		VALUES ('%d','%s', '%d', '%f', '%s')",
-		$next_id, $no_nota, $user->uid, $_POST["totalbelanja"], $waktujual);
+		db_query("INSERT INTO hasilreproduksi (idreproduksi, nonota, idpemakai, total, tglhasilreproduksi,ref_idreproduksi) 
+		VALUES ('%d','%s', '%d', '%f', '%s','%d')",
+            $next_id, $no_nota, $user->uid, $_POST["totalbelanja"], $waktujual,$idreproduksi);
 		print $_POST["detail_produk"];
 		$pecahdetail = explode("&",$_POST["detail_produk"]);
 		$totalmodal = 0;
@@ -104,17 +105,16 @@ function simpan_hasilreproduksi(){
 			$pecahnilai = explode("___",remove_utf8_bom($pecahparameter[1]));
 			$IDPRODUK =	$pecahnilai[0];
 			$QTY = $pecahnilai[1];
-			$HARGAJUAL = $pecahnilai[2];
-			$DISKON = $pecahnilai[3];
-			$result = db_query("SELECT hargapokok,stok FROM product WHERE idproduct='%d'",$IDPRODUK);	
+			$HARGAJUAL = round($pecahnilai[2],2);
+			$result = db_query("SELECT hargapokok,stok FROM product WHERE idproduct='%d'",$IDPRODUK);
 			$data = db_fetch_object($result);
 			$HARGAPOKOK = $data->hargapokok;
 			$totalmodal = $totalmodal + ($HARGAPOKOK*$QTY);
 			$STOKSEBELUM = $data->stok;
 			//idreproduksi, idproduct, jumlah, hargapokok, hargajual
-			db_query("INSERT INTO detailhasilreproduksi(idreproduksi, idproduct, jumlah, hargapokok, hargajual) VALUES
-			('%d', '%d', '%f', '%f', '%f')",
-			$next_id,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL);
+			db_query("INSERT INTO detailhasilreproduksi(idhasilreproduksi,idreproduksi, idproduct, jumlah, hargapokok, hargajual) VALUES
+			('%d','%d', '%d', '%f', '%f', '%f')",
+                $next_id, $idreproduksi,$IDPRODUK,$QTY,$HARGAPOKOK,$HARGAJUAL);
 			$STOKSEKARANG = $STOKSEBELUM + $QTY;
 			db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$STOKSEKARANG,$IDPRODUK);
 			$KETERANGAN = 'Hasil Packing Ulang';
