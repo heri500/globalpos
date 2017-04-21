@@ -10,6 +10,7 @@ function getTotalHutangLatest($idPelanggan = null, $realData = false, $periode =
 	$totalHutangLatest = 0;
 	if (!empty($idPelanggan)){
 		if ($realData){
+            sync_penjualan_hutang($idPelanggan, $periode);
 			$strSqlTotalHutang = "SELECT SUM(besarhutang) AS total_hutang FROM detailpiutang piutang ";
 			$strSqlTotalHutang .= "LEFT JOIN penjualan penj ON piutang.idpenjualan=penj.idpenjualan ";
 			$strSqlTotalHutang .= "WHERE piutang.idpelanggan=%d ";
@@ -170,4 +171,37 @@ function createPelangganSelection($defaultValue = null, $emptyText = 'UMUM', $in
 }
 function getTotalPembayaranHutang(){
 
+}
+
+function sync_penjualan_hutang($idPelanggan = null, $periode = null){
+    if (!empty($idPelanggan)){
+        global $user;
+        $strSQL = "SELECT jual.idpenjualan, jual.total, jual.kembali, jual.carabayar, jual.tglpenjualan ";
+        $strSQL .= "FROM penjualan jual LEFT JOIN detailpiutang piutang ON piutang.idpenjualan = jual.idpenjualan ";
+        $strSQL .= "WHERE jual.idpenjualan NOT IN (SELECT idpenjualan FROM detailpiutang WHERE idpelanggan = %d) ";
+        $strSQL .= "AND jual.idpelanggan = %d AND jual.kembali < 0 ";
+        if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])){
+            $strSQL .= "AND (jual.tglpenjualan BETWEEN '%s' AND '%s')";
+        }
+        if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])) {
+            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan, $periode['tglawal'], $periode['tglakhir']);
+        }else{
+            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan);
+        }
+        while ($dataPenjualan = db_fetch_object($syncResult)){
+            db_query("INSERT INTO detailpiutang (idpelanggan, idpenjualan, besarhutang) VALUES ('%d','%d','%f')",
+                $idPelanggan,$dataPenjualan->idpenjualan,abs($dataPenjualan->kembali));
+            $resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
+                $idPelanggan);
+            $datapiutang = db_fetch_object($resultpiutang);
+            if ($datapiutang->idpelanggan){
+                $besarhutangskrg = $datapiutang->besarhutang + abs($dataPenjualan->kembali);
+                db_query("UPDATE piutang SET besarhutang='%f',uid='%d' WHERE idpelanggan='%d'",
+                    $besarhutangskrg,$user->uid,$idPelanggan);
+            }else{
+                db_query("INSERT INTO piutang(idpelanggan,besarhutang,uid)VALUES('%d','%f','%d')",
+                    $idPelanggan,abs($dataPenjualan->kembali),$user->uid);
+            }
+        }
+    }
 }

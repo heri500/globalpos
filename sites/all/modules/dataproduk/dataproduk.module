@@ -403,6 +403,9 @@ function dataproduct_file_download($uri) {
 	}
 }
 
+/**
+ * @return array
+ */
 function get_data_product(){
 	$strSQL = 'SELECT prod.idproduct, prod.idsupplier, prod.idkategori, prod.idsubkategori, ';
 	$strSQL .= 'prod.barcode, prod.alt_code, prod.namaproduct, prod.type_product, prod.hargapokok, ';
@@ -412,7 +415,7 @@ function get_data_product(){
 	$strSQL .= 'kat.kategori, subkat.subkategori ';
 	$strSQL .= 'FROM product prod LEFT JOIN kategori kat ON prod.idkategori = kat.idkategori ';
 	$strSQL .= 'LEFT JOIN subkategori subkat ON prod.idsubkategori = subkat.idsubkategori ';
-	$strSQL .= 'WHERE prod.status_product = 1 AND prod.idkategori NOT IN (2,7) ';
+	$strSQL .= 'WHERE prod.status_product = 1 ';
 	$strSQL .= 'ORDER BY prod.idkategori, prod.idsubkategori,prod.namaproduct';
 	$dataSongkok = db_query($strSQL);
 	$arrayData = array();
