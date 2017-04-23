@@ -192,9 +192,9 @@ function sync_penjualan_hutang($idPelanggan = null, $periode = null){
         while ($dataPenjualan = db_fetch_object($syncResult)){
             db_query("INSERT INTO detailpiutang (idpelanggan, idpenjualan, besarhutang) VALUES ('%d','%d','%f')",
                 $idPelanggan,$dataPenjualan->idpenjualan,abs($dataPenjualan->kembali));
-            $resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
+            //$resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
                 $idPelanggan);
-            $datapiutang = db_fetch_object($resultpiutang);
+            //$datapiutang = db_fetch_object($resultpiutang);
             /*if ($datapiutang->idpelanggan){
                 $besarhutangskrg = $datapiutang->besarhutang + abs($dataPenjualan->kembali);
                 db_query("UPDATE piutang SET besarhutang='%f',uid='%d' WHERE idpelanggan='%d'",
