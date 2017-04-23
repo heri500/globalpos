@@ -315,7 +315,7 @@ function detail_pembayaran(){
 			$tabelPembayaran .= '<td class="angka">'.number_format($data->pembayaran,0,',','.').'</td>';
 			$tabelPembayaran .= '</tr>';
 		}
-		$result = db_query("SELECT penggunaan, SUBSTR(last_update,1,10) AS tglbayar, keterangan FROM historypenggunaandeposit WHERE idpelanggan='%d' ORDER BY tglbayar",
+		$result = db_query("SELECT penggunaan, tglbayar, keterangan FROM historypenggunaandeposit WHERE idpelanggan='%d' ORDER BY tglbayar",
 		$_POST["idpelanggan"]);
 		while ($data = db_fetch_object($result)){
 			$tabelPembayaran .= '<tr>';

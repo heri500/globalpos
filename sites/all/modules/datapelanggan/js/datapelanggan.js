@@ -9,7 +9,7 @@ var alamatupdate = '';
 var selectedPenjualan = 0;
 function addCommas(nStr){
     nStr += "";
-    x = nStr.split(",");
+    x = nStr.split(".");
     x1 = x[0];
     x2 = x.length > 1 ? "," + x[1] : "";
     var rgx = /(\d+)(\d{3})/;

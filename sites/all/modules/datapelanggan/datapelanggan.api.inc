@@ -11,6 +11,7 @@ function getTotalHutangLatest($idPelanggan = null, $realData = false, $periode =
 	if (!empty($idPelanggan)){
 		if ($realData){
             sync_penjualan_hutang($idPelanggan, $periode);
+	    	sync_penggunaan_deposit($idPelanggan, $periode);
 			$strSqlTotalHutang = "SELECT SUM(besarhutang) AS total_hutang FROM detailpiutang piutang ";
 			$strSqlTotalHutang .= "LEFT JOIN penjualan penj ON piutang.idpenjualan=penj.idpenjualan ";
 			$strSqlTotalHutang .= "WHERE piutang.idpelanggan=%d ";
@@ -194,14 +195,42 @@ function sync_penjualan_hutang($idPelanggan = null, $periode = null){
             $resultpiutang = db_query("SELECT idpelanggan, besarhutang  FROM piutang WHERE idpelanggan='%d'",
                 $idPelanggan);
             $datapiutang = db_fetch_object($resultpiutang);
-            if ($datapiutang->idpelanggan){
+            /*if ($datapiutang->idpelanggan){
                 $besarhutangskrg = $datapiutang->besarhutang + abs($dataPenjualan->kembali);
                 db_query("UPDATE piutang SET besarhutang='%f',uid='%d' WHERE idpelanggan='%d'",
                     $besarhutangskrg,$user->uid,$idPelanggan);
             }else{
                 db_query("INSERT INTO piutang(idpelanggan,besarhutang,uid)VALUES('%d','%f','%d')",
                     $idPelanggan,abs($dataPenjualan->kembali),$user->uid);
-            }
+            }*/
+        }
+    }
+}
+function sync_penggunaan_deposit($idPelanggan = null, $periode = null){
+    if (!empty($idPelanggan)){
+        global $user;
+        $strSQL = "SELECT jual.nonota, jual.idpenjualan, jual.total, jual.kembali, jual.carabayar, jual.tglpenjualan ";
+        $strSQL .= "FROM penjualan jual LEFT JOIN historypenggunaandeposit depos ON depos.idpenjualan = jual.idpenjualan ";
+        $strSQL .= "WHERE jual.idpenjualan NOT IN (SELECT idpenjualan FROM historypenggunaandeposit WHERE idpelanggan = %d) ";
+        $strSQL .= "AND jual.idpelanggan = %d AND jual.carabayar = 'DEPOSIT' ";
+        if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])){
+            $strSQL .= "AND (jual.tglpenjualan BETWEEN '%s' AND '%s')";
+        }
+        if (!empty($periode) && isset($periode['tglawal']) && isset($periode['tglakhir'])) {
+            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan, $periode['tglawal'], $periode['tglakhir']);
+        }else{
+            $syncResult = db_query($strSQL, $idPelanggan, $idPelanggan);
+        }
+        while ($dataPenjualan = db_fetch_object($syncResult)){
+			$sisaDeposit = getTotalPembayaran($idPelanggan) - (getTotalHutang($idPelanggan) + getTotalPenggunaanDeposit($idPelanggan));
+			$variables['idpelanggan'] = $idPelanggan;
+			$variables['deposit'] = $sisaDeposit;
+			$variables['penggunaan'] = abs($dataPenjualan->total);
+			$variables['tglbayar'] = $dataPenjualan->tglpenjualan;
+			$keterangan = 'Penggunaan deposit untuk pembayaran nota : '.$dataPenjualan->nonota.' Tanggal : '.$dataPenjualan->tglpenjualan;
+			$variables['keterangan'] = $keterangan;
+			$variables['idpenjualan'] = $dataPenjualan->idpenjualan;
+			penggunaandeposit($variables);
         }
     }
 }

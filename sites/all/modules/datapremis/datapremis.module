@@ -314,6 +314,9 @@ function generate_premis_ajax(){
     exit();
 }
 function do_upload_premisdata(){
+    return 'Test';
+}
+function do_upload_premisdata_bak(){
     $resultview = '';
     if (is_connected()) {
         //copy premis data();
