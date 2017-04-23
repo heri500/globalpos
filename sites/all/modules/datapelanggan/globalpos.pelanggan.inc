@@ -304,7 +304,7 @@ function detail_pembayaran(){
 		$tabelPembayaran .= '</tr>';
 		$tabelPembayaran .= '</thead>';
 		$tabelPembayaran .= '<tbody>';
-		$result = db_query("SELECT pembayaran, SUBSTR(last_update,1,10) AS tglbayar, keterangan FROM historypembayaran WHERE idpelanggan='%d' ORDER BY tglbayar",
+		$result = db_query("SELECT pembayaran, tglbayar, keterangan FROM historypembayaran WHERE idpelanggan='%d' ORDER BY tglbayar",
 		$_POST['idpelanggan']);
 		$totalbayar = 0;
 		while ($data = db_fetch_object($result)){

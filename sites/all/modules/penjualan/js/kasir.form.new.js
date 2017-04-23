@@ -551,6 +551,7 @@ $(document).ready(function(){
 			$("#dialogubahqty2").dialog("close");
 		}
 	});
+	$("#nilaibayar").autotab({ format : 'numeric' });
 	$("#nilaibayar,#nomerkartu").keyup(function(e){
 		kembali = $("#nilaibayar").val() - totalbelanja;
 		$("#kembali").val("Rp. "+ number_format(kembali,0,",","."));

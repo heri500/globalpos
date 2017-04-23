@@ -276,26 +276,17 @@ function serverSidePenjualan($request){
 		$strCriteria .= "OR plg.namapelanggan LIKE '%%%s%%' OR penj.carabayar LIKE '%%%s%%' ";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if ($pageLength == -1){
+		$strSQL .= $strCriteria." ORDER BY $orderColumn";
+	}else{
+		$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)){
 		if (empty($idpelanggan)) {
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$firstRecord,
-				$lastRecord
-			);
-			$recordsFiltered = db_result(
-				db_query(
-					$strSQLFilteredTotal,
+			if ($pageLength == -1) {
+				$result = db_query(
+					$strSQL,
 					$tglAwal,
 					$tglAkhir,
 					$searchQuery,
@@ -304,23 +295,92 @@ function serverSidePenjualan($request){
 					$searchQuery,
 					$searchQuery,
 					$searchQuery
-				)
-			);
+				);
+				$recordsFiltered = db_result(
+					db_query(
+						$strSQLFilteredTotal,
+						$tglAwal,
+						$tglAkhir,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery
+					)
+				);
+			}else{
+				if ($pageLength == -1) {
+					$result = db_query(
+						$strSQL,
+						$tglAwal,
+						$tglAkhir,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery
+					);
+				}else{
+					$result = db_query(
+						$strSQL,
+						$tglAwal,
+						$tglAkhir,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$firstRecord,
+						$lastRecord
+					);
+				}
+				$recordsFiltered = db_result(
+					db_query(
+						$strSQLFilteredTotal,
+						$tglAwal,
+						$tglAkhir,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery,
+						$searchQuery
+					)
+				);
+			}
 		}else{
-			$result = db_query(
-				$strSQL,
-				$tglAwal,
-				$tglAkhir,
-				$idpelanggan,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$searchQuery,
-				$firstRecord,
-				$lastRecord
-			);
+			if ($pageLength == -1) {
+				$result = db_query(
+					$strSQL,
+					$tglAwal,
+					$tglAkhir,
+					$idpelanggan,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery
+				);
+			}else{
+				$result = db_query(
+					$strSQL,
+					$tglAwal,
+					$tglAkhir,
+					$idpelanggan,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$searchQuery,
+					$firstRecord,
+					$lastRecord
+				);
+			}
 			$recordsFiltered = db_result(
 				db_query(
 					$strSQLFilteredTotal,
@@ -342,7 +402,7 @@ function serverSidePenjualan($request){
 			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir));
 		}else{
 			$result = db_query($strSQL, $tglAwal, $tglAkhir, $idpelanggan, $firstRecord, $lastRecord);
-			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $idpelanggan, $tglAwal, $tglAkhir));
+			$recordsFiltered = db_result(db_query($strSQLFilteredTotal, $tglAwal, $tglAkhir, $idpelanggan));
 		}
 	}
 	$output = array();

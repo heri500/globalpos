@@ -431,7 +431,7 @@ $(document).ready(function() {
         changeMonth: true,
         changeYear: true,
         dateFormat: 'dd-mm-yy',
-        altField: '#tglkirim',
+        altField: '#tglbayarkirim',
         altFormat: 'yy-mm-dd'
     });
     $('#nilaipembayaran').keypress(function(e) {
