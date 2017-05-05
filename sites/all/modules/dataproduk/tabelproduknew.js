@@ -24,7 +24,7 @@ function tampilkantabelproduk(){
         'aoColumns': [
             { 'bSortable': false },null,null,{ 'bVisible': false },null,null,null,null,
             null,{ 'bVisible': false },{ 'bVisible': false },
-            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,{ 'bSortable': false }
+            { 'bVisible': false },null,null,null,{ 'bVisible': false },null,{ 'bSortable': false },{ 'bSortable': false }
         ],
         'aLengthMenu': [[100, 200, 300, 500], [100, 200, 300,500]],
         'iDisplayLength': 100,
@@ -118,11 +118,12 @@ function tampilkantabelproduk(){
                 'select': true,
                 'indicator': 'Menyimpan...',
                 'tooltip': 'Klik untuk mengubah...'
-            });;
+            });
             $('td', row).eq(9).addClass('center');
             $('td', row).eq(10).addClass('center');
             $('td', row).eq(11).addClass('angka');
             $('td', row).eq(12).addClass('center');
+            $('td', row).eq(13).addClass('center');
         },
         'drawCallback': function( settings ) {
             $('.barcode-select').click(function(){
@@ -634,6 +635,26 @@ $(document).ready(function() {
         });
         if (selected_product != ''){
             window.open(pathutama + 'print/6?idproductlogo='+ selected_product);
+        }
+    });
+    $('#print-barcode-tanpa-harga').on('click', function(){
+        var selected_product = '';
+        var counterData = 0;
+        $('.barcode-select').each(function(){
+            if ($(this).is(':checked')){
+                var strID = $(this).val();
+                if (counterData > 0){
+                    selected_product += '||'+ $(this).val() +'__'+ $('#print-'+ strID).val();
+                }else{
+                    selected_product = $(this).val() +'__'+ $('#print-'+ strID).val();
+                }
+                counterData++;
+            }
+
+        });
+        if (selected_product != ''){
+            $('#selected-product-print').val(selected_product);
+            $('#form-print').submit();
         }
     });
     $('#nonaktifkan').on('click', function(){

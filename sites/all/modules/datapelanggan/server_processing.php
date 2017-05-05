@@ -207,6 +207,7 @@ function serverSideProduk($request){
 		$rowData[] = $data->satuan;
 		$rowData[] = $data->keterangan;
 		$rowData[] = number_format($data->total_nilai,0,",",".");
+		$rowData[] = '<input type="text" id="print-'.$data->idproduct.'" name="print-'.$data->idproduct.'" class="total-print" value="'.$data->stok.'" size="2">';
 		$rowData[] = '<input class="barcode-select" type="checkbox" id="check-'.$data->idproduct.'" name="check-'.$data->idproduct.'" value="'.$data->idproduct.'">';
 		$totalNilaiBarang = $totalNilaiBarang + $data->total_nilai;
 		$rowData[] = $data->idproduct;
