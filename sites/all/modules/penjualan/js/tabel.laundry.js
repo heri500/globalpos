@@ -214,4 +214,13 @@ $(document).ready(function(){
 		changeYear: true,
 		dateFormat: 'dd-mm-yy'
 	});
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })

@@ -175,4 +175,13 @@ $(document).ready(function(){
 		dateFormat: 'dd-mm-yy'
 	}).css('height','27px');
 	$('#navigation').css('height','32px');
+	alamat = pathutama + 'datapremis/uploaddata';
+	$.ajax({
+		type: 'POST',
+		url: alamat,
+		cache: false,
+		success: function (data) {
+
+		}
+	});
 })
