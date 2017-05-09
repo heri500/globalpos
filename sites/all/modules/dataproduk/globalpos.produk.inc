@@ -133,7 +133,8 @@ function data_produk(){
 	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Logo</button>&nbsp;&nbsp;';
-	$pilihanstatus .= '<button id="print-barcode-tanpa-harga">Print Barcode Tanpa Harga</button>';
+	$pilihanstatus .= '<button id="print-barcode-tanpa-harga">Barcode 50x25</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-50x15">Barcode 50x15</button>';
 	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
 	$statusProduct = 1;
@@ -200,6 +201,7 @@ function data_produk(){
 	$viewtabelproduk .= '</div>';
 	$viewtabelproduk .= '<form id="form-print" method="post" action="'.base_path().'print/6" target="_blank" style="display:none;">';
 	$viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
+	$viewtabelproduk .= '<input type="hidden" id="sticker-type" name="sticker-type" value="0">';
 	$viewtabelproduk .= '</form>';
 	return $viewtabelproduk;
 }

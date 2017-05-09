@@ -563,6 +563,51 @@ function printProductBarcodeWithLogo2(){
 	}
 	return $tablePrint;
 }
+function printProductBarcodeWithLogo3(){
+	drupal_add_js('misc/media/jquery-1.4.4.min.js');
+	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+	_addBarcodePlugins();
+	drupal_add_js($js_path);
+	$js_path = drupal_get_path('module','penjualan').'/js/productlogo2.barcode.js';
+	drupal_add_js($js_path);
+	$tablePrint = '';
+	$products = isset($_POST['selected-product-print']) ? $_POST['selected-product-print'] : null;
+	$explodeProduct = explode('||',$products);
+	$pathLogo = createLogoImagePath();
+	if (!empty($explodeProduct) && count($explodeProduct)){
+		$printPage = 0;
+		for ($i = 0;$i < count($explodeProduct);$i++) {
+			$productData = explode('__',$explodeProduct[$i]);
+			$nidProduct = $productData[0];
+			$totalPrint = $productData[1];
+			$dataProduct = getDataProduct($nidProduct);
+			if (count($dataProduct) && $totalPrint > 0) {
+				for ($j = 0;$j < $totalPrint;$j++) {
+					if ($printPage == 0) {
+						$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" >';
+						$tablePrint .= '<tbody>';
+					} else {
+						$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
+						$tablePrint .= '<tbody>';
+						$tablePrint .= '<tr><td colspan="2" style="font-size: 8px;">&nbsp;</td></tr>';
+					}
+					$tablePrint .= '<tr>';
+					$tablePrint .= '<td rowspan="3" class="logo-place">';
+					$tablePrint .= '<td class="small-font" align="center">' . $dataProduct['info']->namaproduct . '</td>';
+					$tablePrint .= '</td>';
+					$tablePrint .= '<td>';
+					$tablePrint .= '<div id="' . $dataProduct['info']->barcode . '" class="barcode-place" align="center"></div>';
+					$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataProduct['info']->barcode . '</div>';
+					$tablePrint .= '</td></tr>';
+					$tablePrint .= '</tbody>';
+					$tablePrint .= '</table>';
+					$printPage++;
+				}
+			}
+		}
+	}
+	return $tablePrint;
+}
 function printCustomerOrderLogo(){
 	drupal_add_js('misc/media/jquery-1.4.4.min.js');
 	$js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
@@ -762,7 +807,13 @@ function cekPrinterCommand(){
 		}
 		$printOut = printCustomerOrderBarcodeNew($totalPrint);
 	}else if (isset($_POST['selected-product-print'])){
-		$printOut = printProductBarcodeWithLogo2();
+		if (isset($_POST['sticker-type']) && $_POST['sticker-type'] == 0){
+			$printOut = printProductBarcodeWithLogo2();
+		}else if(isset($_POST['sticker-type']) && $_POST['sticker-type'] == 1){
+			$printOut = printProductBarcodeWithLogo3();
+		}else{
+			$printOut = printProductBarcodeWithLogo2();
+		}
 	}
 	return $printOut;
 }
