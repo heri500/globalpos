@@ -435,3 +435,13 @@ function generate_barcode_product(){
 	}
 	return $dataProduct;
 }
+
+function get_konversi_satuan($satuan1 = null, $satuan2 = 'PCS'){
+	if ($satuan1 == $satuan2){
+		$konversi = 1;
+	}else {
+		$strSQL = "SELECT konversi FROM konversisatuan WHERE satuan1 = '%s' AND satuan2 = '%s'";
+		$konversi = db_result(db_query($strSQL, $satuan1, $satuan2));
+	}
+	return $konversi;
+}
