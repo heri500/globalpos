@@ -3,7 +3,7 @@ $(document).ready(function(){
     var btype = "ean13";
     var settings = {
         output:renderer,
-        barWidth: 1,
+        barWidth: 2,
         barHeight: 30,
     };
     $(".barcode-place").each(function(){

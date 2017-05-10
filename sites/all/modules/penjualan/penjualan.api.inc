@@ -589,15 +589,12 @@ function printProductBarcodeWithLogo3(){
 					} else {
 						$tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
 						$tablePrint .= '<tbody>';
-						$tablePrint .= '<tr><td colspan="2" style="font-size: 8px;">&nbsp;</td></tr>';
+						$tablePrint .= '<tr><td style="font-size: 8px;">&nbsp;</td></tr>';
 					}
 					$tablePrint .= '<tr>';
-					$tablePrint .= '<td rowspan="3" class="logo-place">';
-					$tablePrint .= '<td class="small-font" align="center">' . $dataProduct['info']->namaproduct . '</td>';
-					$tablePrint .= '</td>';
 					$tablePrint .= '<td>';
 					$tablePrint .= '<div id="' . $dataProduct['info']->barcode . '" class="barcode-place" align="center"></div>';
-					$tablePrint .= '<div class="small-font" align="center" style="width: 100%;">' . $dataProduct['info']->barcode . '</div>';
+					$tablePrint .= '<div class="standard-font" align="center" style="width: 100%;">' . strtoupper($dataProduct['info']->namaproduct) . '</div>';
 					$tablePrint .= '</td></tr>';
 					$tablePrint .= '</tbody>';
 					$tablePrint .= '</table>';
