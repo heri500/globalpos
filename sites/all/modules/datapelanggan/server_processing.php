@@ -424,6 +424,8 @@ function serverSidePenjualan($request){
 		$rowData[] = $data->namapelanggan;
 		$tombolprint = "<img title=\"Klik untuk mencetak nota penjualan\" onclick=\"print_penjualan(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/print.png\" width=\"22\">";
 		$rowData[] = $tombolprint;
+		$tombolprint2 = "<img title=\"Klik untuk mencetak faktur penjualan\" onclick=\"print_faktur(".$data->idpenjualan.",'".$data->nonota."');\" src=\"$baseDirectory/misc/media/images/printer2.png\" width=\"22\">";
+		$rowData[] = $tombolprint2;
 		$rowData[] = $data->idpenjualan;
 		$output[] = $rowData;
 	}

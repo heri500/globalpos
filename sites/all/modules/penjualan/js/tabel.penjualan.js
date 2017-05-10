@@ -320,6 +320,21 @@ function print_penjualan(idpenjualan,nonota){
 		window.open(pathutama + 'print/6?idpenjualan='+ idpenjualan);
 	}
 }
+function print_faktur(idpenjualan,nonota){
+	var konfirmasi = confirm('Yakin ingin export faktur ke xls untuk penjualan dengan no nota : '+ nonota +' ini...??!!');
+	if (konfirmasi){
+		alamat = pathutama + 'penjualan/exportfaktur/'+ idpenjualan;
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function(data){
+				var xlsFilename = data.trim();
+				window.location = Drupal.settings.basePath +"sites/default/files/"+ xlsFilename;
+			}
+		});
+	}
+}
 $(document).ready(function(){
     pathutama = Drupal.settings.basePath;
 	alamatupdatepenjualan = pathutama + 'penjualan/updatedetailpenjualan';
