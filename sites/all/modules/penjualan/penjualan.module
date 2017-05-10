@@ -449,11 +449,18 @@ function create_faktur_in_excel($idpenjualan = 0){
 			$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
 			$colnumber++;
 			$konversiSatuan = get_konversi_satuan(strtoupper($detailPenjualan->satuan));
-			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $konversiSatuan*$detailPenjualan->jumlah);
-			$colnumber++;
-			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, round($detailPenjualan->hargajual/$konversiSatuan));
-			$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
-			$colnumber++;
+			if (!empty($konversiSatuan)) {
+				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, $konversiSatuan * $detailPenjualan->jumlah);
+				$colnumber++;
+				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, round($detailPenjualan->hargajual / $konversiSatuan));
+				$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber] . $rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
+				$colnumber++;
+			}else{
+				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, '-');
+				$colnumber++;
+				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, '-');
+				$colnumber++;
+			}
 			$subTotal = ($detailPenjualan->hargajual - ($detailPenjualan->hargajual*$detailPenjualan->diskon/100))*$detailPenjualan->jumlah;
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $subTotal);
 			$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber].$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
