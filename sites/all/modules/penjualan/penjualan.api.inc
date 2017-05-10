@@ -70,7 +70,7 @@ function getDetailPenjualan($nidpenjualan = null){
 	if (!empty($nidpenjualan)){
 		$detailPenjualan = array();
 		$strSQL = "SELECT iddetail, idpenjualan, a.idproduct, jumlah, a.hargapokok, a.hargajual, 
-		a.diskon, b.namaproduct, b.satuan FROM detailpenjualan a LEFT JOIN product b
+		a.diskon, b.namaproduct, b.satuan, b.barcode FROM detailpenjualan a LEFT JOIN product b
 		ON a.idproduct = b.idproduct WHERE a.idpenjualan=%d";
 		$result = db_query($strSQL,$nidpenjualan);
 		while ($data = db_fetch_object($result)){
