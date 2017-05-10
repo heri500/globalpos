@@ -433,13 +433,13 @@ function create_faktur_in_excel($idpenjualan = 0){
 			$colnumber = 0;
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, ($i + 1));
 			$colnumber++;
-			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan->kategori)));
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan->namaproduct)));
 			$colnumber++;
 			$ukuran = !empty($detailPenjualan->ukuran) ? $detailPenjualan->ukuran : '-';
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $ukuran);
 			$colnumber++;
 			$barcode = !empty($detailPenjualan->barcode) ? $detailPenjualan->barcode : '-';
-			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim(strtoupper($detailPenjualan->subkategori)));
+			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim($barcode));
 			$colnumber++;
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->jumlah);
 			$colnumber++;
