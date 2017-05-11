@@ -1,0 +1,1671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ab9ed199-b1b6-4559-b200-a89ca111c649" name="Default" comment="Changed for centralization data">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/includes/module.inc" afterPath="$PROJECT_DIR$/includes/module.inc" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/default/settings.php" afterPath="$PROJECT_DIR$/sites/default/settings.php" />
+    </list>
+    <ignored path="ikhwanmart.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DrupalConfiguration" doNotAskAgain="true" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="ikhwanmart" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="tabelproduknew.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="680" column="7" selection-start-line="680" selection-start-column="7" selection-end-line="680" selection-end-column="7" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="penjualan.module" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="524">
+              <caret line="464" column="16" selection-start-line="464" selection-start-column="16" selection-end-line="464" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="globalpos.penjualan.inc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1271">
+              <caret line="144" column="41" selection-start-line="144" selection-start-column="41" selection-end-line="144" selection-end-column="41" />
+              <folding>
+                <marker date="1494388853246" expanded="true" signature="6460:6476" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="6876:6893" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="6990:7007" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="7105:7122" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="7252:7269" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="7367:7384" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="10040:10056" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="10128:10145" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="10242:10259" placeholder="..." />
+                <marker date="1494388853246" expanded="true" signature="10357:10374" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="globalpos.kategori.inc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="277">
+              <caret line="98" column="55" selection-start-line="0" selection-start-column="0" selection-end-line="128" selection-end-column="1" />
+              <folding>
+                <marker date="1334195462000" expanded="true" signature="3145:3156" placeholder="..." />
+                <marker date="1334195462000" expanded="true" signature="3440:3453" placeholder="..." />
+                <marker date="1334195462000" expanded="true" signature="3659:3754" placeholder="SELECT idkat... kategori" />
+                <marker date="1334195462000" expanded="true" signature="4283:4360" placeholder="INSERT INTO kategori... " />
+                <marker date="1334195462000" expanded="true" signature="4488:4561" placeholder="SELECT idkat... kategori" />
+                <marker date="1334195462000" expanded="true" signature="4941:5000" placeholder="UPDATE kateg... " />
+                <marker date="1334195462000" expanded="true" signature="5046:5101" placeholder="UPDATE kateg... " />
+                <marker date="1334195462000" expanded="true" signature="5147:5204" placeholder="UPDATE kateg... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="penjualan.api.inc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="516">
+              <caret line="78" column="5" selection-start-line="78" selection-start-column="5" selection-end-line="78" selection-end-column="5" />
+              <folding>
+                <marker date="1494390381540" expanded="true" signature="491:894" placeholder="SELECT a.idt... titipanlaundry" />
+                <marker date="1494390381540" expanded="true" signature="1243:1547" placeholder="SELECT iddet... detaillaundry" />
+                <marker date="1494390381540" expanded="true" signature="1971:2318" placeholder="SELECT idpen... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="2811:3033" placeholder="SELECT iddet... detailpenjualan" />
+                <marker date="1494390381540" expanded="true" signature="3677:3716" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="3817:3911" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="3993:4056" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4071:4082" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4154:4176" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4224:4236" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4313:4335" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4449:4483" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4608:4642" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4656:4679" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4703:4726" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4862:4896" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4910:4933" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="4961:4984" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5163:5197" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5211:5234" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5260:5283" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5298:5310" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5355:5368" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5556:5621" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5635:5658" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5685:5708" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5723:5735" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="5779:5792" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6080:6114" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6278:6309" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6386:6430" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6733:6777" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6872:6942" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6957:6969" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="6994:7007" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="7570:7632" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="7678:7757" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="7772:7784" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="7809:7822" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8006:8040" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8088:8139" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8154:8166" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8191:8204" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8365:8399" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8445:8496" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8511:8523" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8548:8561" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8716:8781" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8826:8908" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8923:8935" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="8960:8973" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="9139:9174" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="9931:9965" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="10060:10094" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="10184:10218" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="10299:10333" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11000:11039" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11140:11227" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11296:11406" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11488:11553" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11811:11846" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11861:11872" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="11897:11909" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12077:12112" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12127:12138" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12166:12178" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12302:12367" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12382:12393" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12422:12434" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12595:12660" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12675:12686" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12767:12779" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12910:12975" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="12990:13001" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="13037:13049" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="13344:13378" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="13499:13551" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="13642:13694" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="13784:13836" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14090:14170" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14185:14196" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14223:14235" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14358:14411" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14426:14437" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14508:14520" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14877:14930" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14945:14956" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="14990:15002" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15212:15246" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15420:15473" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15488:15499" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15556:15568" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15711:15773" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15844:15879" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="15962:16024" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16120:16173" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16188:16199" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16271:16293" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16341:16353" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16430:16452" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="16562:16627" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="17870:17968" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="18058:18137" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="18278:18396" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="18499:18636" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="18777:18845" placeholder="SELECT SUM(b... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="19036:19104" placeholder="SELECT SUM(b... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="19496:19566" placeholder="SELECT SUM(k... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="19755:19825" placeholder="SELECT SUM(k... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="20187:20300" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="20414:20546" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="20794:20899" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="21013:21137" placeholder="SELECT SUM($... penjualan" />
+                <marker date="1494390381540" expanded="true" signature="21607:21800" placeholder="SELECT SUM($... detailpenjualan" />
+                <marker date="1494390381540" expanded="true" signature="21906:22190" placeholder="SELECT SUM($... detailpenjualan" />
+                <marker date="1494390381540" expanded="true" signature="23544:23583" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="23750:23769" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="24605:24644" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="24727:24766" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="24856:24872" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="25128:25140" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="25274:25293" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="25399:25418" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="25433:25445" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="25519:25532" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="26516:26555" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="26638:26677" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="26779:26794" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="27207:27219" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="28667:28706" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="28794:28833" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="28937:28952" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="29373:29385" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="30673:30712" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="30800:30839" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="30943:30958" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="31420:31432" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="32401:32440" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="32526:32565" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="32669:32684" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="33103:33115" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="34289:34328" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="34411:34450" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="34552:34567" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="34969:34981" placeholder="..." />
+                <marker date="1494390381540" expanded="true" signature="36465:36554" placeholder="SELECT a.det... detailcustomerorder" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="globalpos.produk.inc" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4466">
+              <caret line="203" column="96" selection-start-line="203" selection-start-column="96" selection-end-line="203" selection-end-column="96" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataproduk.module" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="594">
+              <caret line="440" column="22" selection-start-line="440" selection-start-column="22" selection-end-line="440" selection-end-column="22" />
+              <folding>
+                <marker date="1494387853203" expanded="true" signature="6728:6776" placeholder="SELECT lead_... product" />
+                <marker date="1494387853203" expanded="true" signature="12446:12532" placeholder="SELECT SUM(s... product" />
+                <marker date="1494387853203" expanded="true" signature="17185:17231" placeholder="SELECT idpro... product" />
+                <marker date="1494387853203" expanded="true" signature="17394:17444" placeholder="UPDATE produ... " />
+                <marker date="1494387853203" expanded="true" signature="17636:17711" placeholder="SELECT konve... konversisatuan" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="datapremis.module" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="361">
+              <caret line="317" column="1" selection-start-line="317" selection-start-column="1" selection-end-line="317" selection-end-column="1" />
+              <folding>
+                <marker date="1494387890009" expanded="true" signature="7763:7821" placeholder="INSERT INTO " />
+                <marker date="1494387890009" expanded="true" signature="8028:8061" placeholder="SELECT COUNT... " />
+                <marker date="1494387890009" expanded="true" signature="10910:10973" placeholder="SELECT COUNT... product" />
+                <marker date="1494387890009" expanded="true" signature="12869:12921" placeholder="UPDATE produ... " />
+                <marker date="1494387890009" expanded="true" signature="13488:13553" placeholder="SELECT COUNT... penjualan" />
+                <marker date="1494387890009" expanded="true" signature="15443:15499" placeholder="UPDATE penju... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="server_processing.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="389">
+              <caret line="427" column="35" selection-start-line="427" selection-start-column="35" selection-end-line="427" selection-end-column="35" />
+              <folding>
+                <marker date="1494386778903" expanded="true" signature="4322:4362" placeholder="SELECT COUNT... pelanggan" />
+                <marker date="1494386778903" expanded="true" signature="10433:10469" placeholder="SELECT COUNT... product" />
+                <marker date="1494386778903" expanded="true" signature="17273:17354" placeholder="SELECT COUNT... penjualan" />
+                <marker date="1494386778903" expanded="true" signature="17450:17550" placeholder="SELECT COUNT... penjualan" />
+                <marker date="1494386778903" expanded="true" signature="22607:22800" placeholder="SELECT COUNT... detailpenjualan" />
+                <marker date="1494386778903" expanded="true" signature="28504:28595" placeholder="SELECT COUNT... titipanlaundry" />
+                <marker date="1494386778903" expanded="true" signature="34598:34671" placeholder="SELECT COUNT... customer_order" />
+                <marker date="1494386778903" expanded="true" signature="37165:37210" placeholder="SELECT COUNT... cms_kategoripengeluaran" />
+                <marker date="1494386778903" expanded="true" signature="40740:40777" placeholder="SELECT COUNT... cms_pengeluaran" />
+                <marker date="1494386778903" expanded="true" signature="44225:44260" placeholder="SELECT COUNT... cms_pemasukan" />
+                <marker date="1494386778903" expanded="true" signature="44646:44832" placeholder="SELECT idpro... product" />
+                <marker date="1494386778903" expanded="true" signature="45113:45194" placeholder="SELECT besar... diskonkategori" />
+                <marker date="1494386778903" expanded="true" signature="45839:46013" placeholder="SELECT idpro... product" />
+                <marker date="1494386778903" expanded="true" signature="46294:46375" placeholder="SELECT besar... diskonkategori" />
+                <marker date="1494386778903" expanded="true" signature="48445:48479" placeholder="SELECT COUNT... " />
+                <marker date="1494386778903" expanded="true" signature="50261:50304" placeholder="SELECT COUNT... detailpenjualan" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tabel.penjualan.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="439">
+              <caret line="336" column="1" selection-start-line="336" selection-start-column="1" selection-end-line="336" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" root0="SKIP_HIGHLIGHTING" root1="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/sites/all/modules/keuangan/keuangan.schema.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/keuangan/keuangan.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/query-update-stok.php" />
+        <option value="$PROJECT_DIR$/sites/all/settings.ikhwanmart.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/db_settings/settings.ikhwanmart.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/keuangan/api.keuangan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/keuangan/keuangan.pengeluaran.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/keuangan/js/tabel.pengeluaran.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapremis/js/datapremis.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js" />
+        <option value="$PROJECT_DIR$/sites/default/settings.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc" />
+        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/update-sentralisasi-data.sql" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc" />
+        <option value="$PROJECT_DIR$/includes/module.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/phpexcel/phpexcel.api.inc" />
+        <option value="$PROJECT_DIR$/includes/file.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/filedownload.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc" />
+        <option value="$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css" />
+        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/update-node-print.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/globalpos.pelanggan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.api.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js" />
+        <option value="$PROJECT_DIR$/sites/all/libraries/images-update/update-konversisatuan.sql.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/js/konversisatuan.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/konversi.satuan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js" />
+        <option value="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" />
+        <option value="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" />
+  <component name="JsBuildToolPackageJson" detection-done="true" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="PhpServers">
+    <servers />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="default" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="default" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="default" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="files" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ikhwanmart" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sites" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images-update" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../notaris" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Development\WebRoot\ikhwanmart\sites\default" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
+      <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="js.build_tools.npm" factoryName="npm">
+      <command value="run-script" />
+      <scripts />
+      <node-interpreter value="project" />
+      <envs />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ab9ed199-b1b6-4559-b200-a89ca111c649" name="Default" comment="" />
+      <created>1476306874699</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1476306874699</updated>
+      <workItem from="1484554388256" duration="616000" />
+      <workItem from="1484555210619" duration="57000" />
+      <workItem from="1484687459484" duration="960000" />
+      <workItem from="1486996025859" duration="720000" />
+      <workItem from="1488363812379" duration="18717000" />
+      <workItem from="1489613784148" duration="750000" />
+      <workItem from="1489631307030" duration="4680000" />
+      <workItem from="1489651764438" duration="634000" />
+      <workItem from="1490064178204" duration="49000" />
+      <workItem from="1490098111454" duration="26000" />
+      <workItem from="1490131645817" duration="2439000" />
+      <workItem from="1490171197754" duration="26000" />
+      <workItem from="1490187080656" duration="642000" />
+      <workItem from="1491558024399" duration="899000" />
+      <workItem from="1492520623049" duration="2352000" />
+      <workItem from="1492591968848" duration="8438000" />
+      <workItem from="1492998655520" duration="77000" />
+      <workItem from="1493080563962" duration="229000" />
+      <workItem from="1493277641367" duration="1022000" />
+      <workItem from="1493948047733" duration="1318000" />
+      <workItem from="1494060228177" duration="1460000" />
+      <workItem from="1494297603765" duration="1569000" />
+      <workItem from="1494385447058" duration="6656000" />
+    </task>
+    <task id="LOCAL-00004" summary="Update struk">
+      <created>1477127341226</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1477127341226</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Merge branches 'master' and 'songkokikhwan' of https://github.com/heri500/globalpos&#10;&#10;# Conflicts:&#10;#&#9;sites/all/modules/datapelanggan/server_processing.php&#10;">
+      <created>1477455233381</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1477455233381</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Merge branches 'master' and 'songkokikhwan' of https://github.com/heri500/globalpos&#10;&#10;# Conflicts:&#10;#&#9;sites/all/modules/datapelanggan/server_processing.php&#10;">
+      <created>1477455433096</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1477455433096</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Modify Bacode, auto create if empty on edit">
+      <created>1477475838007</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1477475838007</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Modify Bacode, auto create if empty on edit">
+      <created>1477476414153</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1477476414153</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Modify Bacode, auto create if empty on edit">
+      <created>1477476876466</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1477476876466</updated>
+    </task>
+    <task id="LOCAL-00010" summary="make more random">
+      <created>1477478343086</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1477478343086</updated>
+    </task>
+    <task id="LOCAL-00011" summary="query update stok">
+      <created>1478608971590</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1478608971590</updated>
+    </task>
+    <task id="LOCAL-00012" summary="update for kasir edc">
+      <created>1478609834696</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1478609834696</updated>
+    </task>
+    <task id="LOCAL-00013" summary="update laporan keuangan">
+      <created>1478615118219</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1478615118219</updated>
+    </task>
+    <task id="LOCAL-00014" summary="update laporan keuangan">
+      <created>1478929830603</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1478929830603</updated>
+    </task>
+    <task id="LOCAL-00015" summary="update laporan keuangan dan penambahan filter pelanggan dan supplier pada tabel penjualan">
+      <created>1479027793749</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1479027793749</updated>
+    </task>
+    <task id="LOCAL-00016" summary="update feature status product active atau nonaktif, penambahan feature untuk menonaktifkan dan mengaktifkan produk, serta penambahan filter produk yang non aktif">
+      <created>1479036673037</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1479036673037</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fix input pengeluaran pemasukan, tambah icon nonaktif product">
+      <created>1479052656089</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1479052656089</updated>
+    </task>
+    <task id="LOCAL-00018" summary="tambah icon nonaktif product">
+      <created>1479052699205</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1479052699205</updated>
+    </task>
+    <task id="LOCAL-00019" summary="update module keuangan dan fungsi total pembelian">
+      <created>1479365995915</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1479365995915</updated>
+    </task>
+    <task id="LOCAL-00020" summary="update module keuangan">
+      <created>1479367602604</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1479367602604</updated>
+    </task>
+    <task id="LOCAL-00021" summary="update module keuangan">
+      <created>1479474091154</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1479474091154</updated>
+    </task>
+    <task id="LOCAL-00022" summary="update module keuangan">
+      <created>1479605693545</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1479605693545</updated>
+    </task>
+    <task id="LOCAL-00023" summary="update module keuangan">
+      <created>1480237909880</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1480237909880</updated>
+    </task>
+    <task id="LOCAL-00024" summary="update data premis">
+      <created>1480468400388</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1480468400389</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fix print out using datapremis">
+      <created>1480715061987</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1480715061987</updated>
+    </task>
+    <task id="LOCAL-00026" summary="add edit detail penjualan feature">
+      <created>1480802090499</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1480802090499</updated>
+    </task>
+    <task id="LOCAL-00027" summary="fix edit product alt code error">
+      <created>1480813529419</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1480813529419</updated>
+    </task>
+    <task id="LOCAL-00028" summary="fix pembelian">
+      <created>1481150430809</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1481150430809</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Changed for centralization data">
+      <created>1482729871440</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1482729871440</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Changed for centralization data">
+      <created>1482877153182</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1482877153182</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Changed for centralization data">
+      <created>1483015253512</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1483015253512</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Add upload data after transaction save">
+      <created>1483310223601</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1483310223601</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Changed for centralization data">
+      <created>1483595544076</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1483595544076</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Changed for centralization data">
+      <created>1483598485169</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1483598485169</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Changed process for centralization data">
+      <created>1484688004350</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1484688004350</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Add export product">
+      <created>1488437783773</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1488437783773</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Chosen select pelanggan, F9 select pelanggan">
+      <created>1488461262803</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1488461262803</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Update export to xls">
+      <created>1488496499544</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1488496499544</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix export excel">
+      <created>1489632433732</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1489632433732</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Changed for centralization data">
+      <created>1491558661221</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1491558661221</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Changed for centralization data">
+      <created>1492522956639</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1492522956639</updated>
+    </task>
+    <task id="LOCAL-00042" summary="PHPExcel">
+      <created>1492757566407</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1492757566407</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Update pelanggan data">
+      <created>1492941844012</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1492941844012</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Changed for centralization data">
+      <created>1492966054692</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1492966054692</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Changed for centralization data">
+      <created>1492966393689</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1492966393689</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Changed for centralization data">
+      <created>1493949200627</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1493949200627</updated>
+    </task>
+    <task id="LOCAL-00047" summary="PHPExcel Module">
+      <created>1494060273811</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1494060273811</updated>
+    </task>
+    <task id="LOCAL-00048" summary="New sticker 50x15">
+      <created>1494304083767</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1494304083767</updated>
+    </task>
+    <task id="LOCAL-00049" summary="Konversi Satuan">
+      <created>1494386527948</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1494386527948</updated>
+    </task>
+    <task id="LOCAL-00050" summary="Penambahan Faktur">
+      <created>1494389160081</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1494389160083</updated>
+    </task>
+    <task id="LOCAL-00051" summary="fix faktur">
+      <created>1494390489450</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1494390489451</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Update export faktur">
+      <created>1494429667792</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1494429667792</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="54336000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27360514" sideWeight="0.4931973" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32915717" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295063" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.326062" sideWeight="0.50213903" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32505643" sideWeight="0.49786097" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27635783" sideWeight="0.50680274" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="DB Browser" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="DB Execution Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <MESSAGE value="update feature status product active atau nonaktif, penambahan feature untuk menonaktifkan dan mengaktifkan produk, serta penambahan filter produk yang non aktif" />
+    <MESSAGE value="fix input pengeluaran pemasukan, tambah icon nonaktif product" />
+    <MESSAGE value="tambah icon nonaktif product" />
+    <MESSAGE value="update module keuangan dan fungsi total pembelian" />
+    <MESSAGE value="update module keuangan" />
+    <MESSAGE value="update data premis" />
+    <MESSAGE value="fix print out using datapremis" />
+    <MESSAGE value="add edit detail penjualan feature" />
+    <MESSAGE value="fix edit product alt code error" />
+    <MESSAGE value="fix pembelian" />
+    <MESSAGE value="Add upload data after transaction save" />
+    <MESSAGE value="Changed process for centralization data" />
+    <MESSAGE value="Add export product" />
+    <MESSAGE value="Chosen select pelanggan, F9 select pelanggan" />
+    <MESSAGE value="Update export to xls" />
+    <MESSAGE value="fix export excel" />
+    <MESSAGE value="PHPExcel" />
+    <MESSAGE value="Update pelanggan data" />
+    <MESSAGE value="Changed for centralization data" />
+    <MESSAGE value="PHPExcel Module" />
+    <MESSAGE value="New sticker 50x15" />
+    <MESSAGE value="Konversi Satuan" />
+    <MESSAGE value="Penambahan Faktur" />
+    <MESSAGE value="fix faktur" />
+    <MESSAGE value="Update export faktur" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update export faktur" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/globalpos.pembelian.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="59" column="4" selection-start-line="59" selection-start-column="4" selection-end-line="59" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/phpstorm.jar!/resources/html5-schema/html5chars.ent">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="63" column="8" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/keuangan/api.keuangan.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="127" column="0" selection-start-line="127" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datasupplier/datasupplier.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="137" column="25" selection-start-line="137" selection-start-column="25" selection-end-line="137" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/keuangan/keuangan.pengeluaran.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="266" column="39" selection-start-line="266" selection-start-column="35" selection-end-line="266" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/keuangan/js/tabel.pengeluaran.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="148" column="41" selection-start-line="148" selection-start-column="41" selection-end-line="148" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduk.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="296" column="40" selection-start-line="296" selection-start-column="16" selection-end-line="296" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/js/datapremis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="16" column="2" selection-start-line="16" selection-start-column="2" selection-end-line="16" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/keuangan/keuangan.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="209" column="28" selection-start-line="209" selection-start-column="28" selection-end-line="209" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc.ori">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/ikhwanmart.sql.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="4" column="18" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.delete.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3000">
+          <caret line="120" column="8" selection-start-line="120" selection-start-column="8" selection-end-line="120" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.info">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.install">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.schema.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="30" column="49" selection-start-line="30" selection-start-column="49" selection-end-line="30" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.update.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="761">
+          <caret line="124" column="98" selection-start-line="124" selection-start-column="75" selection-end-line="124" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="91" column="54" selection-start-line="91" selection-start-column="44" selection-end-line="91" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/com/jetbrains/php/lang/psi/stubs/data/standard_5.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="1092" column="9" selection-start-line="1092" selection-start-column="9" selection-end-line="1092" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/file.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="974" column="0" selection-start-line="974" selection-start-column="0" selection-end-line="974" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/common.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="154" column="0" selection-start-line="154" selection-start-column="0" selection-end-line="154" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/editproduct.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="248" column="30" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/module.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="488" column="9" selection-start-line="488" selection-start-column="9" selection-end-line="488" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/filedownload.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/phpexcel/phpexcel.api.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="806">
+          <caret line="148" column="9" selection-start-line="148" selection-start-column="9" selection-end-line="148" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/pembelian.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="806">
+          <caret line="137" column="35" selection-start-line="137" selection-start-column="35" selection-end-line="137" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/pembelian/js/pembelian.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2486">
+          <caret line="113" column="5" selection-start-line="113" selection-start-column="5" selection-end-line="113" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/themes/cti_flex/css/custom-style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2090">
+          <caret line="95" column="1" selection-start-line="78" selection-start-column="0" selection-end-line="95" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/update-node-print.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.customerorder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="1" selection-start-line="4" selection-start-column="0" selection-end-line="14" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2398">
+          <caret line="109" column="9" selection-start-line="109" selection-start-column="9" selection-end-line="109" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/js/datapelanggan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9526">
+          <caret line="433" column="33" selection-start-line="433" selection-start-column="33" selection-end-line="433" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/globalpos.pelanggan.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6732">
+          <caret line="306" column="47" selection-start-line="306" selection-start-column="47" selection-end-line="306" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/misc/media/jquery.autotab.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="12166">
+          <caret line="553" column="53" selection-start-line="553" selection-start-column="53" selection-end-line="553" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/datapelanggan.api.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="195" column="15" selection-start-line="195" selection-start-column="15" selection-end-line="195" selection-end-column="15" />
+          <folding>
+            <marker date="1492998672027" expanded="true" signature="401:467" placeholder="SELECT SUM(b... detailpiutang" />
+            <marker date="1492998672027" expanded="true" signature="813:894" placeholder="SELECT SUM(p... historypembayaran" />
+            <marker date="1492998672027" expanded="true" signature="932:1019" placeholder="SELECT SUM(p... historypenggunaandeposit" />
+            <marker date="1492998672027" expanded="true" signature="1744:1796" placeholder="SELECT besar... piutang" />
+            <marker date="1492998672027" expanded="true" signature="2060:2093" placeholder="SELECT idpel... pelanggan" />
+            <marker date="1492998672027" expanded="true" signature="2498:2619" placeholder="SELECT SUM(a... detailpiutang" />
+            <marker date="1492998672027" expanded="true" signature="2874:2942" placeholder="SELECT SUM(p... historypembayaran" />
+            <marker date="1492998672027" expanded="true" signature="3089:3192" placeholder="SELECT SUM(p... historypembayaran" />
+            <marker date="1492998672027" expanded="true" signature="3358:3403" placeholder="SELECT SUM(p... historypembayaran" />
+            <marker date="1492998672027" expanded="true" signature="3536:3618" placeholder="SELECT SUM(p... historypembayaran" />
+            <marker date="1492998672027" expanded="true" signature="3870:3945" placeholder="SELECT SUM(p... historypenggunaandeposit" />
+            <marker date="1492998672027" expanded="true" signature="4167:4226" placeholder="SELECT COUNT... piutang" />
+            <marker date="1492998672027" expanded="true" signature="4416:4449" placeholder="SELECT idpel... pelanggan" />
+            <marker date="1492998672027" expanded="true" signature="4888:4946" placeholder="UPDATE piuta... " />
+            <marker date="1492998672027" expanded="true" signature="5040:5110" placeholder="INSERT INTO piutang... " />
+            <marker date="1492998672027" expanded="true" signature="5818:5865" placeholder="SELECT idpel... pelanggan" />
+            <marker date="1492998672027" expanded="true" signature="7515:7604" placeholder="INSERT INTO detailpiutang... " />
+            <marker date="1492998672027" expanded="true" signature="7736:7804" placeholder="SELECT idpel... piutang" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.kasir.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="779">
+          <caret line="250" column="44" selection-start-line="250" selection-start-column="44" selection-end-line="250" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/attachplugins.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Downloads/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="253" column="33" selection-start-line="253" selection-start-column="21" selection-end-line="253" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4466">
+          <caret line="203" column="96" selection-start-line="203" selection-start-column="96" selection-end-line="203" selection-end-column="96" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/libraries/images-update/update-konversisatuan.sql.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" column="72" selection-start-line="1" selection-start-column="72" selection-end-line="1" selection-end-column="72" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.kategori.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="98" column="55" selection-start-line="0" selection-start-column="0" selection-end-line="128" selection-end-column="1" />
+          <folding>
+            <marker date="1334195462000" expanded="true" signature="3145:3156" placeholder="..." />
+            <marker date="1334195462000" expanded="true" signature="3440:3453" placeholder="..." />
+            <marker date="1334195462000" expanded="true" signature="3659:3754" placeholder="SELECT idkat... kategori" />
+            <marker date="1334195462000" expanded="true" signature="4283:4360" placeholder="INSERT INTO kategori... " />
+            <marker date="1334195462000" expanded="true" signature="4488:4561" placeholder="SELECT idkat... kategori" />
+            <marker date="1334195462000" expanded="true" signature="4941:5000" placeholder="UPDATE kateg... " />
+            <marker date="1334195462000" expanded="true" signature="5046:5101" placeholder="UPDATE kateg... " />
+            <marker date="1334195462000" expanded="true" signature="5147:5204" placeholder="UPDATE kateg... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/js/konversisatuan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="880">
+          <caret line="40" column="4" selection-start-line="40" selection-start-column="4" selection-end-line="40" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/konversi.satuan.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="41" column="58" selection-start-line="41" selection-start-column="58" selection-end-line="41" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/tabelproduknew.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="680" column="7" selection-start-line="680" selection-start-column="7" selection-end-line="680" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="389">
+          <caret line="427" column="35" selection-start-line="427" selection-start-column="35" selection-end-line="427" selection-end-column="35" />
+          <folding>
+            <marker date="1494386778903" expanded="true" signature="4322:4362" placeholder="SELECT COUNT... pelanggan" />
+            <marker date="1494386778903" expanded="true" signature="10433:10469" placeholder="SELECT COUNT... product" />
+            <marker date="1494386778903" expanded="true" signature="17273:17354" placeholder="SELECT COUNT... penjualan" />
+            <marker date="1494386778903" expanded="true" signature="17450:17550" placeholder="SELECT COUNT... penjualan" />
+            <marker date="1494386778903" expanded="true" signature="22607:22800" placeholder="SELECT COUNT... detailpenjualan" />
+            <marker date="1494386778903" expanded="true" signature="28504:28595" placeholder="SELECT COUNT... titipanlaundry" />
+            <marker date="1494386778903" expanded="true" signature="34598:34671" placeholder="SELECT COUNT... customer_order" />
+            <marker date="1494386778903" expanded="true" signature="37165:37210" placeholder="SELECT COUNT... cms_kategoripengeluaran" />
+            <marker date="1494386778903" expanded="true" signature="40740:40777" placeholder="SELECT COUNT... cms_pengeluaran" />
+            <marker date="1494386778903" expanded="true" signature="44225:44260" placeholder="SELECT COUNT... cms_pemasukan" />
+            <marker date="1494386778903" expanded="true" signature="44646:44832" placeholder="SELECT idpro... product" />
+            <marker date="1494386778903" expanded="true" signature="45113:45194" placeholder="SELECT besar... diskonkategori" />
+            <marker date="1494386778903" expanded="true" signature="45839:46013" placeholder="SELECT idpro... product" />
+            <marker date="1494386778903" expanded="true" signature="46294:46375" placeholder="SELECT besar... diskonkategori" />
+            <marker date="1494386778903" expanded="true" signature="48445:48479" placeholder="SELECT COUNT... " />
+            <marker date="1494386778903" expanded="true" signature="50261:50304" placeholder="SELECT COUNT... detailpenjualan" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/js/tabel.penjualan.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="439">
+          <caret line="336" column="1" selection-start-line="336" selection-start-column="1" selection-end-line="336" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="440" column="22" selection-start-line="440" selection-start-column="22" selection-end-line="440" selection-end-column="22" />
+          <folding>
+            <marker date="1494387853203" expanded="true" signature="6728:6776" placeholder="SELECT lead_... product" />
+            <marker date="1494387853203" expanded="true" signature="12446:12532" placeholder="SELECT SUM(s... product" />
+            <marker date="1494387853203" expanded="true" signature="17185:17231" placeholder="SELECT idpro... product" />
+            <marker date="1494387853203" expanded="true" signature="17394:17444" placeholder="UPDATE produ... " />
+            <marker date="1494387853203" expanded="true" signature="17636:17711" placeholder="SELECT konve... konversisatuan" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="317" column="1" selection-start-line="317" selection-start-column="1" selection-end-line="317" selection-end-column="1" />
+          <folding>
+            <marker date="1494387890009" expanded="true" signature="7763:7821" placeholder="INSERT INTO " />
+            <marker date="1494387890009" expanded="true" signature="8028:8061" placeholder="SELECT COUNT... " />
+            <marker date="1494387890009" expanded="true" signature="10910:10973" placeholder="SELECT COUNT... product" />
+            <marker date="1494387890009" expanded="true" signature="12869:12921" placeholder="UPDATE produ... " />
+            <marker date="1494387890009" expanded="true" signature="13488:13553" placeholder="SELECT COUNT... penjualan" />
+            <marker date="1494387890009" expanded="true" signature="15443:15499" placeholder="UPDATE penju... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/globalpos.penjualan.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1271">
+          <caret line="144" column="41" selection-start-line="144" selection-start-column="41" selection-end-line="144" selection-end-column="41" />
+          <folding>
+            <marker date="1494388853246" expanded="true" signature="6460:6476" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="6876:6893" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="6990:7007" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="7105:7122" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="7252:7269" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="7367:7384" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="10040:10056" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="10128:10145" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="10242:10259" placeholder="..." />
+            <marker date="1494388853246" expanded="true" signature="10357:10374" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="516">
+          <caret line="78" column="5" selection-start-line="78" selection-start-column="5" selection-end-line="78" selection-end-column="5" />
+          <folding>
+            <marker date="1494390381540" expanded="true" signature="491:894" placeholder="SELECT a.idt... titipanlaundry" />
+            <marker date="1494390381540" expanded="true" signature="1243:1547" placeholder="SELECT iddet... detaillaundry" />
+            <marker date="1494390381540" expanded="true" signature="1971:2318" placeholder="SELECT idpen... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="2811:3033" placeholder="SELECT iddet... detailpenjualan" />
+            <marker date="1494390381540" expanded="true" signature="3677:3716" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="3817:3911" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="3993:4056" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4071:4082" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4154:4176" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4224:4236" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4313:4335" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4449:4483" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4608:4642" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4656:4679" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4703:4726" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4862:4896" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4910:4933" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="4961:4984" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5163:5197" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5211:5234" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5260:5283" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5298:5310" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5355:5368" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5556:5621" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5635:5658" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5685:5708" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5723:5735" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="5779:5792" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6080:6114" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6278:6309" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6386:6430" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6733:6777" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6872:6942" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6957:6969" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="6994:7007" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="7570:7632" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="7678:7757" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="7772:7784" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="7809:7822" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8006:8040" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8088:8139" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8154:8166" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8191:8204" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8365:8399" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8445:8496" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8511:8523" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8548:8561" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8716:8781" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8826:8908" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8923:8935" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="8960:8973" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="9139:9174" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="9931:9965" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="10060:10094" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="10184:10218" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="10299:10333" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11000:11039" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11140:11227" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11296:11406" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11488:11553" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11811:11846" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11861:11872" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="11897:11909" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12077:12112" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12127:12138" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12166:12178" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12302:12367" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12382:12393" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12422:12434" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12595:12660" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12675:12686" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12767:12779" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12910:12975" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="12990:13001" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="13037:13049" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="13344:13378" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="13499:13551" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="13642:13694" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="13784:13836" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14090:14170" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14185:14196" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14223:14235" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14358:14411" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14426:14437" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14508:14520" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14877:14930" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14945:14956" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="14990:15002" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15212:15246" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15420:15473" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15488:15499" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15556:15568" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15711:15773" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15844:15879" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="15962:16024" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16120:16173" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16188:16199" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16271:16293" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16341:16353" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16430:16452" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="16562:16627" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="17870:17968" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="18058:18137" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="18278:18396" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="18499:18636" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="18777:18845" placeholder="SELECT SUM(b... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="19036:19104" placeholder="SELECT SUM(b... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="19496:19566" placeholder="SELECT SUM(k... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="19755:19825" placeholder="SELECT SUM(k... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="20187:20300" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="20414:20546" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="20794:20899" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="21013:21137" placeholder="SELECT SUM($... penjualan" />
+            <marker date="1494390381540" expanded="true" signature="21607:21800" placeholder="SELECT SUM($... detailpenjualan" />
+            <marker date="1494390381540" expanded="true" signature="21906:22190" placeholder="SELECT SUM($... detailpenjualan" />
+            <marker date="1494390381540" expanded="true" signature="23544:23583" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="23750:23769" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="24605:24644" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="24727:24766" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="24856:24872" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="25128:25140" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="25274:25293" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="25399:25418" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="25433:25445" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="25519:25532" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="26516:26555" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="26638:26677" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="26779:26794" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="27207:27219" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="28667:28706" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="28794:28833" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="28937:28952" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="29373:29385" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="30673:30712" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="30800:30839" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="30943:30958" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="31420:31432" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="32401:32440" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="32526:32565" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="32669:32684" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="33103:33115" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="34289:34328" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="34411:34450" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="34552:34567" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="34969:34981" placeholder="..." />
+            <marker date="1494390381540" expanded="true" signature="36465:36554" placeholder="SELECT a.det... detailcustomerorder" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="464" column="16" selection-start-line="464" selection-start-column="16" selection-end-line="464" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

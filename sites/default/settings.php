@@ -89,11 +89,7 @@
  *   $db_url = 'mysqli://username:password@localhost/databasename';
  *   $db_url = 'pgsql://username:password@localhost/databasename';
  */
-<<<<<<< HEAD
-$db_url = 'mysqli://root@localhost/galeri_ikhwan';
-=======
-$db_url = 'mysqli://root@localhost/ikhwanmart';
->>>>>>> 975ce39b642e1f5ac66b31ef2f1fe0ee94a6362c
+$db_url = 'mysqli://root:abuya313@localhost/ikhwanmart';
 $db_prefix = 'cms_';
 
 /**
