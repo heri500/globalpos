@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ab9ed199-b1b6-4559-b200-a89ca111c649" name="Default" comment="Changed for centralization data">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sites/all/libraries/images-update/~$template-faktur.xlsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" afterPath="$PROJECT_DIR$/sites/all/modules/datapelanggan/server_processing.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/editproduct.js" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/editproduct.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" afterPath="$PROJECT_DIR$/sites/all/modules/dataproduk/globalpos.produk.inc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/kasir.form.new.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/js/productlogo2.barcode.js" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/js/productlogo2.barcode.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" afterPath="$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.api.inc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sites/default/settings.php" afterPath="$PROJECT_DIR$/sites/default/settings.php" />
-    </list>
+    <list default="true" id="ab9ed199-b1b6-4559-b200-a89ca111c649" name="Default" comment="Changed for centralization data" />
     <ignored path="ikhwanmart.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -48,16 +38,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="524">
               <caret line="464" column="16" selection-start-line="464" selection-start-column="16" selection-end-line="464" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="settings.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1971">
-              <caret line="96" column="2" selection-start-line="96" selection-start-column="2" selection-end-line="96" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -258,30 +238,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dataproduk.module" pinned="false" current-in-tab="false">
+      <file leaf-file-name="dataproduk.module" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1100">
-              <caret line="463" column="22" selection-start-line="463" selection-start-column="22" selection-end-line="463" selection-end-column="22" />
+            <state relative-caret-position="660">
+              <caret line="458" column="9" selection-start-line="458" selection-start-column="9" selection-end-line="458" selection-end-column="9" />
               <folding>
-                <marker date="1494489728561" expanded="true" signature="75:362" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="410:701" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="749:1040" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="1085:1387" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="1427:1696" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="1740:2014" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="2062:2333" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="2384:2660" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="2711:3017" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="3068:3374" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="3420:3692" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="3736:3995" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="4040:4300" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="4348:4623" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="4672:4993" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="5041:5308" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="5359:5640" placeholder="..." />
-                <marker date="1494489728561" expanded="true" signature="5683:5927" placeholder="..." />
+                <marker date="1494489728561" expanded="true" signature="7024:7072" placeholder="SELECT lead_... product" />
+                <marker date="1494489728561" expanded="true" signature="12742:12828" placeholder="SELECT SUM(s... product" />
+                <marker date="1494489728561" expanded="true" signature="17481:17527" placeholder="SELECT idpro... product" />
+                <marker date="1494489728561" expanded="true" signature="17690:17740" placeholder="UPDATE produ... " />
+                <marker date="1494489728561" expanded="true" signature="17932:18007" placeholder="SELECT konve... konversisatuan" />
+                <marker date="1494489728561" expanded="true" signature="18113:18188" placeholder="SELECT konve... konversisatuan" />
               </folding>
             </state>
           </provider>
@@ -574,7 +542,7 @@
       <workItem from="1493948047733" duration="1318000" />
       <workItem from="1494060228177" duration="1460000" />
       <workItem from="1494297603765" duration="1569000" />
-      <workItem from="1494385447058" duration="6682000" />
+      <workItem from="1494385447058" duration="6976000" />
     </task>
     <task id="LOCAL-00004" summary="Update struk">
       <created>1477127341226</created>
@@ -923,16 +891,16 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54362000" />
+    <option name="totallyTimeSpent" value="54656000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27360514" sideWeight="0.4931973" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32915717" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295063" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.326062" sideWeight="0.50213903" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32505643" sideWeight="0.50213903" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3283582" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1367,33 +1335,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1100">
-          <caret line="463" column="22" selection-start-line="463" selection-start-column="22" selection-end-line="463" selection-end-column="22" />
-          <folding>
-            <marker date="1494489728561" expanded="true" signature="75:362" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="410:701" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="749:1040" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="1085:1387" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="1427:1696" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="1740:2014" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="2062:2333" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="2384:2660" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="2711:3017" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="3068:3374" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="3420:3692" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="3736:3995" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="4040:4300" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="4348:4623" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="4672:4993" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="5041:5308" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="5359:5640" placeholder="..." />
-            <marker date="1494489728561" expanded="true" signature="5683:5927" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/datapremis/datapremis.module">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="361">
@@ -1581,6 +1522,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1971">
+          <caret line="96" column="2" selection-start-line="96" selection-start-column="2" selection-end-line="96" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sites/all/modules/penjualan/penjualan.module">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="524">
@@ -1589,11 +1538,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sites/default/settings.php">
+    <entry file="file://$PROJECT_DIR$/sites/all/modules/dataproduk/dataproduk.module">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1971">
-          <caret line="96" column="2" selection-start-line="96" selection-start-column="2" selection-end-line="96" selection-end-column="2" />
-          <folding />
+        <state relative-caret-position="660">
+          <caret line="458" column="9" selection-start-line="458" selection-start-column="9" selection-end-line="458" selection-end-column="9" />
+          <folding>
+            <marker date="1494489728561" expanded="true" signature="7024:7072" placeholder="SELECT lead_... product" />
+            <marker date="1494489728561" expanded="true" signature="12742:12828" placeholder="SELECT SUM(s... product" />
+            <marker date="1494489728561" expanded="true" signature="17481:17527" placeholder="SELECT idpro... product" />
+            <marker date="1494489728561" expanded="true" signature="17690:17740" placeholder="UPDATE produ... " />
+            <marker date="1494489728561" expanded="true" signature="17932:18007" placeholder="SELECT konve... konversisatuan" />
+            <marker date="1494489728561" expanded="true" signature="18113:18188" placeholder="SELECT konve... konversisatuan" />
+          </folding>
         </state>
       </provider>
     </entry>
