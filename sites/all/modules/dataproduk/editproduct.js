@@ -336,7 +336,7 @@ $(document).ready(function() {
 		nospace: true
 	});
 	$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-		format: "numeric",
+		pattern: "[^0-9\.]",
 		nospace: true
 	});
 	$("#main h2").css("width","100%");
@@ -350,4 +350,31 @@ $(document).ready(function() {
 	$("#formproduk").validationEngine();
 	filtersubkategori(Drupal.settings.idSubKategori);
 	$("#barcode").select();
+	$("#satuan").change(function(){
+		var request = new Object();
+		request.satuan1 = $(this).val();
+	 	request.satuan2 = $("#satuan_lama").val();
+		var alamat = pathutama +"dataproduk/getconversion";
+		$.ajax({
+			type: "POST",
+			url: alamat,
+			data: request,
+			cache: false,
+			success: function(data){
+				var konversi = data.trim();
+				if (konversi){
+					var stokkonversi = $('#stok').val()/konversi;
+					$('#stok').val(stokkonversi);
+					if ($('#hargajual').val() > 0){
+						var hargajual = $('#hargajual').val() * konversi; 
+						$('#hargajual').val(hargajual);
+					}
+					if ($('#hargapokok').val() > 0){
+						var hargapokok = $('#hargapokok').val() * konversi; 
+						$('#hargapokok').val(hargapokok);
+					}
+				}
+			}
+		});
+	});
 })
