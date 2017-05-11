@@ -201,6 +201,8 @@ function tampiltabeljualdetail(){
 		'bAutoWidth': false,
 		'bPaginate': false,
 		'bLengthChange': false,
+		'scrollY': '330px',
+		'scrollCollapse': true,
 		'bInfo': false,
 		'aaSorting': [[1, 'asc']],
 		'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
@@ -209,7 +211,7 @@ function tampiltabeljualdetail(){
 		],
 		'processing': true,
 		'serverSide': true,
-		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + selectedPenjualan,
+		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?asal=penjualan&request_data=detailpenjualan&idpenjualan=' + selectedPenjualan,
 		'createdRow': function ( row, data, index ) {
 			row.id = data[(data.length - 1)];
 			$('td', row).eq(1).addClass('center');

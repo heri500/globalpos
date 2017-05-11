@@ -1106,7 +1106,11 @@ function serverSideGetOneProduct($request){
 function serverSideDetailPenjualan($request){
 	global $baseDirectory;
 	$pageStart = $_GET['start'];
-	$pageLength = $_GET['length'];
+	if (isset($_GET['asal']) && $_GET['asal'] == 'penjualan'){
+		$pageLength = -1;
+	}else {
+		$pageLength = $_GET['length'];
+	}
 	$searchArray = $_REQUEST['search'];
 	$idPenjualan = $_REQUEST['idpenjualan'];
 	$searchQuery = $searchArray['value'];
@@ -1125,9 +1129,10 @@ function serverSideDetailPenjualan($request){
 	if (is_null($pageStart)){
 		$pageStart = 0;
 	}
-	if (is_null($pageLength) || $pageLength == -1){
+	if (is_null($pageLength)){
 		$pageLength = 25;
 	}
+
 	$firstRecord = $pageStart;
 	$lastRecord = $pageStart + $pageLength;
 	$strSQL = 'SELECT detail.iddetail,product.barcode, product.namaproduct, detail.jumlah,';
@@ -1149,15 +1154,27 @@ function serverSideDetailPenjualan($request){
 		$strCriteria .= "product.namaproduct LIKE '%%%s%%'";
 		$strCriteria .= ")";
 	}
-	$strSQL .= $strCriteria." ORDER BY $orderColumn LIMIT %d, %d";
+	if ($pageLength == -1){
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn";
+	}else {
+		$strSQL .= $strCriteria . " ORDER BY $orderColumn LIMIT %d, %d";
+	}
 	$strSQLFilteredTotal .= $strCriteria;
 	if (!empty($searchQuery)) {
-		$result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+		if ($pageLength == -1){
+			$result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery);
+		}else {
+			$result = db_query($strSQL, $idPenjualan, $searchQuery, $searchQuery, $firstRecord, $lastRecord);
+		}
 		$recordsFiltered = db_result(
 			db_query($strSQLFilteredTotal, $idPenjualan, $searchQuery, $searchQuery)
 		);
 	}else{
-		$result = db_query($strSQL,$idPenjualan,$firstRecord,$lastRecord);
+		if ($pageLength == -1) {
+			$result = db_query($strSQL, $idPenjualan);
+		}else {
+			$result = db_query($strSQL, $idPenjualan, $firstRecord, $lastRecord);
+		}
 		$recordsFiltered = db_result(db_query($strSQLFilteredTotal,$idPenjualan));
 	}
 	$output = array();
