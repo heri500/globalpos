@@ -3,6 +3,17 @@ var pathutama = '';
 var pathfile = '';
 var barcodesama = false;
 
+var fpArithmetic = function (op, x, y) {
+    var n = {
+            '*': x * y,
+            '-': x - y,
+            '+': x + y,
+            '/': x / y
+        }[op];        
+
+    return Math.round(n * 100)/100;
+};
+
 function simpankategori(){
 	if ($("#kodekategori").val() != "" && $("#kategori").val() != ""){
 		var request = new Object();
@@ -361,16 +372,17 @@ $(document).ready(function() {
 			data: request,
 			cache: false,
 			success: function(data){
-				var konversi = data.trim();
+				var konversi = parseFloat(data.trim());
 				if (konversi){
-					var stokkonversi = $('#stok').val()/konversi;
-					$('#stok').val(stokkonversi);
+					$("#satuan_lama").val(request.satuan1);
+					var stokkonversi = fpArithmetic('/',$('#stok').val(),konversi);
+                                        $('#stok').val(stokkonversi);
 					if ($('#hargajual').val() > 0){
-						var hargajual = $('#hargajual').val() * konversi; 
+						var hargajual = fpArithmetic('*',$('#hargajual').val(),konversi); 
 						$('#hargajual').val(hargajual);
 					}
 					if ($('#hargapokok').val() > 0){
-						var hargapokok = $('#hargapokok').val() * konversi; 
+						var hargapokok = fpArithmetic('*',$('#hargapokok').val(),konversi); 
 						$('#hargapokok').val(hargapokok);
 					}
 				}

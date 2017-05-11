@@ -450,6 +450,13 @@ function get_konversi_satuan($satuan1 = null, $satuan2 = 'PCS'){
 	}else {
 		$strSQL = "SELECT konversi FROM konversisatuan WHERE satuan1 = '%s' AND satuan2 = '%s'";
 		$konversi = db_result(db_query($strSQL, $satuan1, $satuan2));
+		if (empty($konversi)){
+			$strSQL = "SELECT konversi FROM konversisatuan WHERE satuan1 = '%s' AND satuan2 = '%s'";
+			$konversi = db_result(db_query($strSQL, $satuan2, $satuan1));
+			if (!empty($konversi)){
+				$konversi = 1/$konversi;	
+			}
+		}
 	}
 	return $konversi;
 }
