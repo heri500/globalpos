@@ -194,7 +194,7 @@ function serverSideProduk($request){
 		$rowData[] = number_format($data->margin,0,",",".");
 		$rowData[] = $data->minstok;
     $rowData[] = $data->maxstok;
-    $rowData[] = number_format($data->stok,0,",",".");
+    $rowData[] = number_format($data->stok,2,",",".");
     if ($data->stok < $data->minstok){
 			$rowData[] = "<img title=\"Stok dibawah minimum\" src=\"$baseDirectory/misc/media/images/statusmerah.png\">";
 		}elseif ($data->stok > $data->maxstok){

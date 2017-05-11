@@ -3,6 +3,17 @@ var pathutama = '';
 var pathfile = '';
 var barcodesama = false;
 
+var fpArithmetic = function (op, x, y) {
+    var n = {
+            '*': x * y,
+            '-': x - y,
+            '+': x + y,
+            '/': x / y
+        }[op];        
+
+    return Math.round(n * 100)/100;
+};
+
 function simpankategori(){
 	if ($("#kodekategori").val() != "" && $("#kategori").val() != ""){
 		var request = new Object();
@@ -336,7 +347,7 @@ $(document).ready(function() {
 		nospace: true
 	});
 	$("#hargapokok,#hargajual,#margin,#minstok,#maxstok,#stok").autotab_filter({
-		format: "numeric",
+		pattern: "[^0-9\.]",
 		nospace: true
 	});
 	$("#main h2").css("width","100%");
@@ -350,4 +361,32 @@ $(document).ready(function() {
 	$("#formproduk").validationEngine();
 	filtersubkategori(Drupal.settings.idSubKategori);
 	$("#barcode").select();
+	$("#satuan").change(function(){
+		var request = new Object();
+		request.satuan1 = $(this).val();
+	 	request.satuan2 = $("#satuan_lama").val();
+		var alamat = pathutama +"dataproduk/getconversion";
+		$.ajax({
+			type: "POST",
+			url: alamat,
+			data: request,
+			cache: false,
+			success: function(data){
+				var konversi = parseFloat(data.trim());
+				if (konversi){
+					$("#satuan_lama").val(request.satuan1);
+					var stokkonversi = fpArithmetic('/',$('#stok').val(),konversi);
+                                        $('#stok').val(stokkonversi);
+					if ($('#hargajual').val() > 0){
+						var hargajual = fpArithmetic('*',$('#hargajual').val(),konversi); 
+						$('#hargajual').val(hargajual);
+					}
+					if ($('#hargapokok').val() > 0){
+						var hargapokok = fpArithmetic('*',$('#hargapokok').val(),konversi); 
+						$('#hargapokok').val(hargapokok);
+					}
+				}
+			}
+		});
+	});
 })

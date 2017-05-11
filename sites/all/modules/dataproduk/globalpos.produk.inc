@@ -593,6 +593,7 @@ function edit_data_produk(){
 			}
 		}
 		$pilihansatuan .= '</select>';
+		$pilihansatuan .= '<input type="hidden" id="satuan_lama" name="satuan_lama" value="'.$dataproduk->satuan.'">';
 		$buttonadd4 = '<img id="addsatuan" title="Tambah satuan Baru" src="'.base_path().'misc/media/images/add-small.ico">';
 		//Pilihan Kategori untuk Dialog Box Tambah Sub kategori
 		$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");

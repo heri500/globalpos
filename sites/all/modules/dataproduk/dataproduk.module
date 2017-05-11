@@ -163,6 +163,14 @@ function dataproduk_menu() {
 		'access arguments' => array('Admin Data Produk'),
 		'type' => MENU_CALLBACK,
 	);
+	$items['dataproduk/getconversion'] = array(
+		'title' => t('Get unit conversion'),
+		'description' => 'Get unit conversion',
+		'page callback' => 'get_konversi_satuan_ajax',
+		'access callback' => 'user_access',
+		'access arguments' => array('Admin Data Produk'),
+		'type' => MENU_CALLBACK,
+	);
 	return $items;
 } // end hook menu
 
@@ -442,6 +450,21 @@ function get_konversi_satuan($satuan1 = null, $satuan2 = 'PCS'){
 	}else {
 		$strSQL = "SELECT konversi FROM konversisatuan WHERE satuan1 = '%s' AND satuan2 = '%s'";
 		$konversi = db_result(db_query($strSQL, $satuan1, $satuan2));
+		if (empty($konversi)){
+			$strSQL = "SELECT konversi FROM konversisatuan WHERE satuan1 = '%s' AND satuan2 = '%s'";
+			$konversi = db_result(db_query($strSQL, $satuan2, $satuan1));
+			if (!empty($konversi)){
+				$konversi = 1/$konversi;	
+			}
+		}
 	}
 	return $konversi;
+}
+function get_konversi_satuan_ajax(){
+	$konversiSatuan = null;
+	if (isset($_POST['satuan1']) && isset($_POST['satuan2']) && !empty($_POST['satuan1']) && !empty($_POST['satuan2'])){
+		$konversiSatuan = get_konversi_satuan($_POST['satuan1'], $_POST['satuan2']);
+	}
+	print $konversiSatuan;
+	exit();
 }
