@@ -428,6 +428,8 @@ function create_faktur_in_excel($idpenjualan = 0){
  		* A10: Nomer, B10: Nama Barang, C10: Barcode, D10: Qty, E10: Satuan, F10: Harga, G10: Diskon,  H10: Subtotal
 		*/
 		$jumlahTotal = 0;
+		$totalQty1 = 0;
+		$totalQty2 = 0;
 		for ($i = 0; $i < count($dataPenjualan['detail']);$i++){
 			$detailPenjualan = $dataPenjualan['detail'][$i];
 			$colnumber = 0;
@@ -442,6 +444,7 @@ function create_faktur_in_excel($idpenjualan = 0){
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, trim($barcode));
 			$colnumber++;
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, $detailPenjualan->jumlah);
+			$totalQty1 = $totalQty1 + $detailPenjualan->jumlah;
 			$colnumber++;
 			$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber].$rownumber, strtoupper($detailPenjualan->satuan));
 			$colnumber++;
@@ -451,6 +454,7 @@ function create_faktur_in_excel($idpenjualan = 0){
 			$konversiSatuan = get_konversi_satuan(strtoupper($detailPenjualan->satuan));
 			if (!empty($konversiSatuan)) {
 				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, $konversiSatuan * $detailPenjualan->jumlah);
+				$totalQty2 = $totalQty2 + ($konversiSatuan * $detailPenjualan->jumlah);
 				$colnumber++;
 				$objPHPExcel->getActiveSheet()->setCellValue($alphas[$colnumber] . $rownumber, round($detailPenjualan->hargajual / $konversiSatuan));
 				$objPHPExcel->getActiveSheet()->getStyle($alphas[$colnumber] . $rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
@@ -479,14 +483,20 @@ function create_faktur_in_excel($idpenjualan = 0){
 		$objPHPExcel->getActiveSheet()->mergeCells('A'.$rownumber.':B'.($rownumber + 1));
 		$objPHPExcel->getActiveSheet()->setCellValue('A'.$rownumber, strtoupper($dataPremis->nama));
 		$objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 1))->applyFromArray($alignmentStyle);
+		$objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber)->getFont()->setBold(true);
 		$objPHPExcel->getActiveSheet()->mergeCells('A'.($rownumber + 4).':B'.($rownumber + 4));
 		$objPHPExcel->getActiveSheet()->setCellValue('A'.($rownumber + 4), '.....................................');
 		$objPHPExcel->getActiveSheet()->getStyle('A'.($rownumber + 4).':B'.($rownumber + 4))->applyFromArray($alignmentStyle);
 		$objPHPExcel->getActiveSheet()->getStyle('A'.$rownumber.':B'.($rownumber + 4))->applyFromArray($BStyle);
-		$objPHPExcel->getActiveSheet()->mergeCells('C'.$rownumber.':H'.($rownumber + 4));
-		$objPHPExcel->getActiveSheet()->setCellValue('C'.$rownumber, 'KETERANGAN : ');
-		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':H'.($rownumber + 4))->applyFromArray($alignmentStyle2);
-		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':H'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->mergeCells('C'.$rownumber.':D'.($rownumber + 1));
+		$objPHPExcel->getActiveSheet()->setCellValue('C'.$rownumber, 'PENERIMA');
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber)->getFont()->setBold(true);
+		$objPHPExcel->getActiveSheet()->mergeCells('C'.($rownumber + 4).':D'.($rownumber + 4));
+		$objPHPExcel->getActiveSheet()->setCellValue('C'.($rownumber + 4), '..............................');
+		$objPHPExcel->getActiveSheet()->getStyle('C'.($rownumber + 4).':D'.($rownumber + 4))->applyFromArray($alignmentStyle);
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':D'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->setCellValue('D'.$rownumber, $totalQty1);
+		$objPHPExcel->getActiveSheet()->setCellValue('H'.$rownumber, $totalQty2);
 		$objPHPExcel->getActiveSheet()->setCellValue('I'.$rownumber, 'TOTAL');
 		$objPHPExcel->getActiveSheet()->setCellValue('J'.$rownumber, $jumlahTotal);
 		$objPHPExcel->getActiveSheet()->getStyle('J'.$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
