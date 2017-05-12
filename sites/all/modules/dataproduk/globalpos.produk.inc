@@ -273,6 +273,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
 	$tabelproduk .= '</table>';
@@ -679,7 +680,13 @@ function update_data_produk(){
 	$hargaPokok = $data->hargapokok;
 	$hargaJual = $data->hargajual;
 	$nilaiRet = $nilai;
-	if ($kolom == "3"){
+	if ($kolom == "1") {
+		$sql_update = "UPDATE product SET idkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT kategori FROM kategori WHERE idkategori=%d', $nilai));
+	}else if ($kolom == "2") {
+		$sql_update = "UPDATE product SET idsubkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT subkategori FROM subkategori WHERE idsubkategori=%d',$nilai));
+	}else if ($kolom == "3"){
 		$sql_update = "UPDATE product SET barcode='%s',uploaded=0, changed=1 WHERE idproduct='%d'";
 	}else if ($kolom == "4"){
 		$sql_update = "UPDATE product SET alt_code='%s',uploaded=0, changed=1 WHERE idproduct='%d'";
@@ -716,6 +723,29 @@ function update_data_produk(){
 			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
 			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$nilai,$keterangan);
 		}
+	}else if ($kolom == "10") {
+		$sql_update = "UPDATE product SET satuan='%s' WHERE idproduct='%d'";
+		$strSQL = "SELECT satuan FROM product WHERE idproduct=%d";
+		$satuanAsal = db_result(db_query($strSQL,$productId));
+		$konversiSatuan = get_konversi_satuan($nilai,$satuanAsal);
+		$hargaJualBaru = $hargaJual*$konversiSatuan;
+		$hargaPokokBaru = $hargaPokok*$konversiSatuan;
+		$stokBaru = $stokSebelum/$konversiSatuan;
+		$sqlUpdateStok = "UPDATE product SET stok='%f',hargajual='%f',hargapokok='%f' WHERE idproduct=%d";
+		db_query($sqlUpdateStok,$stokBaru,$hargaJualBaru, $hargaPokokBaru,$productId);
+		$selisihStok = $stokBaru - $stokSebelum;
+		if ($selisihStok < 0){
+			$keluar = abs($selisihStok);
+			$keterangan = 'Perubahan Stock-Stok Berkurang';
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$keluar,$stokBaru,$keterangan);
+		}else{
+			$masuk = $selisihStok;
+			$keterangan = 'Perubahan Stock-Stok Bertambah';
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$stokBaru,$keterangan);
+		}
+		$nilaiRet = $nilai;
 	}
 	db_query($sql_update,$nilai,$productId);
 	echo $nilaiRet;

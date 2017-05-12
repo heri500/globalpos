@@ -1203,6 +1203,44 @@ function serverSideDetailPenjualan($request){
 		"data"            => $output
 	);
 }
+function serverSideArrayKategori($request){
+	$strSQL = 'SELECT idkategori, kodekategori, kategori FROM kategori';
+	$result = db_query($strSQL);
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$output[$data->idkategori] = $data->kodekategori.' => '.$data->kategori;
+	}
+	$strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+	$idKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$output['selected'] =  $idKategori;
+	return $output;
+}
+function serverSideArraySubKategori($request){
+	$strSQL = 'SELECT idkategori FROM product WHERE idproduct=%d';
+	$idKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$strSQL = 'SELECT idsubkategori, kodesubkategori, subkategori FROM subkategori WHERE idkategori=%d';
+	$result = db_query($strSQL,$idKategori);
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$output[$data->idsubkategori] = $data->kodesubkategori.' => '.$data->subkategori;
+	}
+	$strSQL = 'SELECT idsubkategori FROM product WHERE idproduct=%d';
+	$idSubKategori = db_result(db_query($strSQL, $request['idproduk']));
+	$output['selected'] =  $idSubKategori;
+	return $output;
+}
+function serverSideArraySatuan($request){
+	$strSQL = 'SELECT satuan FROM satuan ORDER BY satuan';
+	$result = db_query($strSQL);
+	$output = array();
+	while($data = db_fetch_object($result)){
+		$output[$data->satuan] = $data->satuan;
+	}
+	$strSQL = 'SELECT satuan FROM product WHERE idproduct=%d';
+	$satuan = db_result(db_query($strSQL, $request['idproduk']));
+	$output['selected'] =  $satuan;
+	return $output;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1227,6 +1265,12 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideGetOneProduct($_GET);
 }else if($_GET['request_data'] == 'detailpenjualan'){
 	$returnArray = serverSideDetailPenjualan($_GET);
+}else if($_GET['request_data'] == 'kategori'){
+	$returnArray = serverSideArrayKategori($_GET);
+}else if($_GET['request_data'] == 'subkategori'){
+	$returnArray = serverSideArraySubKategori($_GET);
+}else if($_GET['request_data'] == 'satuan'){
+	$returnArray = serverSideArraySatuan($_GET);
 }
 echo json_encode($returnArray);
 ?>

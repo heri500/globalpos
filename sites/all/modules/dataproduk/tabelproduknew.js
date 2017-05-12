@@ -38,6 +38,32 @@ function tampilkantabelproduk(){
         'sDom': '<"button-div"B><"H"lfr>t<"F"ip>',
         'createdRow': function ( row, data, index ) {
             row.id = data[(data.length - 1)];
+            var alamatKategori = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=kategori&idproduk='+ row.id;
+            $('td', row).eq(1).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 1 };
+                },
+                'loadurl' : alamatKategori,
+                'width': '140px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
+            var alamatSubKategori = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=subkategori&idproduk='+ row.id;
+            $('td', row).eq(2).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 2 };
+                },
+                'loadurl' : alamatSubKategori,
+                'width': '140px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...'
+            });
             $('td', row).eq(3).addClass('center').editable(alamatupdate, {
                 'submitdata': function ( value, settings ) {
                     return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 3 };
@@ -120,7 +146,22 @@ function tampilkantabelproduk(){
                 'tooltip': 'Klik untuk mengubah...'
             });
             $('td', row).eq(9).addClass('center');
-            $('td', row).eq(10).addClass('center');
+            var alamatSatuan = Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=satuan&idproduk='+ row.id;
+            $('td', row).eq(10).addClass('center').editable(alamatupdate, {
+                'submitdata': function ( value, settings ) {
+                    return { 'row_id': this.parentNode.getAttribute('id'), 'kol_id': 10 };
+                },
+                'loadurl' : alamatSatuan,
+                'width': '80px',
+                'height': '20px',
+                'submit': 'Ok',
+                'type': 'select',
+                'indicator': 'Menyimpan...',
+                'tooltip': 'Klik untuk mengubah...',
+                'callback' : function(value, settings) {
+                    oTable.draw(false);
+                }
+            });
             $('td', row).eq(11).addClass('angka');
             $('td', row).eq(12).addClass('center');
             $('td', row).eq(13).addClass('center');
