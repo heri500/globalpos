@@ -494,9 +494,13 @@ function create_faktur_in_excel($idpenjualan = 0){
 		$objPHPExcel->getActiveSheet()->mergeCells('C'.($rownumber + 4).':D'.($rownumber + 4));
 		$objPHPExcel->getActiveSheet()->setCellValue('C'.($rownumber + 4), '..............................');
 		$objPHPExcel->getActiveSheet()->getStyle('C'.($rownumber + 4).':D'.($rownumber + 4))->applyFromArray($alignmentStyle);
-		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':D'.($rownumber + 4))->applyFromArray($BStyle);
-		$objPHPExcel->getActiveSheet()->setCellValue('D'.$rownumber, $totalQty1);
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$rownumber.':H'.($rownumber + 4))->applyFromArray($BStyle);
+		$objPHPExcel->getActiveSheet()->setCellValue('E'.$rownumber, $totalQty1);
+		$objPHPExcel->getActiveSheet()->getStyle('E'.$rownumber)->applyFromArray($alignmentStyle);
+		$objPHPExcel->getActiveSheet()->getStyle('E'.$rownumber)->getFont()->setBold(true);
 		$objPHPExcel->getActiveSheet()->setCellValue('H'.$rownumber, $totalQty2);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber)->getFont()->setBold(true);
+		$objPHPExcel->getActiveSheet()->getStyle('H'.$rownumber)->applyFromArray($alignmentStyle);
 		$objPHPExcel->getActiveSheet()->setCellValue('I'.$rownumber, 'TOTAL');
 		$objPHPExcel->getActiveSheet()->setCellValue('J'.$rownumber, $jumlahTotal);
 		$objPHPExcel->getActiveSheet()->getStyle('J'.$rownumber)->getNumberFormat()->setFormatCode('_("Rp"* #,##0.00_);_("Rp"* \(#,##0.00\);_("Rp"* "-"??_);_(@_)');
