@@ -1241,6 +1241,448 @@ function serverSideArraySatuan($request){
 	$output['selected'] =  $satuan;
 	return $output;
 }
+function serverSideGetAllProduct($request){
+	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$data->diskon = 0;
+		if ($data->idproduct) {
+			$idpelanggan = 0;
+			if (isset($request["idpelanggan"])){
+				$idpelanggan = $request["idpelanggan"];
+			}
+			$result2 = db_query(
+				"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+				$idpelanggan,
+				$data->idkategori
+			);
+			$datadiskon = db_fetch_object($result2);
+			if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+				$data->diskon = $datadiskon->besardiskon;
+			}
+		}
+		$items[] = $data;
+	}
+	return $items;
+}
+function serverSidePostSales($request){
+	header('Access-Control-Allow-Origin: *');
+	$postData = $request;
+	$savedData = array();
+	if (count($postData)){
+		$newData = array();
+		foreach ($postData as $key => $dataVal){
+			if ($key != 'request_data'){
+				$splitKey = explode('__', $key);
+				$newData[$splitKey[1]][$splitKey[0]] = $dataVal;
+			}
+		}
+		$savedData = saveSalesAndroid($newData);
+	}
+	return $savedData;
+}
+
+function saveSalesAndroid($postData = null){
+	if (!empty($postData) && count($postData)){
+		$savedData = array();
+		$username = $postData['']['userkonter'];
+		$password = $postData['']['passkonter'];
+		$savedData['username'] = $username;
+		$savedData['password'] = $password;
+		$userID = db_result(db_query("SELECT uid FROM cms_users WHERE name='%s' AND pass='%s'", $username, md5($password)));
+		$savedData['user_id'] = $userID;
+		if (!empty($userID) && count($postData) && isset($postData[0])) {
+			$userTimeZone = db_result(db_query("SELECT timezone_name FROM cms_users WHERE uid=%d", $userID));
+			date_default_timezone_set($userTimeZone);
+			$savedData['user_timezone'] = $userTimeZone;
+			$totalBelanja = 0;
+			$totalModal = 0;
+			for ($i = 0; $i < count($postData); $i++) {
+				$totalBelanja = $totalBelanja + ($postData[$i]['hargajual'] * $postData[$i]['jumlah']);
+				$totalModal = $totalModal + ($postData[$i]['hargamodal'] * $postData[$i]['jumlah']);
+			}
+			$result = db_query("SELECT idpenjualan FROM penjualan ORDER BY idpenjualan DESC LIMIT 1");
+			$data = db_fetch_object($result);
+			if ($data->idpenjualan > 0) {
+				$next_id = $data->idpenjualan + 1;
+			} else {
+				$next_id = 1;
+			}
+			$no_nota = buat_nota_server_side($next_id);
+			$carabayar = 'TUNAI';
+			$bayar = $totalBelanja;
+			$nokartu = '';
+			$waktujual = date("Y-m-d H:i:s");
+			$savedData['penjualan']['nonota'] = $no_nota;
+			$savedData['penjualan']['idpemakai'] = $userID;
+			$savedData['penjualan']['total'] = $totalBelanja;
+			$savedData['penjualan']['carabayar'] = $carabayar;
+			$savedData['penjualan']['bayar'] = $bayar;
+			$savedData['penjualan']['nokartu'] = $nokartu;
+			$savedData['penjualan']['tglpenjualan'] = $waktujual;
+			$savedData['penjualan']['idpelanggan'] = 0;
+			$savedData['penjualan']['totalmodal'] = $totalModal;
+			db_query("INSERT INTO penjualan (nonota, idpemakai, total, carabayar, bayar, nokartu, 
+			tglpenjualan, idpelanggan, keterangan, totalmodal, android_order)
+			VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%f','%d')",
+			$no_nota, $userID, $totalBelanja, $carabayar, $bayar, $nokartu, $waktujual, 0, 'Penjualan Via Android', $totalModal, 1);
+			$idSales = db_result(db_query("SELECT idpenjualan FROM penjualan WHERE nonota='%s'", $no_nota));
+			$savedData['penjualan']['id'] = $idSales;
+			for ($i = 0; $i < count($postData); $i++) {
+				$detailData = array();
+				$idProduct = $postData[$i]['idproduct'];
+				$detailData['idproduk'] = $idProduct;
+				$qtyProduct = $postData[$i]['jumlah'];
+				$detailData['qty'] = $qtyProduct;
+				$hargaJual = $postData[$i]['hargajual'];
+				$detailData['hargajual'] = $hargaJual;
+				$diskon = 0;
+				$detailData['diskon'] = $diskon;
+				$hargaPokok = $postData[$i]['hargamodal'];
+				$detailData['hargapokok'] = $hargaPokok;
+				if (!empty($idProduct) && !empty($qtyProduct)) {
+					db_query("INSERT INTO detailpenjualan(idpenjualan, idproduct, jumlah,
+					hargapokok, hargajual, diskon) VALUES ('%d', '%d', '%f', '%f', '%f', '%f')",
+					$idSales, $idProduct, $qtyProduct, $hargaPokok, $hargaJual, $diskon);
+					$savedData['detailpenjualan'][] = $detailData;
+					$result = db_query("SELECT type_product, hargapokok,stok FROM product WHERE idproduct='%d'",$idProduct);
+					$data = db_fetch_object($result);
+					$stokSebelum = $data->stok;
+					if ($data->type_product == 0){
+						$stokSekarang = $stokSebelum - $qtyProduct;
+						db_query("UPDATE product SET stok='%f' WHERE idproduct='%d'",$stokSekarang,$idProduct);
+						$keterangan = 'Penjualan';
+						db_query("INSERT INTO transaksistock (idproduk, idpenjualan, stocksebelum, keluar, stocksetelah, keterangan) VALUES 	
+						('%d', '%d', '%f', '%f', '%f', '%s')",$idProduct,$idSales,$stokSebelum,$qtyProduct,$stokSekarang,$keterangan);
+					}
+				}
+			}
+            do_upload_premisdata_server_side();
+		}
+	}
+	return $savedData;
+}
+function buat_nota_server_side($idpenjualan){
+	if ($idpenjualan > 0 AND $idpenjualan < 10){
+		$no_nota = "N000000".$idpenjualan;
+	}elseif ($idpenjualan >= 10 AND $idpenjualan < 100){
+		$no_nota = "N00000".$idpenjualan;
+	}elseif ($idpenjualan >= 100 AND $idpenjualan < 1000){
+		$no_nota = "N0000".$idpenjualan;
+	}elseif ($idpenjualan >= 1000 AND $idpenjualan < 10000){
+		$no_nota = "N000".$idpenjualan;
+	}elseif ($idpenjualan >= 10000 AND $idpenjualan < 100000){
+		$no_nota = "N00".$idpenjualan;
+	}elseif ($idpenjualan >= 100000 AND $idpenjualan < 1000000){
+		$no_nota = "N0".$idpenjualan;
+	}elseif ($idpenjualan >= 1000000){
+		$no_nota = "N".$idpenjualan;
+	}
+	return $no_nota;
+}
+function serverSidePenjualanAndroid($request){
+	header('Access-Control-Allow-Origin: *');
+	$tglAwal = $_REQUEST['tglawal'].' 00:00';
+	$tglAkhir = $_REQUEST['tglakhir'].' 23:59';
+	$strSQL = "SELECT penj.idpenjualan,penj.nonota,SUBSTR(penj.tglpenjualan,1,10) AS tanggal,";
+	$strSQL .= "SUBSTR(penj.tglpenjualan,11,9) AS waktu, penj.idpemakai,penj.total,penj.totalmodal,";
+	$strSQL .= "(penj.total-penj.totalmodal) AS laba, penj.carabayar,penj.bayar,penj.kembali,";
+	$strSQL .= "penj.nokartu,penj.keterangan,penj.insert_date, user.name, plg.namapelanggan ";
+	$strSQL .= "FROM penjualan AS penj ";
+	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = penj.idpemakai ";
+	$strSQL .= "LEFT JOIN pelanggan AS plg ON plg.idpelanggan = penj.idpelanggan ";
+	$strSQL .= "WHERE penj.tglpenjualan BETWEEN '%s' AND '%s' ";
+	$strSQL .= "ORDER BY tglpenjualan";
+	$result = db_query($strSQL,$tglAwal,$tglAkhir);
+	$output = array();
+	while ($data = db_fetch_object($result)){
+		$output[] = $data;
+	}
+	return $output;
+}
+function serverSidePerubahanHargaAndroid($request){
+	$returnData = json_decode($request);
+	for ($i = 0;$i < count($returnData);$i++){
+		$sql_update = "UPDATE product SET hargajual='%f',uploaded=0, changed=1 WHERE idproduct='%d'";
+		db_query($sql_update, $returnData[$i]->hargajualbaru,$returnData[$i]->idproduct);
+		db_query("INSERT INTO historyhargajual (hargasebelum, hargasesudah, uid) VALUES('%f','%f','%d')",
+			$returnData[$i]->hargajual,$returnData[$i]->hargajualbaru,1);
+	}
+	return $returnData;
+}
+function serverSideGetOmset($request){
+	header('Access-Control-Allow-Origin: *');
+	$output = array();
+	if (isset($request['tglawal']) && isset($request['tglakhir'])) {
+		$namaBulan = namaBulan();
+		$tglAwal = $request['tglawal'];
+		$tglAkhir = $request['tglakhir'];
+		$username = $request['userkonter'];
+		$password = $request['passkonter'];
+		$dateRange = create_date_range_array($username, $password, $tglAwal, $tglAkhir);
+		$strSQL = "SELECT tanggal, omset FROM laporan_omset WHERE tanggal BETWEEN '%s' AND '%s' ORDER BY tanggal";
+		$result = db_query($strSQL, $tglAwal, $tglAkhir);
+		$dateExist = array();
+		while ($data = db_fetch_object($result)) {
+			$dateExist[] = $data->tanggal;
+			$dataOmset = new stdClass();
+			$dataOmset->tanggal = $data->tanggal;
+			$splitTanggal = explode('-', $data->tanggal);
+			$dataOmset->rawdate = mktime(7, 0, 0, $splitTanggal[1], $splitTanggal[2], $splitTanggal[0]);
+			$dataOmset->tanggaltampil = date('d', $dataOmset->rawdate).' '.$namaBulan[((int)$splitTanggal[1] - 1)].' '.$splitTanggal[0];
+			$dataOmset->omset = $data->omset;
+			$output[$data->tanggal] = $dataOmset;
+		}
+		for ($i = 0; $i < count($dateRange); $i++) {
+			if (!count($dateExist) || !in_array($dateRange[$i], $dateExist)) {
+				$dataOmset = new stdClass();
+				$dataOmset->tanggal = $dateRange[$i];
+				$dataOmset->omset = 0;
+				$splitTanggal = explode('-', $dateRange[$i]);
+				$dataOmset->rawdate = mktime(7, 0, 0, $splitTanggal[1], $splitTanggal[2], $splitTanggal[0]);
+				$dataOmset->tanggaltampil = date('d', $dataOmset->rawdate).' '.$namaBulan[((int)$splitTanggal[1] - 1)].' '.$splitTanggal[0];
+				$output[$dataOmset->tanggal] = $dataOmset;
+			}
+		}
+		ksort($output);
+		$outputRet = array();
+		foreach($output as $dataOmset){
+			$outputRet[] = $dataOmset;
+		}
+		$output = $outputRet;
+	}else{
+		$output = $request;
+	}
+	return $output;
+}
+function serverSidePostOmset($request, $username, $password){
+	$returnData = json_decode($request);
+	$userID = db_result(db_query("SELECT uid FROM cms_users WHERE name='%s' AND pass='%s'", $username, md5($password)));
+	if ($userID > 0) {
+		$savedData['user_id'] = $userID;
+		$userTimeZone = db_result(db_query("SELECT timezone_name FROM cms_users WHERE uid=%d", $userID));
+		date_default_timezone_set($userTimeZone);
+		for ($i = 0; $i < count($returnData); $i++) {
+			$omsetExists = db_result(db_query("SELECT COUNT(*) FROM laporan_omset WHERE tanggal = '%s'", $returnData[$i]->tanggal));
+			$changed = time();
+			if ($omsetExists > 0) {
+				$sql_update = "UPDATE laporan_omset SET omset='%f',changed = '%d', uid='%d' WHERE tanggal='%s'";
+				db_query($sql_update, $returnData[$i]->omset, $changed, $userID, $returnData[$i]->tanggal);
+			} else {
+				$sql_insert = "INSERT INTO laporan_omset(tanggal, omset, created, uid) VALUES ('%s','%f','%d','%d')";
+				db_query($sql_insert, $returnData[$i]->tanggal, $returnData[$i]->omset, $changed, $userID);
+			}
+		}
+	}
+	return $returnData;
+}
+function namaBulan(){
+	return array(
+		"Januari", "Februari", "Maret",
+		"April", "Mei", "Juni", "Juli",
+		"Agustus", "September", "Oktober",
+		"November", "Desember"
+	);
+}
+function create_date_range_array($username = null, $password = null, $strDateFrom, $strDateTo, $dateFormat = 'Y-m-d')
+{
+	set_default_time_zone($username, $password);
+	$aryRange = array();
+	$iDateFrom = mktime(0, 0, 0, substr($strDateFrom, 5, 2), substr($strDateFrom, 8, 2), substr($strDateFrom, 0, 4));
+	$iDateTo = mktime(0, 0, 0, substr($strDateTo, 5, 2), substr($strDateTo, 8, 2), substr($strDateTo, 0, 4));
+
+	if ($iDateTo >= $iDateFrom) {
+		if ($dateFormat == 'UNIX') {
+			array_push($aryRange, $iDateFrom); // first entry
+		} else {
+			array_push($aryRange, date($dateFormat, $iDateFrom)); // first entry
+		}
+		while ($iDateFrom < $iDateTo) {
+			$iDateFrom += 86400; // add 24 hours
+			if ($dateFormat == 'UNIX') {
+				array_push($aryRange, $iDateFrom);
+			} else {
+				array_push($aryRange, date($dateFormat, $iDateFrom));
+			}
+		}
+	}
+	return $aryRange;
+}
+function set_default_time_zone($username = null, $password = null){
+	$userTimeZone = db_result(db_query("SELECT timezone_name FROM cms_users WHERE name='%s' AND pass='%s'", $username, md5($password)));
+	$defaultTimeZone = date_default_timezone_get();
+	if (!empty($userTimeZone)) {
+		if ($defaultTimeZone != $userTimeZone){
+			date_default_timezone_set($userTimeZone);
+		}
+	}else{
+		if ($defaultTimeZone != 'Asia/Jakarta') {
+			date_default_timezone_set('Asia/Jakarta');
+		}
+	}
+}
+
+function get_data_premis_server_side(){
+	$strSQL = 'SELECT id, zone, nama, alamat, telepon, whatsapp, bbm, telegram, email, ';
+    $strSQL .= 'website, created, changed, uid FROM cms_datapremis LIMIT 1';
+    $result = db_query($strSQL);
+    $arrayData = db_fetch_array($result);
+    return $arrayData;
+}
+
+function get_updated_penjualan_server_side(){
+    $strSQL = 'SELECT idpenjualan, nonota, idtitipanlaundry, idcustomerorder, tglpenjualan, idpemakai, ';
+    $strSQL .= 'idpelanggan, total, totalmodal, carabayar, bayar, kembali, perlakuankembalian, ';
+    $strSQL .= 'nokartu, keterangan, insert_date ';
+    $strSQL .= 'FROM penjualan WHERE uploaded=0';
+    $result = db_query($strSQL);
+    $dataPenjualan = array();
+    while ($data = db_fetch_array($result)){
+        $dataPenjualan[] = $data;
+    }
+    return $dataPenjualan;
+}
+function get_updated_product_server_side(){
+    $strSQL = 'SELECT idproduct, idsupplier, idkategori, idsubkategori, barcode, ';
+    $strSQL .= 'alt_code, namaproduct, type_product, hargapokok, hargajual, margin, minstok, ';
+    $strSQL .= 'maxstok, stok, satuan, berat, keterangan, lead_time, aturan_jam_kerja, ';
+    $strSQL .= 'berlaku_sebelum_zuhur, status_product, uploaded, changed ';
+    $strSQL .= 'FROM product WHERE uploaded=0';
+    $result = db_query($strSQL);
+    $dataProduct = array();
+    while ($data = db_fetch_array($result)){
+        $dataProduct[] = $data;
+    }
+    return $dataProduct;
+}
+function do_upload_premisdata_server_side(){
+    $resultview = '';
+    if (is_connected_server_side()) {
+        //copy premis data();
+        $url = 'http://report.ikhwanit.com/importdatapremis';
+        /* Process Upload Product Data */
+        $totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM product WHERE uploaded = 0"));
+        $totalUploadProcess = floor($totalRecord / 40) + 1;
+        if ($totalUploadProcess > 40) {
+            $totalUploadProcess = 40;
+        }
+        $dataPremis = get_data_premis_server_side();
+        $dataProduct = get_updated_product_server_side();
+        $uploadproses = 1;
+        for ($i = 0; $i < $totalUploadProcess; $i++) {
+            $startJ = ($i * 40);
+            $endRecord = ($i * 40) + 40;
+            if ($endRecord > $totalRecord) {
+                $endRecord = $totalRecord;
+            }
+            $postproduct = array();
+            for ($j = $startJ; $j < $endRecord; $j++) {
+                if (isset($dataProduct[$j])) {
+                    $postproduct[] = $dataProduct[$j];
+                }
+            }
+            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+            $postdata['product'] = $postproduct;
+            $fields_string2 = http_build_query($postdata, '', '&');
+            $ch = curl_init();
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+            $result = curl_exec($ch);
+            $arrayProdUploaded = json_decode($result);
+            $resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Product successfully uploaded[' . count($arrayProdUploaded) . '] : <ul>';
+            for ($k = 0; $k < count($arrayProdUploaded); $k++) {
+                $prod_id = $arrayProdUploaded[$k]->idproduct_old;
+                $proses = $arrayProdUploaded[$k]->proses;
+                db_query("UPDATE product SET uploaded = 1 WHERE idproduct='%d'", $prod_id);
+                $productName = $arrayProdUploaded[$k]->namaproduct;
+                $productBarcode = $arrayProdUploaded[$k]->barcode;
+                $resultview .= '<li>ID : ' . $prod_id . ', Barcode : ' . $productBarcode . ', Product Name : ' . $productName . ', Proses : ' . $proses . '</li>';
+            }
+            $resultview .= '</ul></p>';
+            curl_close($ch);
+            $uploadproses++;
+        }
+        /* End Process Upload Product Data */
+        /* Process Upload Penjualan Data */
+        $totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM penjualan WHERE uploaded = 0"));
+        $totalUploadProcess = floor($totalRecord / 50) + 1;
+        if ($totalUploadProcess > 40) {
+            $totalUploadProcess = 40;
+        }
+        $dataPremis = get_data_premis_server_side();
+        $dataPenjualan = get_updated_penjualan_server_side();
+        $uploadproses = 1;
+        for ($i = 0; $i < $totalUploadProcess; $i++) {
+            $startJ = ($i * 50);
+            $endRecord = ($i * 50) + 50;
+            if ($endRecord > $totalRecord) {
+                $endRecord = $totalRecord;
+            }
+            $postpenjualan = array();
+            for ($j = $startJ; $j < $endRecord; $j++) {
+                if (isset($dataPenjualan[$j])) {
+                    $postpenjualan[] = $dataPenjualan[$j];
+                }
+            }
+            $postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+            $postdata['penjualan'] = $postpenjualan;
+            $fields_string2 = http_build_query($postdata, '', '&');
+            $ch = curl_init();
+            //set the url, number of POST vars, POST data
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+            curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+            $result = curl_exec($ch);
+            $arrayPenjualanUploaded = json_decode($result);
+            $resultview .= '<p>' . $uploadproses . '. Penjualan successfully uploaded[' . count($arrayPenjualanUploaded) . '] : <ul>';
+            for ($k = 0; $k < count($arrayPenjualanUploaded); $k++) {
+                $penj_id = $arrayPenjualanUploaded[$k]->idpenjualan;
+                $proses = $arrayPenjualanUploaded[$k]->proses;
+                db_query("UPDATE penjualan SET uploaded = 1 WHERE idpenjualan='%d'", $penj_id);
+                $noNota = $arrayPenjualanUploaded[$k]->nonota;
+                $tglPenjualan = $arrayPenjualanUploaded[$k]->tglpenjualan;
+                $resultview .= '<li>ID report : ' . $arrayPenjualanUploaded[$k]->id . ', ID : ' . $penj_id . ', No. Nota : ' . $noNota . ', Tgl Penjualan : ' . $tglPenjualan . ', Proses : ' . $proses . '</li>';
+            }
+            $resultview .= '</ul></p>';
+            curl_close($ch);
+            $uploadproses++;
+        }
+        /* End Process Upload Penjualan Data */
+    }
+    return $resultview;
+}
+function is_connected_server_side(){
+    $connected = @fsockopen("report.ikhwanit.com", 80);
+    //website, port  (try 80 or 443)
+    if ($connected){
+        $is_conn = true; //action when connected
+        fclose($connected);
+    }else{
+        $is_conn = false; //action in connection failure
+    }
+    return $is_conn;
+
+}
+
+function serverSideCheckLogin($request){
+    $username = $request['userkonter'];
+    $password = $request['passkonter'];
+    $userID = db_result(db_query("SELECT uid FROM cms_users WHERE name='%s' AND pass='%s'", $username, md5($password)));
+    $retArray = array();
+    $retData = new stdClass();
+    $retData->uservalid = 0;
+    if ($userID > 0){
+        $retData->uservalid = 1;
+    }
+    $retArray[] = $retData;
+    return $retArray;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1271,6 +1713,66 @@ if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSideArraySubKategori($_GET);
 }else if($_GET['request_data'] == 'satuan'){
 	$returnArray = serverSideArraySatuan($_GET);
+}else if($_GET['request_data'] == 'allproduct'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSideGetAllProduct($_GET);
+}else if ($_GET['request_data'] == 'postsales'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSidePostSales($_GET);
+}else if ($_GET['request_data'] == 'penjualanandroid'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSidePenjualanAndroid($_GET);
+}else if ($_GET['request_data'] == 'perubahanhargadroid'){
+	header('Access-Control-Allow-Origin: *');
+	if (isset($_SERVER['HTTP_ORIGIN'])) {
+		header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+		header('Access-Control-Allow-Credentials: true');
+		header('Access-Control-Max-Age: 86400');    // cache for 1 day
+	}
+	// Access-Control headers are received during OPTIONS requests
+	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+		exit(0);
+	}
+	//http://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
+	$postdata = file_get_contents("php://input");
+	if (isset($postdata)) {
+		$returnArray = serverSidePerubahanHargaAndroid($postdata);
+	}
+}else if ($_GET['request_data'] == 'omsetandroid'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSideGetOmset($_GET);
+}else if ($_GET['request_data'] == 'postOmsetAndroid'){
+	$username = $_GET['userkonter'];
+	$password = $_GET['passkonter'];
+	header('Access-Control-Allow-Origin: *');
+	if (isset($_SERVER['HTTP_ORIGIN'])) {
+		header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+		header('Access-Control-Allow-Credentials: true');
+		header('Access-Control-Max-Age: 86400');    // cache for 1 day
+	}
+	// Access-Control headers are received during OPTIONS requests
+	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+		exit(0);
+	}
+	//http://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
+	$postdata = file_get_contents("php://input");
+	if (isset($postdata)) {
+		$returnArray = serverSidePostOmset($postdata,$username, $password);
+	}
+}else if ($_GET['request_data'] == 'checkconnection'){
+    header('Access-Control-Allow-Origin: *');
+    $returnArray = serverSideCheckLogin($_GET);
 }
+header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);
 ?>
