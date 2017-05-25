@@ -385,6 +385,9 @@ function get_data_premis_uploaded(){
     }
     return $arrayData;
 }
+/*function do_upload_premisdata(){
+    return 'Test';
+}*/
 function do_upload_premisdata(){
     $resultview = '';
     if (is_connected()) {
