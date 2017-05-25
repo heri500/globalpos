@@ -255,7 +255,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>SATUAN</th>';
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL('.trim($currencySym).')</th>';
-	$tabelproduk .= '<th>GRUP MENU</th>';
+	$tabelproduk .= '<th>GRUP</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
