@@ -1466,13 +1466,14 @@ function serverSidePostOmset($request, $username, $password){
 			$omsetExists = db_result(db_query("SELECT COUNT(*) FROM laporan_omset WHERE tanggal = '%s'", $returnData[$i]->tanggal));
 			$changed = time();
 			if ($omsetExists > 0) {
-				$sql_update = "UPDATE laporan_omset SET omset='%f',changed = '%d', uid='%d' WHERE tanggal='%s'";
+				$sql_update = "UPDATE laporan_omset SET omset='%f',changed = '%d', uid='%d', uploaded=0 WHERE tanggal='%s'";
 				db_query($sql_update, $returnData[$i]->omset, $changed, $userID, $returnData[$i]->tanggal);
 			} else {
 				$sql_insert = "INSERT INTO laporan_omset(tanggal, omset, created, uid) VALUES ('%s','%f','%d','%d')";
 				db_query($sql_insert, $returnData[$i]->tanggal, $returnData[$i]->omset, $changed, $userID);
 			}
 		}
+		do_upload_omset_server_side($username, $password);
 	}
 	return $returnData;
 }
@@ -1656,6 +1657,75 @@ function do_upload_premisdata_server_side(){
         /* End Process Upload Penjualan Data */
     }
     return $resultview;
+}
+function do_upload_omset_server_side($username = null, $password = null){
+	$resultview = '';
+	if (is_connected_server_side() && !empty($username) && !empty($password)) {
+		//copy premis data();
+		$url = 'http://report.ikhwanit.com/importdatapremis';
+		/* Process Upload Omset Data */
+		$totalRecord = db_result(db_query("SELECT COUNT(*) AS total_record FROM laporan_omset WHERE uploaded = 0"));
+		$totalUploadProcess = floor($totalRecord / 40) + 1;
+		if ($totalUploadProcess > 40) {
+			$totalUploadProcess = 40;
+		}
+		$dataPremis = get_data_premis_server_side();
+		$dataOmset = get_updated_omset_server_side();
+		$uploadproses = 1;
+		for ($i = 0; $i < $totalUploadProcess; $i++) {
+			$startJ = ($i * 40);
+			$endRecord = ($i * 40) + 40;
+			if ($endRecord > $totalRecord) {
+				$endRecord = $totalRecord;
+			}
+			$postomset = array();
+			for ($j = $startJ; $j < $endRecord; $j++) {
+				if (isset($dataOmset[$j])) {
+					$postomset[] = $dataOmset[$j];
+				}
+			}
+			$postdata = array('premisuser' => 'ikhwanmart', 'premispssword' => '@abuya313', 'datapremis' => $dataPremis);
+			$postdata['omset'] = $postomset;
+			$fields_string2 = http_build_query($postdata, '', '&');
+			$ch = curl_init();
+			//set the url, number of POST vars, POST data
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string2);
+			curl_setopt($ch, CURLOPT_COOKIEJAR, 'cookie.txt');
+			$result = curl_exec($ch);
+			$arrayOmsetUploaded = json_decode($result);
+			$resultview .= '<p>' . $uploadproses . '. Record : ' . $startJ . ' to ' . $endRecord . ' Omset successfully uploaded[' . count($arrayOmsetUploaded) . '] : <ul>';
+			for ($k = 0; $k < count($arrayOmsetUploaded); $k++) {
+				set_default_time_zone($username, $password);
+				$omsetDate = date('Y-m-d',$arrayOmsetUploaded[$k]->tglomset);
+				$proses = $arrayOmsetUploaded[$k]->proses;
+				db_query("UPDATE laporan_omset SET uploaded = 1 WHERE tanggal='%s'", $omsetDate);
+				$resultview .= '<li>Tanggal Omset : ' . $omsetDate . ', Omset : ' . $arrayOmsetUploaded[$k]->omset . ', Proses : ' . $proses . '</li>';
+			}
+			$resultview .= '</ul></p>';
+			curl_close($ch);
+			$uploadproses++;
+		}
+		/* End Process Upload Omset */
+	}
+	return $resultview;
+}
+function get_updated_omset_server_side(){
+    date_default_timezone_set('Asia/Jakarta');
+	$strSQL = 'SELECT tanggal, omset, created, changed, uid, uploaded ';
+	$strSQL .= 'FROM laporan_omset WHERE uploaded=0';
+	$result = db_query($strSQL);
+	$dataOmset = array();
+	while ($data = db_fetch_array($result)) {
+		$postData = array();
+		$splitDate = explode('-', $data['tanggal']);
+		$postData['tglomset'] = mktime(23, 0, 0, (int)$splitDate[1], (int)$splitDate[2], (int)$splitDate[0]);
+		$postData['omset'] = $data['omset'];
+		$dataOmset[] = $postData;
+	}
+	return $dataOmset;
 }
 function is_connected_server_side(){
     $connected = @fsockopen("report.ikhwanit.com", 80);
