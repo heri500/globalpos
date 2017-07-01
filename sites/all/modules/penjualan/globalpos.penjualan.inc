@@ -119,7 +119,8 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th>KEMBALI</th>';
 	$tabelpenjualan .= '<th>KASIR</th>';
 	$tabelpenjualan .= '<th>PELANGGAN</th>';
-	$tabelpenjualan .= '<th class="tablebutton"></th>';
+	$tabelpenjualan .= '<th class="tablebutton">SLIP</th>';
+	$tabelpenjualan .= '<th class="tablebutton">FAKTUR</th>';
 	$tabelpenjualan .= '</tr>';
 	$tabelpenjualan .= '</thead>';
 	$tabelpenjualan .= '<tbody>';
@@ -138,6 +139,7 @@ function tabel_penjualan($tgl1,$tgl2,$idPelanggan){
 	$tabelpenjualan .= '<th></th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalbayar,0,",",".").'&nbsp;&nbsp;</th>';
 	$tabelpenjualan .= '<th style="text-align: right">Rp. '.number_format($totalkembali,0,",",".").'&nbsp;&nbsp;</th>';
+	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
 	$tabelpenjualan .= '<th>&nbsp;</th>';
@@ -187,10 +189,10 @@ function penjualan_produk($tgl1,$tgl2,$idSupplier){
 	$tabelpenjualan .= '<th>PRODUK</th>';
 	$tabelpenjualan .= '<th>SUPPLIER</th>';
 	$tabelpenjualan .= '<th class="qty">QTY</th>';
-	$tabelpenjualan .= '<th>H.JUAL MIN</th>';
-	$tabelpenjualan .= '<th>H.JUAL MAX</th>';
 	$tabelpenjualan .= '<th>H.MODAL MIN</th>';
 	$tabelpenjualan .= '<th>H.MODAL MAX</th>';
+	$tabelpenjualan .= '<th>H.JUAL MIN</th>';
+	$tabelpenjualan .= '<th>H.JUAL MAX</th>';
 	$tabelpenjualan .= '<th>SUBTOTAL</th>';
 	$tabelpenjualan .= '<th>MODAL</th>';
 	$tabelpenjualan .= '<th>LABA</th>';

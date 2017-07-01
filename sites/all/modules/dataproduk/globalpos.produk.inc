@@ -131,8 +131,10 @@ function data_produk(){
 	$pilihanstatus .= '<button id="export-xls" onclick="export_to_xls();">Export XLS</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="nonaktifkan">Non Aktifkan</button>&nbsp;&nbsp;';
 	$pilihanstatus .= '<button id="aktifkan">Aktifkan</button>&nbsp;&nbsp;';
-	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode Biasa</button>&nbsp;&nbsp;';
-	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Dengan Logo</button>';
+	$pilihanstatus .= '<button id="print-barcode-biasa">Print Barcode</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-logo">Print Barcode Logo</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-tanpa-harga">Barcode 50x25</button>&nbsp;&nbsp;';
+	$pilihanstatus .= '<button id="print-barcode-50x15">Barcode 50x15</button>';
 	$pilihanstatus .= '</span>';
 	$pilihanstatus .= '</div>';
 	$statusProduct = 1;
@@ -197,6 +199,10 @@ function data_produk(){
 	$viewtabelproduk .= '</form>';
 	$viewtabelproduk .= '<div><button id="tambahsatuan" onclick="simpansatuan();">Tambah Satuan</button></div>';
 	$viewtabelproduk .= '</div>';
+	$viewtabelproduk .= '<form id="form-print" method="post" action="'.base_path().'print/6" target="_blank" style="display:none;">';
+	$viewtabelproduk .= '<textarea id="selected-product-print" name="selected-product-print"></textarea>';
+	$viewtabelproduk .= '<input type="hidden" id="sticker-type" name="sticker-type" value="0">';
+	$viewtabelproduk .= '</form>';
 	return $viewtabelproduk;
 }
 function cek_kode_alt($kodealt = null){
@@ -256,6 +262,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<th>KETERANGAN</th>';
 	$tabelproduk .= '<th>TOTAL(Rp.)</th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</thead>';
 	$tabelproduk .= '<tbody>';
@@ -265,6 +272,7 @@ function tabel_produk($statusstok = null, $statusProduct = 1){
 	$tabelproduk .= '<tr>';
 	$tabelproduk .= '<th class="right" colspan="16">TOTAL NILAI BARANG :</th>';
 	$tabelproduk .= '<th class="right"><strong><div id="total-nilai-barang">Rp. '.number_format($totalNilaiBarang,2,',','.').'</div></strong></th>';
+	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '<th class="tablebutton"></th>';
 	$tabelproduk .= '</tr>';
 	$tabelproduk .= '</tfoot>';
@@ -586,6 +594,7 @@ function edit_data_produk(){
 			}
 		}
 		$pilihansatuan .= '</select>';
+		$pilihansatuan .= '<input type="hidden" id="satuan_lama" name="satuan_lama" value="'.$dataproduk->satuan.'">';
 		$buttonadd4 = '<img id="addsatuan" title="Tambah satuan Baru" src="'.base_path().'misc/media/images/add-small.ico">';
 		//Pilihan Kategori untuk Dialog Box Tambah Sub kategori
 		$result = db_query("SELECT idkategori,kodekategori,kategori FROM kategori ORDER BY kodekategori,kategori");
@@ -671,7 +680,13 @@ function update_data_produk(){
 	$hargaPokok = $data->hargapokok;
 	$hargaJual = $data->hargajual;
 	$nilaiRet = $nilai;
-	if ($kolom == "3"){
+	if ($kolom == "1") {
+		$sql_update = "UPDATE product SET idkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT kategori FROM kategori WHERE idkategori=%d', $nilai));
+	}else if ($kolom == "2") {
+		$sql_update = "UPDATE product SET idsubkategori='%d' WHERE idproduct='%d'";
+		$nilaiRet = db_result(db_query('SELECT subkategori FROM subkategori WHERE idsubkategori=%d',$nilai));
+	}else if ($kolom == "3"){
 		$sql_update = "UPDATE product SET barcode='%s',uploaded=0, changed=1 WHERE idproduct='%d'";
 	}else if ($kolom == "4"){
 		$sql_update = "UPDATE product SET alt_code='%s',uploaded=0, changed=1 WHERE idproduct='%d'";
@@ -708,6 +723,29 @@ function update_data_produk(){
 			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
 			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$nilai,$keterangan);
 		}
+	}else if ($kolom == "10") {
+		$sql_update = "UPDATE product SET satuan='%s' WHERE idproduct='%d'";
+		$strSQL = "SELECT satuan FROM product WHERE idproduct=%d";
+		$satuanAsal = db_result(db_query($strSQL,$productId));
+		$konversiSatuan = get_konversi_satuan($nilai,$satuanAsal);
+		$hargaJualBaru = $hargaJual*$konversiSatuan;
+		$hargaPokokBaru = $hargaPokok*$konversiSatuan;
+		$stokBaru = $stokSebelum/$konversiSatuan;
+		$sqlUpdateStok = "UPDATE product SET stok='%f',hargajual='%f',hargapokok='%f' WHERE idproduct=%d";
+		db_query($sqlUpdateStok,$stokBaru,$hargaJualBaru, $hargaPokokBaru,$productId);
+		$selisihStok = $stokBaru - $stokSebelum;
+		if ($selisihStok < 0){
+			$keluar = abs($selisihStok);
+			$keterangan = 'Perubahan Stock-Stok Berkurang';
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, keluar, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$keluar,$stokBaru,$keterangan);
+		}else{
+			$masuk = $selisihStok;
+			$keterangan = 'Perubahan Stock-Stok Bertambah';
+			db_query("INSERT INTO transaksistock (idproduk, stocksebelum, masuk, stocksetelah, keterangan) VALUES 
+			('%d', '%f', '%f', '%f', '%s')",$productId,$stokSebelum,$masuk,$stokBaru,$keterangan);
+		}
+		$nilaiRet = $nilai;
 	}
 	db_query($sql_update,$nilai,$productId);
 	echo $nilaiRet;

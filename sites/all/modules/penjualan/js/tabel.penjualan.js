@@ -201,6 +201,8 @@ function tampiltabeljualdetail(){
 		'bAutoWidth': false,
 		'bPaginate': false,
 		'bLengthChange': false,
+		'scrollY': '330px',
+		'scrollCollapse': true,
 		'bInfo': false,
 		'aaSorting': [[1, 'asc']],
 		'sDom': '<"H"<"toolbar">fr>t<"F"ip>',
@@ -209,7 +211,7 @@ function tampiltabeljualdetail(){
 		],
 		'processing': true,
 		'serverSide': true,
-		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=detailpenjualan&idpenjualan=' + selectedPenjualan,
+		'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?asal=penjualan&request_data=detailpenjualan&idpenjualan=' + selectedPenjualan,
 		'createdRow': function ( row, data, index ) {
 			row.id = data[(data.length - 1)];
 			$('td', row).eq(1).addClass('center');
@@ -318,6 +320,21 @@ function print_penjualan(idpenjualan,nonota){
 	var konfirmasi = confirm('Yakin ingin mencetak nota penjualan dengan no nota : '+ nonota +' ini...??!!');
 	if (konfirmasi){
 		window.open(pathutama + 'print/6?idpenjualan='+ idpenjualan);
+	}
+}
+function print_faktur(idpenjualan,nonota){
+	var konfirmasi = confirm('Yakin ingin export faktur ke xls untuk penjualan dengan no nota : '+ nonota +' ini...??!!');
+	if (konfirmasi){
+		alamat = pathutama + 'penjualan/exportfaktur/'+ idpenjualan;
+		$.ajax({
+			type: 'POST',
+			url: alamat,
+			cache: false,
+			success: function(data){
+				var xlsFilename = data.trim();
+				window.location = Drupal.settings.basePath +"sites/default/files/"+ xlsFilename;
+			}
+		});
 	}
 }
 $(document).ready(function(){

@@ -615,6 +615,9 @@ $(document).ready(function(){
 			$("#field_no_kartu").hide();
 			$("#field_bayar").show();
 			$("#nilaibayar").removeAttr('readonly').removeAttr('disabled');
+			if ($(this).val() == 'HUTANG'){
+				$("#nilaibayar").val(0);
+			}
 			$("#nilaibayar").select();
 		}
 	});
