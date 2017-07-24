@@ -285,17 +285,23 @@ function datapremis_input_form_submit($form, &$form_state) {
             }
         }
         $fieldName = 'ppn_value';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         $fieldName = 'currency_code';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         $fieldName = 'currency_symbol';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         $fieldName = 'thousand_separator';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         $fieldName = 'decimal_separator';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         $fieldName = 'ppn_symbol';
-        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
         drupal_set_message(t('Data premis berhasil dibuat.'));
     }
