@@ -1393,6 +1393,33 @@ function serverSideGetProductByCategory($request){
 	}
 	return $items;
 }
+function serverSideGetProductByGrup($request){
+	$dataCategory = serverSideGetCategoryProduct();
+	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	$items = array();
+	while ($data = db_fetch_object($result)) {
+		$diskon = 0;
+		if ($data->idproduct) {
+			$idpelanggan = 0;
+			if (isset($request["idpelanggan"])){
+				$idpelanggan = $request["idpelanggan"];
+			}
+			$result2 = db_query(
+				"SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
+				$idpelanggan,
+				$data->idkategori
+			);
+			$datadiskon = db_fetch_object($result2);
+			if (!empty($datadiskon) && $datadiskon->besardiskon >= 0) {
+				$data->diskon = $datadiskon->besardiskon;
+			}
+		}
+		if (!empty($data->idkategori)){
+			$items[$dataCategory[$data->idkategori]->kategori][] = $data;
+		}
+	}
+	return $items;
+}
 function serverSideGetDataMeja($request){
 	$result = db_query("SELECT id,barcodemeja, kodemeja, meja, keterangan FROM meja");
 	$items = array();
@@ -1591,6 +1618,19 @@ function serverSideArrayGrupMenu($request){
     $output['selected'] =  $idGrup;
     return $output;
 }
+function serverSideCheckLogin($request){
+	$username = $request['userkonter'];
+	$password = $request['passkonter'];
+	$userID = db_result(db_query("SELECT uid FROM cms_users WHERE name='%s' AND pass='%s'", $username, md5($password)));
+	$retArray = array();
+	$retData = new stdClass();
+	$retData->uservalid = 0;
+	if ($userID > 0){
+		$retData->uservalid = 1;
+	}
+	$retArray[] = $retData;
+	return $retArray;
+}
 if ($_GET['request_data'] == 'pelanggan'){
 	$returnArray = serverSidePelanggan($_GET);
 }else if($_GET['request_data'] == 'produk'){
@@ -1636,6 +1676,9 @@ if ($_GET['request_data'] == 'pelanggan'){
     $returnArray = serverSideArraySubKategori($_GET);
 }else if($_GET['request_data'] == 'grupmenu'){
     $returnArray = serverSideArrayGrupMenu($_GET);
+}else if ($_GET['request_data'] == 'checkconnection'){
+	header('Access-Control-Allow-Origin: *');
+	$returnArray = serverSideCheckLogin($_GET);
 }
 header('Access-Control-Allow-Origin: *');
 echo json_encode($returnArray);
