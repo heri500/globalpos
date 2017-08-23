@@ -459,6 +459,8 @@ function save_produk(){
     }
 }
 $(document).ready(function() {
+    //jsPrintSetup.getPrintersList();
+    //jsPrintSetup.setPrinter();
     pathutama = Drupal.settings.basePath;
     pathfile = Drupal.settings.filePath;
     alamatupdate = Drupal.settings.basePath + 'dataproduk/updateproduk';
