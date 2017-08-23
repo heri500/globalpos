@@ -74,6 +74,8 @@ function array_zone_gisb(){
         '039' => 'Afrika Utara',
         '040' => 'Haramain',
         '041' => 'Mesir',
+        '042' => 'Kelantan 1',
+        '043' => 'Kelantan 2',
     );
 }
 function data_premis(){
