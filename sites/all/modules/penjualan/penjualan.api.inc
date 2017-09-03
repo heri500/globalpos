@@ -783,6 +783,49 @@ function getPremisInformation(){
 	}
 	return $dataPremis;
 }
+function printLabelHarga(){
+    drupal_add_js('misc/media/jquery-1.4.4.min.js');
+    $js_path = drupal_get_path('module','penjualan').'/js/direct.print.js';
+    drupal_add_js($js_path);
+    _addBarcodePlugins2();
+    $js_path = drupal_get_path('module','penjualan').'/js/labelBarcode.js';
+    drupal_add_js($js_path);
+    $products = isset($_POST['selected-product-print']) ? $_POST['selected-product-print'] : null;
+    $explodeProduct = explode('||',$products);
+    $pathLogo = createLogoImagePath();
+    if (!empty($explodeProduct) && count($explodeProduct)) {
+        $printPage = 0;
+        $productsData = array();
+        for ($i = 0; $i < count($explodeProduct); $i++) {
+            $productData = explode('__', $explodeProduct[$i]);
+            $idProduct = $productData[0];
+            $dataProduct = getDataProduct($idProduct);
+            $productsData[] = $dataProduct['info'];
+            if ($printPage == 0) {
+                $tablePrint .= '<table style="width: 190px;border-collapse: collapse;margin-top: -6px;" >';
+                $tablePrint .= '<tbody>';
+            } else {
+                $tablePrint .= '<table style="width: 190px;border-collapse: collapse;" class="pagebreak">';
+                $tablePrint .= '<tbody>';
+            }
+            $tablePrint .= '<tr><td colspan="2" style="font-size: 10px;font-weight: bold;padding-left: 4px;">' . strtoupper($dataProduct['info']->namaproduct) . '</td></tr>';
+            $tablePrint .= '<tr><td colspan="2" style="font-size: 30px;font-weight: bold;padding-left: 4px"><sup style="font-size: 10px;">Rp.</sup>' . number_format($dataProduct['info']->hargajual, 0, ',', '.') . '</td></tr>';
+            $tablePrint .= '<tr><td rowspan="2" style="width: 40px;"><img height="36" src="' . $pathLogo . '" /></td>';
+            $tablePrint .= '<td><svg id="barcode-'.$dataProduct['info']->barcode.'" class="barcode"></svg></td>';
+            $tablePrint .= '</tr>';
+            $tablePrint .= '<tr><td style="font-size: 10px;font-weight: bold;letter-spacing: 7px;">' . $dataProduct['info']->barcode . '</td></tr>';
+            $tablePrint .= '</tbody>';
+            $tablePrint .= '</table>';
+            $printPage++;
+        }
+        drupal_add_js(
+            array(
+                'dataProduct' => $productsData,
+            ),
+            'setting');
+    }
+    return $tablePrint;
+}
 function cekPrinterCommand(){
 	$printOut = '';
 	if (isset($_GET['nidlaundry'])){
@@ -808,9 +851,13 @@ function cekPrinterCommand(){
 			$printOut = printProductBarcodeWithLogo2();
 		}else if(isset($_POST['sticker-type']) && $_POST['sticker-type'] == 1){
 			$printOut = printProductBarcodeWithLogo3();
-		}else{
+		}else if(isset($_POST['sticker-type']) && $_POST['sticker-type'] == 2){
+            $printOut = printLabelHarga();
+        }else{
 			$printOut = printProductBarcodeWithLogo2();
 		}
-	}
+	}else if (isset($_GET['idprodlabel'])){
+        $printOut = printLabelHarga();
+    }
 	return $printOut;
 }

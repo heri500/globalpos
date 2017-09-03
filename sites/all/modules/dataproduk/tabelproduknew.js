@@ -782,4 +782,25 @@ $(document).ready(function() {
             }
         }
     });
+    $('#print-price-label').on('click', function(){
+        var selected_product = '';
+        var counterData = 0;
+        $('.barcode-select').each(function(){
+            if ($(this).is(':checked')){
+                var strID = $(this).val();
+                if (counterData > 0){
+                    selected_product += '||'+ $(this).val() +'__'+ $('#print-'+ strID).val();
+                }else{
+                    selected_product = $(this).val() +'__'+ $('#print-'+ strID).val();
+                }
+                counterData++;
+            }
+
+        });
+        if (selected_product != ''){
+            $('#selected-product-print').val(selected_product);
+            $('#sticker-type').val(2);
+            $('#form-print').submit();
+        }
+    });
 })

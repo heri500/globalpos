@@ -92,7 +92,7 @@ function tabel_kategori(){
 	}
 	$tabelkategori .= '</tbody>';
 	$tabelkategori .= '</table>';
-	return $tabelkategori;
+    return $tabelkategori;
 }
 
 function simpan_kategori(){
