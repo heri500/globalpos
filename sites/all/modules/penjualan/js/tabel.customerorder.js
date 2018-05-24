@@ -30,7 +30,7 @@ function tampiltabelcustomerorder(){
 			'bInfo': true,
 			'aLengthMenu': [[100, 200, 300, -1], [100, 200, 300, 'All']],
 			'iDisplayLength': 100,
-			'order': [[ 7, "desc" ]],
+			'order': [[ 9, "desc" ]],
 			'processing': true,
 			'serverSide': true,
 			'ajax': Drupal.settings.basePath + 'sites/all/modules/datapelanggan/server_processing.php?request_data=customerorder&tglawal='+ Drupal.settings.tglawal +'&tglakhir='+ Drupal.settings.tglakhir,
@@ -53,13 +53,15 @@ function tampiltabelcustomerorder(){
 				$('td', row).eq(8).addClass('center');
 				$('td', row).eq(9).addClass('angka');
 				$('td', row).eq(10).addClass('angka');
-				$('td', row).eq(11).addClass('center');
-				$('td', row).eq(12).addClass('angka');
-				$('td', row).eq(13).addClass('angka');
-				$('td', row).eq(14).addClass('center');
-				$('td', row).eq(15).addClass('center');
+                $('td', row).eq(11).addClass('angka');
+                $('td', row).eq(12).addClass('angka');
+				$('td', row).eq(13).addClass('center');
+				$('td', row).eq(14).addClass('angka');
+				$('td', row).eq(15).addClass('angka');
 				$('td', row).eq(16).addClass('center');
 				$('td', row).eq(17).addClass('center');
+				$('td', row).eq(18).addClass('center');
+				$('td', row).eq(19).addClass('center');
 			},
 			'drawCallback': function( settings ) {
 				var renderer = "bmp";
@@ -103,26 +105,52 @@ function tampiltabelcustomerorder(){
 				$( api.column( 10 ).footer() ).html(
 					currSym +' '+ addCommas(total)
 				).addClass('angka');
+
+                total = api
+                    .column( 11 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                // Update footer
+                total = parseFloat(Math.abs(total)).toFixed(2);
+                $( api.column( 11 ).footer() ).html(
+                    currSym +' '+ addCommas(total)
+                ).addClass('angka');
+
+                total = api
+                    .column( 12 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                // Update footer
+                total = parseFloat(Math.abs(total)).toFixed(2);
+                $( api.column( 12 ).footer() ).html(
+                    currSym +' '+ addCommas(total)
+                ).addClass('angka');
+
+
 				total = api
-					.column( 12 )
+					.column( 14 )
 					.data()
 					.reduce( function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
 				total = parseFloat(Math.abs(total)).toFixed(2);
-				$( api.column( 12 ).footer() ).html(
+				$( api.column( 14 ).footer() ).html(
 					currSym +' '+ addCommas(total)
 				).addClass('angka');
 				total = api
-					.column( 13 )
+					.column( 15 )
 					.data()
 					.reduce( function (a, b) {
 						return intVal(a) + intVal(b);
 					}, 0 );
 				// Update footer
 				total = parseFloat(Math.abs(total)).toFixed(2);
-				$( api.column( 13 ).footer() ).html(
+				$( api.column( 15 ).footer() ).html(
 					currSym +' '+ addCommas(total)
 				).addClass('angka');
 			},
@@ -351,6 +379,29 @@ function hapus_detail(id, namaproduct){
 		});
 	}
 }
+
+function reset_android(){
+	var Konfirmasi = confirm('Yakin ingin mereset monitoring Android Order??');
+	if (Konfirmasi){
+        alamat = pathutama + 'penjualan/resettablecoopen';
+        $.ajax({
+            type: 'POST',
+            url: alamat,
+            cache: false,
+            success: function (data) {
+				alert('Android Monitoring Berhasil Di Reset, Silahkan Tutup Browser Anda Dan Buka Kembali Aplikasi...!!!!');
+            }
+        });
+	}
+}
+
+function panggil_pelanggan(nopanggil){
+    var konfirmasi = confirm('Yakin order dengan no order : '+ nopanggil +' selesai dan memanggil pelanggan...??!!');
+    if (konfirmasi){
+        window.open(pathutama + 'panggilpelanggan/'+ nopanggil);
+    }
+}
+
 $(document).ready(function(){
 	pathutama = Drupal.settings.basePath;
 	alamatupdatetanggaljual = pathutama + 'penjualan/updatecustomerorder';
@@ -549,25 +600,52 @@ $(document).ready(function(){
     $('#print-slip').on('click', function(){
         print_customerorder(selectedOrder,selectedNota);
     });
-	var timeOutId = 0;
-	var ajaxFn = function () {
-		alamat = pathutama + 'penjualan/getnewandroidorderandroid';
-		$.ajax({
-			type: 'POST',
-			url: alamat,
-			cache: false,
-			success: function (data) {
-				var idOrder = parseInt(data.trim());
-				if (idOrder > 0) {
-					$('select[name=tabel_customerorder_length]').val(200);
-					$('select[name=tabel_customerorder_length]').trigger('change');
-					window.open(pathutama + 'print/6?idghorder='+ idOrder);
-				}
-				timeOutId = setTimeout(ajaxFn, 5000);
+    alamat = pathutama + 'penjualan/gettablecoopen';
+    $.ajax({
+        type: 'POST',
+        url: alamat,
+        cache: false,
+        success: function (data) {
+			var totalOpen = parseInt(data);
+			if (totalOpen == 1){
+                var timeOutId = 0;
+                var ajaxFn = function () {
+                    alamat = pathutama + 'penjualan/getnewandroidorderandroid';
+                    $.ajax({
+                        type: 'POST',
+                        url: alamat,
+                        cache: false,
+                        success: function (data) {
+                            var idOrder = parseInt(data.trim());
+                            if (idOrder > 0) {
+                                $('select[name=tabel_customerorder_length]').val(200);
+                                $('select[name=tabel_customerorder_length]').trigger('change');
+                                //window.open(pathutama + 'print/6?idghorder='+ idOrder);
+                                window.open(pathutama + "print/6?idghorderonly=" + idOrder +'&totalprint=1&print_category=1');
+                            }
+                            alamatcek = pathutama + 'penjualan/gettablecoopen';
+                            $.ajax({
+                                type: 'POST',
+                                url: alamatcek,
+                                cache: false,
+                                success: function (data) {
+                                    totalOpen = parseInt(data);
+                                    $('#total-open').html(totalOpen);
+                                    timeOutId = setTimeout(ajaxFn, 7000);
+                                }
+                            });
+                        }
+                    });
+                }
+                ajaxFn();
+                $('#status-android').attr('src',pathutama + 'misc/media/images/on-icon.png');
+                //$('#total-open').html(totalOpen);
+			}else{
+                $('#status-android').attr('src',pathutama + 'misc/media/images/off-icon.png');
+                $('#total-open').html(totalOpen);
 			}
-		});
-	}
-	ajaxFn();
+        }
+    });
 	alamat = pathutama + 'datapremis/uploaddata';
 	$.ajax({
 		type: 'POST',
@@ -577,4 +655,26 @@ $(document).ready(function(){
 
 		}
 	});
+	window.onunload = function(){
+        alamat = pathutama + 'penjualan/updatetableco?count=-1';
+        $.ajax({
+            type: 'GET',
+            url: alamat,
+            cache: false,
+            success: function (data) {
+
+            }
+        });
+	}
+    window.onbeforeunload = function(){
+        alamat = pathutama + 'penjualan/updatetableco?count=-1';
+        $.ajax({
+            type: 'GET',
+            url: alamat,
+            cache: false,
+            success: function (data) {
+
+            }
+        });
+    }
 })

@@ -31,6 +31,9 @@ function datapremis_menu() {
 function datapremis_perm() {
     return array('Access Data Premis','Admin Data Premis');
 }
+
+require_once 'datapremis.api.inc';
+
 function array_zone_gisb(){
     return array(
         '001' => 'Utara',
@@ -105,6 +108,9 @@ function datapremis_input_form(&$form_state){
         $thousand_separator = '.';
         $decimal_separator = ',';
         $ppn_symbol = 'PPN';
+        $Bahasa = 'Indonesia';
+        $KritikSaran = 'KRITIK/SARAN DAN PESAN ANTAR HUBUNGI';
+        $DecimalDigit = 0;
     }else{
         $idPremis = $dataPremis->id;
         $zonePremis = $dataPremis->zone;
@@ -122,6 +128,9 @@ function datapremis_input_form(&$form_state){
         $thousand_separator = $dataPremis->thousand_separator;
         $decimal_separator = $dataPremis->decimal_separator;
         $ppn_symbol = $dataPremis->ppn_symbol;
+        $Bahasa = $dataPremis->bahasa;
+        $KritikSaran = $dataPremis->kritik_saran;
+        $DecimalDigit = $dataPremis->decimal_digit;
     }
     $form['#attributes'] = array('class' => 'form-item-lined-up');
     $form['zone'] = array(
@@ -217,11 +226,30 @@ function datapremis_input_form(&$form_state){
         '#default_value' => $decimal_separator,
         '#description' => t('Isi dengan karakter pemisah decimal, contoh: ,(koma) untuk Indonesia, .(titik) untuk malaysia'),
     );
+    $form['decimal_digit'] = array(
+        '#title' => t('Decimal Digit/Count'),
+        '#type' => 'textfield',
+        '#default_value' => $DecimalDigit,
+        '#description' => t('Isi dengan digit desimal(jumlah angka dibelakang koma), default 0'),
+    );
     $form['ppn_symbol'] = array(
         '#title' => t('PPN/GST Title'),
         '#type' => 'textfield',
         '#default_value' => $ppn_symbol,
         '#description' => t('Isi dengan judul PPN/GST, Indonesia sebut PPN, Malaysia sebut GST'),
+    );
+    $form['bahasa'] = array(
+        '#type' => 'select',
+        '#title' => t('Bahasa di Resi'),
+        '#options' => array_bahasa_premis(),
+        '#description' => t('Pilih bahasa di resi.'),
+        '#default_value' => $Bahasa,
+    );
+    $form['kritik_saran'] = array(
+        '#title' => t('Tulisan Kritik/Saran di Resi'),
+        '#type' => 'textfield',
+        '#default_value' => $KritikSaran,
+        '#description' => t('Isi dengan kode currency yang digunakan, contoh: IDR untuk Indonesia, MYR untuk malaysia'),
     );
     $form['submit'] = array(
         '#type' => 'submit',
@@ -264,6 +292,12 @@ function datapremis_input_form_submit($form, &$form_state) {
         $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         $fieldName = 'ppn_symbol';
         $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'bahasa';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'kritik_saran';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_digit';
+        $fieldList .= ",$fieldName = '".$formValues[$fieldName]."'";
         db_query("UPDATE {datapremis} SET $fieldList");
         drupal_set_message(t('Data premis berhasil diupdate.'));
     }else{
@@ -304,6 +338,15 @@ function datapremis_input_form_submit($form, &$form_state) {
         $fieldName = 'ppn_symbol';
         $fieldList .= ",$fieldName";
         $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'bahasa';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'kritik_saran';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
+        $fieldName = 'decimal_digit';
+        $fieldList .= ",$fieldName";
+        $fieldValue .= ",'".$formValues[$fieldName]."'";
         db_query("INSERT INTO {datapremis} ($fieldList) VALUES ($fieldValue)");
         drupal_set_message(t('Data premis berhasil dibuat.'));
     }
@@ -330,7 +373,8 @@ function get_data_premis(){
             $fieldList .= ','.$fieldName;
         }
     }
-    $fieldList .= ',ppn_value,currency_code,currency_symbol,thousand_separator,decimal_separator,ppn_symbol';
+    $fieldList .= ',ppn_value,currency_code,currency_symbol,thousand_separator,';
+    $fieldList .= 'decimal_separator,ppn_symbol,bahasa,kritik_saran,decimal_digit';
     if (cek_data_premis_exists()){
         $strSQL = 'SELECT '.$fieldList.' FROM '.$db_prefix.'datapremis LIMIT 1';
         $result = db_query($strSQL);
@@ -393,10 +437,10 @@ function get_data_premis_uploaded(){
     }
     return $arrayData;
 }
-/*function do_upload_premisdata(){
-    return 'Test';
-}*/
 function do_upload_premisdata(){
+    return 'Test';
+}
+function do_upload_premisdata_bak(){
     $resultview = '';
     if (is_connected()) {
         //copy data premis();

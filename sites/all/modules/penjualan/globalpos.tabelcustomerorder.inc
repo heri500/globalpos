@@ -1,6 +1,7 @@
 <?php
 
 function view_tabel_customerorder(){
+    update_opened_customer_order_table(1);
 	get_number_format($currencySym, $thousandSep, $decimalSep);
 	$path = drupal_get_path('theme', 'cti_flex');
  	$form_style = $path.'/css/custom-style.css';
@@ -21,7 +22,7 @@ function view_tabel_customerorder(){
         $splitTgl = explode('-', $tgl2);
         $tgl2 = $splitTgl[2].'-'.$splitTgl[1].'-'.$splitTgl[0];
 	}else{
-		$tgl1 = date("Y-m-").'01';
+		$tgl1 = date("Y-m-d");
 		$tgl2 = date("Y-m-d");
 	}
 	if ($_POST["pilihantampil"] == 'NOTA'){
@@ -70,9 +71,19 @@ function view_tabel_customerorder(){
 	$pilihantampil .= '<option '.$nota.'>NOTA</option>';
 	$pilihantampil .= '<option '.$produk.'>PRODUK</option>';
 	$pilihantampil .= '</select>';
-	$pilihperiode = '<form action="'.base_path().'penjualan/viewcustomerorder" method="post"><div id="pilihanperiode"><label>PILIH PERIODE</label><input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
-	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">'.$pilihantampil.'<button>LIHAT ORDER</button></div></form>';
-	$viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
+	$pilihperiode = '<form action="'.base_path().'penjualan/viewcustomerorder" method="post">';
+    $pilihperiode .= '<div id="pilihanperiode"><label>PILIH PERIODE</label>';
+    $pilihperiode .= '<input readonly="readonly" type="text" id="tgl1" name="tgl1" value="'.date('d-m-Y',strtotime($tgl1)).'">';
+	$pilihperiode .= '<input readonly="readonly" type="text" id="tgl2" name="tgl2" value="'.date('d-m-Y', strtotime($tgl2)).'">';
+    $pilihperiode .= $pilihantampil.'<button>LIHAT ORDER</button>';
+    $pilihperiode .= '<span style="float: right;margin-top: 6px;"><b>ANDROID MONITOR : ';
+    $pilihperiode .= '<img style="vertical-align:middle" id="status-android" src="'.base_path().'misc/media/images/on-icon.png">';
+    $pilihperiode .= '&nbsp;Total Table Open : <span id="total-open">0</span>';
+    $pilihperiode .= '&nbsp;&nbsp;RESET <img onclick="reset_android()" style="cursor: pointer;vertical-align:middle" src="'.base_path().'misc/media/images/reset-icon.png"></b>';
+    $pilihperiode .= '</span>';
+    $pilihperiode .= '</div>';
+    $pilihperiode .= '</form>';
+    $viewcustomerorder = $pilihperiode.'<div id="viewcustomerorder">'.$tabeltampil.'</div>';
 	$viewcustomerorder .= '<div id="dialogdetail" title="DETAIL CUSTOMER ORDER">';
 	$viewcustomerorder .= '<div id="table-detail-wrapper"></div>';
 	$viewcustomerorder .= '<div id="add-new-item">';
@@ -110,6 +121,8 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th class="tanggal">TGL</th>';
 	$tabelcustomerorder .= '<th class="tanggal">JAM</th>';
 	$tabelcustomerorder .= '<th class="col_angka">TOTAL</th>';
+    $tabelcustomerorder .= '<th class="col_angka">PPN</th>';
+    $tabelcustomerorder .= '<th class="col_angka">TOTAL+PPN</th>';
 	$tabelcustomerorder .= '<th class="col_angka">CARA BAYAR</th>';
 	$tabelcustomerorder .= '<th class="col_angka">BAYAR</th>';
 	$tabelcustomerorder .= '<th class="col_angka">SISA</th>';
@@ -118,7 +131,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>STATUS</th>';
 	$tabelcustomerorder .= '<th>PERKIRAAN</th>';
 	$tabelcustomerorder .= '<th>KETERANGAN</th>';
-	//$tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
+    $tabelcustomerorder .= '<th class="center tablebutton">&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</thead>';
 	$tabelcustomerorder .= '<tbody>';
@@ -134,6 +147,8 @@ function tabel_customerorder($tgl1,$tgl2){
     $totalbayar = getTotalCustomerOrder('bayar',$tgl1, $tgl2);
     $totalSisa = getTotalCustomerOrder('total-bayar',$tgl1, $tgl2);*/
 	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
+    $tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
+    $tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
 	$tabelcustomerorder .= '<th style="text-align: right">&nbsp;</th>';
@@ -142,7 +157,7 @@ function tabel_customerorder($tgl1,$tgl2){
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '<th>&nbsp;</th>';
-	//$tabelcustomerorder .= '<th>&nbsp;</th>';
+	$tabelcustomerorder .= '<th>&nbsp;</th>';
 	$tabelcustomerorder .= '</tr>';
 	$tabelcustomerorder .= '</tfoot>';
 	$tabelcustomerorder .= '</table>';

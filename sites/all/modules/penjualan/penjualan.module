@@ -353,6 +353,56 @@ function penjualan_menu() {
 		'type' => MENU_CALLBACK,
 		'file' => 'globalpos.customerorder.inc'
 	);
+    $items['penjualan/getnewandroidorderpending'] = array(
+        'title' => t('Nota Order Android Pending'),
+        'description' => 'Pencarian Nota Order Android Terbaru',
+        'page callback' => 'cari_nota_order_android_pending',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/getcoarrayprinter'] = array(
+        'title' => t('Get Customer Order Array Printer'),
+        'description' => 'Pengambilan customer order printer',
+        'page callback' => 'get_customer_order_printer',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+        'file' => 'globalpos.customerorder.inc'
+    );
+    $items['penjualan/updatetableco'] = array(
+        'title' => t('Update opened table customer order'),
+        'description' => 'Update opened table customer order',
+        'page callback' => 'update_opened_customer_order_table',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/gettablecoopen'] = array(
+        'title' => t('Get total opened table customer order'),
+        'description' => 'Get total opened table customer order',
+        'page callback' => 'total_opened_customer_order_table_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['penjualan/resettablecoopen'] = array(
+        'title' => t('Reset total opened table customer order'),
+        'description' => 'Reset total opened table customer order',
+        'page callback' => 'reset_total_opened_customer_order_ajax',
+        'access callback' => 'user_access',
+        'access arguments' => array('Input Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
+    $items['panggilpelanggan'] = array(
+        'title' => t('Panggil pelanggan'),
+        'description' => 'Panggil pelanggan',
+        'page callback' => 'panggil_pelanggan',
+        'access callback' => 'user_access',
+        'access arguments' => array('Access Data Customer Order'),
+        'type' => MENU_CALLBACK,
+    );
 	return $items;
 } // end hook menu
 
@@ -382,4 +432,42 @@ function get_updated_penjualan(){
 		$dataPenjualan[] = $data;
 	}
 	return $dataPenjualan;
+}
+function update_opened_customer_order_table(){
+    $Count = isset($_GET['count']) ? $_GET['count'] : 1;
+    $CurrentCOunter = db_result(db_query('SELECT table_open FROM cust_view_open LIMIT 1'));
+    $UpdatedCount = $CurrentCOunter + $Count;
+    if ($UpdatedCount < 0){
+        $UpdatedCount = 0;
+    }
+    db_query('UPDATE cust_view_open SET table_open = '. $UpdatedCount);
+}
+function total_opened_customer_order_table(){
+    $TotalOpen = db_result(db_query('SELECT table_open FROM cust_view_open LIMIT 1'));
+    return $TotalOpen;
+}
+function total_opened_customer_order_table_ajax(){
+    $TotalOpen = total_opened_customer_order_table();
+    print $TotalOpen;
+    exit();
+}
+function reset_total_opened_customer_order_ajax(){
+    db_query('UPDATE cust_view_open SET table_open = 0');
+    exit();
+}
+function panggil_pelanggan($nomerpanggil = null){
+    $SoundPath = base_path().drupal_get_path('module','penjualan').'/sound/';
+    $js_path = drupal_get_path('module','penjualan').'/js/soundplay.js';
+    drupal_add_js($js_path);
+    $SoundPlay = 'No Sound';
+    if (!empty($nomerpanggil)){
+        $SoundPlay = '<ul id="playlist">';
+        for ($i = 0;$i < strlen($nomerpanggil);$i++){
+            $NumberSound = 'a'.$nomerpanggil[$i].'.mp3';
+            $SoundPlay .= '<li song="'.$SoundPath.$NumberSound.'"></li>';
+        }
+        $SoundPlay .= '<li song="'.$SoundPath.'last_sound.mp3"></li>';
+        $SoundPlay .= '</ul>';
+    }
+    return $SoundPlay;
 }

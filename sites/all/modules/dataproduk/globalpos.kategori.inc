@@ -19,54 +19,20 @@ function kategori_produk(){
 	drupal_add_js('misc/media/datatables/js/TableTools.min.js');
 	drupal_add_js('misc/media/jquery.jeditable.js');
 	drupal_add_js('misc/media/jquery.autotab-1.1b.js');
-	drupal_add_js('
-		var oTable;
-		var pathutama = "'.base_path().'";
-		var pathfile = "'.base_path().file_directory_path().'/";
-		function tampilkantabelkategori(){
-			oTable = $("#tabel_kategori").dataTable( {
-				"bJQueryUI": true,
-				"bAutoWidth": false,
-				"sPaginationType": "full_numbers",
-				"bInfo": false,
-				"aLengthMenu": [[100, 200, 300, -1], [100, 200, 300, "All"]],
-				"iDisplayLength": 100,
-				"aaSorting": [[0, "asc"]],
-				"sDom": \'<"space"T><"clear"><"H"lfr>t<"F"ip>\'
-			});
-		}
-		$(document).ready(function() {
-			TableToolsInit.sSwfPath = pathutama +"misc/media/datatables/swf/ZeroClipboard.swf";
-			alamatupdate = pathutama + "dataproduk/updatekategori";
-			$("#tabel_kategori tbody .editable").editable(alamatupdate, {
-				"callback": function( sValue, y ) {
-					var aPos = oTable.fnGetPosition( this );
-					oTable.fnUpdate( sValue, aPos[0], aPos[1] );
-				},
-				"submitdata": function ( value, settings ) {
-					var aPos = oTable.fnGetPosition( this );
-				  return { "row_id": this.parentNode.getAttribute("id"), "kol_id": aPos[1] };
-				},
-				"height": "20px",
-				"submit": "Ok",
-				"cancel": "Batal",
-				"indicator": "Menyimpan...",
-				"tooltip": "Klik untuk mengubah..."
-			});
-			tampilkantabelkategori();
-			$("#formkategori").validationEngine();
-			$("button").button();
-			$("#kodekategori").autotab_filter({
-				format: "alphanumeric",
-				uppercase: true,
-				nospace: true
-			});
-		})
-	','inline');
-	$viewtabelkategori = '<form id="formkategori" action="'.base_path().'dataproduk/simpankategori" method="post"><div id="formplace">';
-	$viewtabelkategori .= '<label>KODE</label><input type="text" class=\"validate[required]\" id="kodekategori" name="kodekategori">';
-	$viewtabelkategori .= '<label>KATEGORI</label><input class=\"validate[required]\" type="text" id="kategori" name="kategori">';
+    $filePath = base_path().file_directory_path();
+    drupal_add_js(
+        array(
+            'filePath'  => $filePath,
+        ),
+        'setting'
+    );
+    $js_path = drupal_get_path('module','dataproduk').'/tabelkategori.js';
+    drupal_add_js($js_path);
+    $viewtabelkategori = '<form id="formkategori" action="'.base_path().'dataproduk/simpankategori" method="post"><div id="formplace">';
+	$viewtabelkategori .= '<label>KODE</label><input type="text" class="validate[required]" id="kodekategori" name="kodekategori">';
+	$viewtabelkategori .= '<label>KATEGORI</label><input class="validate[required]" type="text" id="kategori" name="kategori">';
 	$viewtabelkategori .= '<label>KETERANGAN</label><input type="text" id="keterangan" name="keterangan">';
+    $viewtabelkategori .= '<label>PRINTER</label><select id="selected-printer" name="selected-printer"></select>';
 	$viewtabelkategori .= '<button>Tambah Kategori</button></div></form>';
 	$viewtabelkategori .= '<div style="width: 80%;">'.tabel_kategori().'</div>';
 	return $viewtabelkategori;
@@ -79,15 +45,17 @@ function tabel_kategori(){
 	$tabelkategori .= '<th style="width: 150px;">KODE</th>';
 	$tabelkategori .= '<th>KATEGORI</th>';
 	$tabelkategori .= '<th>KETERANGAN</th>';
+    $tabelkategori .= '<th>PRINTER</th>';
 	$tabelkategori .= '</tr>';
 	$tabelkategori .= '</thead>';
 	$tabelkategori .= '<tbody>';
-	$result = db_query("SELECT idkategori,kodekategori,kategori,keterangan FROM kategori ORDER BY kodekategori,kategori");
+	$result = db_query("SELECT idkategori,kodekategori,kategori,keterangan, selected_printer FROM kategori ORDER BY kodekategori,kategori");
 	while ($data = db_fetch_object($result)){
 		$tabelkategori .= '<tr id="'.$data->idkategori.'">';
 		$tabelkategori .= '<td class="editable">'.$data->kodekategori.'</td>';
 		$tabelkategori .= '<td class="editable">'.$data->kategori.'</td>';
 		$tabelkategori .= '<td class="editable">'.$data->keterangan.'</td>';
+        $tabelkategori .= '<td class="editable-printer">'.$data->selected_printer.'</td>';
 		$tabelkategori .= '</tr>';
 	}
 	$tabelkategori .= '</tbody>';
@@ -122,7 +90,9 @@ function update_kategori(){
 		$sql_update = "UPDATE kategori SET kategori='%s' WHERE idkategori='%d'";
 	}elseif ($KOLOM == "2"){
 		$sql_update = "UPDATE kategori SET keterangan='%s' WHERE idkategori='%d'";
-	}
+	}elseif ($KOLOM == "3"){
+        $sql_update = "UPDATE kategori SET selected_printer='%s' WHERE idkategori='%d'";
+    }
 	db_query($sql_update,$NILAI,$KATEGORI_ID);
 	echo $NILAI;
 	exit();	

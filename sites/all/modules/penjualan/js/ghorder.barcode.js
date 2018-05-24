@@ -1,9 +1,9 @@
 $(document).ready(function(){
     var renderer = "bmp";
-    var btype = "ean13";
+    var btype = "code128";
     var settings = {
         output:renderer,
-        barWidth: 2,
+        barWidth: 1.5,
         barHeight: 30
     };
     $(".barcode-place").each(function(){

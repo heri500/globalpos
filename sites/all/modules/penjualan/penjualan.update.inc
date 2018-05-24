@@ -98,8 +98,11 @@ function insert_detail_customer_order(){
 			$totalOrder = db_result(db_query($strSQL,$_POST['idcustomerorder']));
 			$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailcustomerorder WHERE idcustomerorder=%d';
 			$totalModal = db_result(db_query($strSQL,$_POST['idcustomerorder']));
-			$strSQL = 'UPDATE customer_order SET total=\'%f\', totalmodal=\'%f\' WHERE id=%d';
-			db_query($strSQL,$totalOrder,$totalModal,$_POST['idcustomerorder']);
+            $strSQL = 'SELECT ppn FROM customer_order WHERE id=%d';
+            $PpnValue = db_result(db_query($strSQL));
+            $TotalPlusPpn = $totalOrder + ($totalOrder * $PpnValue/100);
+			$strSQL = 'UPDATE customer_order SET total=\'%f\', totalmodal=\'%f\', total_plus_ppn=\'%f\' WHERE id=%d';
+			db_query($strSQL,$totalOrder,$totalModal,$TotalPlusPpn,$_POST['idcustomerorder']);
 		}
 		print json_encode($executedSQL);
 	}
@@ -124,8 +127,11 @@ function update_detail_penjualan(){
 			$totalOrder = db_result(db_query($strSQL,$idPenjualan));
 			$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 			$totalModal = db_result(db_query($strSQL,$idPenjualan));
-			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d';
-			db_query($strSQL,$totalOrder,$totalModal,$idPenjualan);
+            $strSQL = 'SELECT ppn FROM customer_order WHERE id=%d';
+            $PpnValue = db_result(db_query($strSQL));
+            $TotalPlusPpn = $totalOrder + ($totalOrder * $PpnValue/100);
+			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', total_plus_ppn=\'%f\', uploaded=0, changed=1  WHERE idpenjualan=%d';
+			db_query($strSQL,$totalOrder,$totalModal,$TotalPlusPpn,$idPenjualan);
 			/* End Update Penjualan */
 			/* Update Stok Product */
 			$idproduct = db_result(db_query('SELECT idproduct FROM detailpenjualan WHERE iddetail=%d', $iddetailpenjualan[1]));
@@ -144,14 +150,14 @@ function update_detail_penjualan(){
 			$idPelanggan = db_result(db_query('SELECT idpelanggan FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
 			$bayar = db_result(db_query('SELECT bayar FROM penjualan WHERE idpenjualan=%d',$idPenjualan));
 			if (!empty($idPelanggan) && ($caraJual == 'HUTANG' || $kembali < 0)){
-				$besarHutang = $totalOrder - $bayar;
+				$besarHutang = $TotalPlusPpn - $bayar;
 				$sqlUpdatePiutang = 'UPDATE detailpiutang SET besarhutang=\'%f\' ';
 				$sqlUpdatePiutang .= 'WHERE idpelanggan=%d AND idpenjualan=%d';
 				db_query($sqlUpdatePiutang, $besarHutang, $idPelanggan, $idPenjualan);
 				syncHutangPelanggan($idPelanggan);
 			}
 			/* End Update Hutang Penjualan */
-			$kembali = $bayar - $totalOrder;
+			$kembali = $bayar - $TotalPlusPpn;
 			db_query('UPDATE penjualan SET kembali=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d',$kembali,$idPenjualan);
 			print $_POST['qty'];
 		}
@@ -187,10 +193,13 @@ function insert_detail_penjualan(){
 			$totalOrder = db_result(db_query($strSQL,$_POST['idpenjualan']));
 			$strSQL = 'SELECT SUM(hargapokok*jumlah) AS total_modal FROM detailpenjualan WHERE idpenjualan=%d';
 			$totalModal = db_result(db_query($strSQL,$_POST['idpenjualan']));
-			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d';
-			db_query($strSQL,$totalOrder,$totalModal,$_POST['idpenjualan']);
+            $strSQL = 'SELECT ppn FROM customer_order WHERE id=%d';
+            $PpnValue = db_result(db_query($strSQL));
+            $TotalPlusPpn = $totalOrder + ($totalOrder * $PpnValue/100);
+			$strSQL = 'UPDATE penjualan SET total=\'%f\', totalmodal=\'%f\', total_plus_ppn=\'%f\', uploaded=0, changed=1  WHERE idpenjualan=%d';
+			db_query($strSQL,$totalOrder,$totalModal,$TotalPlusPpn,$_POST['idpenjualan']);
 			$stokproduct = db_result(db_query('SELECT stok FROM product WHERE idproduct=%d',$_POST['idproduk']));
-			$stoksekarang = $stockproduct - $_POST['qty'];
+			$stoksekarang = $stokproduct - $_POST['qty'];
 			if (!empty($idproduct)){
 				db_query("UPDATE product SET stok = stok - '%f',uploaded=0, changed=1  WHERE idproduct='%d'",$_POST['qty'],$_POST['idproduk']);
 				$keterangan = 'Revisi Penjualan - Tambah Detail Penjualan';
@@ -205,14 +214,14 @@ function insert_detail_penjualan(){
 			$idPelanggan = db_result(db_query('SELECT idpelanggan FROM penjualan WHERE idpenjualan=%d',$_POST['idpenjualan']));
 			$bayar = db_result(db_query('SELECT bayar FROM penjualan WHERE idpenjualan=%d',$_POST['idpenjualan']));
 			if (!empty($idPelanggan) && ($caraJual == 'HUTANG' || $kembali < 0)){
-				$besarHutang = $totalOrder + $bayar;
+				$besarHutang = $TotalPlusPpn - $bayar;
 				$sqlUpdatePiutang = 'UPDATE detailpiutang SET besarhutang=\'%f\' ';
 				$sqlUpdatePiutang .= 'WHERE idpelanggan=%d AND idpenjualan=%d';
 				db_query($sqlUpdatePiutang, $besarHutang, $idPelanggan, $_POST['idpenjualan']);
 				syncHutangPelanggan($idPelanggan);
 			}
 			/* End Update Hutang Penjualan */
-			$kembali = $bayar - $totalOrder;
+			$kembali = $bayar - $TotalPlusPpn;
 			db_query('UPDATE penjualan SET kembali=\'%f\',uploaded=0, changed=1  WHERE idpenjualan=%d',$kembali,$_POST['idpenjualan']);
 		}
 		print json_encode($executedSQL);

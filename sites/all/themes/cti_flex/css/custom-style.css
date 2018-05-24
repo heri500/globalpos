@@ -941,3 +941,18 @@ form.form-item-lined-up, .form-item-lined-up{
 	float: right;
 	margin: 9px 8px 0 0;
 }
+#keterangan-wrapper{
+	float: left;
+	margin-top: 4px;
+	margin-bottom: 4px;
+}
+.keterangan-div{
+	height: 150px !important;
+	overflow-y: auto;
+}
+.keterangan-div label{
+	font-size: 16px !important;
+}
+.keterangan-div input{
+	width: auto !important;
+}

@@ -86,3 +86,32 @@ function datapremis_update_6() {
     db_add_field($return, 'datapremis', 'ppn_symbol', $gstSymbol);
     return $return;
 }
+function datapremis_update_7() {
+    $KritikSaran = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => 'KRITIK/SARAN DAN PESAN ANTAR HUBUNGI',
+        'description' => t('Tulisan keterangan paling bawah resi penjualan/order.'),
+    );
+    db_add_field($return, 'datapremis', 'kritik_saran', $KritikSaran);
+    return $return;
+}
+function datapremis_update_8() {
+    $Bahasa = array(
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => 'Indonesia',
+        'description' => t('Pilihan bahasa untuk resi penjualan/order.'),
+    );
+    db_add_field($return, 'datapremis', 'bahasa', $Bahasa);
+    return $return;
+}
+function datapremis_update_9() {
+    $DecimalCount = array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => 'Desimal digit setelah angka, default 0.',
+    );
+    db_add_field($return, 'datapremis', 'decimal_digit', $DecimalCount);
+    return $return;
+}

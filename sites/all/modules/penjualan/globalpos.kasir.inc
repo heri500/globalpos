@@ -54,18 +54,28 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 				$labelTgl = 'MASUK';
 			}
 		}else if($alamatasal == 'viewcustomerorder' || $alamatasal == 'orderkeluar'){
-			$titipanlaundry = db_fetch_array(db_query("SELECT id, nonota, tglorder, idpemakai,
-			idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, keterangan, insert_date, status_order,
-			users.name FROM customer_order custord LEFT JOIN cms_users users ON custord.idpemakai = users.uid
-			WHERE id=%d",$idtitipanlaundry));
+			$titipanlaundry = db_fetch_array(db_query("SELECT custord.id, nonota, tglorder, idpemakai,idmeja,
+			idpelanggan, total, totalmodal, carabayar, bayar, kembali, nokartu, custord.keterangan, insert_date, status_order,
+			users.name,m.meja AS namameja FROM customer_order custord 
+			LEFT JOIN cms_users users ON custord.idpemakai = users.uid
+			LEFT JOIN meja m ON custord.idmeja = m.id 
+			WHERE custord.id=%d",$idtitipanlaundry));
 			if (count($titipanlaundry)){
 				$tgllaundry = explode(' ', $titipanlaundry['tglorder']);
 				$splittgllaundry = explode('-',$tgllaundry[0]);
 				$tglTampilLaundry = $splittgllaundry[2].'-'.$splittgllaundry[1].'-'.$splittgllaundry[0];
 				$idPelanggan = $titipanlaundry['idpelanggan'];
 				$kasirlaundry = $titipanlaundry['name'];
+                $idMeja = $titipanlaundry['idmeja'];
+                $namaMeja = $titipanlaundry['namameja'];
 				$labelKasir = 'ORDER';
 				$labelTgl = 'ORDER';
+                drupal_add_js(
+                    array(
+                        'idmeja' => $idMeja,
+                        'namaMeja' => $namaMeja,
+                    ),
+                    'setting');
 			}
 		}
 	}
@@ -216,6 +226,14 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 	$kembali = '<input readonly="readonly" type="text" id="kembali" name="kembali">';
 	$totalbelanja = '<input type="text" id="totalbelanjauser" name="totalbelanjauser">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
+    if (isset($namaMeja) && isset($idMeja)){
+        $meja = '<input type="text" id="nomormeja" name="nomormeja" value="'.$namaMeja.'">';
+        $meja .= '<input type="hidden" id="idmeja" name="idmeja" value="'.$idMeja.'">';
+    }else {
+        $meja = '<input type="text" id="nomormeja" name="nomormeja">';
+        $meja .= '<input type="hidden" id="idmeja" name="idmeja">';
+    }
+    //$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Total Belanja</label>'.$totalbelanja.'</div>';
 	$totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
 	$totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
@@ -234,12 +252,13 @@ function penjualan($idtitipanlaundry = null, $alamatasal = null){
 }
 
 function simpan_penjualan(){
+    global $user;
 	//nonota, idpemakai, total, bayar, kembali
 	if (isset($_POST["detail_produk"]) AND isset($_POST["bayar"]) >= 0 AND
         isset($_POST["totalbelanja"]) AND isset($_POST['totalbelanjappn'])
     ){
 		global $user;
-		//date_default_timezone_set('Asia/Jakarta');
+        date_default_timezone_set($user->timezone_name);
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
 		$splitTanggal = explode('-', $_POST["tgljual"]);
 		$splitJam = explode(':',date("H:i:s"));
@@ -258,6 +277,7 @@ function simpan_penjualan(){
 		if (isset($_POST['idtitipanlaundry']) && !empty($_POST['idtitipanlaundry'])){
 			$idtitipanlaundry = $_POST['idtitipanlaundry'];
 		}
+		//$idMeja = $_POST['idmeja'];
 		db_query("INSERT INTO penjualan (nonota, idpemakai, total, bayar, kembali, tglpenjualan, idpelanggan, 
         carabayar, idtitipanlaundry, perlakuankembalian, ppn, total_plus_ppn) 
 		VALUES ('%s', '%d', '%f', '%f', '%f', '%s', '%d', '%s', '%d', '%d', '%f', '%f')",
@@ -440,7 +460,7 @@ function cari_produk(){
 		//$sql = "SELECT idproduct,idkategori,namaproduct,hargajual FROM product WHERE alt_code LIKE '$KATACARI' OR barcode LIKE '$KATACARI' OR namaproduct LIKE '$KATACARI'";
 		$result = db_query("SELECT idproduct,barcode,idkategori,namaproduct,hargajual,lead_time,aturan_jam_kerja,
 		berlaku_sebelum_zuhur FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' 
-		OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		OR UPPER(namaproduct) LIKE '%s' AND status_product=1 LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$data = db_fetch_object($result);
 		if ($data->idproduct){
 			$result2 = db_query("SELECT besardiskon FROM diskonkategori WHERE idpelanggan='%d' AND idkategori='%d'",
@@ -466,7 +486,7 @@ function cari_barang(){
 	if ($_GET["term"]){
         get_number_format($currencySym, $thousandSep, $decimalSep, false);
 		$KATACARI = '%'.$_GET["term"].'%';
-		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
+		$result = db_query("SELECT barcode, alt_code, namaproduct, stok, hargajual FROM product WHERE alt_code LIKE '%s' OR barcode LIKE '%s' OR UPPER(namaproduct) LIKE '%s' AND status_product=1 LIMIT 50",$KATACARI,$KATACARI,$KATACARI);
 		$items = array();
 		while ($data = db_fetch_object($result)) {
 			$items[] = array(

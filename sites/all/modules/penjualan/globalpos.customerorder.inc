@@ -3,6 +3,8 @@
 function customerorder(){
 	get_number_format($currencySym, $thousandSep, $decimalSep);
 	createLogoImagePath();
+    $gstSym = get_gst_symbols();
+    $dataPremis = get_data_premis();
 	$path = drupal_get_path('theme', 'cti_flex');
 	$form_style = $path.'/css/custom-style.css';
 	drupal_add_css($form_style, 'theme', 'all', FALSE);
@@ -154,11 +156,19 @@ function customerorder(){
 	$meja .= '<input type="hidden" id="idmeja" name="idmeja">';
 	//$penjualan .= '<div class="barisbayar"><label>Pelanggan</label>'.$pelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Total Order</label>'.$totalbelanja.'</div>';
+    $totalppn = '<input type="hidden" id="ppn_value" name="ppn_value" value="'.$dataPremis->ppn_value.'">';
+    $totalppn .= '<input type="text" id="total_ppn" name="total_ppn" value="0" disabled="disabled">';
+    $ceklistPpn = '<input type="checkbox" id="use-ppn" name="use-ppn" value="1" checked="checked" class="checkbox-ppn">';
+    $penjualan .= '<div class="barisbayar"><label>'.$gstSym.' ('.$dataPremis->ppn_value.'%)&nbsp;'.$ceklistPpn.'</label>'.$totalppn.'</div>';
+    $totalplusppn = '<input type="text" id="total_plus_ppn" name="total_plus_ppn" value="0" disabled="disabled">';
+    $penjualan .= '<div class="barisbayar"><label>TOTAL + '.$gstSym.'</label>'.$totalplusppn.'</div>';
 	$penjualan .= '<div id="baris-deposit" class="barisbayar"><label id="label-deposit">Deposit</label>'.$depositpelanggan.'</div>';
 	$penjualan .= '<div class="barisbayar"><label>Cara Bayar</label>'.$carabayar.'</div>';
 	$penjualan .= '<div id="field_no_kartu" class="barisbayar" style="display: none;"><label>No. Kartu/Giro</label>'.$nokartudebit.'</div>';
 	$penjualan .= '<div id="field_bayar" class="barisbayar"><label>Pembayaran</label>'.$nilaibayar.'</div>';
+    //$penjualan .= '<div id="keterangan-wrapper" class="keterangan-div">';
 	$penjualan .= '<div class="barisbayar"><label>Keterangan</label>'.$keterangan.'</div>';
+    //$penjualan .= '</div>';
 	$penjualan .= '<div class="barisbayar"><label>Meja</label>'.$meja.'</div>';
 	$penjualan .= '<div id="field_kembali" class="barisbayar" style="display: none;"><label>Kembali</label>'.$kembali.'</div>';
 	//$penjualan .= '<div class="barisbayar" style="text-align: center;">';
@@ -178,8 +188,9 @@ function customerorder(){
 }
 
 function simpan_customerorder(){
+    global $user;
 	//nonota, idpemakai, total, bayar, kembali
-	if (isset($_POST["detail_produk"]) AND isset($_POST["totalbelanja"])){
+	if (isset($_POST["detail_produk"]) && isset($_POST["totalbelanja"]) && isset($_POST['totalbelanjappn'])){
 		$result = db_query("SELECT id FROM customer_order ORDER BY id DESC LIMIT 1");
 		$data = db_fetch_object($result);
 		if ($data->id > 0){
@@ -190,15 +201,26 @@ function simpan_customerorder(){
 		$no_nota = buat_nota_customerorder($next_id);
 		$carabayar = $_POST["carabayar"];
 		$nokartu = $_POST["nomerkartu"];
-		date_default_timezone_set('Asia/Jakarta');
+		date_default_timezone_set($user->timezone_name);
 		$waktujual = $_POST["tgljual"]." ".date("H:i:s");
 		$splitTanggal = explode('-', $_POST["tgljual"]);
 		$splitJam = explode(':',date("H:i:s"));
 		$intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+        $intTanggal = mktime($splitJam[0],$splitJam[1],$splitJam[2],$splitTanggal[1],$splitTanggal[2],$splitTanggal[0]);
+        $tanggalTerakhir = substr(db_result(db_query("SELECT tglorder FROM customer_order ORDER BY id DESC LIMIT 1")),0, 10);
+        if ($tanggalTerakhir != $_POST["tgljual"]){
+            $OrderNumber = 1;
+        }else{
+            $LastOrderNumber = db_result(db_query("SELECT idorderpanggil FROM customer_order ORDER BY id DESC LIMIT 1"));
+            $OrderNumber = $LastOrderNumber + 1;
+        }
 		global $user;
-		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, tglorder, idpelanggan, keterangan, idmeja)
-		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d')",
-				 $no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"], $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"],$_POST["idmeja"]);
+		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, 
+        bayar, nokartu, tglorder, idpelanggan, keterangan, idmeja, ppn, total_plus_ppn, idorderpanggil)
+		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d', '%f', '%f', '%d')",
+			$no_nota, $user->uid, $_POST["totalbelanja"], $carabayar, $_POST["bayar"],
+            $nokartu, $waktujual,$_POST["idpelanggan"],$_POST["keterangan"],$_POST["idmeja"],
+            $_POST["ppn"],$_POST["totalbelanjappn"], $OrderNumber);
 		$next_id = db_last_insert_id('customer_order', 'id');
 		print $next_id;
 		if (isset($_POST["bayar"]) && isset($_POST["idpelanggan"]) && (int)$_POST["idpelanggan"] > 0){
@@ -410,8 +432,37 @@ function cari_meja(){
 	exit();
 }
 function cari_nota_order_android(){
-	$strSQL = 'SELECT id FROM customer_order WHERE android_order=1 AND printed=0 ORDER BY id LIMIT 1';
+	$strSQL = 'SELECT id FROM customer_order WHERE android_order=1 AND printed=0 ';
+    $strSQL .= 'AND pending_print = 0 ORDER BY id LIMIT 1';
 	$idOrder = db_result(db_query($strSQL));
-	print $idOrder;
+	if ($idOrder > 0){
+	    db_query('UPDATE customer_order SET pending_print = 1 WHERE android_order=1 AND printed=0 AND id != %d', $idOrder);
+        print $idOrder;
+    }
 	exit();
+}
+function get_customer_order_printer(){
+    if (isset($_POST['idorder']) && !empty($_POST['idorder'])){
+        $StrSql = 'SELECT selected_printer FROM detailcustomerorder AS dco ';
+        $StrSql .= 'LEFT JOIN product AS prod ON dco.idproduct = prod.idproduct ';
+        $StrSql .= 'LEFT JOIN kategori AS kat ON prod.idkategori = kat.idkategori ';
+        $StrSql .= 'WHERE idcustomerorder=%d GROUP BY kat.selected_printer';
+        $SelectedPrinter = array();
+        $Result = db_query($StrSql, $_POST['idorder']);
+        while ($DataPrinter = db_fetch_object($Result)){
+            $SelectedPrinter[] = $DataPrinter->selected_printer;
+        }
+        print json_encode($SelectedPrinter);
+    }
+    exit();
+}
+function cari_nota_order_android_pending(){
+    $strSQL = 'SELECT id FROM customer_order WHERE android_order=1 AND printed=0 ';
+    $strSQL .= 'AND pending_print = 1 ORDER BY id LIMIT 1';
+    $idOrder = db_result(db_query($strSQL));
+    if ($idOrder > 0){
+        db_query('UPDATE customer_order SET pending_print = 0 WHERE id = %d', $idOrder);
+        print $idOrder;
+    }
+    exit();
 }

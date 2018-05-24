@@ -210,39 +210,60 @@ function hapus_produk(posisi,nTr,idproduk){
 	$("#barcode").focus();
 	$("#barcode").select();
 }
-function akhiri_belanja(cetak){
-	var request = new Object();
-	request.detail_produk = $("#nilaikirim").val();
-	request.idpelanggan = $("#idpelanggan").val();
-	request.totalbelanja = totalbelanja;
-	if ($("#carabayar").val() == 'KEMUDIAN'){
-		request.bayar = 0;
-	}else{
-		request.bayar = $("#nilaibayar").val();
-	}
-	request.carabayar = $("#carabayar").val();
-	request.nomerkartu = $("#nomerkartu").val();
-	request.tgljual = $("#tgljualkirim").val();
-	request.keterangan = $("#keterangan").val();
-	request.idmeja = $("#idmeja").val();
-	alamat = pathutama + "penjualan/simpancustomerorder";
-	$.ajax({
-		type: "POST",
-		url: alamat,
-		data: request,
-		cache: false,
-		success: function(data){
-			var returndata = data.trim();
-			if (returndata != "error"){
-                                if (cetak == 1){
-					window.open(pathutama + "print/6?idghorderonly="+ returndata);
-				}
-				window.location = pathutama + "penjualan/customerorder?tanggal="+ request.tgljual;
-			}else{
-				alert("Ada masalah dalam penyimpanan data...!!!");
-			}
-		}
-	});
+function akhiri_belanja(cetak) {
+    var request = new Object();
+    request.detail_produk = $("#nilaikirim").val();
+    request.idpelanggan = $("#idpelanggan").val();
+    request.totalbelanja = totalbelanja;
+    if ($("#carabayar").val() == 'KEMUDIAN') {
+        request.bayar = 0;
+    } else {
+        request.bayar = $("#nilaibayar").val();
+    }
+    request.carabayar = $("#carabayar").val();
+    request.nomerkartu = $("#nomerkartu").val();
+    request.tgljual = $("#tgljualkirim").val();
+    request.keterangan = $("#keterangan").val();
+    request.idmeja = $("#idmeja").val();
+    request.ppn = $("#ppn_value").val();
+    var totalbelanjappn = (totalbelanja * parseInt($("#ppn_value").val())/100) + totalbelanja;
+    request.totalbelanjappn = totalbelanjappn;
+    alamat = pathutama + "penjualan/simpancustomerorder";
+    $.ajax({
+        type: "POST",
+        url: alamat,
+        data: request,
+        cache: false,
+        success: function (data) {
+            var returndata = data.trim();
+            if (returndata != "error") {
+                if (cetak == 1) {
+                    window.open(pathutama + "print/6?idghorderonly=" + returndata +'&totalprint=1&print_category=1');
+                }
+                window.location = pathutama + "penjualan/customerorder?tanggal=" + request.tgljual;
+            } else {
+                alert("Ada masalah dalam penyimpanan data...!!!");
+            }
+            /*if (returndata != "error") {
+                var request = new Object();
+                request.idorder = returndata;
+                alamat = pathutama + "penjualan/getcoarrayprinter";
+                $.ajax({
+                    type: "POST",
+                    url: alamat,
+                    data: request,
+                    cache: false,
+                    success: function (data) {
+                        var ArrayPrinter = eval(data);
+                        window.open(pathutama + 'print/6?idghordermultiprint=' + returndata + '&printername=' + ArrayPrinter[0].trim() + '&print_idx=0');
+                        window.location = pathutama + "penjualan/customerorder?tanggal=" + request.tgljual;
+                    }
+                });
+            } else {
+                alert("Ada masalah dalam penyimpanan data...!!!");
+            }*/
+        }
+    });
 }
 function hitung_omset(){
 	var request = new Object();
@@ -383,19 +404,25 @@ $(document).ready(function(){
 		autoOpen: false,
 		open: function(event, ui) {
             var totalbelanjaView = parseFloat(Math.abs(totalbelanja)).toFixed(2);
-			$("#totalbelanjauser").val(currSym +" "+ addCommas(totalbelanjaView));
-			if (totalbelanja > 0 && totalbelanja <= 10){
-				$("#nilaibayar").val("10");
-			}else if(totalbelanja > 10 && totalbelanja <= 50){
-				$("#nilaibayar").val("50");
-			}else if(totalbelanja > 50 && totalbelanja <= 100){
-				$("#nilaibayar").val("100");
-			}else{
-				$("#nilaibayar").val(totalbelanjaView);
-			}
-			kembali = $("#nilaibayar").val() - totalbelanja;
-            var kembaliView = parseFloat(Math.abs(kembali)).toFixed(2);
-			$("#kembali").val(currSym +" "+ addCommas(kembaliView));
+            $("#totalbelanjauser").val(currSym +" "+ addCommas(totalbelanjaView));
+            var total_ppn_value = totalbelanja * (parseInt($('#ppn_value').val())/100);
+            var total_ppn_valueView = parseFloat(total_ppn_value).toFixed(2);
+            $("#total_ppn").val(currSym +" "+ addCommas(total_ppn_valueView));
+            var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+            var total_plus_ppnView = parseFloat(total_plus_ppn).toFixed(2);
+            $("#total_plus_ppn").val(currSym +" "+ addCommas(total_plus_ppnView));
+            if (total_plus_ppn > 0 && total_plus_ppn <= 10){
+                $("#nilaibayar").val("10");
+            }else if(total_plus_ppn > 10 && total_plus_ppn <= 50){
+                $("#nilaibayar").val("50");
+            }else if(total_plus_ppn > 50 && total_plus_ppn <= 100){
+                $("#nilaibayar").val("100");
+            }else{
+                $("#nilaibayar").val(total_plus_ppnView);
+            }
+            kembali = $("#nilaibayar").val() - total_plus_ppn;
+            var kembaliView = parseFloat(kembali).toFixed(2);
+            $("#kembali").val(currSym +" "+ addCommas(kembaliView));
 			$("#nilaibayar").select();
 			if ($("#idpelanggan").val() != 0){
 				$("#baris-deposit").show();
@@ -419,6 +446,12 @@ $(document).ready(function(){
 				$("#baris-deposit").hide();
 			}
 			$('#keterangan').select();
+            /*$('#tabel_kasir tbody tr').each(function(){
+                var BarisAdd = '<div class="barisbayar"><label>'+ $('td:eq(2)', this).html() +'</label>';
+                BarisAdd += '<input type="text">';
+                BarisAdd += '</div>';
+                $('#keterangan-wrapper').append(BarisAdd);
+            });*/
 		},
 		close: function(){
 			$("#barcode").select();
@@ -544,10 +577,11 @@ $(document).ready(function(){
 	});
 	$("#tgljual").css("width","177px");
 	$("#carabayar").change(function(){
+        var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
 		if ($(this).val() == 'DEBIT' || $(this).val() == 'GIRO'){
 			$("#field_no_kartu").show();
 			$("#field_bayar").show();
-			$("#nilaibayar").val(totalbelanja).attr('readonly','readonly').removeAttr('disabled'); 
+			$("#nilaibayar").val(total_plus_ppn).attr('readonly','readonly').removeAttr('disabled');
 			$("#field_kembali").hide();
 			$("#kembali").attr('disabled','disabled');
 			$("#kembali").removeAttr('readonly');
@@ -568,13 +602,14 @@ $(document).ready(function(){
 			$("#nilaibayar").removeAttr('readonly').removeAttr('disabled');
 			$("#kembali").removeAttr('disabled');
 			$("#kembali").attr('readonly','readonly');
-			$("#kembali").val($("#nilaibayar").val() - totalbelanja);
+			$("#kembali").val($("#nilaibayar").val() - total_plus_ppn);
 			$("#nilaibayar").select();
 		}
 	});
 	$("#carabayar").change();
 	$("#nilaibayar").keyup(function(e){
-		kembali = $("#nilaibayar").val()-totalbelanja;
+        var total_plus_ppn = (totalbelanja * (parseInt($('#ppn_value').val())/100)) + totalbelanja;
+		kembali = $("#nilaibayar").val() - total_plus_ppn;
 		$("#kembali").val(currSym +" "+ addCommas(kembali));
 		if (e.keyCode == 13){
 			if ($('#idmeja').val() != ''){
@@ -660,4 +695,17 @@ $(document).ready(function(){
 
 		}
 	});
+    $('#use-ppn').click(function(){
+        if ($('#ppn_value').val() > 0){
+            ppnValue = $('#ppn_value').val();
+        }
+        var ppnChecked = $('#use-ppn:checkbox:checked').length;
+        if (!ppnChecked){
+            $('#ppn_value').val(0);
+        }else{
+            $('#ppn_value').val(ppnValue);
+        }
+        $("#dialogbayar").dialog('close');
+        $("#dialogbayar").dialog('open');
+    });
 })

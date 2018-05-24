@@ -755,12 +755,14 @@ function serverSideCustomerOrder($request){
 		5 => 'customerorder.nonota',
 		7 => 'tanggal',
 		9 => 'total',
-		10 => 'customerorder.carabayar',
-		11 => 'customerorder.bayar',
-		14 => 'plg.namapelanggan',
-		15 => 'customerorder.status_order',
-		16 => 'perkiraan_ambil',
-		17 => 'customerorder.keterangan',
+        10 => 'ppn_value',
+        11 => 'total_plus_ppn',
+		12 => 'customerorder.carabayar',
+		13 => 'customerorder.bayar',
+		16 => 'plg.namapelanggan',
+		17 => 'customerorder.status_order',
+		18 => 'perkiraan_ambil',
+		19 => 'customerorder.keterangan',
 	);
 	$orderColumnArray = $_REQUEST['order'];
 	$orderColumn = $arrayColumn[$orderColumnArray[0]['column']].' '.$orderColumnArray[0]['dir'];
@@ -775,11 +777,12 @@ function serverSideCustomerOrder($request){
 	$strSQL = "SELECT customerorder.id,customerorder.nonota,SUBSTR(customerorder.tglorder,1,10) AS tanggal,";
 	$strSQL .= "SUBSTR(customerorder.tglorder,11,9) AS waktu, customerorder.idpemakai,";
 	$strSQL .= "customerorder.total,";
+    $strSQL .= "(customerorder.total * (customerorder.ppn/100)) AS ppn_value, customerorder.total_plus_ppn, ";
 	$strSQL .= "(SELECT MAX(perkiraan_ambil) FROM detailcustomerorder WHERE ";
 	$strSQL .= "idcustomerorder = customerorder.id) AS perkiraan_ambil,";
 	$strSQL .= "customerorder.carabayar, customerorder.bayar, customerorder.status_order, ";
 	$strSQL .= "customerorder.idpelanggan, plg.namapelanggan, customerorder.keterangan, ";
-    $strSQL .= "user.name, meja.meja ";
+    $strSQL .= "user.name, meja.meja, customerorder.idorderpanggil  ";
 	$strSQL .= "FROM customer_order AS customerorder ";
 	$strSQL .= "LEFT JOIN meja AS meja ON meja.id = customerorder.idmeja ";
 	$strSQL .= "LEFT JOIN cms_users AS user ON user.uid = customerorder.idpemakai ";
@@ -837,9 +840,11 @@ function serverSideCustomerOrder($request){
 		$rowData[] = date('d-m-Y', strtotime($data->tanggal));
 		$rowData[] = $data->waktu;
 		$rowData[] = number_format($data->total,0,",",".");
+        $rowData[] = number_format($data->ppn_value,0,",",".");
+        $rowData[] = number_format($data->total_plus_ppn,0,",",".");
 		$rowData[] = $data->carabayar;
 		$rowData[] = number_format($data->bayar,0,",",".");
-		$sisaPembayaran = $data->total - $data->bayar;
+		$sisaPembayaran = ($data->total + $data->ppn_value) - $data->bayar;
 		$rowData[] = number_format($sisaPembayaran,0,",",".");
 		$rowData[] = $data->name;
 		$rowData[] = $data->namapelanggan;
@@ -853,6 +858,9 @@ function serverSideCustomerOrder($request){
 		$rowData[] = date('d-m-Y H:i', $data->perkiraan_ambil);
 		$rowData[] = $data->keterangan;
 		//$rowData[] = $tombolprintproduksi;
+        $NomerPanggil = '1'.str_pad($data->idorderpanggil,3,'0', STR_PAD_LEFT);
+        $tombolselesai = "<img title=\"Klik untuk memanggil pelanggan\" onclick=\"panggil_pelanggan('".$NomerPanggil."');\" src=\"$baseDirectory/misc/media/images/complete-small.png\" width=\"22\">";
+        $rowData[] = $tombolselesai;
 		$rowData[] = $data->id;
 		$output[] = $rowData;
 	}
@@ -1366,9 +1374,21 @@ function serverSideGetCategoryProduct(){
 	}
 	return $items;
 }
-function serverSideGetProductByCategory($request){
+function serverSideGetProductByCategory($request, $SearchText = null){
 	$dataCategory = serverSideGetCategoryProduct();
-	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	if (!empty($SearchText)){
+        $result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, 
+        hargajual,hargapokok,idkategori 
+        FROM product WHERE status_product = 1 AND 
+        (barcode LIKE ('%".$SearchText."%') OR namaproduct LIKE ('%".$SearchText."%') 
+        OR alt_code LIKE ('%".$SearchText."%'))
+        ORDER BY idkategori, namaproduct");
+    }else {
+        $result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, 
+        hargajual,hargapokok,idkategori 
+        FROM product WHERE status_product = 1 
+        ORDER BY idkategori, namaproduct");
+    }
 	$items = array();
 	while ($data = db_fetch_object($result)) {
 		$diskon = 0;
@@ -1429,7 +1449,10 @@ function serverSideGetDataMeja($request){
 	return $items;
 }
 function serverSideGetAllProduct($request){
-	$result = db_query("SELECT idproduct,barcode, alt_code, namaproduct, stok, hargajual,hargapokok,idkategori FROM product");
+	$result = db_query("SELECT idproduct,barcode, alt_code, 
+    namaproduct, stok, hargajual,hargapokok,idkategori FROM product 
+    WHERE status_product = 1
+    ORDER BY idkategori, namaproduct");
 	$items = array();
 	while ($data = db_fetch_object($result)) {
 		$diskon = 0;
@@ -1458,18 +1481,23 @@ function serverSidePostOrder($request){
 	$savedData = array();
 	if (count($postData)){
 		$newData = array();
+		$Keterangan = '';
 		foreach ($postData as $key => $dataVal){
-			if ($key != 'request_data'){
+			if ($key != 'request_data' && $key != 'keterangan'){
 				$splitKey = explode('__', $key);
 				$newData[$splitKey[1]][$splitKey[0]] = $dataVal;
-			}
+			}else{
+                $Keterangan = $dataVal;
+            }
 		}
-		$savedData = saveCustomerOrderAndroid($newData);
+		$savedData = saveCustomerOrderAndroid($newData, $Keterangan);
 	}
 	return $savedData;
 }
 
-function saveCustomerOrderAndroid($postData = null){
+function saveCustomerOrderAndroid($postData = null, $Keterangan = ''){
+    $dataPremis = get_data_premis_server_side();
+    date_default_timezone_set('Asia/Jakarta');
 	if (!empty($postData) && count($postData)){
 		$savedData = array();
 		$totalBelanja = 0;
@@ -1497,10 +1525,14 @@ function saveCustomerOrderAndroid($postData = null){
 		$savedData['penjualan']['idpelanggan'] = 0;
 		$savedData['penjualan']['idmeja'] = $idMeja;
 		$savedData['penjualan']['totalmodal'] = $totalModals;
-		db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, 
-		tglorder, idpelanggan, keterangan, idmeja, totalmodal, android_order)
-		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d','%f','%d')",
-			$no_nota, 4, $totalBelanja, $carabayar, 0, $nokartu, $waktujual,0,'Android Order',$idMeja,$totalModals,1);
+        $savedData['penjualan']['keterangan'] = $Keterangan;
+        $savedData['penjualan']['ppn'] = $dataPremis->ppn_value;
+        $savedData['penjualan']['total_plus_ppn'] = $totalBelanja + ($totalBelanja*($dataPremis->ppn_value/100));
+        db_query("INSERT INTO customer_order (nonota, idpemakai, total, carabayar, bayar, nokartu, 
+		tglorder, idpelanggan, keterangan, idmeja, totalmodal, android_order, ppn, total_plus_ppn)
+		VALUES ('%s', '%d', '%f', '%s', '%f', '%s', '%s', '%d', '%s','%d','%f','%d','%f','%f')",
+		$no_nota, 4, $totalBelanja, $carabayar, 0, $nokartu, $waktujual,0,$Keterangan.' => Android Order',
+            $idMeja,$totalModals,1, $dataPremis->ppn_value, $savedData['penjualan']['total_plus_ppn']);
 		$idOrder = db_result(db_query("SELECT id FROM customer_order WHERE nonota='%s'", $no_nota));
 		for ($i = 0;$i < count($postData);$i++){
 			$detailData = array();
@@ -1662,7 +1694,11 @@ if ($_GET['request_data'] == 'pelanggan'){
 }else if($_GET['request_data'] == 'kategoriproduct'){
 	$returnArray = serverSideGetCategoryProduct($_GET);
 }else if($_GET['request_data'] == 'productbykategori'){
-	$returnArray = serverSideGetProductByCategory($_GET);
+    $SearchText = null;
+    if (isset($_GET['search_text']) && !empty($_GET['search_text'])){
+        $SearchText = $_GET['search_text'];
+    }
+    $returnArray = serverSideGetProductByCategory($_GET, $SearchText);
 }else if($_GET['request_data'] == 'allproduct'){
 	$returnArray = serverSideGetAllProduct($_GET);
 }else if ($_GET['request_data'] == 'getdatameja'){
